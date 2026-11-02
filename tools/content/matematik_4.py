@@ -197,6 +197,10 @@ OUTCOMES = [
             "Kumbaramda 250 TL vardı, 175 TL daha attım. Kaç TL oldu?",
             "250 TL'nin 175 TL'sini harcadım. Kaç TL kaldı?",
             "175 kişiye 250'şer TL verildi. Toplam kaç TL?"], 0),
+        mc("“12 × 30” işlemiyle çözülen problem hangisidir?", [
+            "Bir yılın her ayında 30 gün olsaydı bir yıl kaç gün olurdu?",
+            "30 günün 12'sini tatilde geçirdim. Kaç gün kaldı?",
+            "12 kitaba 30 kitap eklendi. Kaç kitap oldu?"], 0),
     ]),
     outcome("MAT.4.2.9", lessons=[lesson("Eşitlik", [
         page("Eşitlik bir terazi gibidir: iki kefe de aynı olmalıdır. 6 × 5 = 40 − 10.", V("text", text="⚖️ 6 × 5 = 40 − 10")),
