@@ -321,7 +321,8 @@ void main() {
       expect(q.options.toSet(), {'A', 'B', 'C'});
       positions.add(q.answerIndex);
     }
-    expect(positions, {0, 1, 2}, reason: 'doğru cevap her konumda görünebilmeli');
+    expect(positions, {0, 1, 2},
+        reason: 'doğru cevap her konumda görünebilmeli');
   });
 
   test('aynı tohum aynı soruyu üretir (tekrarlanabilirlik)', () {

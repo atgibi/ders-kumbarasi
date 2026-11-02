@@ -408,7 +408,10 @@ class _QuestionViewState extends State<_QuestionView> {
                 Row(
                   children: [
                     const Text('VELİYLE BİRLİKTE',
-                        style: TextStyle(color: Kumbara.primaryDark, fontWeight: FontWeight.w900, fontSize: 15)),
+                        style: TextStyle(
+                            color: Kumbara.primaryDark,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
                     const Spacer(),
                     IconButton.filledTonal(
                       key: const Key('listen'),
@@ -419,7 +422,9 @@ class _QuestionViewState extends State<_QuestionView> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                const Text('👨‍👩‍👧', style: TextStyle(fontSize: 56), textAlign: TextAlign.center),
+                const Text('👨‍👩‍👧',
+                    style: TextStyle(fontSize: 56),
+                    textAlign: TextAlign.center),
                 const SizedBox(height: 8),
                 MascotSays(text: q.prompt, onTap: () => widget.onSay(q.spoken)),
                 if (q.visual != null) VisualView(q.visual!),
@@ -440,14 +445,16 @@ class _QuestionViewState extends State<_QuestionView> {
                   shadow: Kumbara.goodDark,
                   onPressed: () {
                     _watch.stop();
-                    setState(() => _result = widget.onAnswer(0, Duration.zero, false));
+                    setState(() =>
+                        _result = widget.onAnswer(0, Duration.zero, false));
                     widget.onSay('Harika! Birlikte yaptınız.');
                   },
                 ),
                 TextButton(
                   key: const Key('activity-skip'),
                   onPressed: widget.onSkip,
-                  child: Text('Şimdi değil', style: t.bodyLarge?.copyWith(color: Kumbara.inkSoft)),
+                  child: Text('Şimdi değil',
+                      style: t.bodyLarge?.copyWith(color: Kumbara.inkSoft)),
                 ),
               ],
             ),
