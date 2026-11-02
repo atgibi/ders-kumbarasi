@@ -29,6 +29,10 @@ jobs:
           flutter create . --platforms web --org com.derskumbarasi --project-name ders_kumbarasi
           rm -f test/widget_test.dart
           sed -i 's|<title>.*</title>|<title>Ders Kumbarası</title>|' web/index.html
+          sed -i 's|"name": ".*"|"name": "Ders Kumbarası"|; s|"short_name": ".*"|"short_name": "Ders Kumbarası"|' web/manifest.json
+          for f in web/favicon.png web/icons/Icon-192.png web/icons/Icon-512.png web/icons/Icon-maskable-192.png web/icons/Icon-maskable-512.png; do
+            cp assets/mascot/icon_512.png "$f"
+          done
       - run: flutter pub get
       - name: Web derlemesi
         run: flutter build web --release --base-href /ders-kumbarasi/
