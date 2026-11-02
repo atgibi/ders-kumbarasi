@@ -39,4 +39,3 @@ class FileStorage implements Storage {
     if (await f.exists()) await f.delete();
   }
 }
-
