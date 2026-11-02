@@ -297,6 +297,168 @@ Question _ordinal(Map<String, Object?> p, Random r) {
   );
 }
 
+
+const _pairs = [
+  ('🍎', 'elma'), ('🍐', 'armut'), ('⭐', 'yıldız'), ('🎈', 'balon'),
+  ('🐟', 'balık'), ('🌼', 'çiçek'), ('🚗', 'araba'), ('⚽', 'top'),
+];
+
+/// İki grubu "daha çok / daha az / eşit" diye karşılaştırma (MAT.1.1.4).
+Question _compareGroups(Map<String, Object?> p, Random r) {
+  final max = _p(p, 'max', 10);
+  final shuffled = List.of(_pairs)..shuffle(r);
+  final x = shuffled[0], y = shuffled[1];
+  final a = _between(r, 1, max);
+  final b = r.nextInt(4) == 0 ? a : _between(r, 1, max);
+  final askMore = r.nextBool();
+  // Türkçe çoğul eki ünlü uyumuna göre
+  final xp = _plural(x.$2), yp = _plural(y.$2);
+  final opts = [xp, yp, 'Eşit'];
+  final String ans;
+  if (a == b) {
+    ans = 'Eşit';
+  } else if (askMore) {
+    ans = a > b ? xp : yp;
+  } else {
+    ans = a < b ? xp : yp;
+  }
+  return Question(
+    prompt: askMore ? 'Hangisi daha çok?' : 'Hangisi daha az?',
+    visual: Visual('compare_groups', {'a': a, 'b': b, 'ea': x.$1, 'eb': y.$1}),
+    options: opts,
+    answerIndex: opts.indexOf(ans),
+    explanation: a == b
+        ? 'İkisi de $a tane; sayıları eşit.'
+        : '$a tane ${x.$2} ve $b tane ${y.$2} var.',
+  );
+}
+
+String _cap(String s) => s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
+
+/// Türkçe çoğul: son ünlü kalın (a, ı, o, u) ise -lar, ince ise -ler.
+String _plural(String word) {
+  const back = 'aıou';
+  const front = 'eiöü';
+  for (var i = word.length - 1; i >= 0; i--) {
+    final c = word[i];
+    if (back.contains(c)) return '${_cap(word)}lar';
+    if (front.contains(c)) return '${_cap(word)}ler';
+  }
+  return '${_cap(word)}ler';
+}
+
+/// Günlük yaşam toplama/çıkarma problemi (MAT.1.2.1): hangi işlem?
+/// İyelik ekleri elle yazılmıştır (armut -> armudu, balık -> balığı).
+const _people = [
+  ('Ali', "Ali'nin"), ('Elif', "Elif'in"), ('Can', "Can'ın"), ('Zeynep', "Zeynep'in"),
+  ('Mert', "Mert'in"), ('Ayşe', "Ayşe'nin"), ('Emir', "Emir'in"), ('Defne', "Defne'nin"),
+];
+const _things = [
+  ('elma', 'elması'), ('armut', 'armudu'), ('balon', 'balonu'), ('balık', 'balığı'),
+  ('çiçek', 'çiçeği'), ('araba', 'arabası'), ('top', 'topu'), ('kalem', 'kalemi'),
+];
+
+Question _wordAddSub(Map<String, Object?> p, Random r) {
+  final max = _p(p, 'max', 10);
+  final who = _people[r.nextInt(_people.length)];
+  final thing = _things[r.nextInt(_things.length)];
+  final add = r.nextBool();
+  final int a, b;
+  final String text;
+  if (add) {
+    a = _between(r, 1, max - 1);
+    b = _between(r, 1, max - a);
+    text = '${who.$2} $a ${thing.$1} var. $b ${thing.$1} daha alıyor. '
+        'Şimdi kaç ${thing.$2} var?';
+  } else {
+    a = _between(r, 2, max);
+    b = _between(r, 1, a - 1);
+    text = '${who.$2} $a ${thing.$1} var. $b tanesini arkadaşına veriyor. '
+        'Kaç ${thing.$2} kalır?';
+  }
+  final plus = '$a + $b = ${a + b}', minus = '$a − $b = ${a - b}';
+  final opts = [plus, minus]..shuffle(r);
+  return Question(
+    prompt: '$text\nHangi işlemi yaparız?',
+    say: '$text Hangi işlemi yaparız?',
+    options: opts,
+    answerIndex: opts.indexOf(add ? plus : minus),
+    explanation: add
+        ? 'Daha fazla aldığı için toplarız: $plus.'
+        : 'Verdiği için azalır, çıkarırız: $minus.',
+  );
+}
+
+/// Eşit işaretinin iki tarafı (MAT.1.2.3): 3 + 4 = ☐ + 2
+Question _equalSides(Map<String, Object?> p, Random r) {
+  final max = _p(p, 'max_sum', 10);
+  final s = _between(r, 3, max);
+  final a = _between(r, 1, s - 1), b = s - a;
+  int c;
+  do {
+    c = _between(r, 0, s);
+  } while (c == a || c == b);
+  final d = s - c;
+  final o = numericOptions(d, r, spread: 2, preferred: [s, d + 1]);
+  return Question(
+    prompt: '$a + $b = ☐ + $c',
+    say: 'Eşittir işaretinin iki yanı aynı olmalı. $a artı $b, kutu artı $c ediyor. Kutuya hangi sayı gelir?',
+    options: o.options,
+    answerIndex: o.answerIndex,
+    explanation: 'Sol taraf $s eder. $s olması için $d + $c gerekir.',
+    hint: 'Önce sol tarafı hesapla.',
+  );
+}
+
+/// Toplama ve çıkarmanın ters ilişkisi (MAT.1.2.4).
+Question _factFamily(Map<String, Object?> p, Random r) {
+  final max = _p(p, 'max_sum', 10);
+  final s = _between(r, 2, max);
+  final a = _between(r, 1, s - 1), b = s - a;
+  final askB = r.nextBool();
+  final ans = askB ? b : a;
+  final o = numericOptions(ans, r, spread: 2, preferred: [s, askB ? a : b]);
+  return Question(
+    prompt: '$a + $b = $s ise $s − ${askB ? a : b} = ?',
+    say: '$a artı $b, $s ediyorsa $s eksi ${askB ? a : b} kaç eder?',
+    options: o.options,
+    answerIndex: o.answerIndex,
+    explanation: 'Toplamdan bir parçayı çıkarırsak diğer parça kalır: $ans.',
+  );
+}
+
+/// Geriye doğru ritmik sayma (MAT.1.1.5).
+Question _countBack(Map<String, Object?> p, Random r) {
+  final from = _p(p, 'from', 20);
+  final start = _between(r, 5, from);
+  final seq = [for (var i = 0; i < 3; i++) start - i];
+  final ans = start - 3;
+  final o = numericOptions(ans, r, spread: 2, preferred: [start + 1, ans + 2]);
+  return Question(
+    prompt: '${seq.join(', ')}, ?',
+    say: 'Geriye doğru sayıyoruz: ${seq.join(', ')}. Sırada hangi sayı var?',
+    options: o.options,
+    answerIndex: o.answerIndex,
+    explanation: 'Geriye sayarken her seferinde 1 azalır: ${seq.last}den sonra $ans gelir.',
+  );
+}
+
+/// Çokluk tahmini (MAT.1.1.7): saymadan yaklaşık değer.
+Question _estimate(Map<String, Object?> p, Random r) {
+  final targets = [5, 10, 15, 20];
+  final t = targets[r.nextInt(targets.length)];
+  final n = (t + _between(r, -1, 1)).clamp(3, 20);
+  final emoji = _objects[r.nextInt(_objects.length)];
+  final opts = ['Yaklaşık 5', 'Yaklaşık 10', 'Yaklaşık 15', 'Yaklaşık 20'];
+  return Question(
+    prompt: 'Saymadan tahmin et: kaç tane var?',
+    visual: Visual('objects', {'emoji': emoji, 'count': n, 'scatter': true}),
+    options: opts,
+    answerIndex: targets.indexOf(t),
+    explanation: 'Tam olarak $n tane var; en yakın tahmin $t.',
+  );
+}
+
 final Map<String, QuestionGenerator> generators = {
   'count_objects': _countObjects,
   'compare': _compare,
@@ -309,6 +471,12 @@ final Map<String, QuestionGenerator> generators = {
   'tens_ones': _tensOnes,
   'skip_count': _skipCount,
   'ordinal': _ordinal,
+  'compare_groups': _compareGroups,
+  'word_add_sub': _wordAddSub,
+  'equal_sides': _equalSides,
+  'fact_family': _factFamily,
+  'count_back': _countBack,
+  'estimate': _estimate,
 };
 
 Question generate(CardDef card, Random rnd) {

@@ -64,6 +64,26 @@ void main() {
     'ordinal': [
       {'max': 6},
     ],
+    'compare_groups': [
+      {'max': 10},
+    ],
+    'word_add_sub': [
+      {'max': 10},
+      {'max': 20},
+    ],
+    'equal_sides': [
+      {'max_sum': 10},
+      {'max_sum': 20},
+    ],
+    'fact_family': [
+      {'max_sum': 10},
+    ],
+    'count_back': [
+      {'from': 20},
+    ],
+    'estimate': [
+      {},
+    ],
   };
 
   test('tüm üreteçler testte', () {
@@ -129,6 +149,39 @@ void main() {
       expect(number.length, 4);
       expect(q.answer, names[pos]);
       expect(q.prompt, contains('${number[number.length - 1 - pos]} rakamı'));
+    }
+  });
+
+  test('kelime problemi: doğru işlem seçeneği gerçekten doğru', () {
+    const card = CardDef(
+      id: 't',
+      outcomeCode: 'X',
+      generator: 'word_add_sub',
+      generatorParams: {'max': 10},
+    );
+    for (var seed = 0; seed < 300; seed++) {
+      final q = generate(card, Random(seed));
+      final isAdd = q.prompt.contains('daha alıyor');
+      expect(q.answer.contains(isAdd ? '+' : '−'), isTrue, reason: q.prompt);
+      final m = RegExp(r'^(\d+) [+−] (\d+) = (\d+)$').firstMatch(q.answer)!;
+      final a = int.parse(m.group(1)!), b = int.parse(m.group(2)!), c = int.parse(m.group(3)!);
+      expect(c, isAdd ? a + b : a - b);
+      expect(c, inInclusiveRange(0, 10));
+    }
+  });
+
+  test('eşit işareti: iki taraf gerçekten eşit', () {
+    const card = CardDef(
+      id: 't',
+      outcomeCode: 'X',
+      generator: 'equal_sides',
+      generatorParams: {'max_sum': 10},
+    );
+    for (var seed = 0; seed < 300; seed++) {
+      final q = generate(card, Random(seed));
+      final m = RegExp(r'^(\d+) \+ (\d+) = ☐ \+ (\d+)$').firstMatch(q.prompt)!;
+      final a = int.parse(m.group(1)!), b = int.parse(m.group(2)!), c = int.parse(m.group(3)!);
+      expect(int.parse(q.answer) + c, a + b, reason: q.prompt);
     }
   });
 

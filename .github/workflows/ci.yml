@@ -34,6 +34,8 @@ jobs:
             flutter create --platforms=android,ios --org "$ORG" --project-name ders_kumbarasi .
             rm -f test/widget_test.dart
           fi
+      - name: İçerik paketlerini doğrula
+        run: python3 tools/content/build.py --check
       - run: flutter pub get
       - name: Biçimlendir (main dalında otomatik düzeltilir)
         run: dart format lib test
