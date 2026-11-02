@@ -51,7 +51,11 @@ void main() {
 
   test('vadesi gelmemiş ve hiç görülmemiş kartlar plana girmez', () {
     final states = [
-      CardState(cardId: 'future', box: 3, due: now.add(const Duration(days: 2)), reviews: 3),
+      CardState(
+          cardId: 'future',
+          box: 3,
+          due: now.add(const Duration(days: 2)),
+          reviews: 3),
       CardState.fresh('never', now),
     ];
     final p = planSession(states: states, nextNew: null, now: now);
@@ -59,7 +63,9 @@ void main() {
   });
 
   test('birikmiş tekrar > 20: yeni konu yok, tekrar kotası genişler', () {
-    final states = [for (var i = 0; i < 30; i++) seen('k$i', 2, daysOverdue: i)];
+    final states = [
+      for (var i = 0; i < 30; i++) seen('k$i', 2, daysOverdue: i)
+    ];
     final p = planSession(states: states, nextNew: newOutcome, now: now);
     expect(p.isReviewDay, isTrue);
     expect(p.newOutcomeId, isNull);
@@ -69,7 +75,9 @@ void main() {
   });
 
   test('tekrar en çok gecikmiş kartları seçer', () {
-    final states = [for (var i = 0; i < 15; i++) seen('k$i', 1, daysOverdue: i)];
+    final states = [
+      for (var i = 0; i < 15; i++) seen('k$i', 1, daysOverdue: i)
+    ];
     final p = planSession(
       states: states,
       nextNew: null,

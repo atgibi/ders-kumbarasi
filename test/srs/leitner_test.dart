@@ -57,7 +57,8 @@ void main() {
       final s = review(base, ReviewOutcome.correctSlow, t0);
       expect(s.box, 3);
       expect(s.due, dueFor(3, t0));
-      final fresh = review(CardState.fresh('c', t0), ReviewOutcome.correctSlow, t0);
+      final fresh =
+          review(CardState.fresh('c', t0), ReviewOutcome.correctSlow, t0);
       expect(fresh.box, 1);
     });
 
@@ -87,13 +88,19 @@ void main() {
     });
     test('hızlı', () {
       expect(
-        classify(correct: true, elapsed: const Duration(seconds: 4), fastThreshold: fast),
+        classify(
+            correct: true,
+            elapsed: const Duration(seconds: 4),
+            fastThreshold: fast),
         ReviewOutcome.correctFast,
       );
     });
     test('yavaş veya ipuçlu', () {
       expect(
-        classify(correct: true, elapsed: const Duration(seconds: 30), fastThreshold: fast),
+        classify(
+            correct: true,
+            elapsed: const Duration(seconds: 30),
+            fastThreshold: fast),
         ReviewOutcome.correctSlow,
       );
       expect(
@@ -133,7 +140,8 @@ void main() {
       expect(outcomeMastery([c(0, reviews: 0)]), MasteryLevel.notStarted);
     });
     test('yeterli: %80 kutu 4+', () {
-      expect(outcomeMastery([c(4), c(5), c(6), c(4), c(1)]), MasteryLevel.sufficient);
+      expect(outcomeMastery([c(4), c(5), c(6), c(4), c(1)]),
+          MasteryLevel.sufficient);
     });
     test('gelişiyor: yarısı kutu 2+', () {
       expect(outcomeMastery([c(2), c(3), c(1), c(0)]), MasteryLevel.developing);
