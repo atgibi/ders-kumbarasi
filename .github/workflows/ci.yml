@@ -13,6 +13,9 @@ concurrency:
 env:
   ORG: com.derskumbarasi
 
+permissions:
+  contents: write
+
 jobs:
   analyze-test:
     name: Analiz + test
@@ -32,7 +35,18 @@ jobs:
             rm -f test/widget_test.dart
           fi
       - run: flutter pub get
-      - run: dart format --output=none --set-exit-if-changed lib test
+      - name: Biçimlendir (main dalında otomatik düzeltilir)
+        run: dart format lib test
+      - name: Biçim değişikliklerini gönder
+        if: github.event_name != 'pull_request'
+        run: |
+          if [ -n "$(git status --porcelain lib test)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add lib test
+            git commit -m "dart format (otomatik)"
+            git push
+          fi
       - run: flutter analyze
       - run: flutter test
 
