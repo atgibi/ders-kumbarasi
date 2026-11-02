@@ -279,9 +279,15 @@ class _NodeRowState extends State<_NodeRow>
   static const _offsets = [0.0, 50.0, 80.0, 50.0, 0.0, -50.0, -80.0, -50.0];
 
   @override
-  void initState() {
-    super.initState();
-    if (widget.node.state == NodeState.current) _bounce.repeat(reverse: true);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // "Hareketi azalt" erişilebilirlik ayarı açıksa zıplama yok
+    final reduce = MediaQuery.of(context).disableAnimations;
+    if (widget.node.state == NodeState.current && !reduce) {
+      if (!_bounce.isAnimating) _bounce.repeat(reverse: true);
+    } else {
+      _bounce.stop();
+    }
   }
 
   @override

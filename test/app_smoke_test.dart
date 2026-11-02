@@ -37,10 +37,18 @@ AppState makeState(MemoryStorage storage, {DateTime? at}) => AppState(
 
 Future<void> settle(WidgetTester t) => t.pumpAndSettle();
 
+/// Yol ekranındaki sürekli animasyonları kapatır ("hareketi azalt").
+void reduceMotion(WidgetTester t) {
+  t.platformDispatcher.accessibilityFeaturesTestValue =
+      const FakeAccessibilityFeatures(disableAnimations: true);
+  addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
+}
+
 void main() {
   testWidgets(
       'ilk kurulum -> profil -> 1. sınıf matematik oturumu sonuna kadar',
       (t) async {
+    reduceMotion(t);
     t.view.physicalSize = const Size(1080, 2200);
     t.view.devicePixelRatio = 2.6;
     addTearDown(t.view.reset);
@@ -130,6 +138,7 @@ void main() {
   });
 
   testWidgets('oturumdan çıkış onay ister; vazgeçince oturum sürer', (t) async {
+    reduceMotion(t);
     t.view.physicalSize = const Size(1080, 2200);
     t.view.devicePixelRatio = 2.6;
     addTearDown(t.view.reset);
@@ -160,6 +169,7 @@ void main() {
   });
 
   testWidgets('veli kapısı yanlış cevapta açılmaz', (t) async {
+    reduceMotion(t);
     final storage = MemoryStorage();
     final store = ProgressStore(storage);
     await store.saveProfiles(
@@ -179,6 +189,7 @@ void main() {
   });
 
   testWidgets('sessiz saatlerde oturum açılmaz', (t) async {
+    reduceMotion(t);
     final storage = MemoryStorage();
     final store = ProgressStore(storage);
     await store.saveProfiles(
