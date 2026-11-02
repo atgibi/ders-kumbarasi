@@ -839,7 +839,6 @@ Question _wordMulDiv(Map<String, Object?> p, Random r) {
   );
 }
 
-
 /// Kesir karşılaştırma: birim kesirler ya da paydaları eşit kesirler.
 Question _fractionCompare(Map<String, Object?> p, Random r) {
   final unit = p['unit'] as bool? ?? false;
@@ -873,8 +872,16 @@ Question _fractionCompare(Map<String, Object?> p, Random r) {
 
 /// Kesirlerin okunuşu için bulunma hâli: 4 -> "dörtte" (dörtte üç).
 const _bulunma = {
-  2: 'ikide', 3: 'üçte', 4: 'dörtte', 5: 'beşte', 6: 'altıda',
-  7: 'yedide', 8: 'sekizde', 9: 'dokuzda', 10: 'onda', 12: 'on ikide',
+  2: 'ikide',
+  3: 'üçte',
+  4: 'dörtte',
+  5: 'beşte',
+  6: 'altıda',
+  7: 'yedide',
+  8: 'sekizde',
+  9: 'dokuzda',
+  10: 'onda',
+  12: 'on ikide',
 };
 
 /// Bir çokluğun kesir kadarı: 24'ün 3/4'ü kaçtır?
@@ -883,11 +890,15 @@ Question _fractionOfSet(Map<String, Object?> p, Random r) {
   final n = (p['unit'] as bool? ?? false) ? 1 : _between(r, 1, d - 1);
   final total = d * _between(r, 1, _p(p, 'k_max', 6));
   final ans = total ~/ d * n;
-  final o = numericOptions(ans, r, spread: 3, min: 1, preferred: [total ~/ d, total - ans]);
+  final o = numericOptions(ans, r,
+      spread: 3, min: 1, preferred: [total ~/ d, total - ans]);
   return Question(
     prompt: '$total sayısının $n/$d kadarı kaçtır?',
-    say: '$total sayısının ${_bulunma[d] ?? '$d'} ${sayiOkunusu(n)} kadarı kaçtır?',
-    visual: total <= 24 ? Visual('groups', {'emoji': '🍬', 'groups': d, 'each': total ~/ d}) : null,
+    say:
+        '$total sayısının ${_bulunma[d] ?? '$d'} ${sayiOkunusu(n)} kadarı kaçtır?',
+    visual: total <= 24
+        ? Visual('groups', {'emoji': '🍬', 'groups': d, 'each': total ~/ d})
+        : null,
     options: o.options,
     answerIndex: o.answerIndex,
     explanation: '$total ÷ $d = ${total ~/ d}; bunun $n katı $ans.',
@@ -909,36 +920,49 @@ Question _fractionAddSame(Map<String, Object?> p, Random r) {
     c = a - b;
   }
   final right = '$c/$d';
-  final set = <String>{right, '$c/${d * 2}', '${add ? a + b + 1 : a - b + 1}/$d', '$c/${add ? d + d : d - 1}'};
+  final set = <String>{
+    right,
+    '$c/${d * 2}',
+    '${add ? a + b + 1 : a - b + 1}/$d',
+    '$c/${add ? d + d : d - 1}'
+  };
   set.removeWhere((e) => e.endsWith('/0'));
   final opts = set.take(3).toList()..shuffle(r);
   return Question(
     prompt: '$a/$d ${add ? '+' : '−'} $b/$d = ?',
     options: opts,
     answerIndex: opts.indexOf(right),
-    explanation: 'Paydalar eşitse payları ${add ? 'toplar' : 'çıkarır'}, paydayı aynen yazarız: $right.',
+    explanation:
+        'Paydalar eşitse payları ${add ? 'toplar' : 'çıkarır'}, paydayı aynen yazarız: $right.',
   );
 }
 
 /// Açı türü: dar, dik, geniş.
 Question _angleType(Map<String, Object?> p, Random r) {
   final t = r.nextInt(3);
-  final deg = switch (t) { 0 => _between(r, 15, 80), 1 => 90, _ => _between(r, 100, 170) };
+  final deg = switch (t) {
+    0 => _between(r, 15, 80),
+    1 => 90,
+    _ => _between(r, 100, 170)
+  };
   final opts = ['Dar açı', 'Dik açı', 'Geniş açı'];
   return Question(
     prompt: 'Bu açı hangi türdendir?',
     visual: Visual('angle', {'deg': deg}),
     options: opts,
     answerIndex: t,
-    explanation: 'Dik açı tam köşe gibidir (90°). Ondan küçük açı dar, büyük açı geniştir.',
+    explanation:
+        'Dik açı tam köşe gibidir (90°). Ondan küçük açı dar, büyük açı geniştir.',
   );
 }
 
 /// Birim karelerle alan: dikdörtgen kaç birim kare?
 Question _areaCount(Map<String, Object?> p, Random r) {
-  final w = _between(r, 2, _p(p, 'max', 6)), h = _between(r, 2, _p(p, 'max', 6));
+  final w = _between(r, 2, _p(p, 'max', 6)),
+      h = _between(r, 2, _p(p, 'max', 6));
   final ans = w * h;
-  final o = numericOptions(ans, r, spread: 3, min: 1, preferred: [2 * (w + h), w + h]);
+  final o = numericOptions(ans, r,
+      spread: 3, min: 1, preferred: [2 * (w + h), w + h]);
   return Question(
     prompt: 'Bu şeklin alanı kaç birim karedir?',
     visual: Visual('area', {'w': w, 'h': h}),

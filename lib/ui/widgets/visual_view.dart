@@ -533,7 +533,6 @@ class _FractionPainter extends CustomPainter {
       old.parts != parts || old.shaded != shaded;
 }
 
-
 class _AnglePainter extends CustomPainter {
   _AnglePainter(this.deg);
   final int deg;
@@ -585,7 +584,8 @@ class _AreaGrid extends StatelessWidget {
                   height: 30,
                   decoration: BoxDecoration(
                     color: Kumbara.primary.withValues(alpha: 0.35),
-                    border: Border.all(color: Kumbara.ink.withValues(alpha: 0.6)),
+                    border:
+                        Border.all(color: Kumbara.ink.withValues(alpha: 0.6)),
                   ),
                 ),
             ],

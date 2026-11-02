@@ -293,11 +293,15 @@ void main() {
   });
 
   test('kesir toplama: cevap doğru', () {
-    const card = CardDef(id: 't', outcomeCode: 'X', generator: 'fraction_add_same');
+    const card =
+        CardDef(id: 't', outcomeCode: 'X', generator: 'fraction_add_same');
     for (var seed = 0; seed < 300; seed++) {
       final q = generate(card, Random(seed));
-      final m = RegExp(r'^(\d+)/(\d+) ([+−]) (\d+)/(\d+) = \?$').firstMatch(q.prompt)!;
-      final a = int.parse(m.group(1)!), d = int.parse(m.group(2)!), b = int.parse(m.group(4)!);
+      final m = RegExp(r'^(\d+)/(\d+) ([+−]) (\d+)/(\d+) = \?$')
+          .firstMatch(q.prompt)!;
+      final a = int.parse(m.group(1)!),
+          d = int.parse(m.group(2)!),
+          b = int.parse(m.group(4)!);
       final c = m.group(3) == '+' ? a + b : a - b;
       expect(q.answer, '$c/$d', reason: q.prompt);
       expect(c, inInclusiveRange(0, d));
