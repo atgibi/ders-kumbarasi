@@ -170,6 +170,7 @@ class _SessionScreenState extends State<SessionScreen> {
               onAnswer: (i, elapsed, hint) =>
                   c.answer(i, elapsed: elapsed, usedHint: hint),
               onNext: () => _advance(c.next),
+              onSkip: () => _advance(c.skip),
             );
     }
 
@@ -356,6 +357,7 @@ class _QuestionView extends StatefulWidget {
     required this.onSay,
     required this.onAnswer,
     required this.onNext,
+    required this.onSkip,
   });
 
   final SessionStep step;
@@ -363,6 +365,7 @@ class _QuestionView extends StatefulWidget {
   final AnswerResult Function(int index, Duration elapsed, bool usedHint)
       onAnswer;
   final VoidCallback onNext;
+  final VoidCallback onSkip;
 
   @override
   State<_QuestionView> createState() => _QuestionViewState();
