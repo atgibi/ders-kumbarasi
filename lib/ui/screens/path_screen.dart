@@ -9,10 +9,13 @@ import 'session_screen.dart';
 enum NodeState { done, current, locked, soon }
 
 class PathNode {
-  const PathNode(this.outcome, this.state, this.level);
+  const PathNode(this.outcome, this.state, this.level, this.label);
   final Outcome outcome;
   final NodeState state;
   final MasteryLevel level;
+
+  /// Çocuk dostu başlık (konu anlatımının adı); yoksa programdaki ifade.
+  final String label;
 }
 
 class PathSection {
@@ -45,7 +48,13 @@ Future<List<PathSection>> buildPath(AppState app, Subject subject) async {
     } else {
       st = NodeState.locked;
     }
-    nodes.add(PathNode(o, st, mastery[o] ?? MasteryLevel.notStarted));
+    final lessons = pack[o.code]?.lessons ?? const <Lesson>[];
+    nodes.add(PathNode(
+      o,
+      st,
+      mastery[o] ?? MasteryLevel.notStarted,
+      lessons.isNotEmpty ? lessons.first.title : o.title,
+    ));
   }
 
   // Gruplama: Türkçe beceri alanına, diğer dersler üniteye göre
@@ -397,7 +406,7 @@ class _NodeRowState extends State<_NodeRow>
             SizedBox(
               width: 220,
               child: Text(
-                n.outcome.title,
+                n.label,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
