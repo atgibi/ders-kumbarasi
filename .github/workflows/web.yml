@@ -24,6 +24,11 @@ jobs:
           channel: stable
           flutter-version: 3.47.9
           cache: true
+      - name: Web platformu
+        run: |
+          flutter create . --platforms web --org com.derskumbarasi --project-name ders_kumbarasi
+          rm -f test/widget_test.dart
+          sed -i 's|<title>.*</title>|<title>Ders Kumbarası</title>|' web/index.html
       - run: flutter pub get
       - name: Web derlemesi
         run: flutter build web --release --base-href /ders-kumbarasi/
