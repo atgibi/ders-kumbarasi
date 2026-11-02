@@ -1,0 +1,3916 @@
+[
+ {
+  "kod": "T.D.1.1",
+  "sinif": 1,
+  "baslik": "Dinlemeyi/izlemeyi yönetebilme",
+  "surec": [
+   "Verilen görseller arasından öğrendiği sesin geçtiği görseli/görselleri seçer.",
+   "Dinleyeceklerini/izleyeceklerini amacına uygun olarak seçer.",
+   "Dinleme kurallarına uygun olarak dinler.",
+   "Dinleme esnasında konuşmaya dâhil olmak için uygun zamanda söz alır."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.1.2",
+  "sinif": 1,
+  "baslik": "Dinledikleri/izledikleri ile ilgili anlam oluşturabilme",
+  "surec": [
+   "Sese karşılık gelen sembolü/harfi tanır.",
+   "Dinlediği sesin kaynağını tahmin eder.",
+   "Görselden/görsellerden hareketle dinleyeceği/izleyeceği metin hakkında tahminde bulunur.",
+   "Dinlediklerini yaşantı ve ön bilgileriyle karşılaştırarak çıkarımda bulunur.",
+   "Dinlediği sesin bulunduğu sözcüklere örnekler verir.",
+   "Dinlediklerinde/izlediklerinde geçen olayların öncesi hakkında tahminde bulunur.",
+   "Dinlediklerinde/izlediklerinde geçen olayların sonrası hakkında tahminde bulunur.",
+   "Dinlediklerindeki/izlediklerindeki iletileri doğruluk, gerçeklik açısından ön bilgileriyle karşılaştırır.",
+   "Dinlediklerindeki/izlediklerindeki nesneleri fiziksel özelliklerine göre sınıflandırır."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.1.3",
+  "sinif": 1,
+  "baslik": "Dinlediklerini/izlediklerini çözümleyebilme",
+  "surec": [
+   "Doğal ve yapay ses kaynaklarından çıkan sesleri ayırt eder.",
+   "Seslere karşılık gelen sembolleri/harfleri ayırt eder.",
+   "Dinlediği/izlediği metnin konusunu bulur.",
+   "Dinlediği/izlediği farklı metinlerdeki iletilerin benzerliklerini belirler.",
+   "Dinlediğindeki/izlediğindeki söylem ve görsel arasındaki ilişkiyi belirler."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.1.4",
+  "sinif": 1,
+  "baslik": "Dinleme/izleme sürecini değerlendirebilme",
+  "surec": [
+   "Dinleme/izleme sürecindeki hatalarını belirler.",
+   "Dinlemesinde/izlemesinde belirlediği hatalarını düzeltir.",
+   "Dinlemesindeki/izlemesindeki uygun davranışlarını sonraki dinlemelerine aktarır."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.2.1",
+  "sinif": 2,
+  "baslik": "Dinlemeyi/izlemeyi yönetebilme",
+  "surec": [
+   "Dinleyeceklerini/izleyeceklerini amacına ve ilgi alanına uygun olarak seçer.",
+   "Dinleme kurallarına uygun olarak dinler.",
+   "Dinleme esnasında konuşmaya dâhil olmak için uygun zamanda söz alır."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.2.2",
+  "sinif": 2,
+  "baslik": "Dinledikleri/izledikleri ile ilgili anlam oluşturabilme",
+  "surec": [
+   "Dinlediklerini yaşantı ve ön bilgileriyle karşılaştırarak çıkarımda bulunur.",
+   "Görsellerden hareketle dinleyeceği/izleyeceği metnin konusunu tahmin eder.",
+   "Dinlediklerinde/izlediklerinde geçen olayların öncesi hakkında tahminde bulunur.",
+   "Dinlediklerinde/izlediklerinde geçen olayların sonrası hakkında tahminde bulunur.",
+   "Dinlediklerindeki/izlediklerindeki iletilerden ilgi alanına uygun çıkarımlar yapar.",
+   "Dinlediklerindeki/izlediklerindeki iletileri doğruluk, gerçeklik açısından ön bilgileriyle karşılaştırır.",
+   "Dinlediği/izlediği metnin içindeki bilgileri doğruluk, gerçeklik açısından karşılaştırır.",
+   "Dinlediklerindeki/izlediklerindeki farklı nesne ve karakterleri özelliklerine göre sınıflandırır.",
+   "Dinlediklerine/izlediklerine yönelik düşüncelerini ifade eder."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.2.3",
+  "sinif": 2,
+  "baslik": "Dinlediklerini/izlediklerini çözümleyebilme",
+  "surec": [
+   "Dinlediği/izlediği metindeki olayları belirler.",
+   "Dinlediği/izlediği metnin konusunu bulur.",
+   "Dinlediği/izlediği farklı metinlerdeki iletilerin benzerlik ve farklılıklarını belirler.",
+   "Dinlediğindeki/izlediğindeki söylem ve görsel arasındaki ilişkiyi belirler."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.2.4",
+  "sinif": 2,
+  "baslik": "Dinleme/izleme sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Dinleme/izleme yapacağı ortamın uygunluğunu gözden geçirir."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.2.5",
+  "sinif": 2,
+  "baslik": "Dinleme/izleme sürecini değerlendirebilme",
+  "surec": [
+   "Dinleme/izleme sürecindeki hatalarını belirler.",
+   "Dinlemesinde/izlemesinde belirlediği hataları düzeltir.",
+   "Dinlemesindeki/izlemesindeki uygun davranışlarını sonraki dinlemelerine aktarır."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.3.1",
+  "sinif": 3,
+  "baslik": "Dinlemeyi/izlemeyi yönetebilme",
+  "surec": [
+   "Dinleyeceklerini/izleyeceklerini amacına ve ilgi alanına uygun olarak seçer.",
+   "Konuya ve amacına uygun olarak dinleme/izleme stratejisini seçer.",
+   "Dinleme kurallarına uygun olarak dinler.",
+   "Dinlediği konuya ilişkin düşüncelerini belirtmek için uygun zamanda söz alır."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.3.2",
+  "sinif": 3,
+  "baslik": "Dinledikleri/izledikleri ile ilgili anlam oluşturabilme",
+  "surec": [
+   "Görsellerden hareketle dinleyeceği/izleyeceği metnin konusunu tahmin eder.",
+   "Dinlediklerinde/izlediklerinde geçen olayların öncesi hakkında tahminde bulunur.",
+   "Dinlediklerinde/izlediklerinde geçen olayların sonrası hakkında tahminde bulunur.",
+   "Dinlediklerindeki/izlediklerindeki bilgiler ile ön bilgileri arasında bağlantı kurar.",
+   "Dinlediklerindeki/izlediklerindeki iletilerden amacına ve ilgi alanına uygun çıkarımlar yapar.",
+   "Dinlediklerindeki/izlediklerindeki iletileri doğruluk, gerçeklik açısından ön bilgileriyle karşılaştırır.",
+   "Dinlediği/izlediği metnin içindeki bilgileri doğruluk, gerçeklik açısından karşılaştırır.",
+   "Dinlediklerindeki/izlediklerindeki farklı durum, nesne ve karakterleri özelliklerine göre sınıflandırır.",
+   "Dinlediklerine/izlediklerine yönelik düşüncelerini nedenleriyle ifade eder.",
+   "Dinlediklerindeki/izlediklerindeki iletilere ilişkin önerilerde bulunur.",
+   "Dinlediklerine/izlediklerine ilişkin düşüncelerini sözlü ve sözsüz iletişim unsurları ile ifade eder."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.3.3",
+  "sinif": 3,
+  "baslik": "Dinlediklerini/izlediklerini çözümleyebilme",
+  "surec": [
+   "Dinlediği/izlediği metindeki olayları belirler.",
+   "Dinlediği/izlediği metindeki ana fikri/ana duyguyu bulur.",
+   "Dinlediği/izlediği metnin konusunu bulur.",
+   "Dinlediği/izlediği farklı metinlerdeki iletilerin benzerlik ve farklılıklarını belirler.",
+   "Dinlediği/izlediği farklı metinlerdeki iletileri benzerlik ve farklılık yönüyle ilişkilendirir.",
+   "Dinlediğindeki/izlediğindeki söylem ve görsel arasındaki ilişkiyi açıklar."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.3.4",
+  "sinif": 3,
+  "baslik": "Dinleme/izleme sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Dinleme/izleme yapacağı ortamın uygunluğunu gözden geçirir.",
+   "Dinleme/izleme ortamının dinleme sürecindeki duygu, düşünce ve davranışlarına etkisini açıklar."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.3.5",
+  "sinif": 3,
+  "baslik": "Dinleme/izleme sürecini değerlendirebilme",
+  "surec": [
+   "Dinlemelerinde/izlemelerinde tercih ettiği dinleme/izleme stratejilerini açıklar.",
+   "Dinleyecekleri/izleyecekleri türü tercih nedenleri ile belirtir.",
+   "Dinlemesindeki/izlemesindeki uygun davranışlarını sonraki dinlemelerine aktarır. KONUŞMA"
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.4.1",
+  "sinif": 4,
+  "baslik": "Dinlemeyi/izlemeyi yönetebilme",
+  "surec": [
+   "Konuya, amacına ve ilişkinin türüne uygun olarak dinleme/izleme stratejisini seçer.",
+   "Dinleme kurallarına uygun olarak dinler.",
+   "Dinlediği konuya ilişkin düşüncelerini belirtmek için uygun zamanda söz alır."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.4.2",
+  "sinif": 4,
+  "baslik": "Dinledikleri/izledikleri ile ilgili anlam oluşturabilme",
+  "surec": [
+   "Görsellerden hareketle dinleyeceği/izleyeceği metnin konusunu tahmin eder.",
+   "Dinlediği/izlediği metnin günlük yaşamla bağlantısını kurar.",
+   "Dinlediklerinde/izlediklerinde geçen olayların öncesi hakkında tahminde bulunur.",
+   "Dinlediklerinde/izlediklerinde geçen olayların sonrası hakkında tahminde bulunur.",
+   "Dinlediklerindeki/izlediklerindeki bilgiler ile ön bilgileri arasında bağlantı kurar.",
+   "Dinlediklerindeki/izlediklerindeki içerikten hareketle uygun çıkarımlar yapar.",
+   "Dinlediklerindeki/izlediklerindeki iletileri doğruluk, gerçeklik açısından ön bilgileriyle karşılaştırır.",
+   "Dinlediği/izlediği metnin içindeki bilgileri doğruluk, gerçeklik açısından karşılaştırır.",
+   "Dinlediklerindeki/izlediklerindeki olay, durum, nesne ve karakterleri özelliklerine göre sınıflandırır.",
+   "Dinlediklerine/izlediklerine katılıp katılmadığını nedenleriyle ifade eder.",
+   "Dinlediklerinde/izlediklerinde kabul etmediği konulara ilişkin önerilerde bulunur.",
+   "Dinlediklerine/izlediklerine ilişkin düşüncelerini sözlü ve sözsüz iletişim unsurları ile ifade eder."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.4.3",
+  "sinif": 4,
+  "baslik": "Dinlediklerini/izlediklerini çözümleyebilme",
+  "surec": [
+   "Dinlediği/izlediği metindeki olayları belirler.",
+   "Dinlediği/izlediği metindeki ana fikri/ana duyguyu bulur.",
+   "Dinlediği/izlediği metnin konusunu bulur.",
+   "Dinlediği/izlediği farklı metinlerdeki iletilerin benzerlik ve farklılıklarını belirler.",
+   "Dinlediği/izlediği farklı metinlerdeki iletileri benzerlik ve farklılık yönüyle ilişkilendirir.",
+   "Dinlediğindeki/izlediğindeki söylem ve görsel arasındaki ilişkiyi değerlendirir."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.4.4",
+  "sinif": 4,
+  "baslik": "Dinleme/izleme sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Dinleme/izleme ortamının dinleme sürecindeki duygu, düşünce ve davranışlarına etkisini açıklar.",
+   "Dinleme/izleme yapacağı ortamın fiziksel özelliklerini dikkate alarak dinler."
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.D.4.5",
+  "sinif": 4,
+  "baslik": "Dinleme/izleme sürecini değerlendirebilme",
+  "surec": [
+   "Dinlemelerinde/izlemelerinde tercih ettiği dinleme/izleme stratejilerini açıklar.",
+   "Dinlediği/izlediği metinde verilen bilginin ve kaynağının doğruluğunu sorgular.",
+   "Dinlemesindeki/izlemesindeki uygun davranışlarını sonraki dinlemelerine aktarır. KONUŞMA"
+  ],
+  "alan": "Dinleme/İzleme",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.1.1",
+  "sinif": 1,
+  "baslik": "Konuşmalarını yönetebilme",
+  "surec": [
+   "Konunun özelliğine göre konuşma üslubunu belirler.",
+   "Konuşma sırasında dinleyiciler ile göz teması kurar.",
+   "İletişim sırasında uygun zamanda söz alır.",
+   "Konuşmalarında selamlaşma ve hitap ile ilgili ifadeler kullanır."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.1.2",
+  "sinif": 1,
+  "baslik": "Konuşmalarında içerik oluşturabilme",
+  "surec": [
+   "Ön bilgilerinden hareketle dinlediği sesin içinde geçtiği sözcükler hakkında konuşur.",
+   "Dinlediği/izlediği metni anlatır.",
+   "Kendisi ve ailesi hakkında konuşmalar yapar.",
+   "Dinlediklerini/izlediklerini ifade ederken ön bilgilerini kullanır.",
+   "Görselden/görsellerden hareketle dinleyeceği/izleyeceği metin hakkında tahminde bulunur.",
+   "Konuşmalarında geçen nesneleri fiziksel özelliklerine göre karşılaştırır."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.1.3",
+  "sinif": 1,
+  "baslik": "Konuşma kurallarını uygulayabilme",
+  "surec": [
+   "Öğrendiği ses, hece, sözcük, cümleleri işitilebilir bir ses düzeyinde söyler.",
+   "Konuşmalarında konuşma hızını ayarlar.",
+   "Dinlediğini/izlediğini telaffuza dikkat ederek anlatır.",
+   "Konuşmalarında sözcükleri yerinde ve anlamına uygun kullanır.",
+   "Konuşmalarını mimiklerle destekler.",
+   "Konuşmalarını desteklemek için beden dilini kullanır."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.1.4",
+  "sinif": 1,
+  "baslik": "Konuşma sürecini değerlendirebilme",
+  "surec": [
+   "Konuşmasındaki hatalarını fark eder.",
+   "Konuşmasında fark ettiği hataları düzeltir.",
+   "Konuşmasındaki olumlu davranışları sonraki konuşmalarına aktarır."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.2.1",
+  "sinif": 2,
+  "baslik": "Konuşmalarını yönetebilme",
+  "surec": [
+   "Konunun özelliğine göre konuşma üslubunu belirler.",
+   "Konuşma türüne göre konuşmasını belirler.",
+   "Konuşma amacına göre konuşmasını belirler.",
+   "Konuşma sırasında dinleyiciler ile göz teması kurar.",
+   "İletişim sırasında uygun zamanda söz alır.",
+   "Konuşmalarında selamlaşma ve hitap ile ilgili ifadeler kullanır.",
+   "Belirlenen bir konuda konuşma planı hazırlar."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.2.2",
+  "sinif": 2,
+  "baslik": "Konuşmalarında içerik oluşturabilme",
+  "surec": [
+   "Dinlediklerini/izlediklerini ifade ederken ön bilgilerini kullanır.",
+   "Görsellerden hareketle olayların oluş sırası hakkında tahminlerde bulunur.",
+   "Dinledikleri, izledikleri veya okudukları metinlerdeki kişilerin benzer ve farklı yönlerini açıklar.",
+   "Verilen görsellerden hareketle karakterleri veya nesneleri benzer özelliklerine göre sınıflandırarak anlatır.",
+   "Konuşmalarında zıt anlamlı sözcükleri kullanır.",
+   "Dinlediği, izlediği veya okuduğu bir metindeki olayları oluş sırasına göre kendi ifadeleriyle anlatır."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.2.3",
+  "sinif": 2,
+  "baslik": "Konuşma kurallarını uygulayabilme",
+  "surec": [
+   "Konuşmalarında konuşma hızını ayarlar.",
+   "Dinleyici kitlesi ve konunun özelliğine göre hazırladığı plana uygun konuşur.",
+   "Konuşmalarında vurgu ve tonlamaya dikkat eder.",
+   "Konuşmalarında sözcükleri yerinde ve anlamına uygun kullanır.",
+   "Günlük hayatta karşılaştığı bir olayla ilgili düşüncelerini açık ve anlaşılır cümlelerle ifade eder.",
+   "Konuşmalarında anlamlı ve kurallı cümleler kullanır.",
+   "Konuşmalarında bağlama ögelerini (ile, ve, ama, çünkü) doğru kullanır.",
+   "Konuşmalarını jest ve mimiklerle destekler.",
+   "Konuşmalarını desteklemek için beden dilini kullanır.",
+   "Konuşma sürecinde beden dilini yerinde kullanır."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.2.4",
+  "sinif": 2,
+  "baslik": "Konuşma sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Konuşma yapacağı ortamın uygunluğunu gözden geçirir."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.2.5",
+  "sinif": 2,
+  "baslik": "Konuşma sürecini değerlendirebilme",
+  "surec": [
+   "Konuşmasında fark ettiği hataları düzeltir.",
+   "Konuşmasındaki olumlu davranışları fark eder.",
+   "Konuşmasındaki olumlu davranışları sonraki konuşmalarına aktarır."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.3.1",
+  "sinif": 3,
+  "baslik": "Konuşmalarını yönetebilme",
+  "surec": [
+   "Konunun özelliğine göre konuşma üslubunu belirler.",
+   "Konuşma türüne göre konuşmasını belirler.",
+   "Konuşma amacına göre konuşmasını belirler.",
+   "Konuşma kurallarına uygun (ses düzeyi, nezaket ifadeleri, göz teması) bir biçimde iletişimi sürdürür.",
+   "Belirlenen bir konuda konuşma planı hazırlar."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.3.2",
+  "sinif": 3,
+  "baslik": "Konuşmalarında içerik oluşturabilme",
+  "surec": [
+   "Konuşmalarında eş anlamlı sözcükler kullanır.",
+   "Dinlediklerini, izlediklerini veya okuduklarını mantıksal ilişkilere bağlı olarak kendi cümleleriyle ifade eder.",
+   "Sözlü iletişimde katılmadığı görüşlere ilişkin nedenleri ifade eder.",
+   "Konuşmalarında örneklendirmelere yer verir.",
+   "Dinlediği/izlediği veya okuduğu metindeki neden-sonuç ilişkisini söyler."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.3.3",
+  "sinif": 3,
+  "baslik": "Konuşma kurallarını uygulayabilme",
+  "surec": [
+   "Konuşmanın özelliğine uygun olarak ses düzeyini ayarlar.",
+   "Dinleyici kitlesi ve konunun özelliğine göre hazırladığı plana uygun konuşur.",
+   "Konuşmalarında vurgu ve tonlamaya dikkat eder.",
+   "Konuşmalarında sözcükleri yerinde ve anlamına uygun kullanır.",
+   "Sık karşılaşılan atasözlerini konuşma bağlamına uygun kullanır.",
+   "Konuşmasındaki mesajları açık ve anlaşılır cümlelerle ifade eder.",
+   "Konuşmalarında içeriğe uygun zaman ifadelerini kullanır.",
+   "Konuşmalarında anlamlı ve kurallı cümleler kullanır.",
+   "Konuşmalarında bağlama ögelerini (ile, ve, veya, ya da, ama, çünkü) doğru kullanır.",
+   "Konuşmalarını jest ve mimiklerle destekler.",
+   "Konuşma sürecinde beden dilini yerinde kullanır."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.3.4",
+  "sinif": 3,
+  "baslik": "Konuşma sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Konuşma yapacağı ortamın uygunluğunu gözden geçirir.",
+   "Konuşma ortamının konuşma sürecindeki duygu, düşünce ve davranışlarına etkisini açıklar."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.3.5",
+  "sinif": 3,
+  "baslik": "Konuşma sürecini değerlendirebilme",
+  "surec": [
+   "Başkalarının konuşmalarındaki hataları fark eder.",
+   "Konuşmasındaki olumlu davranışları sonraki konuşmalarına aktarır. OKUMA"
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.4.1",
+  "sinif": 4,
+  "baslik": "Konuşmalarını yönetebilme",
+  "surec": [
+   "Konunun özelliğine göre konuşma üslubunu belirler.",
+   "Konuşma türüne göre konuşmasını belirler.",
+   "Konuşma amacına göre konuşmasını belirler.",
+   "Yüz yüze iletişimde konuşma kurallarına uygun biçimde iletişimi sürdürür.",
+   "Çevrim içi iletişimde konuşma kurallarına uygun biçimde iletişimi sürdürür.",
+   "Yüz yüze iletişim sürecini uygun nezaket ifadelerini kullanarak sürdürür.",
+   "Çevrim içi iletişim sürecini uygun nezaket ifadelerini kullanarak sürdürür.",
+   "Dinleyici kitlesi ve konunun özelliğine uygun konuşma planı hazırlar."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.4.2",
+  "sinif": 4,
+  "baslik": "Konuşmalarında içerik oluşturabilme",
+  "surec": [
+   "Belirlenen bir konu hakkında konuşurken yaşantı ve ön bilgilerinden yararlanır.",
+   "Dinlediği, izlediği veya okuduğu metnin günlük yaşamla ilişkisini ifade eder.",
+   "Dinlediklerindeki/izlediklerindeki yarım kalan bir konuşmayı tahminleri ile devam ettirir.",
+   "Dinlediği/izlediği bir konuya ilişkin çıkarımlarını planlayarak konuşur.",
+   "Konuşmalarında dinlediklerinden, izlediklerinden veya okuduğu metinlerden yola çıkarak nesne ve kişileri karşılaştırır.",
+   "Konuşmalarında olay, durum, nesne ve karakterleri özelliklerine göre sınıflandırır.",
+   "Çevrim içi konuşmalarında olay, durum, nesne ve karakterleri özelliklerine göre sınıflandırır.",
+   "Konuşmalarında zıt anlamlı sözcükleri kullanır.",
+   "Konuşmalarında eş anlamlı sözcükleri kullanır.",
+   "Konuşmalarında eş sesli sözcükleri kullanır.",
+   "Dinlediklerini, izlediklerini veya okuduklarını mantıksal ilişkilere bağlı olarak kendi cümleleriyle ifade eder.",
+   "Dinledikleri, izledikleri veya okuduklarındaki görüşlere katılma veya katılmama kararını nedenleriyle ifade eder.",
+   "Serbest konuşma çalışmalarında görüş ve düşüncelerini nedenleriyle açıklar.",
+   "Sözlü iletişimde kabul etmediği konulara ilişkin önerilerde bulunur.",
+   "Konuşmalarında benzetmelere yer verir.",
+   "Konuşmalarında örneklendirmeye yer verir.",
+   "Konuşmalarını görsel/dijital içeriklerle destekler.",
+   "Sık karşılaşılan deyimlerin anlamını söyler.",
+   "Sık karşılaşılan atasözlerinin anlamlarını söyler."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.4.3",
+  "sinif": 4,
+  "baslik": "Konuşma kurallarını uygulayabilme",
+  "surec": [
+   "Konuşmalarında sesinin düzeyini dikkat çekmek amacıyla kullanır.",
+   "Dinleyici kitlesi ve konunun özelliğine göre hazırladığı plana uygun konuşma yapar.",
+   "Konuşmalarında vurgu ve tonlamaya dikkat eder.",
+   "Belirli bir konuda beden dilini, ses tonunu ve dinleyici özelliklerini dikkate alarak sunum yapar.",
+   "Dinlediği, izlediği veya okuduğu metindeki neden-sonuç ilişkisini söyler.",
+   "Konuşmalarında sözcükleri yerinde ve anlamına uygun kullanır.",
+   "Deyimleri konuşma bağlamına uygun kullanır.",
+   "Atasözlerini konuşma bağlamına uygun kullanır.",
+   "Konuşmasındaki mesajları açık ve anlaşılır cümlelerle ifade eder.",
+   "Konuşmalarında içeriğe uygun zaman ifadelerini kullanır.",
+   "Konuşmalarında anlamlı ve kurallı cümleler kullanır.",
+   "Konuşmalarında bağlama ögelerini (ile, ve, veya, ya da, ama, çünkü, de, ki) doğru kullanır.",
+   "Konuşmalarını jest ve mimiklerle destekler.",
+   "Konuşma sürecinde beden dilini yerinde kullanır."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.4.4",
+  "sinif": 4,
+  "baslik": "Konuşma sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Konuşma ortamının konuşma sürecindeki duygu, düşünce ve davranışlarına etkisini açıklar.",
+   "Konuşma yapacağı ortamın fiziksel özelliklerini dikkate alarak konuşur."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.K.4.5",
+  "sinif": 4,
+  "baslik": "Konuşma sürecini değerlendirebilme",
+  "surec": [
+   "Başkalarının konuşmalarındaki hataları fark eder.",
+   "Başkalarının konuşmalarındaki hataları düzeltir.",
+   "Konuşmasındaki olumlu davranışları sonraki konuşmalarına aktarır.",
+   "Metni yazar rolünde değerlendirerek ifade eder."
+  ],
+  "alan": "Konuşma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.1.1",
+  "sinif": 1,
+  "baslik": "Okuma sürecini yönetebilme",
+  "surec": [
+   "Harf ve heceleri doğru seslendirir.",
+   "Sözcükleri doğru okur.",
+   "Basit ve kısa cümleleri doğru okur.",
+   "Telaffuza dikkat ederek okur.",
+   "Öğrendiği ses, hece, sözcük veya cümleleri işitilebilir bir ses düzeyinde okur.",
+   "Okuyacağı metnin başlığı ve görsellerini inceler.",
+   "Kuralına uygun sesli ve sessiz okur.",
+   "Anlaşılabilir ve uygun bir hızda sesli okur.",
+   "Bir dizi kısa metin içerisinden seçtiği metni okur.",
+   "Noktalama işaretlerine dikkat ederek okur."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.1.2",
+  "sinif": 1,
+  "baslik": "Okudukları ile ilgili anlam oluşturabilme",
+  "surec": [
+   "Metni okurken ön bilgilerini kullanır.",
+   "Okuduğu metindeki bilgiler ile ön bilgileri arasında bağlantı kurar.",
+   "Okuyacağı metnin başlığından ve görsellerinden hareketle metnin konusu hakkında tahminde bulunur.",
+   "Okuduğu metindeki yönergeleri uygular."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.1.3",
+  "sinif": 1,
+  "baslik": "Okuduklarını çözümleyebilme",
+  "surec": [
+   "Okuduğu metnin konusunu bulur."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.1.4",
+  "sinif": 1,
+  "baslik": "Okuma sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Okuduğu ortamın fiziksel özelliklerini açıklar."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.1.5",
+  "sinif": 1,
+  "baslik": "Okuma sürecini değerlendirebilme",
+  "surec": [
+   "Okuma sürecindeki hatalarını belirler.",
+   "Okuma sürecinde belirlediği hatalarını düzeltir.",
+   "Okuma sürecindeki olumlu davranışlarını sonraki okumalarına aktarır."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.2.1",
+  "sinif": 2,
+  "baslik": "Okuma sürecini yönetebilme",
+  "surec": [
+   "Okuyacağı metnin başlığı ve görsellerini inceler.",
+   "Okuyacağı metni ilgi alanına göre seçer.",
+   "Kuralına uygun sesli ve sessiz okur.",
+   "Noktalama işaretlerine dikkat ederek okur."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.2.2",
+  "sinif": 2,
+  "baslik": "Okudukları ile ilgili anlam oluşturabilme",
+  "surec": [
+   "Okuduğu metindeki bilgiler ile ön bilgileri arasında bağlantı kurar.",
+   "Okuyacağı metnin başlığından ve görsellerinden hareketle metnin konusu hakkında tahminde bulunur.",
+   "Metnin başlığı ve görsellerinden hareketle metinde geçen bilgiler/olaylar hakkında tahminde bulunur.",
+   "Okuduğu metindeki verilerden yararlanarak içeriğe uygun çıkarımlar yapar.",
+   "Okuduğu metindeki iletileri ön bilgileri ile karşılaştırır.",
+   "Okuduğu metindeki nesne ve kişileri özelliklerine göre sınıflandırır.",
+   "Okuduğu metindeki zıt anlamlı sözcükleri bulur.",
+   "Okuduğu metindeki iletilere katılıp katılmadığını ifade eder."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.2.3",
+  "sinif": 2,
+  "baslik": "Okuduklarını çözümleyebilme",
+  "surec": [
+   "Okuduğu metindeki karakter, olay ve bilgileri açıklar.",
+   "Okuduğu metnin konusunu bulur.",
+   "Okuduğu metindeki iletilerin benzerlik ve/veya farklılıklarını belirler.",
+   "Okuduğu metindeki içerik ve görsel (tablo, grafik vb.) arasındaki ilişkiyi belirler."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.2.4",
+  "sinif": 2,
+  "baslik": "Okuma sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Okuduğu ortamın okumasına etkisini açıklar.",
+   "Okuma yapacağı ortamın fiziksel özelliklerini dikkate alarak okur."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.2.5",
+  "sinif": 2,
+  "baslik": "Okuma sürecini değerlendirebilme",
+  "surec": [
+   "Okuma sürecindeki hatalarını belirler.",
+   "Okuma sürecinde belirlediği hatalarını düzeltir.",
+   "Okuma sürecindeki olumlu davranışlarını sonraki okumalarına aktarır."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.3.1",
+  "sinif": 3,
+  "baslik": "Okuma sürecini yönetebilme",
+  "surec": [
+   "Okuyacağı metnin başlığı ve görsellerini inceler.",
+   "Noktalama işaretlerine dikkat ederek okur.",
+   "Okuyacağı metni ilgi alanına ve amacına göre seçer.",
+   "Okuyacağı konuya veya okuma amacına göre okuma stratejisine karar verir."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.3.2",
+  "sinif": 3,
+  "baslik": "Okudukları ile ilgili anlam oluşturabilme",
+  "surec": [
+   "Okuduğu metindeki bilgiler ile ön bilgileri arasında bağlantı kurar.",
+   "Metnin başlığı ve görsellerinden hareketle metinde geçen bilgiler/olaylar hakkında tahminde bulunur.",
+   "Okuma sırasında metinde verilen bilgilerden ve görsellerden hareketle metinde geçen bilgilerin/olayların sonrası hakkında tahminde bulunur.",
+   "Okuduğu metindeki iletileri ön bilgileri ile karşılaştırır.",
+   "Okuduğu metindeki iletileri metnin içindeki diğer bilgilerle karşılaştırır.",
+   "Okuduğu metindeki olay, nesne ve kişileri özelliklerine göre sınıflandırır.",
+   "Okuduğu metindeki zıt ve eş anlamlı sözcükleri bulur.",
+   "Okuyacağı metnin başlığı ve görsellerinden hareketle metnin içeriği hakkında görüş oluşturur."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.3.3",
+  "sinif": 3,
+  "baslik": "Okuduklarını çözümleyebilme",
+  "surec": [
+   "Okuduğu metindeki karakter, olay, bilgi veya duyguları açıklar.",
+   "Okuduğu metnin konusunu bulur.",
+   "Okuduğu metindeki ana fikri/ana duyguyu bulur.",
+   "Okuduğu metindeki iletileri benzerlik ve/veya farklılık yönüyle ilişkilendirir.",
+   "Gerçek ve mecaz anlamlı sözcüklerin metinle ilişkisini belirler.",
+   "Okuduğu metindeki noktalama işaretlerinin içerikle ilişkisini belirler."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.3.4",
+  "sinif": 3,
+  "baslik": "Okuma sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Okuma yapacağı ortamın uygunluğunu değerlendirir.",
+   "Okuma yapacağı ortamın fiziksel özelliklerini dikkate alarak okur."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.3.5",
+  "sinif": 3,
+  "baslik": "Okuma sürecini değerlendirebilme",
+  "surec": [
+   "Okuma sürecinde belirlediği hatalarını düzeltir.",
+   "Okuma sürecindeki olumlu davranışlarını sonraki okumalarına aktarır.",
+   "Tür veya ilgi alanına göre okuma tercihini belirtir.",
+   "Basılı materyali okuma sürecindeki olumlu davranışlarını çevrim içi okuma sürecine aktarır. YAZMA"
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.4.1",
+  "sinif": 4,
+  "baslik": "Okuma sürecini yönetebilme",
+  "surec": [
+   "Okuma amacına ve ilgi alanına göre okuyacağı metni seçer.",
+   "Okuyacağı konuya veya okuma amacına göre okuma stratejisini seçer.",
+   "Noktalama işaretlerine dikkat ederek okur."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.4.2",
+  "sinif": 4,
+  "baslik": "Okudukları ile ilgili anlam oluşturabilme",
+  "surec": [
+   "Okuduğu metindeki bilgiler ile ön bilgileri arasında bağlantı kurar.",
+   "Okuduğu metnin günlük yaşamla bağlantısını kurar.",
+   "Metnin başlığı ve görsellerinden hareketle metinde geçen bilgiler/olaylar hakkında tahminde bulunur.",
+   "Okuma sırasında metinde verilen bilgilerden hareketle metinde geçen bilgilerin/olayların öncesi ve sonrası hakkında tahminde bulunur.",
+   "Okuduğu metindeki verilerden yararlanarak ilgi alanına uygun çıkarım yapar.",
+   "Okuduğu metindeki verilerden yararlanarak metnin amacına uygun çıkarım yapar.",
+   "Okuduğu metindeki iletileri ön bilgileri ile karşılaştırır.",
+   "Okuduğu metindeki iletileri değerlendirir.",
+   "Okuduklarındaki olay, durum, nesne ve karakterleri özelliklerine göre sınıflandırır.",
+   "Okuduğu metindeki eş anlamlı, zıt anlamlı veya eş sesli sözcükleri sınıflandırır.",
+   "Okuduğu metindeki iletilere katılıp katılmadığını nedenleriyle ifade eder.",
+   "Okuduğu metnin kurgusuna ilişkin farklı önerilerde bulunur.",
+   "Okuyacağı metnin başlığı ve görsellerinden hareketle metnin içeriği hakkında görüş oluşturur.",
+   "Okuyacağı metnin biçimsel ve tanıtıcı özelliklerinden hareketle metnin içeriği hakkında görüş oluşturur.",
+   "Okuduğu metinlerde \"de\" ve \"ki\" bağlaçlarının anlam üzerindeki etkisini fark eder."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.4.3",
+  "sinif": 4,
+  "baslik": "Okuduklarını çözümleyebilme",
+  "surec": [
+   "Okuduğu metindeki karakter, olay, bilgi veya duyguları analiz eder.",
+   "Okuduğu metnin konusunu bulur.",
+   "Okuduğu metindeki ana fikri/ana duyguyu bulur.",
+   "Okuduğu metindeki iletileri benzerlik ve/veya farklılık yönüyle ilişkilendirir.",
+   "Gerçek, mecaz ve terim anlamlı sözcüklerin metinle ilişkisini belirler.",
+   "Yan anlamlı sözcükleri metinde bulur.",
+   "Çevrim içi okumada aradığı bilginin yerini doğru olarak bulur.",
+   "Okuduğu metindeki noktalama işaretlerinin içerikle ilişkisini belirler.",
+   "Okuduğu metindeki içerik ve görsel (tablo, grafik vb.) arasındaki ilişkiyi belirler."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.4.4",
+  "sinif": 4,
+  "baslik": "Okuma sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Okuma sürecini etkileyen fiziksel etmenleri düzenler.",
+   "Okuma yapacağı ortamın fiziksel özelliklerini dikkate alarak okur."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.O.4.5",
+  "sinif": 4,
+  "baslik": "Okuma sürecini değerlendirebilme",
+  "surec": [
+   "Okuma sürecinde belirlediği hatalarını düzeltir.",
+   "Okuma sürecindeki olumlu davranışlarını sonraki okumalarına aktarır.",
+   "Okuduğu metinde verilen bilginin ve kaynağının doğruluğunu sorgular.",
+   "Tür veya ilgi alanına göre okuma tercihini belirtir.",
+   "Basılı materyali okuma sürecindeki olumlu davranışlarını çevrim içi okuma sürecine aktarır."
+  ],
+  "alan": "Okuma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.1.1",
+  "sinif": 1,
+  "baslik": "Yazılı anlatım becerilerini yönetebilme",
+  "surec": [
+   "Yazma materyallerini kurala uygun kullanır.",
+   "Boyama ve çizgi çalışmaları yapar.",
+   "Hece, sözcük veya cümleler yazar.",
+   "Kısa metinler yazar.",
+   "Verilen bir metni metne bakarak yazar.",
+   "Söylenen sözcük ve cümleleri yazar.",
+   "Yazışmalarını selamlaşma ve hitap ifadeleriyle başlatır."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.1.2",
+  "sinif": 1,
+  "baslik": "Yazılarında içerik oluşturabilme",
+  "surec": [
+   "Görsellerle ilgili sözcük veya cümleler yazar.",
+   "Sözcük ve cümlelerde eksik bırakılan yerleri ön bilgileri doğrultusunda yazarak tamamlar.",
+   "Yazılarını karşıdakinin iletilerinden yola çıkarak devam ettirir.",
+   "Yazılarında geçen nesneleri fiziksel özelliklerine göre karşılaştırır.",
+   "Yazılarında nesneleri fiziksel özelliklerine göre sınıflandırır.",
+   "Dinlediği, izlediği veya okuduğu bir metindeki olayları oluş sırasına göre kendi ifadeleriyle yazar.",
+   "Yazılı anlatımlarını zenginleştirmek için görseller kullanır.",
+   "Seçtiği görselden hareketle kısa bir metin yazar.",
+   "Muhatabına ne yazacağını dikkate alarak yazma çalışmaları yapar.",
+   "Yazılarında benzetmelere yer verir."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.1.3",
+  "sinif": 1,
+  "baslik": "Yazma kurallarını uygulayabilme",
+  "surec": [
+   "Anlamlı ve kurallı cümleler yazar.",
+   "Harfleri temel formuna ve yazım yönlerine göre yazar.",
+   "Rakamları temel formuna ve yazım yönlerine göre yazar.",
+   "Harf, sözcük veya cümleler arasında uygun boşluk bırakır.",
+   "Harflerin büyük yazılışını yerinde kullanır.",
+   "Anlamını bilmediği sözcüğün anlamını çevrim içi veya basılı kaynaklardan araştırarak yazar.",
+   "Yazılarında sözcükleri yerinde ve anlamına uygun kullanır.",
+   "Yazışmalarında mesajlarını açık ve anlaşılır şekilde ifade eder.",
+   "Yazılarında anlamlı ve kurallı cümleler kullanır.",
+   "Rakam ve sayıları kuralına uygun yazar.",
+   "Büyük harfleri kuralına uygun yazar.",
+   "Yazılarında harfler, sözcükler ve satırlar arasında uygun boşluk bırakır.",
+   "Soru edatını (mı, mi) kuralına uygun yazar.",
+   "Yazılarında noktalama işaretlerini (nokta, kesme işareti, soru işareti, virgül ve ünlem) kuralına uygun kullanır."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.1.4",
+  "sinif": 1,
+  "baslik": "Yazma sürecini değerlendirebilme",
+  "surec": [
+   "Yazılarında hatalarını bulur.",
+   "Yazılarında belirlediği hataları düzeltir.",
+   "Yazılarındaki uygun davranışları sonraki yazılarına aktarır."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.2.1",
+  "sinif": 2,
+  "baslik": "Yazılı anlatım becerilerini yönetebilme",
+  "surec": [
+   "Verilen bir yazma görevini hazırlık yaparak yazar.",
+   "Verilen bir yazma görevini belirlediği yazı türüne göre yazar.",
+   "Yazışmalarını selamlaşma ve hitap ifadeleriyle başlatır.",
+   "Yazışmalarını uygun ifadeleri kullanarak sonlandırır.",
+   "Belirlenen bir konuda yazma planı hazırlar."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.2.2",
+  "sinif": 2,
+  "baslik": "Yazılarında içerik oluşturabilme",
+  "surec": [
+   "Bir metinde eksik bırakılan cümleleri ön bilgilerini kullanarak yazar.",
+   "Yarım bırakılan bir metni ön bilgilerinden hareketle yazar.",
+   "Bir sözcüğün anlamına ilişkin tahminlerini bağlamdan yararlanarak yazar.",
+   "Eksik bırakılan bir metni tahminleri doğrultusunda yazar.",
+   "Yazılarında kişi ve nesneleri benzerlik ve/veya farklılık bakımından karşılaştırır.",
+   "Verilen görsellerden hareketle karakterleri veya nesneleri benzer özelliklerine göre sınıflandırarak yazar.",
+   "Yazılarında sözcükleri anlamına uygun kullanır.",
+   "Dinlediği, izlediği veya okuduğu bir metindeki olayları oluş sırasına göre kendi ifadeleriyle yazar.",
+   "Basit yönergeler yazar.",
+   "Dinlediği, izlediği veya okuduğu bir metindeki görüşlere katılıp katılmadığını nedenleriyle yazar.",
+   "İstek ve önerilerini yazarak (tebrik, mektup ve anlık ileti) ifade eder.",
+   "Yazılı anlatımlarını desteklemek için görseller kullanır.",
+   "Görsellerle destekleyerek oluşturduğu mektup, anlık ileti türlerindeki yazılarını sunar.",
+   "Yazılarında benzetmelere yer verir.",
+   "Yazılarında örneklendirmeye yer verir.",
+   "Dinlediği, izlediği veya okuduğu metindeki neden-sonuç ilişkisini yazar."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.2.3",
+  "sinif": 2,
+  "baslik": "Yazma kurallarını uygulayabilme",
+  "surec": [
+   "Hedef kitle ve konunun özelliğine göre hazırladığı plana uygun yazar.",
+   "Anlamını bilmediği sözcüğün anlamını çevrim içi veya basılı kaynaklardan araştırarak yazar.",
+   "Yazılarında sözcükleri yerinde kullanır.",
+   "Yazışmalarında mesajlarını birden çok cümleyle açık ve anlaşılır şekilde ifade eder.",
+   "Soru edatını (mı, mi) kuralına uygun yazar.",
+   "Kısaltmaları kuralına uygun yazar.",
+   "Büyük harfleri kuralına uygun yazar.",
+   "Yazılarında yazım alanını uygun şekilde (yazıyı sayfaya hizalama, paragraf başı, satır sonuna sığmayan sözcükler vb.) kullanır.",
+   "Yazılarında noktalama işaretlerini (nokta, kesme işareti, virgül, iki nokta, ünlem, tırnak işareti, soru işareti ve kısa"
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.2.4",
+  "sinif": 2,
+  "baslik": "Yazma sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Yazma yapacağı ortamın uygunluğunu gözden geçirir."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.2.5",
+  "sinif": 2,
+  "baslik": "Yazma sürecini değerlendirebilme",
+  "surec": [
+   "Yazılarında hatalarını bulur.",
+   "Yazılarında belirlediği hataları düzeltir.",
+   "Yazılarındaki uygun davranışları sonraki yazılarına aktarır."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.3.1",
+  "sinif": 3,
+  "baslik": "Yazılı anlatım becerilerini yönetebilme",
+  "surec": [
+   "Verilen bir yazma görevine uygun biçimde hazırlıksız yazı yazar.",
+   "Verilen bir yazma görevini belirlediği yazı türüne göre yazar.",
+   "Yazışmalarını içeriğe ve amacına uygun ifadelerle sürdürür.",
+   "Yazışmayı başlatma, sürdürme ve sonlandırmayla ilgili uygun ifadeler kullanır.",
+   "Çevrim içi yazılarında yazışmayı başlatma, sürdürme ve sonlandırmayla ilgili uygun ifadeler kullanır.",
+   "İmzasında adını ve soyadını özgün bir şekilde kullanır.",
+   "Belirlenen bir konuda yazma planı hazırlar."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.3.2",
+  "sinif": 3,
+  "baslik": "Yazılarında içerik oluşturabilme",
+  "surec": [
+   "Metnin eksik bırakılan bölümlerini ön bilgilerinden hareketle devam ettirir.",
+   "Bir sözcüğün anlamına ilişkin tahminlerini bağlamdan yararlanarak yazar.",
+   "Dinlediği, izlediği veya okuduğu bir metne ilişkin çıkarımlarını planlı biçimde yazar.",
+   "Yazılarında kişi ve nesneleri benzerlik ve/veya farklılık bakımından karşılaştırır.",
+   "Yazılarında karakter, olay ve nesneleri özelliklerine göre sınıflandırır.",
+   "Yazılarında zıt anlamlı sözcükleri kullanır.",
+   "Yazılarında eş anlamlı sözcükleri kullanır.",
+   "Dinlediği, izlediği bir olayı veya okuduklarını kendi ifadeleriyle yazar."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.3.3",
+  "sinif": 3,
+  "baslik": "Yazma kurallarını uygulayabilme",
+  "surec": [
+   "Hedef kitle ve konunun özelliğine göre hazırladığı plana uygun yazar.",
+   "Yazılarında sözcükleri yerinde ve anlamına uygun kullanır.",
+   "Yazılarında sık karşılaşılan deyim ve atasözlerini içeriğe uygun kullanır.",
+   "Yazışmalarında/çevrim içi yazışmalarında mesajlarını birden çok cümleyle açık ve anlaşılır şekilde ifade eder.",
+   "Kısaltmalara gelen ekleri kuralına uygun yazar.",
+   "Pekiştirmeli sözcükleri doğru yazar.",
+   "Büyük harfleri kuralına uygun yazar.",
+   "Yazılarında noktalama işaretlerini (nokta, kesme işareti, virgül, iki nokta, ünlem, tırnak işareti, soru işareti, kısa çizgi, konuşma çizgisi, yay ayraç, üç nokta ve eğik çizgi) kuralına uygun kullanır."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.3.4",
+  "sinif": 3,
+  "baslik": "Yazma sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Yazma yapacağı ortamın uygunluğunu gözden geçirir.",
+   "Yazma ortamının yazma sürecindeki duygu, düşünce ve davranışlarına etkisini açıklar."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.3.5",
+  "sinif": 3,
+  "baslik": "Yazma sürecini değerlendirebilme",
+  "surec": [
+   "Yazılarında hatalarını bulur.",
+   "Yazılarında belirlediği hataları düzeltir.",
+   "Yazılarındaki uygun davranışları sonraki yazılarına aktarır."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.4.1",
+  "sinif": 4,
+  "baslik": "Yazılı anlatım becerilerini yönetebilme",
+  "surec": [
+   "Serbest yazma çalışmaları yapar.",
+   "Amacına uygun yazma stratejisini seçer.",
+   "Belirlediği yazma ortamına (kâğıt/çevrim içi) uygun strateji seçer.",
+   "Seçtiği yazma stratejisine uygun yazma çalışması yapar. T.Y4.2. Yazılarında içerik oluşturabilme",
+   "Dinlediği/izlediği veya okuduğu metnin günlük yaşamla ilişkisini yazar.",
+   "Bir sözcüğün anlamına ilişkin tahminlerini bağlamdan yararlanarak yazar.",
+   "Dinlediği/izlediği bir olayı veya okuduğu bir metni mantıksal ilişkilere uygun şekilde kendi ifadeleriyle yazar.",
+   "Dinledikleri/izledikleri veya okuduklarındaki görüşlere katılma veya katılmama kararını nedenleriyle yazar."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.4.2",
+  "sinif": 4,
+  "baslik": "Yazılarında içerik oluşturabilme",
+  "surec": [
+   "Metnin eksik bırakılan bölümlerini ön bilgilerinden hareketle devam ettirir.",
+   "Ön bilgilerinden hareketle metin yazar.",
+   "Dinlediği, izlediği veya okuduğu metnin günlük yaşamla ilişkisini yazar.",
+   "Bir sözcüğün anlamına ilişkin tahminlerini bağlamdan yararlanarak yazar.",
+   "Dinlediği, izlediği veya okuduğu bir metne ilişkin çıkarımlarını planlı biçimde yazar.",
+   "Yazışmalarında kişi ve nesneleri benzerlik ve/veya farklılık bakımından karşılaştırır.",
+   "Çevrim içi yazışmalarında kişi ve nesneleri benzerlik ve farklılık bakımından karşılaştırır.",
+   "Yazışmalarında olay, durum, nesne ve karakterleri özelliklerine göre sınıflandırır.",
+   "Çevrim içi yazışmalarında olay, durum, nesne ve karakterleri özelliklerine göre sınıflandırır.",
+   "Yazılarında zıt anlamlı sözcükleri kullanır.",
+   "Yazılarında eş anlamlı sözcükleri kullanır.",
+   "Yazılarında eş sesli sözcükleri kullanır.",
+   "Dinlediği, izlediği bir olayı veya okuduğu bir metni mantıksal ilişkilere uygun şekilde kendi ifadeleriyle yazar.",
+   "Ayrıntılı yönergeler yazar.",
+   "Çevrim içi ortamda dijital mahremiyete dikkat ederek yazar.",
+   "Dinledikleri, izledikleri veya okuduklarındaki görüşlere katılma veya katılmama kararını nedenleriyle yazar.",
+   "Serbest yazma çalışmalarında görüş ve düşüncelerini nedenleriyle açıklar.",
+   "İstek, şikâyet ve önerilerini yazarak (mektup, dilekçe, tebrik, elektronik posta, anlık ileti) ifade eder.",
+   "Yazılarını görsel/dijital içeriklerle destekler.",
+   "Edindiği bilginin kaynağını yazar.",
+   "Hedef kitleye görsellerle desteklenmiş açıklayıcı türdeki yazılarını sunar.",
+   "Hedef kitleye görsellerle desteklenmiş öyküleyici türdeki yazılarını sunar.",
+   "Dijital araçları kullanarak hedef kitleye uygun türde yazılarını sunar.",
+   "Yazılarında benzetme ve örneklendirmeye yer verir.",
+   "Dinlediği, izlediği veya okuduğu metindeki neden-sonuç ilişkisini yazar.",
+   "Yazılarında \"de\" ve \"ki\" bağlaçlarını kuralına uygun kullanır."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.4.3",
+  "sinif": 4,
+  "baslik": "Yazma kurallarını uygulayabilme",
+  "surec": [
+   "Yazacağı metin türünün özelliğine göre hazırladığı plana uygun yazar.",
+   "Yazılarında sözcükleri yerinde ve anlamına uygun kullanır.",
+   "Yazılarında deyim ve atasözlerini içeriğe uygun kullanır.",
+   "Yazışmalarında/çevrim içi yazışmalarında mesajlarını birden çok cümleyle açık ve anlaşılır şekilde ifade eder.",
+   "Yazılarında noktalama işaretlerini (nokta, kesme işareti, virgül, iki nokta, ünlem, tırnak işareti, soru işareti, kısa çizgi, konuşma çizgisi, yay ayraç, üç nokta ve eğik çizgi) kuralına uygun kullanır."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.4.4",
+  "sinif": 4,
+  "baslik": "Yazma sürecine etki eden durumları gözden geçirebilme",
+  "surec": [
+   "Yazma ortamının yazma sürecindeki duygu, düşünce ve davranışlarına etkisini açıklar.",
+   "Yazma yapacağı ortamın fiziksel özelliklerini dikkate alarak yazar."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "T.Y.4.5",
+  "sinif": 4,
+  "baslik": "Yazma sürecini değerlendirebilme",
+  "surec": [
+   "Yazılarında hatalarını bulur.",
+   "Yazılarında belirlediği hataları düzeltir.",
+   "Tür veya ilgi alanına göre yazma tercihini belirtir.",
+   "Dinlediği, izlediği veya okuduğu metni yazarın gözünden değerlendirdiği yazılar yazar."
+  ],
+  "alan": "Yazma",
+  "unite": null,
+  "ders": "turkce"
+ },
+ {
+  "kod": "MAT.1.1.1",
+  "sinif": 1,
+  "baslik": "Rakamları ve 20’ye kadar olan sayıları (20 dâhil), niceliklerin büyüklüklerini temsil etmek için kullanabilme",
+  "surec": [
+   "Niceliklerin büyüklüklerinin farklı temsillerini tanır.",
+   "Karşılaştığı niceliklerin büyüklüklerini, farklı temsilleri bağlamında belirler.",
+   "Karşılaştığı niceliklerin büyüklüklerini rakam ve sayılarla okur ve yazar."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.1.2",
+  "sinif": 1,
+  "baslik": "Ögeleri dağınık veya düzenli bir şekilde bulunan bir nesne grubunu sayarken parçalar arasında ilişkileri çözümleyebilme",
+  "surec": [
+   "Ögeleri dağınık veya düzenli bir şekilde bulunan bir nesne grubunun parçalarını belirler.",
+   "Ögeleri dağınık veya düzenli bir şekilde bulunan bir nesne grubunu sayarken parçalar arasındaki ilişkileri belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.1.3",
+  "sinif": 1,
+  "baslik": "Nesnelerin sıra sayısını gösterebilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.1.4",
+  "sinif": 1,
+  "baslik": "İki niceliğin büyüklüğünü “çok”, “daha çok”, “az”, “daha az” veya “eşit” terimleriyle karşılaştırabilme",
+  "surec": [
+   "İki niceliğin büyüklüğünü “çok”, “daha çok”, “az”, “daha az” veya “eşit” terimleriyle ifade eder.",
+   "İfade edilen büyüklüklere ilişkin benzerlikleri listeler.",
+   "İfade edilen büyüklüklere ilişkin farklılıkları listeler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.1.5",
+  "sinif": 1,
+  "baslik": "100’e kadar ileriye ve 20’den geriye doğru ritmik sayabilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.1.6",
+  "sinif": 1,
+  "baslik": "Artan veya azalan sayı ve şekil örüntülerini çözümleyebilme",
+  "surec": [
+   "Sayı ve şekil örüntülerinin ardışık ögelerini belirler.",
+   "Sayı ve şekil örüntülerinin ardışık ögeleri arasındaki ilişkiyi belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.1.7",
+  "sinif": 1,
+  "baslik": "Verilen bir çokluktaki ilişkilerden yararlanarak 20’ye kadar (20 dâhil) olan nesnelerin sayısını tahmin edebilme",
+  "surec": [
+   "Verilen bir çokluktaki ilişkileri gözlem ve deneyimleri ile ilişkilendirir.",
+   "Bir çokluğun büyüklüğünü stratejiye dayanarak tahmin eder.",
+   "Tahmin edilen sonuç ile sayma sonucunu karşılaştırarak yargıda bulunur."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.1.8",
+  "sinif": 1,
+  "baslik": "Standart olmayan uygun ölçme araçları ile nesnelerin uzunluğunu ve tartacağı kütlenin ölçüm sonuçlarını tahmin edebilme",
+  "surec": [
+   "Ölçeceği uzunluğa ve kütleye uygun standart olmayan ölçme aracını belirler.",
+   "Ölçeceği uzunluğun ve tartacağı kütlenin ölçüm sonuçlarını belirlenen standart olmayan ölçü birimi cinsinden tahmin eder.",
+   "Tahmininin doğruluğuna ilişkin yargıda bulunur."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.1.9",
+  "sinif": 1,
+  "baslik": "Paraların (1 TL, 5 TL, 10 TL, 20 TL, 50 TL, 100 TL ve 200 TL) temsil ettiği büyüklükleri tanıyabilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.2.1",
+  "sinif": 1,
+  "baslik": "Günlük yaşamın içerdiği toplama ve çıkarma işlemlerini çözümleyebilme",
+  "surec": [
+   "Günlük yaşam durumunun toplama ve çıkarma işlemlerinden hangisini gerektirdiğini fark eder.",
+   "Günlük yaşam durumuna karşılık gelen toplama ve çıkarma işlemlerini birbiri ile ilişkilendirir."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.2.2",
+  "sinif": 1,
+  "baslik": "Toplama ve çıkarma işlemlerinin sonuçlarını tahminde bulunarak ve zihinden işlem yaparak muhakeme edebilme",
+  "surec": [
+   "Toplama ve çıkarma işlemlerine ilişkin ögeleri belirler.",
+   "Toplama ve çıkarma işlemlerine ilişkin ögeler arasındaki ilişkileri belirler.",
+   "Toplama ve çıkarma işlemlerine yönelik tahmin ve zihinden işlem sonuçları arasında ilişki kurar.",
+   "Tahmin ve zihinden işlem sonuçlarının tutarlılığını ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.2.3",
+  "sinif": 1,
+  "baslik": "Eşit işaretinin anlamını toplama ve çıkarma işlemi bağlamında yorumlayabilme",
+  "surec": [
+   "Toplama ve çıkarma işlemlerinde eşit işaretinin kullanımını inceler.",
+   "Eşit işaretinin anlamını kullanarak bir toplama ya da çıkarma işlemini dönüştürür.",
+   "Dönüştürdüğü toplama ve çıkarma işlemlerini kendi cümleleriyle ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.2.4",
+  "sinif": 1,
+  "baslik": "Toplama ve çıkarma işlemlerinin ilişkisini yorumlayabilme",
+  "surec": [
+   "Toplama ve çıkarma işlemlerinin ilişkisini inceler.",
+   "Toplama ve çıkarma işlemlerini tersine dönüştürür.",
+   "Toplama ve çıkarma işlemlerinin ilişkisini yeniden ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.3.1",
+  "sinif": 1,
+  "baslik": "Hedefe ulaşmak için mesafeleri ve yönleri içeren yönergeleri çözümleyebilme",
+  "surec": [
+   "Yönergede yer alan mesafe ve yönleri içeren kavramları belirler.",
+   "Yönergeleri kullanarak başlangıç noktası ve hedef arasında ilişki kurar."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.3.2",
+  "sinif": 1,
+  "baslik": "Nesnelerin eşliğini değerlendirebilme",
+  "surec": [
+   "Nesnelerin eşliği için bir ölçüt belirler.",
+   "Ölçüte uygun bilgileri kullanarak ölçme yapar.",
+   "Yapılan ölçmeye dayalı olarak elde ettiği sonuçları ölçüt ile karşılaştırır.",
+   "Karşılaştırmalarına ilişkin olarak yargıda bulunur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.3.3",
+  "sinif": 1,
+  "baslik": "Günlük yaşamdaki nesneleri biçimsel özelliklerine göre ayırt edebilme",
+  "surec": [],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.3.4",
+  "sinif": 1,
+  "baslik": "Günlük yaşamda karşılaşılan geometrik yapılardaki geometrik şekilleri çözümleyebilme",
+  "surec": [
+   "Geometrik yapılardaki şekilleri belirler.",
+   "Şekiller arasında ilişki kurar."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.3.5",
+  "sinif": 1,
+  "baslik": "Biçimsel özelliklerine göre geometrik şekilleri sınıflandırabilme",
+  "surec": [
+   "Geometrik şekillerin biçimsel özelliklerini belirler.",
+   "Geometrik şekilleri biçimsel özelliklerine göre ayırır.",
+   "Geometrik şekilleri tasnif eder.",
+   "Geometrik şekilleri adlandırır."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.1.4.1",
+  "sinif": 1,
+  "baslik": "Kategorik veriye dayalı temel veri grubu ile çalışabilme ve veriye dayalı karar verebilme",
+  "surec": [
+   "Kategorik veriye dayalı istatiksel araştırma gerektiren günlük yaşam durumu belirler.",
+   "Kategorik veriye dayalı betimleme gerektirebilecek araştırma soruları oluşturur.",
+   "Kategorik verileri toplamak için plan yapar.",
+   "Kategorik verileri toplar ve analize hazırlar.",
+   "Toplanan verileri analiz etmek için görselleştirme araçlarından çetele, sıklık tablosu ve nesne grafiğini seçer.",
+   "Seçtiği araçlarla verileri görselleştirerek analiz eder.",
+   "Araştırma sonuçlarını yorumlar.",
+   "Araştırma sonuçlarını araştırma sorularına göre değerlendirir."
+  ],
+  "unite": 4,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.1",
+  "sinif": 2,
+  "baslik": "100’e kadar olan niceliklerin büyüklüklerini temsil etmede sayıların sembolik temsillerinden yararlanabilme",
+  "surec": [
+   "Niceliklerin büyüklüklerinin farklı temsillerini tanır.",
+   "Niceliklerin büyüklüklerine uygun sayı temsillerini belirler.",
+   "Niceliklerin büyüklüklerine karşılık gelen sayıları okur ve yazar."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.2",
+  "sinif": 2,
+  "baslik": "İki basamaklı sayıları çözümleyebilme",
+  "surec": [
+   "İki basamaklı sayıların basamak ve basamak değerini belirler.",
+   "İki basamaklı sayıların basamak ve basamak değerleri arasındaki ilişkileri belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.3",
+  "sinif": 2,
+  "baslik": "Sayıların sırasını belirleyebilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.4",
+  "sinif": 2,
+  "baslik": "İleriye ve geriye doğru ritmik sayabilme",
+  "surec": [
+   "Yüzlük tablo üzerinde ileriye ve geriye doğru ritmik saymaya ilişkin gözlem yapar.",
+   "20 içinde ikişer, 30 içinde üçer, 40 içinde dörder, 100 içinde beşer ileriye ve geriye doğru ritmik sayarken örüntü bulur.",
+   "İleriye ve geriye doğru ritmik sayarken bulduğu örüntüyü geneller."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.5",
+  "sinif": 2,
+  "baslik": "Sayı ve sayı temsiline dönüşen şekil örüntülerine dayalı çıkarım yapabilme",
+  "surec": [
+   "Örüntüde kullanılan sayılar ve sayı temsiline dönüşen şekiller arasındaki ilişkiye yönelik varsayımda bulunur.",
+   "Belirlediği varsayıma göre sayı ve sayı temsiline dönüşen şekil örüntülerini örnekler üzerinde listeler.",
+   "Gösterilen örüntünün, varsayımı karşılayıp karşılamadığını örneklerle sınar.",
+   "Karşılaştırılan sayı ve sayı temsiline dönüşen şekil örüntülerinin kuralını sözlü olarak ifade eder.",
+   "Gösterilen örüntü ile ilgili değerlendirmede bulunur."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.6",
+  "sinif": 2,
+  "baslik": "Bir çokluktaki ilişkilerden yararlanarak 50’ye kadar olan nesnelerin sayısını tahmin edebilme",
+  "surec": [
+   "Bir çokluktaki parça-bütün ve dağılım ilişkisini gözlem ve deneyimleri ile ilişkilendirir.",
+   "Bir çokluğun büyüklüğünü stratejiye dayanarak tahmin eder.",
+   "Tahmini ile sayma sonucunu karşılaştırarak tahmininin doğruluğuna yönelik bir yargıda bulunur."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.7",
+  "sinif": 2,
+  "baslik": "Bütün, yarım ve çeyrek arasındaki ilişkiyi çözümleyebilme",
+  "surec": [
+   "Bir bütünün yarım ve çeyrek parçalarını belirler.",
+   "Bütün, yarım ve çeyrek arasındaki ilişkileri belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.8",
+  "sinif": 2,
+  "baslik": "Paraları değerlerine göre ilişkilendirerek çözümleyebilme",
+  "surec": [
+   "Paraları değerlerine göre inceleyerek madenî paraları belirler.",
+   "Kuruş ve Türk lirası arasındaki ilişkileri belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.9",
+  "sinif": 2,
+  "baslik": "Zaman ölçü birimlerini okuyabilme ve yazabilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.10",
+  "sinif": 2,
+  "baslik": "Standart uzunluk ve kütle ölçme araçlarının ve birimlerinin gerekliliğini yansıtabilme",
+  "surec": [
+   "Standart olmayan araçlarla ilgili deneyimlerinden yola çıkarak standart ölçme araçlarına olan ihtiyacı gözden geçirir.",
+   "Deneyimlerine dayalı olarak standart ölçme araçlarının gerekliliğine ilişkin çıkarımda bulunur.",
+   "Standart ölçme araçlarına ilişkin ulaştığı çıkarımlar doğrultusunda standart ölçü birimlerinin gerekliliğini değerlendirir."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.1.11",
+  "sinif": 2,
+  "baslik": "Standart uzunluk ve kütle ölçü birimleri cinsinden uzunlukları ve kütleleri tahmin edebilme",
+  "surec": [
+   "Standart ölçü birimlerine ilişkin deneyimini, tahmine konu olan uzunluk ve kütle ile ilişkilendirir.",
+   "Nesnelerin uzunluğunu ve kütlesini standart ölçü birim cinsinden tahmin eder.",
+   "Tahminini ölçüm sonuçlarıyla karşılaştırarak tahminine ilişkin yargıda bulunur."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.2.1",
+  "sinif": 2,
+  "baslik": "Toplama ve çıkarma işlemleri gerektiren günlük yaşam problemlerini çözebilme",
+  "surec": [
+   "Problemi anlayarak verilen ve istenilenleri belirler.",
+   "Problemde verilenler ile istenilenlerin gerektirdiği işlemler arasındaki ilişkiyi belirler.",
+   "Probleme ilişkin verilenleri belirleyerek uygun matematiksel temsillere dönüştürür.",
+   "Matematiksel temsillere dönüştürdüğü problemi kendi ifadeleri ile açıklar.",
+   "Problemlerin sonucuna ilişkin tahminde bulunarak işlemleri gerçekleştirmek için stratejiler geliştirir.",
+   "Belirlenen strateji ya da stratejileri çözüm için uygular.",
+   "Çözüm yollarını kontrol ederek çözüme ulaştırmayan stratejiyi değiştirir.",
+   "Problemin çözümü için kullandığı veya geliştirdiği stratejileri gözden geçirerek kısa yolları değerlendirir.",
+   "Çözüme ulaştıran stratejinin/stratejilerin hangi problemlere uygulanabileceğini geneller.",
+   "Genellemenin geçerliliğini matematiksel örneklerle değerlendirir."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.2.2",
+  "sinif": 2,
+  "baslik": "Toplama ve çıkarma işlemlerinin sonuçlarını tahminde bulunarak ve zihinden işlem yaparak muhakeme edebilme",
+  "surec": [
+   "Toplama ve çıkarma işlemlerine ilişkin ögeleri belirler.",
+   "Toplama ve çıkarma işlemlerine ilişkin ögeler arasındaki ilişkileri belirler.",
+   "Toplama ve çıkarma işlemine yönelik tahmin ve zihinden işlem sonuçları arasında ilişki kurar.",
+   "Tahmin ve zihinden işlem sonuçlarının tutarlılığını ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.2.3",
+  "sinif": 2,
+  "baslik": "Toplama ve çıkarma işlemlerinin ilişkisini yorumlayabilme",
+  "surec": [
+   "Toplama ve çıkarma işlemlerinin ilişkisini inceler.",
+   "Toplama ve çıkarma işlemlerini tersine dönüştürür.",
+   "Toplama ve çıkarma işlemlerinin ilişkisini yeniden ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.2.4",
+  "sinif": 2,
+  "baslik": "Çarpma ve bölme işlemlerini toplama ve çıkarma işlemlerine dayalı olarak çözümleyebilme",
+  "surec": [
+   "Çarpma ve bölme işlemlerinin anlamlarının toplama ve çıkarma işlemleriyle ilişkili olduğunu fark eder.",
+   "Çarpma ve bölme işlemlerini toplama ve çıkarma işlemleriyle ilişkilendirir."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.2.5",
+  "sinif": 2,
+  "baslik": "Çarpma ve bölme işlemlerinin sonuçlarını tahminde bulunarak ve zihinden işlem yaparak muhakeme edebilme",
+  "surec": [
+   "Çarpma ve bölme işlemlerine ilişkin bileşenleri belirler.",
+   "Çarpma ve bölme işlemlerine ilişkin bileşenler arasındaki ilişkileri belirler.",
+   "Çarpma ve bölme işlemine yönelik tahmin ve zihinden işlem sonuçlarını ifade eder.",
+   "Tahmin ve zihinden işlem sonuçlarını açıklar."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.2.6",
+  "sinif": 2,
+  "baslik": "Dört işlem bağlamında eşitliğin farklı anlamlarını yorumlayabilme",
+  "surec": [
+   "Dört işlemde eşitliği farklı anlamlarına göre inceler.",
+   "Dört işlem bağlamında aynı sonucu veren durumları eşitliğin anlamını kullanarak farklı sayılarla ifade eder.",
+   "Eşitliğin anlamlarını dört işlem bağlamında ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.3.1",
+  "sinif": 2,
+  "baslik": "Günlük yaşamda kullanılan nesneleri biçimsel özelliklerine göre geometrik cisim olarak sınıflandırabilme",
+  "surec": [
+   "Günlük yaşamda kullanılan nesnelerin biçimsel özelliklerini belirler.",
+   "Farklı nesneleri biçimsel özelliklerine göre ayırır.",
+   "Nesneleri geometrik cisim olarak tasnif eder.",
+   "Geometrik cisimleri adlandırır."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.3.2",
+  "sinif": 2,
+  "baslik": "Geometrik cisim modellerini kullanarak yapılar sentezleyebilme",
+  "surec": [
+   "Geometrik yapılardaki geometrik cisimleri belirler.",
+   "Geometrik cisimler arasında ilişki kurar.",
+   "Geometrik cisimleri birleştirerek özgün bir yapı oluşturur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.3.3",
+  "sinif": 2,
+  "baslik": "Geometrik şekiller kullanarak modeller sentezleyebilme",
+  "surec": [
+   "Geometrik yapılardaki geometrik şekilleri belirler.",
+   "Geometrik şekiller arasında ilişki kurar.",
+   "Geometrik şekilleri birleştirerek özgün model oluşturur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.3.4",
+  "sinif": 2,
+  "baslik": "Geometrik şekil ve cisimlerin yön, konum veya büyüklükleri değiştiğinde biçimsel özelliklerinin değişmediğini yorumlayabilme",
+  "surec": [
+   "Geometrik şekil ve cisimlerin mevcut yön, konum veya büyüklüklerini inceler.",
+   "Geometrik şekil ve cisimlerin mevcut yön, konum veya büyüklüklerini biçimsel özelliklerinden kopmadan farklı büyüklüklere veya farklı yönlere dönüştürerek gösterir.",
+   "Geometrik şekil ve cisimlerin yön, konum veya büyüklükleri değişse de geometrik şekil ve cisim olarak aynı kaldığını ifade eder."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.3.5",
+  "sinif": 2,
+  "baslik": "Standart olmayan sıvı ölçme araçları ile sıvı miktarını tahmin edebilme",
+  "surec": [
+   "Standart olmayan sıvı ölçme araçlarına ilişkin deneyimini, tahmine konu olan sıvı miktarı ile ilişkilendirir.",
+   "Belirlenen standart olmayan sıvı ölçme araçlarına göre sıvının miktarını tahmin eder.",
+   "Tahminini ölçüm sonuçlarıyla karşılaştırarak tahminine ilişkin yargıda bulunur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.3.6",
+  "sinif": 2,
+  "baslik": "Mesafe ve yönleri içerecek şekilde hedefe ulaşmak için uygun stratejilere karar verebilme",
+  "surec": [
+   "Hedefe ulaşmak için ölçüt belirler.",
+   "Belirlediği ölçüte uygun bilgileri toplar.",
+   "Topladığı bilgilerden ölçüte yönelik seçenekler oluşturur.",
+   "Oluşturduğu seçenekler üzerinde mantıksal denetleme yapar.",
+   "Seçenekler arasından ölçüte uygun seçim yapar.",
+   "Ölçüt değişikliği durumunu sürece yansıtır."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.3.7",
+  "sinif": 2,
+  "baslik": "Verilen şekiller arasından simetrik olanları ayırt edebilme",
+  "surec": [],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.2.4.1",
+  "sinif": 2,
+  "baslik": "Kategorik veriye dayalı en çok iki veri grubu ile çalışabilme ve veriye dayalı karar verebilme",
+  "surec": [
+   "Kategorik veriye dayalı istatistiksel araştırma gerektiren günlük yaşam durumu belirler.",
+   "Kategorik veriye dayalı betimleme veya karşılaştırma gerektirebilecek araştırma soruları oluşturur.",
+   "Kategorik verileri toplamak için plan yapar.",
+   "Kategorik verileri toplar ve analize hazırlar.",
+   "Toplanan verileri analiz etmek için görselleştirme araçlarından çetele tablosu, sıklık tablosu ve şekil grafiğini seçer.",
+   "Seçtiği araçlarla verileri görselleştirerek analiz eder.",
+   "Araştırma sonuçlarını yorumlar.",
+   "Araştırma sonuçlarını araştırma sorularına göre değerlendirir."
+  ],
+  "unite": 4,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.1",
+  "sinif": 3,
+  "baslik": "Niceliklerin büyüklüklerine karşılık gelen 1000’e kadar olan sayıların temsillerinden yararlanabilme",
+  "surec": [
+   "Niceliklerin büyüklüklerinin temsillerini tanır.",
+   "Niceliklerin büyüklüklerine uygun sayı temsillerini belirler.",
+   "Niceliklerin büyüklüklerine karşılık gelen uygun sayıları okur ve yazar."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.2",
+  "sinif": 3,
+  "baslik": "1000’e kadar olan sayıları çözümleyebilme",
+  "surec": [
+   "Üç basamaklı sayıların basamaklarını belirler.",
+   "Üç basamaklı sayıların basamak ve basamak değerleri arasındaki ilişkileri belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.3",
+  "sinif": 3,
+  "baslik": "Sayıları sıralayabilme",
+  "surec": [
+   "1000’e kadar olan sayıları öncelik/sonralık ilişkisine göre belirler.",
+   "1000’e kadar olan sayıları bulundukları onluklara ve yüzlüklere göre ayırır.",
+   "1000’e kadar olan sayıları en yakın onluklara ve yüzlüklere göre tasnif eder.",
+   "1000’e kadar olan sayıları en yakın onluklara ve yüzlüklere göre ifade eder."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.4",
+  "sinif": 3,
+  "baslik": "Sayıları ileriye ve geriye doğru ritmik sayabilme",
+  "surec": [
+   "Modeller üzerinde ileriye ve geriye doğru ritmik saymaya ilişkin gözlem yapar.",
+   "60 içinde altışar, 70 içinde yedişer, 80 içinde sekizer, 90 içinde dokuzar; 1000 içinde onar ve yüzer ileriye ve geriye doğru ritmik sayarken örüntü bulur.",
+   "İleriye ve geriye doğru ritmik sayarken bulduğu örüntüyü geneller."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.5",
+  "sinif": 3,
+  "baslik": "Sayıları tek-çift olarak sınıflandırabilme",
+  "surec": [
+   "Sayıları tek-çift ilişkisine göre belirler.",
+   "Sayıları tek-çift olma durumlarına göre ayırt eder.",
+   "Sayıları tek-çift olma durumlarına göre tasnif eder.",
+   "Sayıları tek-çift sayı olarak ifade eder."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.6",
+  "sinif": 3,
+  "baslik": "Tek ve çift sayıların toplamlarının tek ya da çift olma durumu arasındaki ilişkiye yönelik tümevarımsal akıl yürütebilme",
+  "surec": [
+   "Tek ve çift sayıların toplamlarına yönelik örnek durumların tek ya da çift olma özelliklerini belirler.",
+   "Toplanan sayılar ile elde edilen toplamın tek ya da çift olma durumları arasındaki örüntüyü belirler.",
+   "Tek ve çift sayıların toplamlarının tek ya da çift olma durumuna ilişkin genelleme yapar."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.7",
+  "sinif": 3,
+  "baslik": "Sayı ve sayı temsiline dönüşen şekil örüntülerine dayalı çıkarım yapabilme",
+  "surec": [
+   "Örüntüde kullanılan sayılar ve sayı temsiline dönüşen şekiller arasındaki ilişkiye yönelik varsayımda bulunur.",
+   "Belirlediği varsayıma göre sayı ve sayı temsiline dönüşen şekil örüntülerini örnekler üzerinde listeler.",
+   "Gösterilen örüntünün varsayımı karşılayıp karşılamadığını örneklerle sınar.",
+   "Karşılaştırılan sayı ve sayı temsiline dönüşen şekil örüntülerinin kuralını sözlü olarak ifade eder.",
+   "Gösterilen örüntü ile ilgili değerlendirmede bulunur."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.8",
+  "sinif": 3,
+  "baslik": "Bir çokluktaki ilişkilerden yararlanarak 100’e kadar olan nesnelerin sayısını tahmin edebilme",
+  "surec": [
+   "Bir çokluktaki parça-bütün ve dağılım ilişkisini gözlem ve deneyimleri ile ilişkilendirir."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.9",
+  "sinif": 3,
+  "baslik": "Bütün, yarım ve çeyreğin kesirle gösterimi için modellerden yararlanabilme",
+  "surec": [
+   "Bütün, yarım ve çeyrek modellerinin temsillerini tanır.",
+   "Bütün, yarım ve çeyrek modellerine uygun kesir temsillerini belirler.",
+   "Belirlediği temsili bütün, yarım ve çeyrek modelleri için kullanır."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.10",
+  "sinif": 3,
+  "baslik": "Bir bütünü eş parçalar oluşturacak şekilde birim kesir olarak çözümleyebilme",
+  "surec": [
+   "Bir bütünü oluşturan eş parçaları belirler.",
+   "Bütün ile eş parçaların her biri arasındaki ilişkiyi belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.11",
+  "sinif": 3,
+  "baslik": "Bir kesrin payı ile paydası arasındaki ilişkiyi çözümleyebilme",
+  "surec": [
+   "Bir kesrin pay ve paydasına ait parçaları belirler.",
+   "Bir kesrin pay ve paydasına ait parçalar arasındaki ilişkiyi belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.12",
+  "sinif": 3,
+  "baslik": "Analog ve dijital saatlerde zamanı okuyabilme ve yazabilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.13",
+  "sinif": 3,
+  "baslik": "Zaman ölçü birimlerini çözümleyebilme",
+  "surec": [
+   "Zaman ölçü birimlerini (yıl, ay, hafta, gün, saat, dakika, saniye) belirler.",
+   "Zaman ölçü birimleri arasındaki ilişkileri belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.14",
+  "sinif": 3,
+  "baslik": "Olayların oluş sürelerini tahmin ederek yargıda bulunabilme",
+  "surec": [
+   "Olayların oluş sürelerini birbirleriyle ilişkilendirir.",
+   "Olayların oluş sürelerine ilişkin deneyimlerinden faydalanarak çıkarım yapar.",
+   "Olayların oluş sürelerine ilişkin yapılan çıkarımla gerçekte olan sürelerine ilişkin yargıda bulunur."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.15",
+  "sinif": 3,
+  "baslik": "Uzunluk ve kütle birimleri arasındaki ilişkileri kullanarak bu birimleri kendi içerisinde çözümleyebilme",
+  "surec": [
+   "Standart kütle ve uzunluk birimlerine ilişkin parçaları belirler.",
+   "Santimetre, metre, kilometre ve gram, kilogram ve ton arasındaki ilişkileri kendi içerisinde belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.1.16",
+  "sinif": 3,
+  "baslik": "Madenî ve kâğıt paraları değerlerine göre ilişkilendirerek yorumlayabilme",
+  "surec": [
+   "Paraları değerlerine göre inceler.",
+   "Madenî paraları ve kâğıt paraları değerlerine göre dönüştürür.",
+   "Paranın değerini, anlamını değiştirmeyecek şekilde yeniden ifade eder."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.2.1",
+  "sinif": 3,
+  "baslik": "Toplama ve çıkarma işlemlerinin sonuçlarını tahminde bulunarak ve zihinden işlem yaparak muhakeme edebilme",
+  "surec": [
+   "Toplama ve çıkarma işlemlerine ilişkin ögeleri belirler.",
+   "Toplama ve çıkarma işlemlerine ilişkin ögeler arasındaki ilişkileri belirler.",
+   "Toplama ve çıkarma işlemine yönelik tahminî ve zihinden işlem sonuçları arasında ilişki kurar.",
+   "Tahminî ve zihinden işlem sonuçlarının tutarlılığını ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.2.2",
+  "sinif": 3,
+  "baslik": "Toplama ve çıkarma işlemlerini çözümleyebilme",
+  "surec": [
+   "Toplama ve çıkarma işlemlerinin adımlarını belirler.",
+   "Toplama ve çıkarmanın işlem süreçlerini birbiri ile ilişkilendirir."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.2.3",
+  "sinif": 3,
+  "baslik": "Çarpma ve bölme işlemlerinin sonuçlarını tahminde bulunarak ve zihinden işlem yaparak muhakeme edebilme",
+  "surec": [
+   "Çarpma ve bölme işlemlerine ilişkin bileşenleri belirler.",
+   "Çarpma ve bölme işlemlerine ilişkin bileşenler arasındaki ilişkileri belirler.",
+   "Çarpma ve bölme işlemine yönelik tahminî ve zihinden işlem sonuçlarını ifade eder.",
+   "Tahminî ve zihinden işlem sonuçlarını kendi cümleleri ile açıklar."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.2.4",
+  "sinif": 3,
+  "baslik": "Çarpma ve bölme işlemlerini çözümleyebilme",
+  "surec": [
+   "Çarpma ve bölme işlemlerinin adımlarını belirler.",
+   "Çarpma ve bölme işlemlerini birbiri ile ilişkilendirir."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.2.5",
+  "sinif": 3,
+  "baslik": "Dört işlem gerektiren durumlar için verilen yönergeleri takip ederek yorumlayabilme",
+  "surec": [
+   "Dört işleme ait bileşenleri inceler.",
+   "İncelediği bileşenleri işlem diline dönüştürür.",
+   "Oluşturduğu yapıyı temsillerle yeniden ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.2.6",
+  "sinif": 3,
+  "baslik": "Dört işlem gerektiren günlük yaşam problemlerini çözebilme",
+  "surec": [
+   "Problemi anlayarak verilenleri ve istenilenleri belirler.",
+   "Problemde verilenlerin ve istenilenlerin gerektirdiği işlemler arasındaki ilişkiyi belirler.",
+   "Probleme ilişkin verilenleri belirleyerek uygun matematiksel temsillere dönüştürür.",
+   "Matematiksel temsillere dönüştürdüğü problemi kendi ifadeleri ile açıklar.",
+   "Problemlerin sonucuna ilişkin tahminde bulunarak işlemleri gerçekleştirmek için stratejiler geliştirir.",
+   "Belirlenen strateji ya da stratejileri çözüm için uygular.",
+   "Çözüm yollarını kontrol ederek çözüme ulaştırmayan stratejiyi değiştirir.",
+   "Problemin çözümü için kullandığı veya geliştirdiği stratejileri gözden geçirerek kısa yolları değerlendirir.",
+   "Çözüme ulaştıran stratejilerin hangi problemlere uygulanabileceğini geneller.",
+   "Genellemenin geçerliliğini matematiksel örneklerle değerlendirir."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.2.7",
+  "sinif": 3,
+  "baslik": "Dört işlem gerektiren problem durumlarını yapılandırabilme",
+  "surec": [
+   "Dört işlem gerektiren problem durumlarına yönelik hiyerarşik, nedensel ya da mantıksal ilişkiler ortaya koyar.",
+   "Dört işlem yapmayı gerektiren deneyimleriyle elde ettiği ilişkilere dayalı bir problem oluşturur."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.2.8",
+  "sinif": 3,
+  "baslik": "Dört işlem bağlamında eşitliğin farklı anlamlarını yorumlayabilme",
+  "surec": [
+   "Dört işlemde eşitliğin kullanımını inceler.",
+   "Aynı sonucu veren dört işlemi eşitliğin anlamını kullanarak farklı sayılarla ifade eder.",
+   "Eşitliğin anlamlarını dört işlem bağlamında ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.3.1",
+  "sinif": 3,
+  "baslik": "Geometrik cisimlerin özelliklerini yorumlayabilme",
+  "surec": [
+   "Geometrik cisimlerin özelliklerini inceler.",
+   "Geometrik cisimlerin köşe, yüz ve ayrıt özelliklerini ifade eder.",
+   "Köşe, yüz ve ayrıt terimlerini kendi ifadeleri ile açıklar."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.3.2",
+  "sinif": 3,
+  "baslik": "Kenar sayılarına göre geometrik şekilleri sınıflandırabilme",
+  "surec": [
+   "Geometrik şekillerin kenarlarını belirler.",
+   "Geometrik şekilleri kenar sayılarına göre ayırır.",
+   "Geometrik şekilleri kenar sayılarına göre tasnif eder.",
+   "Geometrik şekilleri kenar sayılarına göre adlandırır."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.3.3",
+  "sinif": 3,
+  "baslik": "Matematiksel araç ve teknolojileri kullanarak çeşitli geometrik şekilleri ve cisimleri çizebilme",
+  "surec": [
+   "Geometrik şekil ve cisim çizmeyi gerektiren matematiksel araç ve teknolojileri tanır.",
+   "Geometrik şekil ve cisim çizmek için gerekli araçları ve teknolojiyi belirler.",
+   "Belirlenen araç ve teknolojiyi kullanır."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.3.4",
+  "sinif": 3,
+  "baslik": "Standart olmayan ve standart ölçme araçları ile geometrik şekillerin çevre uzunluğunu tahmin edebilme",
+  "surec": [
+   "Standart olmayan ve standart uzunluk ölçme araçlarına ilişkin deneyimini, tahmine konu olan şeklin çevre uzunluğu ile ilişkilendirir.",
+   "Belirlenen standart olmayan ve standart uzunluk ölçme aracına göre çevre uzunluğuna ilişkin tahminde bulunur.",
+   "Tahminini ölçüm sonuçlarıyla karşılaştırarak tahminine ilişkin yargıda bulunur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.3.5",
+  "sinif": 3,
+  "baslik": "Standart sıvı ölçü birimleri cinsinden sıvı miktarını tahmin edebilme",
+  "surec": [
+   "Standart sıvı ölçü birimlerine ilişkin deneyimini tahmine konu olan sıvı miktarı ile ilişkilendirir.",
+   "Belirlenen standart sıvı ölçü birimi cinsinden sıvının miktarına ilişkin tahminde bulunur.",
+   "Tahminini ölçüm sonuçlarıyla karşılaştırarak tahminine ilişkin yargıda bulunur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.3.6",
+  "sinif": 3,
+  "baslik": "Birden fazla simetri doğrusu olan şekilleri çözümleyebilme",
+  "surec": [
+   "Kare, dikdörtgen ve dairenin birden fazla simetri doğrusu olduğunu belirler.",
+   "Simetri doğrusuna göre oluşan parçaların birbirine eş olduğunu belirler."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.3.7",
+  "sinif": 3,
+  "baslik": "Bir parçası verilen simetrik şekli simetri doğrusuna göre yapılandırabilme",
+  "surec": [
+   "Bir parçası verilen simetrik şekli inceleyerek mantıksal ilişkiler ortaya koyar.",
+   "Bir parçası verilen simetrik şekli yatay ve dikey simetri doğrusuna göre tamamlar."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.3.8",
+  "sinif": 3,
+  "baslik": "Yönerge ile yapılandırılan ve bir parçası verilen bir şekli tamamlayarak simetrisini oluşturmaya ilişkin kodlama stratejilerini kullanarak yargıda bulunabilme",
+  "surec": [
+   "Bir parçası verilen şekli tamamlayarak simetrisini oluşturmaya ilişkin yönergeleri yeniden ifade eder.",
+   "Yönergeleri takip ederek bir parçası verilen şekli tamamlayarak simetrisini oluşturur.",
+   "Bir şeklin simetrisini oluşturmaya ilişkin yargıda bulunur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.3.4.1",
+  "sinif": 3,
+  "baslik": "Kategorik ve sayma ile elde edilen nicel veriye dayalı tek veri grubu ile çalışabilme ve veriye dayalı karar verebilme",
+  "surec": [
+   "Kategorik ve nicel veriye dayalı istatistiksel araştırma gerektiren günlük yaşam durumları belirler.",
+   "Kategorik ve nicel veriye dayalı betimleme gerektirebilecek araştırma soruları oluşturur.",
+   "Kategorik ve nicel verileri toplamak için plan yapar.",
+   "Kategorik verileri toplar ve analize hazırlar.",
+   "Toplanan verileri analiz etmek için görselleştirme araçlarından çetele, sıklık tablosu veya nokta grafiğini seçer.",
+   "Seçtiği araçlarla verileri görselleştirerek analiz eder.",
+   "Araştırma sonuçlarını yorumlar.",
+   "Araştırma sonuçlarını araştırma sorularına göre değerlendirir."
+  ],
+  "unite": 4,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.1",
+  "sinif": 4,
+  "baslik": "Niceliklerin büyüklükleri için en fazla altı basamaklı olan sayıların temsillerinden yararlanabilme",
+  "surec": [
+   "Niceliklerin büyüklüklerinin temsillerini tanır.",
+   "Niceliklerin büyüklüklerine uygun sayı temsillerini belirler.",
+   "Niceliklerin büyüklüklerine karşılık gelen uygun sayıları okur ve yazar."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.2",
+  "sinif": 4,
+  "baslik": "En fazla altı basamaklı sayıları çözümleyebilme",
+  "surec": [
+   "En fazla altı basamaklı sayıların basamaklarını ve bölüklerini belirler.",
+   "En fazla altı basamaklı sayıların basamak, bölük ile basamak ve sayı değerleri arasındaki ilişkileri belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.3",
+  "sinif": 4,
+  "baslik": "Sayıları sıralayabilme",
+  "surec": [
+   "En fazla altı basamaklı sayıları öncelik/sonralık ilişkisine göre sembol kullanarak belirler.",
+   "En fazla altı basamaklı sayıları onluklara, yüzlüklere ve binliklere göre basamaklarına ayırır.",
+   "En fazla dört basamaklı sayıları en yakın onluğa, yüzlüğe ve binliğe göre yuvarlayarak tasnif eder.",
+   "Tasnif edilen sayı gruplarını birler ve binler bölüğü şeklinde ifade eder."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.4",
+  "sinif": 4,
+  "baslik": "İleriye ve geriye doğru ritmik saymayı yapılandırabilme",
+  "surec": [
+   "Sayıları ileriye ve geriye doğru ritmik sayarken hiyerarşik ilişkiler ortaya koyar.",
+   "Ritmik saymaya ilişkin öz bilgisine dayanarak yüzer ve biner ileriye ve geriye doğru hedeflenen sayıya ulaşır."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.5",
+  "sinif": 4,
+  "baslik": "Artan azalan sayı örüntüleri ve şekil örüntülerindeki değişimi genelleyebilme",
+  "surec": [
+   "Verilen örüntünün adımı ve örüntüde kullanılan sayılar ya da şekiller arasındaki ilişkiye yönelik bilgi toplar.",
+   "Verilen örüntüde kullanılan sayıların ya da şekillerin ortak olan özelliklerini belirler.",
+   "Verilen örüntüde kullanılan sayıların ya da şekillerin ortak olmayan özelliklerini belirler.",
+   "Karşılaştırılan sayı ve şekil örüntülerindeki artma, azalma ve tekrar etme durumlarını sözlü olarak ifade eder."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.6",
+  "sinif": 4,
+  "baslik": "Basit, bileşik ve tam sayılı kesirleri kullanmak için matematiksel temsillerden yararlanabilme",
+  "surec": [
+   "Basit, bileşik ve tam sayılı kesirlerin temsillerini tanır.",
+   "Günlük yaşam durumuna uygun basit, bileşik ve tam sayılı kesir temsillerini belirler.",
+   "Belirlediği basit, bileşik ve tam sayılı kesirlerin temsillerini kullanır."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.7",
+  "sinif": 4,
+  "baslik": "Denk kesirleri kullanmak için matematiksel temsillerden yararlanabilme",
+  "surec": [
+   "Denk kesirlerin temsillerini tanır.",
+   "Denk kesirlere uygun temsilleri belirler.",
+   "Belirlediği denk kesirlerin temsillerini kullanır."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.8",
+  "sinif": 4,
+  "baslik": "Birim kesirlerin büyüklük küçüklük ilişkilerini çözümleyebilme",
+  "surec": [
+   "Birim kesirleri büyüklük küçüklük bağlamında ifade eder.",
+   "Birim kesirler arasındaki büyüklük küçüklük ilişkisini belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.9",
+  "sinif": 4,
+  "baslik": "Paydaları eşit olan kesirlerin büyüklük küçüklük ilişkilerini çözümleyebilme",
+  "surec": [
+   "Paydaları eşit kesirleri büyüklük küçüklük bağlamında ifade eder.",
+   "Paydaları eşit kesirler arasındaki büyüklük küçüklük ilişkisini belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.10",
+  "sinif": 4,
+  "baslik": "Bir çokluğun basit kesir kadarını ve bir basit kesir kadarı verilen çokluğun tamamını çözümleyebilme",
+  "surec": [
+   "Bir çokluğu oluşturan eş parçaları ve eş parçaları verilen bir çokluğu kesire uygun olacak şekilde belirler.",
+   "Çokluk ile eş parçalar ve eş parçalar ile çokluk arasındaki ilişkiyi belirler."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.11",
+  "sinif": 4,
+  "baslik": "Paydaları eşit kesirlerle toplama ve çıkarma işlemini yapılandırabilme",
+  "surec": [
+   "Paydaları eşit kesirlerle toplama ve çıkarma işleminde mantıksal ilişkileri ortaya koyar.",
+   "Paydaları eşit kesirlerle toplama ve çıkarma işleminde kendi öz bilgisi ile elde ettiği ilişkilere dayalı bir bütün oluşturur."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.12",
+  "sinif": 4,
+  "baslik": "Paydaları eşit kesirlerle toplama ve çıkarma işlemi gerektiren günlük yaşam problemlerine çözüm geliştirebilme",
+  "surec": [
+   "Problemin çözümü için uygun stratejiyi oluşturur.",
+   "Problemi çözmek için uygun stratejiyi kullanır.",
+   "Problemin çözümünü kontrol eder."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.1.13",
+  "sinif": 4,
+  "baslik": "Uzunluk ve kütle birimlerinin kendi içerisindeki dönüşümlerini yorumlayabilme",
+  "surec": [
+   "Uzunluk ve kütle birimlerinin kendi içindeki ilişkileri inceler.",
+   "Uzunluk ve kütle birimlerini kendi içinde birbirine dönüştürür.",
+   "Uzunluk ve kütle birimlerini kendi içinde farklı birim cinsinden yeniden ifade eder."
+  ],
+  "unite": 1,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.2.1",
+  "sinif": 4,
+  "baslik": "Toplama ve çıkarma işlemlerini zihinden yaparak çözümleyebilme",
+  "surec": [
+   "Zihinden toplama ve çıkarma işlemlerinde sayıların uygun bir biçimde parçalarını belirler.",
+   "Sayıların parçalarına ait özellikleri ilişkilendirir."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.2.2",
+  "sinif": 4,
+  "baslik": "En çok dört basamaklı sayılarla toplama ve çıkarma işlemlerini yapılandırabilme",
+  "surec": [
+   "Toplama ve çıkarma işlemlerinin algoritmasına yönelik hiyerarşik, nedensel ya da mantıksal ilişkiler ortaya koyar.",
+   "Toplama ve çıkarma işlemlerinin algoritmasına yönelik kendi öz bilgisi ile elde ettiği ilişkilere dayalı bir bütün oluşturur."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.2.3",
+  "sinif": 4,
+  "baslik": "Çarpma ve bölme işlemlerinin sonucunu tahmin edebilme",
+  "surec": [
+   "Çarpma ve bölme işlemlerinin sonucunu deneyimleri ile ilişkilendirir.",
+   "Çarpma ve bölme işlemlerinin sonucuna ilişkin çıkarım yapar.",
+   "Çarpma ve bölme işlemlerinin sonucuna ilişkin yargıda bulunur."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.2.4",
+  "sinif": 4,
+  "baslik": "Zihinden çözümlenen çarpma ve bölme işlemleri ile bu işlemlerin kısa yollarını yapılandırabilme",
+  "surec": [
+   "Zihinden çözümlenen çarpma ve bölme işlemlerinin algoritmasına yönelik hiyerarşik, nedensel ya da mantıksal ilişkiler ortaya koyar.",
+   "Zihinden çözümlenen çarpma ve bölme işlemlerinin algoritmasına yönelik kendi öz bilgisi ile elde ettiği ilişkilere dayalı bir bütün oluşturur."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.2.5",
+  "sinif": 4,
+  "baslik": "Çarpma ve bölme işlemlerini çözümleyebilme",
+  "surec": [
+   "Çarpma ve bölme işlemlerini fark eder.",
+   "Çarpma ve bölme işlemlerini birbiri ile ilişkilendirir."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.2.6",
+  "sinif": 4,
+  "baslik": "Dört işlem içeren yönergeler oluşturarak süreci yorumlayabilme",
+  "surec": [
+   "Dört işlem içeren durumları inceler.",
+   "İncelediği durumları yönergelere dönüştürür.",
+   "Oluşturduğu yönergeyi yeniden ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.2.7",
+  "sinif": 4,
+  "baslik": "Dört işlem gerektiren problemleri çözebilme",
+  "surec": [
+   "Problemi anlayarak verilenleri ve istenilenleri belirler.",
+   "Problemde verilenlerin ve istenilenlerin gerektirdiği işlemler arasındaki ilişkiyi belirler.",
+   "Probleme ilişkin verilenleri belirleyerek uygun matematiksel temsillere dönüştürür.",
+   "Matematiksel temsillere dönüştürdüğü problemi kendi ifadeleri ile açıklar.",
+   "Problemlerin sonucuna ilişkin tahminde bulunarak işlemleri gerçekleştirmek için stratejiler geliştirir.",
+   "Belirlenen strateji ya da stratejileri çözüm için uygular.",
+   "Çözüm yollarını kontrol ederek çözüme ulaştırmayan stratejiyi değiştirir.",
+   "Problemin çözümü için kullandığı veya geliştirdiği stratejileri gözden geçirerek kısa yolları değerlendirir.",
+   "Çözüme ulaştıran stratejilerin hangi problemlere uygulanabileceğini geneller.",
+   "Genellemenin geçerliliğini matematiksel örneklerle değerlendirir."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.2.8",
+  "sinif": 4,
+  "baslik": "Dört işlem gerektiren problem durumlarını yapılandırabilme",
+  "surec": [
+   "Dört işlem gerektiren problem durumlarına yönelik hiyerarşik, nedensel ya da mantıksal ilişkiler ortaya koyar."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.2.9",
+  "sinif": 4,
+  "baslik": "Dört işlem bağlamında eşitliğin farklı anlamlarını yorumlayabilme",
+  "surec": [
+   "Dört işlem bağlamında eşitlik kavramını inceler.",
+   "Günlük yaşam durumlarını dört işleme dönüştürür.",
+   "Dört işlem içeren günlük yaşam durumunu eşitlik kavramı bağlamında ifade eder."
+  ],
+  "unite": 2,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.3.1",
+  "sinif": 4,
+  "baslik": "Geometrik cisimlerin açınımlarını yapılandırabilme",
+  "surec": [
+   "Geometrik cisimlerin açınımlarını inceleyerek yüzler arasında mantıksal ilişkiler ortaya koyar.",
+   "Ortaya koyduğu ilişkilerden yola çıkarak geometrik cismi oluşturur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.3.2",
+  "sinif": 4,
+  "baslik": "Geometrik şekilleri kenar ve köşelerine göre yorumlayabilme",
+  "surec": [
+   "Üçgen, kare ve dikdörtgenin kenar ve köşelerini belirler.",
+   "Üçgen, kare ve dikdörtgenin kenar ve köşeleri arasında ilişki kurar.",
+   "Kenarlarına göre üçgen çeşitlerini ve kare ile dikdörtgen ilişkisini ifade eder."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.3.3",
+  "sinif": 4,
+  "baslik": "Geometrik şekillerin çevre uzunluğunu ölçmede matematiksel araç ve teknolojiden yararlanabilme",
+  "surec": [
+   "Geometrik şekillerin çevre uzunluğunu ölçmede kullanılabilecek matematiksel araç ve teknolojiyi tanır.",
+   "Üçgen, kare ve dikdörtgenin çevre uzunluğunu ölçmede kullanılabilecek matematiksel araç ve teknolojiyi belirler.",
+   "Üçgen, kare ve dikdörtgenin çevre uzunluğunu ölçmek için ilgili matematiksel araç ve teknolojiyi kullanır."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.3.4",
+  "sinif": 4,
+  "baslik": "Standart olmayan ölçü birimleri cinsinden şekillerin alanlarını tahmin edebilme",
+  "surec": [
+   "Standart olmayan ölçü birimlerine ilişkin deneyimini, tahmine konu olan şeklin alanıyla ilişkilendirir.",
+   "Belirlenen standart olmayan ölçü birimini kullanarak şeklin alanına ilişkin tahminde bulunur.",
+   "Tahminini ölçüm sonuçlarıyla karşılaştırarak tahminine ilişkin yargıda bulunur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.3.5",
+  "sinif": 4,
+  "baslik": "Günlük yaşamdan örneklerle açıyı bir dönme miktarı olarak yorumlayabilme",
+  "surec": [
+   "Günlük hayattan örneklerle açıyı belirler.",
+   "Açıları bağlamından koparmadan günlük yaşam durumlarına dönüştürür.",
+   "Açıyı bir dönme miktarı olarak yeniden ifade eder."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.3.6",
+  "sinif": 4,
+  "baslik": "Açı ölçümüne ilişkin standart ölçme araçlarının gerekliliğini değerlendirebilme",
+  "surec": [
+   "Açı ölçümü için bir ölçüt belirler.",
+   "Ölçüte uygun olarak standart olmayan ölçü birimlerini kullanarak ölçme yapar.",
+   "Standart olmayan ölçü birimlerine dayalı olarak elde ettiği sonuçları ölçüt ile karşılaştırır.",
+   "Karşılaştırmalarına ilişkin olarak standart ölçme araçlarının gerekliliğine ilişkin yargıda bulunur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.3.7",
+  "sinif": 4,
+  "baslik": "Dik açıyı referans alarak açıları dar ve geniş olarak sınıflandırabilme",
+  "surec": [
+   "Dik açının özelliklerini belirler.",
+   "Dik açıyı referans alarak açı çeşitlerini dar ve geniş açı olarak ayırır.",
+   "Dar ve geniş açının özelliklerini tasnif eder.",
+   "Dar ve geniş açıyı adlandırır."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.3.8",
+  "sinif": 4,
+  "baslik": "Geometrik nesneler ve şekiller üzerinden doğruya göre simetriyi yorumlayabilme",
+  "surec": [
+   "Geometrik şekiller ve modeller üzerinden aynaya göre simetrinin özelliklerini inceler.",
+   "Aynaya göre simetri ile doğruya göre simetri arasındaki ilişkiyi fark eder.",
+   "Aynaya göre simetriyi, anlamını değiştirmeden kendi ifadeleriyle doğruya göre simetri olarak yeniden ifade eder."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.3.9",
+  "sinif": 4,
+  "baslik": "Bir şeklin doğruya göre simetrisini yapılandırabilme",
+  "surec": [
+   "Simetri doğrusunun özelliklerini inceleyerek doğruya göre simetriye ilişkin mantıksal ilişkiler ortaya koyar.",
+   "Ortaya koyduğu ilişkilerden yola çıkarak şeklin doğruya göre simetrisini oluşturur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.3.10",
+  "sinif": 4,
+  "baslik": "Geometrik şekillere dayalı bir yapı oluşturabilmek için kodlama stratejilerini yapılandırabilme",
+  "surec": [
+   "Geometrik şekil ve yapı bilgisi arasında mantıksal ilişkiler ortaya koyar.",
+   "Ortaya koyduğu ilişkilerden yola çıkarak kodlama stratejisi oluşturur."
+  ],
+  "unite": 3,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.4.1",
+  "sinif": 4,
+  "baslik": "Günlük yaşamdan herhangi bir olayın olasılığını “imkânsız, olabilir, kesin” olarak belirleyebilme",
+  "surec": [],
+  "unite": 4,
+  "ders": "matematik"
+ },
+ {
+  "kod": "MAT.4.4.2",
+  "sinif": 4,
+  "baslik": "Kategorik veriye ve sayma ile elde edilen nicel veriye dayalı en çok iki veri grubu ile çalışabilme ve veriye dayalı karar verebilme",
+  "surec": [
+   "Kategorik ve nicel veriye dayalı istatistiksel araştırma gerektiren günlük yaşam ile ilgili bir problem belirler.",
+   "Kategorik ve nicel veriye dayalı betimleme veya karşılaştırma gerektirebilecek araştırma soruları oluşturur.",
+   "Kategorik ve nicel verileri toplamak için plan yapar.",
+   "Kategorik verileri toplar ve analize hazırlar.",
+   "Toplanan verileri analiz etmek için uygun görselleştirme araçlarını (çetele ve sıklık tablosu ile nesne, şekil ve nokta grafiği) seçer.",
+   "Seçtiği araçlarla verileri görselleştirerek analiz eder.",
+   "Araştırma sonuçlarını yorumlar.",
+   "Araştırma sonuçlarını araştırma sorularına göre değerlendirir."
+  ],
+  "unite": 4,
+  "ders": "matematik"
+ },
+ {
+  "kod": "HB.1.1.1",
+  "sinif": 1,
+  "baslik": "Öğretmeni ve arkadaşlarıyla tanışabilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.1.2",
+  "sinif": 1,
+  "baslik": "Sınıf ve okul ortamını tanıyabilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.1.3",
+  "sinif": 1,
+  "baslik": "Sınıf ve okul ortamında kurallara uygun davranabilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.1.4",
+  "sinif": 1,
+  "baslik": "Bireysel özelliklerini açıklayabilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.2.1",
+  "sinif": 1,
+  "baslik": "Sağlıklı büyüme ve gelişme için yapılması gerekenleri belirleyebilme",
+  "surec": [],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.2.2",
+  "sinif": 1,
+  "baslik": "Kişisel alan sınırlarını koruyabilme",
+  "surec": [],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.2.3",
+  "sinif": 1,
+  "baslik": "Temel trafik kurallarına uygun davranabilme",
+  "surec": [],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.2.4",
+  "sinif": 1,
+  "baslik": "Acil durumlarda yapılması gerekenleri belirleyebilme",
+  "surec": [],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.3.1",
+  "sinif": 1,
+  "baslik": "Ailenin özelliklerini ifade edebilme",
+  "surec": [],
+  "unite": 3,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.3.2",
+  "sinif": 1,
+  "baslik": "Aile yaşamında nezaket ve görgü kurallarına uygun davranabilme",
+  "surec": [],
+  "unite": 3,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.3.3",
+  "sinif": 1,
+  "baslik": "Aile bireylerinin görev ve sorumluluklarını çözümleyebilme",
+  "surec": [
+   "Aile içindeki görev ve sorumlulukları belirler.",
+   "Aile bireylerinin görev ve sorumluluklarını ilişkilendirir. Öğrenme-öğretme sürecinde ele alınan"
+  ],
+  "unite": 3,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.4.1",
+  "sinif": 1,
+  "baslik": "Yaşadığı yerin ve ülkemizin genel özelliklerini açıklayabilme",
+  "surec": [],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.4.2",
+  "sinif": 1,
+  "baslik": "Türk bayrağı ve İstiklâl Marşı’nın önemini ifade edebilme",
+  "surec": [],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.4.3",
+  "sinif": 1,
+  "baslik": "Mustafa Kemal Atatürk’ün hayatıyla ilgili bilgileri ifade edebilme",
+  "surec": [],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.4.4",
+  "sinif": 1,
+  "baslik": "Millî gün ve bayramlarda yaşadığı duyguları ifade edebilme",
+  "surec": [],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.4.5",
+  "sinif": 1,
+  "baslik": "Dinî gün ve bayramlarda yaşadığı duyguları ifade edebilme",
+  "surec": [],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.5.1",
+  "sinif": 1,
+  "baslik": "Yakın çevresinde bulunan doğadaki varlıkları gözlemleyebilme",
+  "surec": [
+   "Doğadaki varlıkları gözlemleme amacını belirler.",
+   "Doğadaki varlıklara ilişkin veri toplar.",
+   "Doğadaki varlıklara ilişkin topladığı verileri sınıflandırarak kaydeder."
+  ],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.5.2",
+  "sinif": 1,
+  "baslik": "Modeller üzerinden gök cisimlerini karşılaştırabilme",
+  "surec": [
+   "Modeller üzerinden gök cisimlerinin (Güneş, Dünya ve Ay) özelliklerini belirler.",
+   "Modeller üzerinden gök cisimlerinin (Güneş, Dünya ve Ay) benzerliklerini listeler.",
+   "Modeller üzerinden gök cisimlerinin (Güneş, Dünya ve Ay) farklılıklarını listeler."
+  ],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.5.3",
+  "sinif": 1,
+  "baslik": "Afet türlerini tanıyabilme",
+  "surec": [],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.5.4",
+  "sinif": 1,
+  "baslik": "Geri dönüştürülebilen atıkları sınıflandırabilme",
+  "surec": [
+   "Geri dönüştürülebilen atıkları belirler.",
+   "Geri dönüştürülebilen atıkları ayrıştırır.",
+   "Geri dönüştürülebilen atıkları tasnif eder.",
+   "Geri dönüştürülebilen atıkları etiketler."
+  ],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.6.1",
+  "sinif": 1,
+  "baslik": "Bilimle ilgili merak ettiklerini sorabilme",
+  "surec": [
+   "Bilim ile ilgili merak ettiği konuları belirler.",
+   "Bilim ile ilgili merak ettiği konular hakkında sorular sorar."
+  ],
+  "unite": 6,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.6.2",
+  "sinif": 1,
+  "baslik": "Teknoloji ile ilgili merak ettiklerini sorabilme",
+  "surec": [
+   "Teknoloji ile ilgili merak ettiği konuları belirler.",
+   "Teknoloji ile merak ettiği konular hakkında sorular sorar."
+  ],
+  "unite": 6,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.1.6.3",
+  "sinif": 1,
+  "baslik": "Sanatla ilgili merak ettiklerini sorabilme",
+  "surec": [
+   "Sanat ile ilgili merak ettiği konuları belirler.",
+   "Sanat ile ilgili merak ettiği konular hakkında sorular sorar."
+  ],
+  "unite": 6,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.1.1",
+  "sinif": 2,
+  "baslik": "Planlı olmanın kişisel yaşama etkilerini fark edebilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.1.2",
+  "sinif": 2,
+  "baslik": "Öğretmen ve arkadaşlarıyla etkili iletişim kurabilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.1.3",
+  "sinif": 2,
+  "baslik": "Arkadaşlık ilişkilerini düzenleyebilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.1.4",
+  "sinif": 2,
+  "baslik": "Sınıf içi karar alma süreçlerinde sosyal temas oluşturabilme",
+  "surec": [
+   "Sınıf içi karar alma süreçlerinde grup iletişimini başlatır.",
+   "Sınıf içi karar alma süreçlerinde grup etkileşimine katılır.",
+   "Sınıf içi karar alma süreçlerinde grup iletişimine katkıda bulunur.",
+   "Sınıf içi karar alma süreçlerinde grup iletişimini değerlendirir."
+  ],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.2.1",
+  "sinif": 2,
+  "baslik": "Sağlıklı büyüme ve gelişme ile alışkanlıkları arasındaki ilişkiyi çözümleyebilme",
+  "surec": [
+   "Sağlıklı büyüme ve gelişmeye yönelik alışkanlıkları belirler.",
+   "Sağlıklı büyüme ve gelişme ile alışkanlıkları arasındaki ilişkiyi belirler."
+  ],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.2.2",
+  "sinif": 2,
+  "baslik": "Çevrim içi ortamlarda kişisel güvenliğini sağlayabilme",
+  "surec": [],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.2.3",
+  "sinif": 2,
+  "baslik": "Temel trafik işaret levhalarını tanıyabilme",
+  "surec": [],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.2.4",
+  "sinif": 2,
+  "baslik": "Acil bir durumda yetkililerle etkili iletişim kurabilme",
+  "surec": [],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.3.1",
+  "sinif": 2,
+  "baslik": "Ailenin önemini yorumlayabilme",
+  "surec": [
+   "Ailenin önemine ilişkin verilen örnekleri inceler.",
+   "Ailenin önemine ilişkin verilen örnekleri bağlamdan kopmadan özgün örneklere dönüştürür.",
+   "Ailenin önemine ilişkin oluşturduğu özgün örnekleri kendi cümleleri ile ifade eder."
+  ],
+  "unite": 3,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.3.2",
+  "sinif": 2,
+  "baslik": "Toplumsal yaşamda nezaket ve görgü kurallarına uygun davranabilme",
+  "surec": [],
+  "unite": 3,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.3.3",
+  "sinif": 2,
+  "baslik": "Yakın çevresinde üzerine düşen görev ve sorumlulukları günlük yaşamına yansıtabilme",
+  "surec": [
+   "Yakın çevresinde üzerine düşen görev ve sorumluluklarını gözden geçirir.",
+   "Yakın çevresinde üzerine düşen görev ve sorumluluklarına ilişkin çıkarımda bulunur.",
+   "Yakın çevresinde üzerine düşen görev ve sorumluluklarına ilişkin değerlendirme yapar."
+  ],
+  "unite": 3,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.4.1",
+  "sinif": 2,
+  "baslik": "Yakın çevresinde bulunan tarihî mekân ve doğal güzellikleri belirleyebilme",
+  "surec": [],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.4.2",
+  "sinif": 2,
+  "baslik": "Yaşadığı yerin yönetim birimleri ile ilgili kaynaklardan bilgi toplayabilme",
+  "surec": [
+   "Yaşadığı yerin yönetim birimleri ile ilgili bilgi toplayacağı kaynakları belirler.",
+   "Yaşadığı yerin yönetim birimleri ile ilgili belirlediği kaynaklardan bilgileri bulur.",
+   "Yaşadığı yerin yönetim birimleri ile ilgili kullanacağı kaynakların uygunluğunu açıklar.",
+   "Yaşadığı yerin yönetim birimleri ile ilgili kaynaklardan ulaştığı bilgileri kaydeder."
+  ],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.4.3",
+  "sinif": 2,
+  "baslik": "Mustafa Kemal Atatürk’ün öğrencilik hayatını ifade edebilme",
+  "surec": [],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.4.4",
+  "sinif": 2,
+  "baslik": "Millî gün ve bayramların önemini yorumlayabilme",
+  "surec": [
+   "Millî gün ve bayramların önemine ilişkin verilen örnekleri inceler.",
+   "Millî gün ve bayramların önemine ilişkin verilen örnekleri bağlamdan kopmadan özgün örneklere dönüştürür.",
+   "Millî gün ve bayramların önemine ilişkin oluşturduğu özgün örnekleri kendi cümleleri ile ifade eder."
+  ],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.4.5",
+  "sinif": 2,
+  "baslik": "Dinî gün ve bayramların önemini yorumlayabilme",
+  "surec": [
+   "Dinî gün ve bayramların önemine ilişkin verilen örnekleri inceler.",
+   "Dinî gün ve bayramların önemine ilişkin verilen örnekleri bağlamdan kopmadan özgün örneklere dönüştürür.",
+   "Dinî gün ve bayramların önemine ilişkin oluşturduğu özgün örnekleri kendi cümleleri ile ifade eder."
+  ],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.5.1",
+  "sinif": 2,
+  "baslik": "Hava olayları ve mevsimler arasındaki ilişkiyi çözümleyebilme",
+  "surec": [
+   "Hava olayları ve mevsimlerin özelliklerini belirler.",
+   "Hava olayları ve mevsimler arasındaki ilişkiyi belirler."
+  ],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.5.2",
+  "sinif": 2,
+  "baslik": "Doğadan yararlanarak yönünü belirleyebilme",
+  "surec": [],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.5.3",
+  "sinif": 2,
+  "baslik": "Afetlere karşı alınması gereken önlemlere ilişkin bilgi toplayabilme",
+  "surec": [
+   "Afetlere karşı alınması gereken önlemlere ilişkin bilgi toplamak için kullanacağı araçları belirler.",
+   "Belirlediği araçları kullanarak afetlere karşı alınması gereken önlemlere ilişkin bilgileri bulur.",
+   "Afetlere karşı alınması gereken önlemlere ilişkin bulduğu bilgileri doğrular.",
+   "Afetlere karşı alınması gereken önlemlere ilişkin bulduğu bilgileri kaydeder."
+  ],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.5.4",
+  "sinif": 2,
+  "baslik": "Doğal kaynakları tasarruflu kullanma davranışlarını günlük yaşamına yansıtabilme",
+  "surec": [
+   "Doğal kaynakları kullanırken davranışlarını gözden geçirir.",
+   "Doğal kaynakları tasarruflu kullanmaya yönelik çıkarımlarda bulunur.",
+   "Doğal kaynakları tasarruflu kullanmaya yönelik ulaştığı çıkarımları değerlendirir."
+  ],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.6.1",
+  "sinif": 2,
+  "baslik": "Bilim insanlarının bilime katkılarına yönelik kaynaklardan bilgi toplayabilme",
+  "surec": [
+   "Bilim insanlarının bilime katkılarına ilişkin bilgi toplayacağı kaynakları belirler.",
+   "Bilim insanlarının bilime katkılarına ilişkin belirlediği kaynaklardan bilgileri bulur.",
+   "Bilim insanlarının bilime katkılarına ilişkin ulaştığı kaynakların uygunluğunu açıklar.",
+   "Bilim insanlarının bilime katkılarına ilişkin kaynaklardan ulaştığı bilgileri kaydeder."
+  ],
+  "unite": 6,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.6.2",
+  "sinif": 2,
+  "baslik": "Teknolojik bir ürünün değişim ve sürekliliğine dair kanıta dayalı öngörüde bulunabilme",
+  "surec": [
+   "Teknolojik bir ürünün zaman içindeki değişimini kanıtlara dayalı olarak ilişkilendirir.",
+   "Teknolojik bir ürünün gelecekteki değişimine ilişkin çıkarım yapar."
+  ],
+  "unite": 6,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.2.6.3",
+  "sinif": 2,
+  "baslik": "Sanatın günlük yaşamdaki yerini belirleyebilme",
+  "surec": [],
+  "unite": 6,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.1.1",
+  "sinif": 3,
+  "baslik": "Güçlü ve gelişime açık olduğu alanlara karar verebilme",
+  "surec": [
+   "Güçlü ve gelişime açık olduğu alanlara ilişkin karar vermeye yönelik amacını belirler.",
+   "Güçlü ve gelişime açık olduğu alanlara ilişkin karar vermeye yönelik bilgi toplar.",
+   "Güçlü ve gelişime açık olduğu alanlara ilişkin karar vermeye yönelik seçenekler oluşturur.",
+   "Güçlü ve gelişime açık olduğu alanlara ilişkin karar vermeye yönelik seçenekler üzerinde mantıksal denetleme yapar.",
+   "Güçlü ve gelişime açık olduğu alanlara ilişkin karar vermeye yönelik seçenekler arasından seçim yapar.",
+   "Güçlü ve gelişime açık olduğu alanlara ilişkin verdiği karara yönelik yansıtma yapar."
+  ],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.1.2",
+  "sinif": 3,
+  "baslik": "Okuldaki hak ve sorumluluklarına uygun davranabilme",
+  "surec": [],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.1.3",
+  "sinif": 3,
+  "baslik": "Çocuk haklarını tanıtmak için fikirlerini eyleme dönüştürebilme",
+  "surec": [
+   "Çocuk haklarını tanıtmak için plan yapar.",
+   "Çocuk haklarını tanıtmak için yaptığı planı uygular.",
+   "Çocuk haklarını tanıtmak için uyguladığı planı değerlendirir."
+  ],
+  "unite": 1,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.2.1",
+  "sinif": 3,
+  "baslik": "Sağlığını korumaya yönelik davranışlarını düzenleyebilme",
+  "surec": [],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.2.2",
+  "sinif": 3,
+  "baslik": "Güvenliğini tehdit eden bir durumla karşılaştığında yapılması gerekenleri sorgulayabilme",
+  "surec": [
+   "Güvenliğini tehdit eden durumları tanımlar.",
+   "Güvenliğini tehdit eden bir durumla karşılaştığında yapılması gerekenler hakkında sorular sorar.",
+   "Güvenliğini tehdit eden bir durumla karşılaştığında yapılması gerekenler hakkında bilgi toplar.",
+   "Güvenliğini tehdit eden bir durumla karşılaştığında yapılması gerekenler hakkında topladığı bilgilerin doğruluğunu değerlendirir.",
+   "Güvenliğini tehdit eden bir durumla karşılaştığında yapılması gerekenler hakkında çıkarım yapar."
+  ],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.2.3",
+  "sinif": 3,
+  "baslik": "Trafik kurallarına uymanın önemine ilişkin özgün ürünler sentezleyebilme",
+  "surec": [
+   "Trafik kurallarına uymanın önemini belirler.",
+   "Trafik kurallarına uyma ile güvenliği arasında ilişki kurar.",
+   "Trafik kurallarına uymanın önemine ilişkin özgün bir ürün oluşturur."
+  ],
+  "unite": 2,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.3.1",
+  "sinif": 3,
+  "baslik": "Aile ve toplum arasındaki ilişkiyi çözümleyebilme",
+  "surec": [
+   "Aile ve toplumun özelliklerini belirler.",
+   "Aile ve toplum arasındaki ilişkiyi belirler."
+  ],
+  "unite": 3,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.3.2",
+  "sinif": 3,
+  "baslik": "Yardıma ihtiyacı olan bireylerin yaşamını kolaylaştırmak için fikirlerini eyleme dönüştürebilme",
+  "surec": [
+   "Yardıma ihtiyacı olan bireylerin yaşamını kolaylaştırmak için plan yapar.",
+   "Yardıma ihtiyacı olan bireylerin yaşamını kolaylaştırmak için yaptığı planı uygular.",
+   "Yardıma ihtiyacı olan bireylerin yaşamını kolaylaştırmak için yaptığı planı değerlendirir."
+  ],
+  "unite": 3,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.3.3",
+  "sinif": 3,
+  "baslik": "Mesleklerin toplumsal yaşamdaki önemini yorumlayabilme",
+  "surec": [
+   "Mesleklerin toplumsal yaşamdaki önemine ilişkin verilen örnekleri inceler.",
+   "Mesleklerin toplumsal yaşamdaki önemine ilişkin verilen örnekleri bağlamdan kopmadan özgün örneklere dönüştürür.",
+   "Mesleklerin toplumsal yaşamdaki önemine ilişkin oluşturduğu özgün örnekleri kendi cümleleri ile ifade eder."
+  ],
+  "unite": 3,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.4.1",
+  "sinif": 3,
+  "baslik": "Yakın çevresindeki tarihî mekân ve doğal güzelliklerin korunmasının önemini fark edebilme",
+  "surec": [],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.4.2",
+  "sinif": 3,
+  "baslik": "Ülkemizin yönetim şekli ile ilgili kaynaklardan bilgi toplayabilme",
+  "surec": [
+   "Ülkemizin yönetim şekli ile ilgili bilgi toplayacağı kaynakları belirler.",
+   "Ülkemizin yönetim şekli ile ilgili belirlediği kaynaklardan bilgileri bulur.",
+   "Ülkemizin yönetim şekli ile ilgili ulaştığı kaynakların uygunluğunu açıklar.",
+   "Ülkemizin yönetim şekli ile ilgili kaynaklardan ulaştığı bilgileri kaydeder."
+  ],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.4.3",
+  "sinif": 3,
+  "baslik": "Mustafa Kemal Atatürk’ün kişilik özelliklerini çözümleyebilme",
+  "surec": [
+   "Mustafa Kemal Atatürk’ün kişilik özelliklerini ve elde ettiği başarıları belirler.",
+   "Mustafa Kemal Atatürk’ün kişilik özellikleri ile başarıları arasında ilişki kurar."
+  ],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.4.4",
+  "sinif": 3,
+  "baslik": "Millî birlik ve beraberliğimizin ülkemize katkılarını açıklayabilme",
+  "surec": [],
+  "unite": 4,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.5.1",
+  "sinif": 3,
+  "baslik": "Doğadaki varlıkların insan yaşamı için önemini yorumlayabilme",
+  "surec": [
+   "Doğadaki varlıkların insan yaşamı için önemine ilişkin verilen örnekleri inceler.",
+   "Doğadaki varlıkların insan yaşamı için önemine ilişkin verilen örnekleri bağlamdan kopmadan özgün örneklere dönüştürür.",
+   "Doğadaki varlıkların insan yaşamı için önemine ilişkin oluşturduğu özgün örnekleri kendi cümleleri ile ifade eder."
+  ],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.5.2",
+  "sinif": 3,
+  "baslik": "Krokiyi kullanarak bulunduğu yerin konumunu algılayabilme",
+  "surec": [
+   "Krokiyi kullanarak bulunduğu yerin konumunu belirler.",
+   "Bulunduğu yerin konumsal görselleştirmesini yapar.",
+   "Bulunduğu yerin konumsal özelliklerini özetler."
+  ],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.5.3",
+  "sinif": 3,
+  "baslik": "Afetlere yönelik yapılması gerekenleri sınıflandırabilme",
+  "surec": [
+   "Afetlere yönelik yapılması gerekenlere ilişkin ölçütleri afet öncesi, afet anı ve afet sonrası olarak belirler.",
+   "Afetlere yönelik yapılması gerekenleri afet öncesi, afet anı ve afet sonrası olarak ayrıştırır.",
+   "Afetlere yönelik yapılması gerekenleri afet öncesi, afet anı ve afet sonrası olarak tasnif eder.",
+   "Afetlere yönelik yapılması gerekenleri afet öncesi, afet anı ve afet sonrası olarak etiketler."
+  ],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.5.4",
+  "sinif": 3,
+  "baslik": "Çevresel sürdürülebilirliğe yönelik kaynaklardan bilgi toplayabilme",
+  "surec": [
+   "Çevresel sürdürülebilirliğe yönelik bilgi toplayacağı kaynakları belirler.",
+   "Çevresel sürdürülebilirliğe yönelik belirlediği kaynaklardan bilgileri bulur.",
+   "Çevresel sürdürülebilirliğe yönelik ulaştığı kaynakların uygunluğunu açıklar.",
+   "Çevresel sürdürülebilirliğe yönelik kaynaklardan ulaştığı bilgileri kaydeder."
+  ],
+  "unite": 5,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.6.1",
+  "sinif": 3,
+  "baslik": "Bilimsel gelişmelerin günlük yaşama etkisini yorumlayabilme",
+  "surec": [
+   "Bilimsel gelişmelerin günlük yaşama etkisine ilişkin verilen örnekleri inceler.",
+   "Bilimsel gelişmelerin günlük yaşama etkisine ilişkin verilen örnekleri bağlamdan kopmadan özgün örneklere dönüştürür.",
+   "Bilimsel gelişmelerin günlük yaşama etkisine ilişkin oluşturduğu özgün örnekleri kendi cümleleri ile ifade eder."
+  ],
+  "unite": 6,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.6.2",
+  "sinif": 3,
+  "baslik": "Teknolojik gelişmelerin günlük yaşama etkisini çözümleyebilme",
+  "surec": [
+   "Teknolojik gelişmelerin günlük yaşama etkisini belirler.",
+   "Teknolojik gelişmelerle günlük yaşam arasında ilişki kurar."
+  ],
+  "unite": 6,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "HB.3.6.3",
+  "sinif": 3,
+  "baslik": "Sanatçıların sanata katkılarına yönelik kaynaklardan bilgi toplayabilme",
+  "surec": [
+   "Sanatçıların sanata katkılarına yönelik bilgi toplayacağı kaynakları belirler.",
+   "Sanatçıların sanata katkılarına yönelik belirlediği kaynaklardan bilgileri bulur.",
+   "Sanatçıların sanata katkılarına yönelik ulaştığı kaynakların uygunluğunu açıklar.",
+   "Sanatçıların sanata katkılarına yönelik kaynaklardan ulaştığı bilgileri kaydeder."
+  ],
+  "unite": 6,
+  "ders": "hayat_bilgisi"
+ },
+ {
+  "kod": "FB.3.1.1",
+  "sinif": 3,
+  "baslik": "Bilimsel bilgiye ulaşma yollarını sorgulayabilme",
+  "surec": [
+   "Merak ettiği bilimsel bir konuyu tanımlar.",
+   "İlgili konu hakkında sorular sorar.",
+   "Sorularını cevaplamaya yönelik bilgi toplar.",
+   "Bilimsel bilgiye ulaşma yollarının uygunluğunu değerlendirir.",
+   "Toplanan bilgiler üzerinden bilimsel bilgiye ulaşma yollarına ilişkin çıkarım yapar."
+  ],
+  "unite": 1,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.1.2",
+  "sinif": 3,
+  "baslik": "Bilim insanlarının özelliklerini genelleyebilme",
+  "surec": [
+   "Bilim insanları hakkında bilgi toplar.",
+   "Bilim insanlarının ortak özelliklerini belirler.",
+   "Bilim insanlarının ortak olmayan özelliklerini belirler.",
+   "Örüntüler üzerinden bilim insanlarının özellikleri hakkında önermede bulunur."
+  ],
+  "unite": 1,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.2.1",
+  "sinif": 3,
+  "baslik": "Canlıları; mikroskopla görülebilen canlılar, mantarlar, bitkiler ve hayvanlar olarak sınıflandırabilme",
+  "surec": [
+   "Canlıların benzer ve farklı niteliklerini belirler.",
+   "Canlıları niteliklerine göre ayırır.",
+   "Canlıları gruplandırır.",
+   "Canlıları etiketler."
+  ],
+  "unite": 2,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.2.2",
+  "sinif": 3,
+  "baslik": "Canlıların çevrelerini farklı yollarla algılamaları konusunda bilimsel çıkarım yapabilme",
+  "surec": [
+   "Canlıların çevrelerini algılama biçimlerine ilişkin nitelikleri tanımlar.",
+   "Duyu organlarının işlevleri ile ilgili veri toplayarak kaydeder.",
+   "Canlıların çevrelerini farklı biçimlerde algılamalarına ilişkin verileri yorumlayarak değerlendirir."
+  ],
+  "unite": 2,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.2.3",
+  "sinif": 3,
+  "baslik": "Canlıların yaşam döngülerini açıklamada tümevarımsal akıl yürütebilme",
+  "surec": [
+   "Canlıların yaşam döngüleri ile ilgili örüntüleri bulur.",
+   "Canlıların yaşam döngüleri ile ilgili genelleme yapar."
+  ],
+  "unite": 2,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.3.1",
+  "sinif": 3,
+  "baslik": "Kayaçlar, madenler ve mineraller ile ilgili tümdengelimsel akıl yürütebilme",
+  "surec": [
+   "Kayaçlar, madenler ve mineralleri belirler.",
+   "Kayaçlar, madenler ve mineraller arasında ilişki kurar.",
+   "Kayaçlar, madenler ve mineraller arasında genelden genele veya genelden özele çıkarım yapar."
+  ],
+  "unite": 3,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.3.2",
+  "sinif": 3,
+  "baslik": "Fosil oluşumu ile ilgili bilgileri sentezleyebilme",
+  "surec": [
+   "Fosil oluşumunu gösteren sürecin bütün ve parçalarını belirler.",
+   "Süreci oluşturan aşamalar arasında ilişki kurar.",
+   "Fosillerin oluşum sürecini oluşturan aşamaları uygun sırayla bir bütün hâline getirir."
+  ],
+  "unite": 3,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.4.1",
+  "sinif": 3,
+  "baslik": "Çevresindeki maddeleri hâllerine göre sınıflandırabilme",
+  "surec": [
+   "Çevresindeki maddelerin niteliklerini tanımlar.",
+   "Çevresindeki maddeleri niteliklerine göre ayırır.",
+   "Çevresindeki maddeleri hâllerine göre gruplandırır.",
+   "Maddeleri hâllerine göre katı, sıvı ve gaz olarak etiketler."
+  ],
+  "unite": 4,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.4.2",
+  "sinif": 3,
+  "baslik": "Günlük yaşamda karşılaştığı karışımların ayrılmasında kullanılabilecek uygun yöntemleri kullanarak deney yapabilme",
+  "surec": [
+   "Karışımların ayrılmasında kullanılabilecek yöntemlerle ilgili deney tasarlar.",
+   "Deneyle ilgili ölçme ve veri analizi yapar."
+  ],
+  "unite": 4,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.4.3",
+  "sinif": 3,
+  "baslik": "Atıkların ayrıştırılmasına ilişkin problem çözebilme",
+  "surec": [
+   "Atıkların ayrıştırılmasına ilişkin problemi yapılandırır.",
+   "Atıkların ayrıştırılmasına ilişkin problemi özetler.",
+   "Atıkların ayrıştırılmasına ilişkin çözüm önerilerini gözleme ya da veriye dayalı tahmin eder.",
+   "Atıkların ayrıştırılmasına ilişkin problemin çözümüne yönelik önermeler üzerinden akıl yürütür.",
+   "Atıkların ayrıştırılmasına ilişkin problemin çözümüne yönelik yansıtmada/değerlendirmede bulunur."
+  ],
+  "unite": 4,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.5.1",
+  "sinif": 3,
+  "baslik": "Varlıkların hareket durumlarını gözleme dayalı tahmin edebilme",
+  "surec": [
+   "Varlıkların hareket durumlarına ilişkin ön gözlem ve/veya deneyimlerini ilişkilendirir.",
+   "Varlıkların hareket durumlarına ilişkin çıkarım yapar.",
+   "Varlıkların hareket durumlarının sonuçlarına ilişkin yargıda bulunur."
+  ],
+  "unite": 5,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.5.2",
+  "sinif": 3,
+  "baslik": "Kuvvetin varlıklar üzerindeki etkilerini bilimsel gözleme dayalı tahmin edebilme",
+  "surec": [
+   "Varlıkların hareketinin ve şekil değiştirmesinin nedenine ilişkin ön bilgi ve deneyimleriyle önerme oluşturur.",
+   "Varlıkların hareketinin ve şekil değiştirmesinin nedenine ilişkin gözleme dayalı olan önermeleri karşılaştırır.",
+   "Kuvvetin varlıkların hareketine ve şekil değiştirmesine etkilerine ilişkin tahminlerini temellendirmek için gözlem verilerinden sonuç çıkarır.",
+   "Kuvvetin varlıkların hareketine ve şekil değiştirmesine etkileri ile ilgili gözlemlenmemiş duruma ilişkin tahminde bulunur.",
+   "Kuvvetin varlıkların hareketine ve şekil değiştirmesine etkileri ile ilgili tahminlerinin geçerliliğini sorgular."
+  ],
+  "unite": 5,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.6.1",
+  "sinif": 3,
+  "baslik": "Bazı araç gerecin elektrikli olduğuna ilişkin bilimsel çıkarım yapabilme",
+  "surec": [
+   "Farklı araç gerecin niteliklerini tanımlar.",
+   "Elektrikli araç gereçle ilgili veri toplayarak kaydeder.",
+   "Elektrikli araç gereçle ilgili verileri değerlendirir."
+  ],
+  "unite": 6,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.6.2",
+  "sinif": 3,
+  "baslik": "Elektrikli araç gerecin güvenli kullanımı ile ilgili eleştirel düşünebilme",
+  "surec": [
+   "Elektrikli araç gerecin güvenli kullanımı ile ilgili verilen bir olay/konu/problem veya durumu sorgular.",
+   "Elektrikli araç gerecin kullanımında güvenliğin sağlanabileceğine yönelik akıl yürütür.",
+   "Akıl yürütmeyle ulaştığı çıkarımları yansıtır."
+  ],
+  "unite": 6,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.6.3",
+  "sinif": 3,
+  "baslik": "Elektriği tasarruflu kullanma konusunda bilimsel veriye dayalı tahmin edebilme",
+  "surec": [
+   "Elektriği tasarruflu kullanma konusunda verilere ve/veya ön bilgilere dayalı önerme oluşturur.",
+   "Elektriği tasarruflu kullanma üzerine nicel ölçüm verilerine dayalı önermelerini gerekçelendirir.",
+   "Hesaplamalarına dayalı olarak tahmin eder.",
+   "Tahminlerin geçerliliğini sorgular."
+  ],
+  "unite": 6,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.7.1",
+  "sinif": 3,
+  "baslik": "Toprak oluşumunu ve yapısını bilimsel olarak gözlemleyebilme",
+  "surec": [
+   "Toprağın oluşumuna ve yapısına ilişkin nitelikleri tanımlar.",
+   "Toprağın yapısına ilişkin veri toplayarak kaydeder.",
+   "Toprağın yapısına ilişkin topladığı verileri açıklar."
+  ],
+  "unite": 7,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.7.2",
+  "sinif": 3,
+  "baslik": "Bir bitkinin yetişmesi için gerekenleri genelleyebilme",
+  "surec": [
+   "Çevresinde bulunan tarım ürünlerinin nasıl yetiştirildiği konusunda araştırma yaparak bilgi toplar.",
+   "Bitki yetiştirmek için gerekli ortak özellikleri belirler.",
+   "Farklı bitkilerin yetiştirilmesinde ortak olmayan özellikleri belirler.",
+   "Bir bitki yetiştirmek için yapılması gerekenler konusunda önermede bulunur."
+  ],
+  "unite": 7,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.8.1",
+  "sinif": 3,
+  "baslik": "Canlıların yaşam alanlarının özelliklerini belirlemeye yönelik kanıt kullanabilme",
+  "surec": [
+   "Canlıların yaşam alanlarının özelliklerine ilişkin veri toplayarak kaydeder.",
+   "Canlıların yaşam alanlarına ilişkin veri setleri oluşturur.",
+   "Canlıların yaşam alanlarının özelliklerine ilişkin veriye dayalı açıklama yapar."
+  ],
+  "unite": 8,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.8.2",
+  "sinif": 3,
+  "baslik": "Yaşam alanındaki canlı çeşitliliğini operasyonel olarak tanımlayabilme",
+  "surec": [
+   "Yaşam alanının özelliklerini tanımlar.",
+   "Yaşam alanındaki canlı çeşitliliği ile ilgili ölçüm yapar.",
+   "Canlı çeşitliliğinin tanımını yapar."
+  ],
+  "unite": 8,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.3.8.3",
+  "sinif": 3,
+  "baslik": "Yaşam alanlarının korunması için yapılacakları sorgulayabilme",
+  "surec": [
+   "Merak ettiği konuyu tanımlar.",
+   "İlgili konu hakkında sorular sorar.",
+   "İlgili konu hakkında bilgi toplar.",
+   "Toplanan bilgilerin doğruluğunu değerlendirir.",
+   "Toplanan bilgiler üzerinde çıkarım yapar."
+  ],
+  "unite": 8,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.1.1",
+  "sinif": 4,
+  "baslik": "Bilimin özellikleri ile ilgili deneyimlerini yansıtabilme",
+  "surec": [
+   "Bilim ile ilgili bilgi ve deneyimini gözden geçirir.",
+   "Bilimin özellikleri ile ilgili çıkarım yapar.",
+   "Bilimin özellikleri ile ilgili ulaşılan çıkarımları değerlendirir."
+  ],
+  "unite": 1,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.1.2",
+  "sinif": 4,
+  "baslik": "Bilgi kaynağının güvenilirliğini sorgulayabilme",
+  "surec": [
+   "Merak ettiği bilimsel bir konuyu tanımlar.",
+   "İlgili konu hakkında sorular sorar.",
+   "İlgili konu hakkında teknolojik araçlar ve diğer kaynakları kullanarak bilgi toplar.",
+   "Toplanan bilgilerden hareketle bilginin doğruluğunu değerlendirir.",
+   "Yaptığı değerlendirmeler sonucunda bilgi kaynaklarının güvenilirliği ile ilgili çıkarım yapar."
+  ],
+  "unite": 1,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.2.1",
+  "sinif": 4,
+  "baslik": "Besin içeriklerini ayırt etmek için deney yapabilme",
+  "surec": [
+   "Besinlerdeki protein, karbohidrat, yağ ve su içeriğini ayırt etmek için deney tasarlar.",
+   "Yaptığı deneyde ölçme ve veri analizi yapar."
+  ],
+  "unite": 2,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.2.2",
+  "sinif": 4,
+  "baslik": "Besinlerde vitamin ve/veya mineral bulunması durumunu genelleyebilme",
+  "surec": [
+   "Besinlerdeki vitamin ve mineraller ile ilgili bilgi toplar.",
+   "Besinlerdeki ortak olan özellikleri belirler.",
+   "Besinlerdeki ortak olmayan özellikleri belirler.",
+   "Örüntüler üzerinden besinlerde vitamin ve/veya minerallerin bulunduğu önermesinde bulunur."
+  ],
+  "unite": 2,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.2.3",
+  "sinif": 4,
+  "baslik": "Besinlerin işlevleri ile ilgili hipotez oluşturabilme",
+  "surec": [
+   "Besinlerin işlevleri ile ilgili problemi tanımlar.",
+   "Besinlerin işlevleri ve vücudumuzdaki görevleri arasındaki neden-sonuç ilişkilerini belirler.",
+   "Besinlerin içerikleri ile ilgili verilen değişkenleri belirler.",
+   "Besinlerin işlevleri ile ilgili değişkenleri kontrol eder.",
+   "Besinlerin işlevleri ve sağlıklı yaşam arasındaki ilişkiye yönelik önerme sunar."
+  ],
+  "unite": 2,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.3.1",
+  "sinif": 4,
+  "baslik": "Dünya’nın şekli ile ilgili bilimsel gözleme dayalı tahmin yapabilme",
+  "surec": [
+   "Dünya’nın şekli ile ilgili ön bilgi ve deneyimlerine dayalı önerme oluşturur.",
+   "Dünya’nın şekli ile ilgili gözleme dayalı olan önermeleri karşılaştırır.",
+   "Dünya’nın şekli ile ilgili tahminlerini temellendirmek için gözlem verilerinden sonuç çıkarır.",
+   "Dünya’nın şekli ile ilgili veriye dayalı tahminde bulunur.",
+   "Dünya’nın şekli ile ilgili verilere dayalı tahminlerin geçerliğini sorgular."
+  ],
+  "unite": 3,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.3.2",
+  "sinif": 4,
+  "baslik": "Dünya’nın yapısıyla ilgili bilimsel model oluşturabilme",
+  "surec": [
+   "Dünya’nın yapısını açıklamak için model önerir.",
+   "Dünya’nın yapısını açıklamak için yeni kanıtlarla modeli geliştirir."
+  ],
+  "unite": 3,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.3.3",
+  "sinif": 4,
+  "baslik": "Dünya’nın hareketlerini gözlemlerine dayanarak tahmin edebilme",
+  "surec": [
+   "Dünya’nın hareketleri ile ilgili önceki gözlem ve/veya deneyimini ilişkilendirir.",
+   "Dünya’nın hareketlerine ilişkin çıkarım yapar.",
+   "Dünya’nın hareketlerinin sonuçlarına ilişkin yargıda bulunur."
+  ],
+  "unite": 3,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.4.1",
+  "sinif": 4,
+  "baslik": "Maddelerin hâl değişimine yönelik bilimsel çıkarım yapabilme",
+  "surec": [
+   "Maddelerin hâllerine yönelik nitelikleri tanımlar.",
+   "Maddelerin hâl değişimine yönelik verileri kaydeder.",
+   "Maddelerin hâl değişimine yönelik verileri yorumlayarak değerlendirir."
+  ],
+  "unite": 4,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.4.2",
+  "sinif": 4,
+  "baslik": "Maddelerin ısı etkisiyle değişimine yönelik deney yapabilme",
+  "surec": [
+   "Maddelerin ısı etkisiyle değişimine yönelik deney tasarlar.",
+   "Maddelerin ısı etkisiyle değişimine yönelik ölçme veri analizi yapar."
+  ],
+  "unite": 4,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.5.1",
+  "sinif": 4,
+  "baslik": "Mıknatısın kutupları ve birbirleriyle etkileşimleri ile ilgili tümevarımsal akıl yürütebilme",
+  "surec": [
+   "Mıknatıs çeşitlerinin kutupları ve birbiriyle etkileşimleri ile ilgili örüntü bulur.",
+   "Mıknatısın kutupları ve birbiriyle etkileşimleri ile ilgili genelleme yapar."
+  ],
+  "unite": 5,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.5.2",
+  "sinif": 4,
+  "baslik": "Mıknatısın etki ettiği maddelere ilişkin bilimsel gözleme dayalı tahmin yapabilme",
+  "surec": [
+   "Mıknatısın etki ettiği maddelere ilişkin ön bilgi ve deneyimlerine dayanarak önerme oluşturur.",
+   "Mıknatısın etki ettiği maddelere ilişkin gözleme dayalı önermeleri karşılaştırır.",
+   "Mıknatısın etki ettiği maddelere ilişkin tahminlerini temellendirmek için gözlem verilerinden sonuç çıkarır.",
+   "Mıknatısın etki ettiği maddelerle ilgili gözlemlenmemiş duruma ilişkin tahminde bulunur.",
+   "Tahminlerin geçerliğini sorgular."
+  ],
+  "unite": 5,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.5.3",
+  "sinif": 4,
+  "baslik": "Mıknatısın kullanım alanlarına yönelik bilimsel olarak sorgulayabilme",
+  "surec": [
+   "Mıknatısın kullanım alanlarına yönelik bir soru veya problem tanımlar.",
+   "Sorusunu/problemini cevaplamada kullanabileceği bir model geliştirir.",
+   "Modelini oluşturmaya yönelik araştırma planlayarak gerçekleştirir.",
+   "Oluşturduğu modele ilişkin verileri analiz ederek yorumlar.",
+   "Oluşturduğu modelle ilgili sorunlara ilişkin kanıta dayalı açıklama yaparak çözüm üretir.",
+   "Oluşturduğu modeli değerlendirerek paylaşır."
+  ],
+  "unite": 5,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.6.1",
+  "sinif": 4,
+  "baslik": "Basit bir elektrik devresi kurmaya ilişkin bilimsel olarak sorgulayabilme",
+  "surec": [
+   "Devre elemanlarını kullanarak basit bir elektrik devresi kurmaya ilişkin soru veya problemi tanımlar.",
+   "Sorusunu/problemini cevaplamada kullanacağı basit bir elektrik devresi modeli geliştirir.",
+   "Basit bir elektrik devresinde devre elemanlarına ve işlevlerine ilişkin araştırmayı planlayarak gerçekleştirir.",
+   "Basit bir elektrik devresine ilişkin verileri analiz ederek yorumlar.",
+   "Elektrik devresinin çalışıp çalışmamasına yönelik kanıta dayalı açıklama yaparak çözüm üretir.",
+   "Çalışan basit bir elektrik devresi kurmaya ilişkin bilgiyi değerlendirerek paylaşır."
+  ],
+  "unite": 6,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.6.2",
+  "sinif": 4,
+  "baslik": "Elektrik üretiminde yenilenebilir ve yenilenemeyen enerji kaynaklarını kullanmaya ilişkin eleştirel düşünebilme",
+  "surec": [
+   "Elektrik üretiminde yenilenebilir ve yenilenemeyen enerji kaynaklarını kullanmaya ilişkin bir durumu veya problemi sorgular.",
+   "Elektrik üretiminde yenilenebilir ve yenilenemeyen enerji kaynaklarını kullanmaya ilişkin durum veya problemin canlılar ve çevre üzerine etkileri konusunda akıl yürütür.",
+   "Enerji kaynaklarının sürdürülebilirliklerine ilişkin akıl yürütmeyle ulaştığı çıkarımları yansıtır."
+  ],
+  "unite": 6,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.7.1",
+  "sinif": 4,
+  "baslik": "Görme olayının gerçekleşebilmesi için ışığın rolüne ilişkin deney yapabilme",
+  "surec": [
+   "Görme olayının gerçekleşebilmesi için ışığın rolüne ilişkin deney tasarlar.",
+   "Görme olayında ışığın rolüne ilişkin deneyde ölçme ve veri analizi yapar."
+  ],
+  "unite": 7,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.7.2",
+  "sinif": 4,
+  "baslik": "Doğal ve yapay ışık kaynaklarını karşılaştırabilme",
+  "surec": [
+   "Çevresindeki ışık kaynaklarına ilişkin özellikleri belirler.",
+   "Işık kaynaklarının benzerliklerini listeler.",
+   "Işık kaynaklarının farklılıklarını listeler."
+  ],
+  "unite": 7,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.7.3",
+  "sinif": 4,
+  "baslik": "Işık kirliliğinin canlılara etkisine ilişkin problemleri çözebilme",
+  "surec": [
+   "Işık kirliliğinin canlılara etkisine ilişkin problemi yapılandırır.",
+   "Problemi özetler.",
+   "Problemin çözümüne yönelik gözleme dayalı/mevcut bilgiye/veriye dayalı tahmin eder.",
+   "Problemin çözümüne yönelik önermeler üzerinden akıl yürütür.",
+   "Problemin çözümüne ilişkin yansıtmada/değerlendirmede bulunur."
+  ],
+  "unite": 7,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "FB.4.8.1",
+  "sinif": 4,
+  "baslik": "Sürdürülebilir bir yaşam alanı kurmayı bilimsel olarak sorgulayabilme",
+  "surec": [
+   "Sürdürülebilir bir yaşam alanı kurmaya ilişkin soru veya problem tanımlar.",
+   "Sorusunu/problemini cevaplamada kullanabileceği bir sürdürülebilir yaşam alanı modeli geliştirir.",
+   "Sürdürülebilir bir yaşam alanı kurmaya ilişkin araştırma planlayarak modelini gerçekleştirir.",
+   "Yaşam alanının sürdürülebilirliğine ilişkin verileri analiz ederek yorumlar.",
+   "Yaşam alanının sürdürülebilir olup olmadığına ilişkin kanıta dayalı açıklama yaparak çözüm üretir.",
+   "Sürdürülebilir bir yaşam alanı kurmaya ilişkin bilgiyi değerlendirerek paylaşır."
+  ],
+  "unite": 8,
+  "ders": "fen_bilimleri"
+ },
+ {
+  "kod": "SB.4.1.1",
+  "sinif": 4,
+  "baslik": "Sosyal bilgiler dersinin hayatına sunacağı katkıları yorumlayabilme",
+  "surec": [
+   "Örnek olaylardan hareketle sosyal bilgiler dersinin bireysel ve toplumsal katkılarını inceler.",
+   "Sosyal bilgiler dersinin bireysel ve toplumsal katkılarını bağlamdan kopmadan dönüştürür.",
+   "Sosyal bilgiler dersinin bireysel ve toplumsal katkılarını nesnel, doğru ve anlamı değiştirmeyecek şekilde yeniden ifade eder."
+  ],
+  "unite": 1,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.1.2",
+  "sinif": 4,
+  "baslik": "Bireysel özelliklere saygı duymayı hayatına yansıtabilme",
+  "surec": [
+   "Bireysel özelliklere ilişkin deneyimlerini gözden geçirir.",
+   "Bireysel özelliklere saygı duymanın önemine ilişkin çıkarım yapar.",
+   "Bireysel özelliklere saygı duymanın önemine ilişkin ulaştığı çıkarımları değerlendirir."
+  ],
+  "unite": 1,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.1.3",
+  "sinif": 4,
+  "baslik": "Toplumsal birliği sürdürmeye yönelik fikir üretebilme",
+  "surec": [
+   "Aile, sınıf ve okul ortamında toplumsal birliği sürdürmenin bir gereklilik olduğunu fark eder.",
+   "Aile, sınıf ve okul ortamında toplumsal birliği sürdürmeye katkıda bulunan benzer örnekleri inceler.",
+   "Aile, sınıf ve okul ortamında toplumsal birliği sürdürmeye yönelik fikir üretir."
+  ],
+  "unite": 1,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.2.1",
+  "sinif": 4,
+  "baslik": "Konum ve yön bulmada haritaları okuyabilme",
+  "surec": [
+   "Haritanın başlığından haritanın içeriğine ilişkin anlam çıkarır.",
+   "Harita üzerindeki sembol ve renkleri ayırt eder.",
+   "Harita kenar bilgilerini ve harita kenar bilgilerindeki sembolleri anlamlandırır.",
+   "Yakın çevresindeki bir yerin konumunu belirlerken konum bilgisi, konum bulmaya yönelik sistemler ve araçlardan yararlanır.",
+   "Haritadaki unsurlardan hareketle haritayı ve harita türünü çözümler."
+  ],
+  "unite": 2,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.2.2",
+  "sinif": 4,
+  "baslik": "Yakın çevresinden hareketle doğa ve insan ilişkisini çözümleyebilme",
+  "surec": [
+   "Yakın çevresindeki doğal çevre unsurlarını belirler.",
+   "Yakın çevresindeki doğal çevre unsurları ile insanlar arasındaki ilişkileri belirler."
+  ],
+  "unite": 2,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.2.3",
+  "sinif": 4,
+  "baslik": "Afetlerin etkilerini azaltma konusunda yapılabileceklere ilişkin oluşturduğu ürünü paylaşabilme",
+  "surec": [
+   "Kendisine sunulan kaynaklara dayanarak geçmişten günümüze yakın çevresinde gerçekleşen afetlere yönelik çıkarım yapar.",
+   "Yakın çevresinde gerçekleşebilecek afetlerin etkilerini azaltmak için yapılabilecekleri yansıtan bir ürün oluşturur.",
+   "Yakın çevresinde gerçekleşebilecek afetlerin etkilerini azaltmak için yapılabileceklere ilişkin oluşturduğu ürünü paylaşır."
+  ],
+  "unite": 2,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.3.1",
+  "sinif": 4,
+  "baslik": "Geçmişten günümüze çocuk oyun ve oyuncaklarının değişimini karşılaştırabilme",
+  "surec": [
+   "Geçmişten günümüze oyun ve oyuncakların özelliklerini kanıt, gözlem ve/veya deneyimlere dayalı olarak belirler.",
+   "Oyun ve oyuncakların zaman içerisinde değişmeyen özelliklerini kanıt, gözlem ve/ veya deneyime dayalı olarak listeler.",
+   "Oyun ve oyuncakların zaman içerisinde değişen özelliklerini kanıt, gözlem ve/veya deneyime dayalı olarak listeler."
+  ],
+  "unite": 3,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.3.2",
+  "sinif": 4,
+  "baslik": "Aile tarihine ilişkin oluşturduğu ürünü paylaşabilme",
+  "surec": [
+   "Aile tarihine ilişkin kanıtlara dayalı çıkarım yapar.",
+   "Aile tarihine ilişkin kanıtlardaki bilgilerden hareketle görüşünü yansıtan bir ürün oluşturur.",
+   "Aile tarihine ilişkin görüşlerine dayalı olarak oluşturduğu ürünü paylaşır."
+  ],
+  "unite": 3,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.3.3",
+  "sinif": 4,
+  "baslik": "Yakın çevresindeki ortak miras ögelerini tanımanın önemini yorumlayabilme",
+  "surec": [
+   "Yakın çevresindeki ortak miras ögelerini inceler.",
+   "Yakın çevresindeki ortak miras ögeleri ile ilgili edindiği bilgileri nesnel, doğru anlamı değiştirmeyecek bir şekilde yeniden ifade eder."
+  ],
+  "unite": 3,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.4.1",
+  "sinif": 4,
+  "baslik": "Millî Mücadele Dönemi’nde Mustafa Kemal Atatürk’ün ve Türk milletinin yaptığı fedakârlıkları yorumlayabilme",
+  "surec": [
+   "Millî Mücadele Dönemi’nde Mustafa Kemal Atatürk’ün ve Türk milletinin yaptığı fedakârlıklara ilişkin kaynakları inceler.",
+   "Millî Mücadele Dönemi’nde Mustafa Kemal Atatürk’ün ve Türk milletinin yaptığı fedakârlıklara ilişkin bilgileri bağlamdan kopmadan dönüştürür.",
+   "Millî Mücadele Dönemi’nde Mustafa Kemal Atatürk’ün ve Türk milletinin yaptığı fedakârlıklara ilişkin edindiği bilgileri nesnel, doğru ve anlamı değiştirmeyecek şekilde yeniden yorumlar."
+  ],
+  "unite": 4,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.4.2",
+  "sinif": 4,
+  "baslik": "Cumhuriyetin getirdiği değişimlerin hayatımıza katkılarını yorumlayabilme",
+  "surec": [
+   "Cumhuriyetin getirdiği değişimleri dönemi anlatan anılar, hikâyeler ve görsel içerikler aracılığıyla inceler.",
+   "Cumhuriyetin getirdiği değişimlerden edindiği bilgileri bağlamdan kopmadan dönüştürür.",
+   "Cumhuriyetin getirdiği değişimlerden edindiği bilgileri nesnel, doğru ve anlamı değiştirmeyecek şekilde yeniden ifade eder."
+  ],
+  "unite": 4,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.4.3",
+  "sinif": 4,
+  "baslik": "Okulda karar alma ve demokratik katılım süreçlerine ilişkin fikir üretebilme",
+  "surec": [
+   "Okulda karar alma ve demokratik katılım süreçlerini fark eder.",
+   "Okulda karar alma ve demokratik katılım süreçlerine ilişkin deneyimleri inceler.",
+   "Okuldaki karar alma ve demokratik katılım süreçlerinin etkin bir şekilde yürütülmesine ilişkin fikir üretir."
+  ],
+  "unite": 4,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.5.1",
+  "sinif": 4,
+  "baslik": "Doğal kaynakların tüketimi ile ilgili grafik yorumlayabilme",
+  "surec": [
+   "Doğal kaynakların tüketimi ile ilgili verilen grafik üzerindeki simgelerin karşılık geldiği ifadeleri tanır.",
+   "Doğal kaynakların tüketimi ile ilgili verilen grafiği çözümler.",
+   "Çözümlediği grafiklerden elde ettiği verilere dayalı sonuç çıkarır.",
+   "Çıkardığı sonuçları kullanarak kaynaklar ve tüketim ilişkisini karşılaştırır."
+  ],
+  "unite": 5,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.5.2",
+  "sinif": 4,
+  "baslik": "İstek ve ihtiyaçları arasındaki bilinçli seçimleri hayatına yansıtabilme",
+  "surec": [
+   "İstek ve ihtiyaç kavramlarına ilişkin deneyimleri gözden geçirir.",
+   "İstek ve ihtiyaçları arasında bilinçli seçim yapmaya yönelik çıkarımda bulunur.",
+   "İstek ve ihtiyaçları arasında yaptığı seçimleri değerlendirir."
+  ],
+  "unite": 5,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.5.3",
+  "sinif": 4,
+  "baslik": "Bir ürünün üretim, dağıtım ve tüketim süreçlerini çözümleyebilme",
+  "surec": [
+   "Bir ürünün geçirdiği yolculuğun süreçlerini belirler.",
+   "Ürünlerin üretim, dağıtım ve tüketim süreçleri arasındaki ilişkileri belirler."
+  ],
+  "unite": 5,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.6.1",
+  "sinif": 4,
+  "baslik": "Çevrim içi ortamda uyulması gereken güvenlik kurallarını eylemlerine yansıtabilme",
+  "surec": [
+   "Çevrim içi ortamdaki deneyimleri güvenlik kuralları çerçevesinde gözden geçirir.",
+   "Çevrim içi ortamda uyulması gereken güvenlik kurallarına ilişkin çıkarım yapar.",
+   "Çevrim içi ortamda uyulması gereken güvenlik kurallarına ilişkin çıkarımları değerlendirir."
+  ],
+  "unite": 6,
+  "ders": "sosyal_bilgiler"
+ },
+ {
+  "kod": "SB.4.6.2",
+  "sinif": 4,
+  "baslik": "Bilim insanlarının çocukluk hayatlarına ilişkin tarihsel bağlam oluşturabilme",
+  "surec": [
+   "Bilim insanlarının çalışmalarını kanıtlara dayalı analiz eder.",
+   "Bilim insanlarının çocukluk dönemi koşullarını fark eder.",
+   "Bilim insanlarının çocukluk dönemi koşulları ile günümüz koşullarını karşılaştırır.",
+   "Bilim insanlarının çocukluklarını dönemin koşulları içerisinde açıklar."
+  ],
+  "unite": 6,
+  "ders": "sosyal_bilgiler"
+ }
+]
