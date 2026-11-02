@@ -217,7 +217,8 @@ class VisualView extends StatelessWidget {
       'fraction' => SizedBox(
           width: 140,
           height: 140,
-          child: CustomPaint(painter: _FractionPainter(_i('parts'), _i('shaded'))),
+          child:
+              CustomPaint(painter: _FractionPainter(_i('parts'), _i('shaded'))),
         ),
       'emoji' => Text(_s('emoji'), style: const TextStyle(fontSize: 96)),
       'text' => Text(
@@ -427,7 +428,6 @@ class _Grid extends StatelessWidget {
   }
 }
 
-
 /// Akrep ve yelkovanlı analog saat.
 class _ClockPainter extends CustomPainter {
   _ClockPainter(this.h, this.m);
@@ -451,7 +451,8 @@ class _ClockPainter extends CustomPainter {
       final tp = TextPainter(
         text: TextSpan(
             text: '$i',
-            style: const TextStyle(color: Kumbara.ink, fontSize: 17, fontWeight: FontWeight.w800)),
+            style: const TextStyle(
+                color: Kumbara.ink, fontSize: 17, fontWeight: FontWeight.w800)),
         textDirection: TextDirection.ltr,
       )..layout();
       final pos = c + Offset(math.cos(a), math.sin(a)) * (r - 18);
@@ -492,8 +493,10 @@ class _FractionPainter extends CustomPainter {
     final n = parts < 1 ? 1 : parts;
     final sweep = 2 * math.pi / n;
     for (var i = 0; i < n; i++) {
-      final paint = Paint()..color = i < shaded ? Kumbara.primary : Colors.white;
-      canvas.drawArc(rect.deflate(3), -math.pi / 2 + i * sweep, sweep, true, paint);
+      final paint = Paint()
+        ..color = i < shaded ? Kumbara.primary : Colors.white;
+      canvas.drawArc(
+          rect.deflate(3), -math.pi / 2 + i * sweep, sweep, true, paint);
       canvas.drawArc(
           rect.deflate(3),
           -math.pi / 2 + i * sweep,
@@ -507,5 +510,6 @@ class _FractionPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_FractionPainter old) => old.parts != parts || old.shaded != shaded;
+  bool shouldRepaint(_FractionPainter old) =>
+      old.parts != parts || old.shaded != shaded;
 }

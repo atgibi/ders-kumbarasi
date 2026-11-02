@@ -219,7 +219,8 @@ void main() {
     expect(sayiOkunusu(1999), 'bin dokuz yüz doksan dokuz');
     expect(sayiOkunusu(23045), 'yirmi üç bin kırk beş');
     expect(sayiOkunusu(100000), 'yüz bin');
-    expect(sayiOkunusu(999999), 'dokuz yüz doksan dokuz bin dokuz yüz doksan dokuz');
+    expect(sayiOkunusu(999999),
+        'dokuz yüz doksan dokuz bin dokuz yüz doksan dokuz');
   });
 
   test('saat söyleyişi', () {
