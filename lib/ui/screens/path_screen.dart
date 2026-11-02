@@ -126,6 +126,8 @@ class _PathScreenState extends State<PathScreen> {
         return;
       case NodeState.current:
       case NodeState.done:
+        // Yoldaki uyarı mesajı oturum ekranındaki düğmeleri örtmesin
+        ScaffoldMessenger.of(context).clearSnackBars();
         if (app.overDailyLimit || app.settings.isQuietTime(app.clock())) {
           await showRestDialog(context,
               quiet: app.settings.isQuietTime(app.clock()));
