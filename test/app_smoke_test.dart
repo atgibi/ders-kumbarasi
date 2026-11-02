@@ -78,7 +78,8 @@ void main() {
     expect(find.text('Kim çalışacak?'), findsOneWidget);
     await t.tap(find.text('Elif'));
     await settle(t);
-    state.selectSubject(Subject.matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
+    state.selectSubject(Subject
+        .matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
     await settle(t);
 
     // Yol ekranı: ilk konu açık, ikincisi kilitli
@@ -153,7 +154,8 @@ void main() {
     await settle(t);
     await t.tap(find.text('Can'));
     await settle(t);
-    state.selectSubject(Subject.matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
+    state.selectSubject(Subject
+        .matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
     await settle(t);
     await t.tap(find.byKey(const Key('node-MAT.1.1.1')));
     await settle(t);
@@ -204,7 +206,8 @@ void main() {
     await settle(t);
     await t.tap(find.text('Can'));
     await settle(t);
-    state.selectSubject(Subject.matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
+    state.selectSubject(Subject
+        .matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
     await settle(t);
     await t.tap(find.byKey(const Key('node-MAT.1.1.1')));
     await t.pumpAndSettle();

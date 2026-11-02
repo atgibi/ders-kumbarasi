@@ -972,7 +972,6 @@ Question _areaCount(Map<String, Object?> p, Random r) {
   );
 }
 
-
 /// Harf -> o harfle başlayan resimli sözcükler (ilk okuma yazma).
 const Map<String, List<(String, String)>> _harfSozcuk = {
   'a': [('🐝', 'arı'), ('🐻', 'ayı'), ('🌳', 'ağaç')],
@@ -1005,18 +1004,23 @@ const Map<String, List<(String, String)>> _harfSozcuk = {
   'j': [('🪙', 'jeton'), ('🍮', 'jöle'), ('🤹', 'jonglör')],
 };
 
-String _trUp(String s) => s.replaceAll('i', 'İ').replaceAll('ı', 'I').toUpperCase();
+String _trUp(String s) =>
+    s.replaceAll('i', 'İ').replaceAll('ı', 'I').toUpperCase();
 
 /// Gösterilen harfle başlayan resmi bulma.
 Question _firstLetter(Map<String, Object?> p, Random r) {
-  final letters = ((p['letters'] as List<Object?>?)?.cast<String>() ?? _harfSozcuk.keys.toList())
+  final letters = ((p['letters'] as List<Object?>?)?.cast<String>() ??
+          _harfSozcuk.keys.toList())
       .where(_harfSozcuk.containsKey)
       .toList();
   final l = letters[r.nextInt(letters.length)];
   final right = _harfSozcuk[l]![r.nextInt(_harfSozcuk[l]!.length)];
-  final others = _harfSozcuk.entries.where((e) => e.key != l).toList()..shuffle(r);
-  final opts = <(String, String)>[right, for (final e in others.take(2)) e.value[r.nextInt(e.value.length)]]
+  final others = _harfSozcuk.entries.where((e) => e.key != l).toList()
     ..shuffle(r);
+  final opts = <(String, String)>[
+    right,
+    for (final e in others.take(2)) e.value[r.nextInt(e.value.length)]
+  ]..shuffle(r);
   final labels = [for (final o in opts) '${o.$1} ${o.$2}'];
   return Question(
     prompt: '${_trUp(l)} $l sesiyle başlayan hangisi?',
@@ -1030,10 +1034,29 @@ Question _firstLetter(Map<String, Object?> p, Random r) {
 
 /// Heceli sözcük bankası (2-4 hece).
 const _heceler = [
-  ['el', 'ma'], ['a', 'rı'], ['ke', 'di'], ['ka', 'lem'], ['o', 'kul'], ['ba', 'lık'], ['ki', 'tap'],
-  ['çan', 'ta'], ['ma', 'sa'], ['ka', 'pı'], ['ar', 'ka', 'daş'], ['ke', 'le', 'bek'], ['def', 'ter'],
-  ['öğ', 'ret', 'men'], ['pa', 'ta', 'tes'], ['to', 'pu', 'ruk'], ['zü', 'ra', 'fa'], ['do', 'ma', 'tes'],
-  ['şem', 'si', 'ye'], ['bil', 'gi', 'sa', 'yar'], ['ü', 'züm'], ['ne', 'ne'], ['di', 'no', 'zor'],
+  ['el', 'ma'],
+  ['a', 'rı'],
+  ['ke', 'di'],
+  ['ka', 'lem'],
+  ['o', 'kul'],
+  ['ba', 'lık'],
+  ['ki', 'tap'],
+  ['çan', 'ta'],
+  ['ma', 'sa'],
+  ['ka', 'pı'],
+  ['ar', 'ka', 'daş'],
+  ['ke', 'le', 'bek'],
+  ['def', 'ter'],
+  ['öğ', 'ret', 'men'],
+  ['pa', 'ta', 'tes'],
+  ['to', 'pu', 'ruk'],
+  ['zü', 'ra', 'fa'],
+  ['do', 'ma', 'tes'],
+  ['şem', 'si', 'ye'],
+  ['bil', 'gi', 'sa', 'yar'],
+  ['ü', 'züm'],
+  ['ne', 'ne'],
+  ['di', 'no', 'zor'],
 ];
 
 /// Kaç heceli? ya da heceleri birleştir.
@@ -1052,7 +1075,12 @@ Question _syllables(Map<String, Object?> p, Random r) {
       hint: 'Her hecede bir kez alkışla.',
     );
   }
-  final others = (List.of(valid)..remove(w)..shuffle(r)).take(2).map((e) => e.join()).toList();
+  final others = (List.of(valid)
+        ..remove(w)
+        ..shuffle(r))
+      .take(2)
+      .map((e) => e.join())
+      .toList();
   final opts = [word, ...others]..shuffle(r);
   return Question(
     prompt: '${w.join(' + ')} = ?',
@@ -1065,14 +1093,38 @@ Question _syllables(Map<String, Object?> p, Random r) {
 
 /// Eş ve zıt anlamlı sözcükler.
 const _esAnlam = [
-  ('kırmızı', 'al'), ('siyah', 'kara'), ('beyaz', 'ak'), ('okul', 'mektep'), ('yanıt', 'cevap'),
-  ('öğrenci', 'talebe'), ('doktor', 'hekim'), ('ihtiyar', 'yaşlı'), ('hediye', 'armağan'), ('misafir', 'konuk'),
-  ('cümle', 'tümce'), ('sözcük', 'kelime'), ('yıl', 'sene'), ('ülke', 'yurt'), ('sınav', 'imtihan'),
+  ('kırmızı', 'al'),
+  ('siyah', 'kara'),
+  ('beyaz', 'ak'),
+  ('okul', 'mektep'),
+  ('yanıt', 'cevap'),
+  ('öğrenci', 'talebe'),
+  ('doktor', 'hekim'),
+  ('ihtiyar', 'yaşlı'),
+  ('hediye', 'armağan'),
+  ('misafir', 'konuk'),
+  ('cümle', 'tümce'),
+  ('sözcük', 'kelime'),
+  ('yıl', 'sene'),
+  ('ülke', 'yurt'),
+  ('sınav', 'imtihan'),
 ];
 const _zitAnlam = [
-  ('büyük', 'küçük'), ('uzun', 'kısa'), ('sıcak', 'soğuk'), ('gece', 'gündüz'), ('hızlı', 'yavaş'),
-  ('açık', 'kapalı'), ('dolu', 'boş'), ('ağır', 'hafif'), ('yaşlı', 'genç'), ('iyi', 'kötü'),
-  ('ön', 'arka'), ('ince', 'kalın'), ('kolay', 'zor'), ('mutlu', 'mutsuz'), ('erken', 'geç'),
+  ('büyük', 'küçük'),
+  ('uzun', 'kısa'),
+  ('sıcak', 'soğuk'),
+  ('gece', 'gündüz'),
+  ('hızlı', 'yavaş'),
+  ('açık', 'kapalı'),
+  ('dolu', 'boş'),
+  ('ağır', 'hafif'),
+  ('yaşlı', 'genç'),
+  ('iyi', 'kötü'),
+  ('ön', 'arka'),
+  ('ince', 'kalın'),
+  ('kolay', 'zor'),
+  ('mutlu', 'mutsuz'),
+  ('erken', 'geç'),
 ];
 
 Question _wordPair(Map<String, Object?> p, Random r) {
@@ -1081,7 +1133,9 @@ Question _wordPair(Map<String, Object?> p, Random r) {
   final pair = bank[r.nextInt(bank.length)];
   final flip = r.nextBool();
   final ask = flip ? pair.$2 : pair.$1, ans = flip ? pair.$1 : pair.$2;
-  final pool = {for (final b in [..._esAnlam, ..._zitAnlam]) ...[b.$1, b.$2]}.toList()
+  final pool = {
+    for (final b in [..._esAnlam, ..._zitAnlam]) ...[b.$1, b.$2]
+  }.toList()
     ..removeWhere((x) => x == ask || x == ans || x == pair.$1 || x == pair.$2)
     ..shuffle(r);
   final opts = [ans, pool[0], pool[1]]..shuffle(r);

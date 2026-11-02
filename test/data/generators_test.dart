@@ -344,9 +344,14 @@ void main() {
       final q = generate(card, Random(seed));
       final letter = q.prompt.split(' ')[1];
       final word = q.answer.split(' ')[1];
-      expect(word.startsWith(letter), isTrue, reason: '${q.prompt} -> ${q.answer}');
-      final wrong = [for (var i = 0; i < q.options.length; i++) if (i != q.answerIndex) q.options[i].split(' ')[1]];
-      expect(wrong.any((w) => w.startsWith(letter)), isFalse, reason: '${q.prompt} ${q.options}');
+      expect(word.startsWith(letter), isTrue,
+          reason: '${q.prompt} -> ${q.answer}');
+      final wrong = [
+        for (var i = 0; i < q.options.length; i++)
+          if (i != q.answerIndex) q.options[i].split(' ')[1]
+      ];
+      expect(wrong.any((w) => w.startsWith(letter)), isFalse,
+          reason: '${q.prompt} ${q.options}');
     }
   });
 
