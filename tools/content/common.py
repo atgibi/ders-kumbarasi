@@ -29,6 +29,16 @@ def mc(prompt, options, answer, *, say=None, visual=None, explain=None, hint=Non
     return d
 
 
+def act(prompt, *, say=None, visual=None):
+    """Veliyle birlikte yapılan etkinlik kartı (puanlanmaz)."""
+    d = {"type": "act", "prompt": prompt}
+    if say is not None:
+        d["say"] = say
+    if visual is not None:
+        d["visual"] = visual
+    return d
+
+
 def gen(name, fast=None, **params):
     d = {"type": "gen", "gen": name, "params": params}
     if fast is not None:

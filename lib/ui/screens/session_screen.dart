@@ -393,8 +393,81 @@ class _QuestionViewState extends State<_QuestionView> {
         : 'Doğru cevap: ${q.answer}. ${q.explanation ?? ''}');
   }
 
+  Widget _activity(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    final r = _result;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    const Text('VELİYLE BİRLİKTE',
+                        style: TextStyle(color: Kumbara.primaryDark, fontWeight: FontWeight.w900, fontSize: 15)),
+                    const Spacer(),
+                    IconButton.filledTonal(
+                      key: const Key('listen'),
+                      tooltip: 'Dinle',
+                      onPressed: () => widget.onSay(q.spoken),
+                      icon: const Icon(Icons.volume_up_rounded),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                const Text('👨‍👩‍👧', style: TextStyle(fontSize: 56), textAlign: TextAlign.center),
+                const SizedBox(height: 8),
+                MascotSays(text: q.prompt, onTap: () => widget.onSay(q.spoken)),
+                if (q.visual != null) VisualView(q.visual!),
+              ],
+            ),
+          ),
+        ),
+        if (r == null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ChunkyButton(
+                  key: const Key('activity-done'),
+                  label: 'Yaptık',
+                  color: Kumbara.good,
+                  shadow: Kumbara.goodDark,
+                  onPressed: () {
+                    _watch.stop();
+                    setState(() => _result = widget.onAnswer(0, Duration.zero, false));
+                    widget.onSay('Harika! Birlikte yaptınız.');
+                  },
+                ),
+                TextButton(
+                  key: const Key('activity-skip'),
+                  onPressed: widget.onSkip,
+                  child: Text('Şimdi değil', style: t.bodyLarge?.copyWith(color: Kumbara.inkSoft)),
+                ),
+              ],
+            ),
+          )
+        else
+          _FeedbackBar(
+            result: r,
+            answer: '',
+            explanation: null,
+            canCheck: false,
+            onCheck: () {},
+            onNext: widget.onNext,
+          ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (q.activity) return _activity(context);
     final t = Theme.of(context).textTheme;
     final r = _result;
     final label = switch (widget.step.phase) {

@@ -126,7 +126,11 @@ class Question {
     this.visual,
     this.explanation,
     this.hint,
+    this.activity = false,
   }) : assert(answerIndex >= 0);
+
+  /// Veliyle birlikte yapılan etkinlik (puanlanmaz; "Yaptık" ile tamamlanır).
+  final bool activity;
 
   final String prompt;
   final String? say;
@@ -163,6 +167,23 @@ class CardDef {
 
   factory CardDef.fromJson(String outcomeCode, Map<String, Object?> j) {
     final type = j['type'] as String? ?? 'mc';
+    if (type == 'act') {
+      return CardDef(
+        id: j['id']! as String,
+        outcomeCode: outcomeCode,
+        fixed: Question(
+          prompt: j['prompt']! as String,
+          say: j['say'] as String?,
+          visual: j['visual'] == null
+              ? null
+              : Visual.fromJson(j['visual']! as Map<String, Object?>),
+          options: const ['Yaptık', 'Şimdi değil'],
+          answerIndex: 0,
+          activity: true,
+        ),
+        fastSeconds: 1 << 20, // etkinlik süresi ölçülmez
+      );
+    }
     if (type == 'gen') {
       return CardDef(
         id: j['id']! as String,

@@ -308,6 +308,22 @@ void main() {
     }
   });
 
+  test('sabit soruların seçenekleri karışır, doğru cevap korunur', () {
+    const card = CardDef(
+      id: 't',
+      outcomeCode: 'X',
+      fixed: Question(prompt: 'Soru', options: ['A', 'B', 'C'], answerIndex: 0),
+    );
+    final positions = <int>{};
+    for (var seed = 0; seed < 50; seed++) {
+      final q = generate(card, Random(seed));
+      expect(q.answer, 'A');
+      expect(q.options.toSet(), {'A', 'B', 'C'});
+      positions.add(q.answerIndex);
+    }
+    expect(positions, {0, 1, 2}, reason: 'doğru cevap her konumda görünebilmeli');
+  });
+
   test('aynı tohum aynı soruyu üretir (tekrarlanabilirlik)', () {
     const card = CardDef(
         id: 't', outcomeCode: 'X', generator: 'add', generatorParams: {});

@@ -1009,7 +1009,22 @@ final Map<String, QuestionGenerator> generators = {
 };
 
 Question generate(CardDef card, Random rnd) {
-  if (card.fixed != null) return card.fixed!;
+  final f = card.fixed;
+  if (f != null) {
+    if (f.activity) return f;
+    // Sabit sorularda seçenekler her gösterimde karıştırılır; doğru cevap hep
+    // aynı yerde olursa çocuk konuyu değil konumu ezberler.
+    final order = List.generate(f.options.length, (i) => i)..shuffle(rnd);
+    return Question(
+      prompt: f.prompt,
+      say: f.say,
+      visual: f.visual,
+      options: [for (final i in order) f.options[i]],
+      answerIndex: order.indexOf(f.answerIndex),
+      explanation: f.explanation,
+      hint: f.hint,
+    );
+  }
   final g = generators[card.generator];
   if (g == null) {
     throw StateError('Bilinmeyen üreteç: ${card.generator} (${card.id})');

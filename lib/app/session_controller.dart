@@ -248,6 +248,9 @@ class SessionController {
 
   void next() => index++;
 
+  /// Etkinliği şimdi yapmadan geç: kayıt değişmez.
+  void skip() => index++;
+
   /// Oturumu kapatır: süre ve seri kaydı.
   void finish() {
     final now = clock();

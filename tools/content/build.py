@@ -71,6 +71,10 @@ def validate(pk, curriculum, gens, errors, warnings):
             if c["type"] == "gen":
                 if c["gen"] not in gens:
                     errors.append(f"{cid}: bilinmeyen üreteç {c['gen']}")
+            elif c["type"] == "act":
+                if not c["prompt"].strip():
+                    errors.append(f"{cid}: boş etkinlik")
+                check_visual(c.get("visual"), cid, errors)
             else:
                 opts = c["options"]
                 if len(opts) < 2:
