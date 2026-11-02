@@ -97,7 +97,8 @@ Question _add(Map<String, Object?> p, Random r) {
     b = _between(r, 0, maxSum - a);
   } while (!allowCarry && (a % 10) + (b % 10) >= 10 && guard++ < 100);
   final s = a + b;
-  final o = numericOptions(s, r, spread: 2,
+  final o = numericOptions(s, r,
+      spread: 2,
       // Sık hata: basamak birleştirme ("38 + 5 = 313") yerine yakın komşular
       preferred: [s + 1, s - 1, if (s >= 10) s + 10, if (s >= 10) s - 10]);
   return Question(
@@ -127,7 +128,9 @@ Question _sub(Map<String, Object?> p, Random r) {
   return Question(
     prompt: '$a − $b = ?',
     say: '$a eksi $b kaç eder?',
-    visual: max <= 10 ? Visual('objects_crossed', {'emoji': '🎈', 'total': a, 'crossed': b}) : null,
+    visual: max <= 10
+        ? Visual('objects_crossed', {'emoji': '🎈', 'total': a, 'crossed': b})
+        : null,
     options: o.options,
     answerIndex: o.answerIndex,
     explanation: '$a içinden $b çıkarılınca $d kalır.',
@@ -157,12 +160,14 @@ Question _multiply(Map<String, Object?> p, Random r) {
   final a = _between(r, _p(p, 'a_min', 1), aMax);
   final b = _between(r, _p(p, 'b_min', 1), bMax);
   final m = a * b;
-  final o = numericOptions(m, r, spread: max_(2, a),
-      preferred: [m + a, m - a, a + b]);
+  final o = numericOptions(m, r,
+      spread: max_(2, a), preferred: [m + a, m - a, a + b]);
   return Question(
     prompt: '$a × $b = ?',
     say: '$a kere $b kaç eder?',
-    visual: m <= 30 ? Visual('groups', {'emoji': '🍓', 'groups': a, 'each': b}) : null,
+    visual: m <= 30
+        ? Visual('groups', {'emoji': '🍓', 'groups': a, 'each': b})
+        : null,
     options: o.options,
     answerIndex: o.answerIndex,
     explanation: '$a tane $b, $m eder.',
@@ -187,7 +192,14 @@ Question _divide(Map<String, Object?> p, Random r) {
 
 Question _placeValue(Map<String, Object?> p, Random r) {
   final digits = _p(p, 'digits', 2);
-  final names = ['birler', 'onlar', 'yüzler', 'binler', 'on binler', 'yüz binler'];
+  final names = [
+    'birler',
+    'onlar',
+    'yüzler',
+    'binler',
+    'on binler',
+    'yüz binler'
+  ];
   final lo = digits == 1 ? 0 : pow(10, digits - 1).toInt();
   final hi = pow(10, digits).toInt() - 1;
   final n = _between(r, lo, hi);
@@ -201,7 +213,8 @@ Question _placeValue(Map<String, Object?> p, Random r) {
     visual: Visual('number_highlight', {'number': n, 'pos': pos}),
     options: opts,
     answerIndex: opts.indexOf(names[pos]),
-    explanation: '$digit, sağdan ${pos + 1}. basamakta; yani ${names[pos]} basamağında.',
+    explanation:
+        '$digit, sağdan ${pos + 1}. basamakta; yani ${names[pos]} basamağında.',
   );
 }
 
@@ -209,8 +222,8 @@ Question _tensOnes(Map<String, Object?> p, Random r) {
   final max = _p(p, 'max', 99);
   final n = _between(r, 10, max);
   final tens = n ~/ 10, ones = n % 10;
-  final o = numericOptions(n, r, spread: 1,
-      preferred: [ones * 10 + tens, tens + ones, n + 10]);
+  final o = numericOptions(n, r,
+      spread: 1, preferred: [ones * 10 + tens, tens + ones, n + 10]);
   return Question(
     prompt: '$tens onluk ve $ones birlik kaç eder?',
     visual: Visual('blocks', {'tens': tens, 'ones': ones}),
@@ -221,7 +234,8 @@ Question _tensOnes(Map<String, Object?> p, Random r) {
 }
 
 /// Üleştirme sayı sıfatı: 2 -> ikişer, 5 -> beşer, 10 -> onar.
-String _dagitma(int n) => const {
+String _dagitma(int n) =>
+    const {
       2: 'ikişer',
       3: 'üçer',
       4: 'dörder',
@@ -236,7 +250,11 @@ String _dagitma(int n) => const {
     '$n';
 
 Question _skipCount(Map<String, Object?> p, Random r) {
-  final step = (p['steps'] as List<Object?>?)?.cast<num>().map((e) => e.toInt()).toList() ?? [2, 5, 10];
+  final step = (p['steps'] as List<Object?>?)
+          ?.cast<num>()
+          .map((e) => e.toInt())
+          .toList() ??
+      [2, 5, 10];
   final st = step[r.nextInt(step.length)];
   final start = st * _between(r, 0, 5);
   final seq = [for (var i = 0; i < 4; i++) start + st * i];
@@ -244,7 +262,8 @@ Question _skipCount(Map<String, Object?> p, Random r) {
   final o = numericOptions(ans, r, spread: st, preferred: [ans + 1, ans - 1]);
   return Question(
     prompt: '${seq.join(', ')}, ?',
-    say: 'Sayılar ${_dagitma(st)} ${_dagitma(st)} artıyor. Sıradaki sayı hangisi?',
+    say:
+        'Sayılar ${_dagitma(st)} ${_dagitma(st)} artıyor. Sıradaki sayı hangisi?',
     options: o.options,
     answerIndex: o.answerIndex,
     explanation: 'Her seferinde $st ekliyoruz: ${seq.last} + $st = $ans.',
@@ -256,7 +275,16 @@ Question _ordinal(Map<String, Object?> p, Random r) {
   final animals = ['🐢', '🐇', '🐕', '🐈', '🐓', '🦆', '🐑', '🐄'];
   final row = (List.of(animals)..shuffle(r)).take(n).toList();
   final k = r.nextInt(n);
-  final ordinals = ['birinci', 'ikinci', 'üçüncü', 'dördüncü', 'beşinci', 'altıncı', 'yedinci', 'sekizinci'];
+  final ordinals = [
+    'birinci',
+    'ikinci',
+    'üçüncü',
+    'dördüncü',
+    'beşinci',
+    'altıncı',
+    'yedinci',
+    'sekizinci'
+  ];
   final opts = (List.of(row)..shuffle(r)).take(min_(3, n)).toSet();
   opts.add(row[k]);
   final list = opts.toList()..shuffle(r);

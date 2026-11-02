@@ -19,9 +19,10 @@ class ContentRepository {
       'assets/content/${s.id}_$grade.json';
 
   Future<List<Outcome>> outcomes() async {
-    return _outcomes ??= (jsonDecode(await _load(outcomesAsset)) as List<Object?>)
-        .map((e) => Outcome.fromJson(e! as Map<String, Object?>))
-        .toList(growable: false);
+    return _outcomes ??=
+        (jsonDecode(await _load(outcomesAsset)) as List<Object?>)
+            .map((e) => Outcome.fromJson(e! as Map<String, Object?>))
+            .toList(growable: false);
   }
 
   Future<List<Outcome>> outcomesFor(Subject s, int grade) async =>

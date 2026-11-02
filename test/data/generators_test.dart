@@ -135,7 +135,8 @@ void main() {
   test('aynı tohum aynı soruyu üretir (tekrarlanabilirlik)', () {
     const card = CardDef(
         id: 't', outcomeCode: 'X', generator: 'add', generatorParams: {});
-    expect(generate(card, Random(42)).prompt, generate(card, Random(42)).prompt);
+    expect(
+        generate(card, Random(42)).prompt, generate(card, Random(42)).prompt);
   });
 
   test('bilinmeyen üreteç açık hata verir', () {

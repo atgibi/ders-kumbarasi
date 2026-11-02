@@ -8,7 +8,8 @@ void main() {
     test('profil ve ilerleme kaydedilip geri okunur', () async {
       final store = ProgressStore(MemoryStorage());
       expect(await store.loadProfiles(), isEmpty);
-      const elif = ChildProfile(id: 'p1', nickname: 'Elif', grade: 2, avatar: '🦊');
+      const elif =
+          ChildProfile(id: 'p1', nickname: 'Elif', grade: 2, avatar: '🦊');
       await store.saveProfiles([elif]);
       final loaded = await store.loadProfiles();
       expect(loaded.single.nickname, 'Elif');
@@ -16,8 +17,8 @@ void main() {
 
       final now = DateTime(2026, 11, 2, 18);
       final p = ChildProgress()
-        ..cards['MAT.2.1.1#1'] =
-            review(CardState.fresh('MAT.2.1.1#1', now), ReviewOutcome.correctFast, now)
+        ..cards['MAT.2.1.1#1'] = review(
+            CardState.fresh('MAT.2.1.1#1', now), ReviewOutcome.correctFast, now)
         ..startedOutcomes.add('MAT.2.1.1')
         ..dailyMinutes['2026-11-02'] = 12;
       await store.saveProgress('p1', p);

@@ -112,7 +112,8 @@ String weekKey(DateTime t) {
 
 /// Seri kuralı: haftada 2 dinlenme günü hakkı; seri kırılınca ceza yok,
 /// yalnızca sıfırdan başlar (proje planı 7.3).
-void recordSessionDay(ChildProgress p, DateTime now, {int restDaysPerWeek = 2}) {
+void recordSessionDay(ChildProgress p, DateTime now,
+    {int restDaysPerWeek = 2}) {
   final today = dayKey(now);
   if (p.lastSessionDay == today) return;
   final wk = weekKey(now);
