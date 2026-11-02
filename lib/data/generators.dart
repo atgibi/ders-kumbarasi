@@ -664,7 +664,6 @@ Question _multiplyAsAdd(Map<String, Object?> p, Random r) {
   );
 }
 
-
 /// Tek mi çift mi?
 Question _oddEven(Map<String, Object?> p, Random r) {
   final n = _between(r, 0, _p(p, 'max', 100));
@@ -673,7 +672,8 @@ Question _oddEven(Map<String, Object?> p, Random r) {
     prompt: '$n tek mi, çift mi?',
     options: opts,
     answerIndex: n.isEven ? 1 : 0,
-    explanation: 'Birler basamağı ${n % 10}: ${n.isEven ? 'çift (0, 2, 4, 6, 8)' : 'tek (1, 3, 5, 7, 9)'}.',
+    explanation:
+        'Birler basamağı ${n % 10}: ${n.isEven ? 'çift (0, 2, 4, 6, 8)' : 'tek (1, 3, 5, 7, 9)'}.',
   );
 }
 
@@ -699,9 +699,11 @@ Question _roundTo(Map<String, Object?> p, Random r) {
   final lo = n ~/ to * to;
   final ans = n - lo >= to ~/ 2 ? lo + to : lo;
   final other = ans == lo ? lo + to : lo;
-  final opts = ['$lo', '${lo + to}', if (to == 10) '${lo + 2 * to}' else '${n ~/ 10 * 10}']
-      .toSet()
-      .toList()
+  final opts = [
+    '$lo',
+    '${lo + to}',
+    if (to == 10) '${lo + 2 * to}' else '${n ~/ 10 * 10}'
+  ].toSet().toList()
     ..shuffle(r);
   return Question(
     prompt: '$n sayısını en yakın ${to == 10 ? 'onluğa' : 'yüzlüğe'} yuvarla.',
@@ -714,7 +716,17 @@ Question _roundTo(Map<String, Object?> p, Random r) {
 /// Birim dönüştürme: m-cm, km-m, kg-g, ton-kg, L-mL, saat-dakika, dakika-saniye, gün-saat, yıl-ay, hafta-gün.
 Question _unitConvert(Map<String, Object?> p, Random r) {
   final kinds = (p['kinds'] as List<Object?>?)?.cast<String>() ??
-      ['m_cm', 'km_m', 'kg_g', 'ton_kg', 'saat_dk', 'dk_sn', 'gun_saat', 'hafta_gun', 'yil_ay'];
+      [
+        'm_cm',
+        'km_m',
+        'kg_g',
+        'ton_kg',
+        'saat_dk',
+        'dk_sn',
+        'gun_saat',
+        'hafta_gun',
+        'yil_ay'
+      ];
   final k = kinds[r.nextInt(kinds.length)];
   final (String big, String small, int f) = switch (k) {
     'm_cm' => ('metre', 'santimetre', 100),
@@ -731,7 +743,8 @@ Question _unitConvert(Map<String, Object?> p, Random r) {
   };
   final n = _between(r, 1, f >= 1000 ? 5 : (f >= 60 ? 3 : 4));
   final ans = n * f;
-  final o = numericOptions(ans, r, spread: f, min: 1, preferred: [n * 10, n * 100, ans + f]);
+  final o = numericOptions(ans, r,
+      spread: f, min: 1, preferred: [n * 10, n * 100, ans + f]);
   return Question(
     prompt: '$n $big kaç $small eder?',
     options: o.options.map((e) => '$e $small').toList(),
@@ -742,7 +755,11 @@ Question _unitConvert(Map<String, Object?> p, Random r) {
 
 /// Kesir okuma: boyalı parçaların kesirle gösterimi.
 Question _fractionRead(Map<String, Object?> p, Random r) {
-  final allowed = (p['parts'] as List<Object?>?)?.cast<num>().map((e) => e.toInt()).toList() ?? [2, 3, 4, 6, 8];
+  final allowed = (p['parts'] as List<Object?>?)
+          ?.cast<num>()
+          .map((e) => e.toInt())
+          .toList() ??
+      [2, 3, 4, 6, 8];
   final n = allowed[r.nextInt(allowed.length)];
   final unit = p['unit'] as bool? ?? false;
   final k = unit ? 1 : _between(r, 1, n);
@@ -754,7 +771,8 @@ Question _fractionRead(Map<String, Object?> p, Random r) {
     visual: Visual('fraction', {'parts': n, 'shaded': k}),
     options: opts,
     answerIndex: opts.indexOf(right),
-    explanation: 'Bütün $n eş parçaya bölünmüş (payda $n), $k parça boyalı (pay $k): $right.',
+    explanation:
+        'Bütün $n eş parçaya bölünmüş (payda $n), $k parça boyalı (pay $k): $right.',
   );
 }
 
@@ -774,14 +792,20 @@ Question _perimeter(Map<String, Object?> p, Random r) {
       ans = 2 * (a + b);
       text = 'Kenarları $a cm ve $b cm olan dikdörtgenin çevresi kaç cm?';
     default:
-      final a = _between(r, 2, max), b = _between(r, 2, max), c = _between(r, 2, max);
+      final a = _between(r, 2, max),
+          b = _between(r, 2, max),
+          c = _between(r, 2, max);
       ans = a + b + c;
       text = 'Kenarları $a cm, $b cm ve $c cm olan üçgenin çevresi kaç cm?';
   }
   final o = numericOptions(ans, r, spread: 4, min: 1, preferred: [ans ~/ 2]);
   return Question(
     prompt: text,
-    visual: Visual('shapes', {'items': [['kare', 'dikdortgen', 'ucgen'][t]]}),
+    visual: Visual('shapes', {
+      'items': [
+        ['kare', 'dikdortgen', 'ucgen'][t]
+      ]
+    }),
     options: o.options.map((e) => '$e cm').toList(),
     answerIndex: o.answerIndex,
     explanation: 'Çevre, bütün kenarların toplamıdır: $ans cm.',
@@ -798,12 +822,15 @@ Question _wordMulDiv(Map<String, Object?> p, Random r) {
   final int ans;
   if (mul) {
     ans = a * b;
-    text = 'Her pakette $b ${thing.$1} var. $a pakette toplam kaç ${thing.$1} vardır?';
+    text =
+        'Her pakette $b ${thing.$1} var. $a pakette toplam kaç ${thing.$1} vardır?';
   } else {
     ans = b;
-    text = '${a * b} ${thing.$1} $a kişiye eşit paylaştırılıyor. Her kişi kaç ${thing.$1} alır?';
+    text =
+        '${a * b} ${thing.$1} $a kişiye eşit paylaştırılıyor. Her kişi kaç ${thing.$1} alır?';
   }
-  final o = numericOptions(ans, r, spread: 3, min: 1, preferred: [a + b, if (!mul) a]);
+  final o = numericOptions(ans, r,
+      spread: 3, min: 1, preferred: [a + b, if (!mul) a]);
   return Question(
     prompt: text,
     options: o.options,

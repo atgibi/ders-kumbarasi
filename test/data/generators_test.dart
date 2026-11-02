@@ -260,13 +260,17 @@ void main() {
   test('yuvarlama: cevap gerçekten en yakın onluk/yüzlük', () {
     for (final to in [10, 100]) {
       final card = CardDef(
-          id: 't', outcomeCode: 'X', generator: 'round_to', generatorParams: {'to': to, 'max': 999});
+          id: 't',
+          outcomeCode: 'X',
+          generator: 'round_to',
+          generatorParams: {'to': to, 'max': 999});
       for (var seed = 0; seed < 300; seed++) {
         final q = generate(card, Random(seed));
         final n = int.parse(RegExp(r'^(\d+)').firstMatch(q.prompt)!.group(1)!);
         final ans = int.parse(q.answer);
         expect(ans % to, 0, reason: q.prompt);
-        expect((n - ans).abs() <= to ~/ 2, isTrue, reason: '${q.prompt} -> ${q.answer}');
+        expect((n - ans).abs() <= to ~/ 2, isTrue,
+            reason: '${q.prompt} -> ${q.answer}');
       }
     }
   });
