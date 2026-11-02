@@ -150,7 +150,8 @@ class _PathScreenState extends State<PathScreen> {
           return Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
-              child: Text('Yol açılamadı: ${snap.error}', textAlign: TextAlign.center),
+              child: Text('Yol açılamadı: ${snap.error}',
+                  textAlign: TextAlign.center),
             ),
           );
         }
