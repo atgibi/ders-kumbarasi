@@ -1,0 +1,1370 @@
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+
+
+                                                  ORTAOKUL
+          YAPAY ZEKÂ UYGULAMALARI
+                                                          DERSİ
+                               ÖĞRETİM PROGRAMI
+
+
+                                        TÜRKİYE YÜZYILI
+                                        MAARİF MODELİ
+                                                          2O26
+                                                                  1
+2
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+
+
+                                                      İÇİNDEKİLER
+
+      1.    YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI                                    4
+
+                   YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI’NIN TEMEL YAKLAŞIMI VE
+            1.1.                                                                              4
+                   ÖZEL AMAÇLARI
+
+                   YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI’NIN UYGULANMASINA İLİŞKİN
+            1.2.                                                                              5
+                   ESASLAR
+
+                   1.2.1.     Alan Becerileri, Kavramsal Beceriler ve Eğilimler               7
+
+                   1.2.2.     Programlar Arası Bileşenler                                     7
+
+                   1.2.3.     İçerik Çerçevesi                                                9
+
+                   1.2.4.     Öğrenme Kanıtları (Ölçme ve Değerlendirme)                      10
+
+                   1.2.5.     Öğrenme-Öğretme Yaşantıları                                     10
+
+                   1.2.6.     Farklılaştırma                                                  10
+
+                   YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI’NIN TEMA, ÖĞRENME
+            1.3.                                                                              11
+                   ÇIKTILARI SAYISI VE SÜRE TABLOSU
+
+            1.4. YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI’NIN YAPISI                    12
+
+      2. YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI’NIN DÜZEYLERİ                         14
+
+                   I. DÜZEY                                                                   14
+
+                   II. DÜZEY                                                                  20
+
+
+
+
+                                                                                                   3
+                                                                                ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+    1. YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+    1.1. YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI’NIN TEMEL YAKLAŞIMI VE ÖZEL
+         AMAÇLARI
+    Türkiye Yüzyılı Maarif Modeli; bireylerin zihinsel, sosyal-duygusal öğrenme ve okuryazarlık becerileri bakımından bütüncül
+    gelişimini esas alan yenilikçi bir yaklaşımdır. Bu model, Türk Millî Eğitiminin köklü mirasını çağımızın gereklilikleriyle
+    birleştirmektedir. Bu doğrultuda Yapay Zekâ Uygulamaları Dersi Öğretim Programı, Türkiye Yüzyılı Maarif Modeli’nin ilke ve
+    yaklaşımları temel alınarak yapılandırılmıştır. Bu yaklaşımla tasarlanan Yapay Zekâ Dersi Öğretim Programı; öğrencilerin
+    akademik gelişimlerinin yanı sıra üst düzey düşünme becerilerini, okuryazarlık becerilerini, sosyal ve duygusal yönlerini
+    ve değer temelli gelişimlerini desteklemektedir. Bunun yanı sıra bu program, öğrencilerin dijital dünyayı daha bilinçli
+    kullanmalarını ve değerlerle harmanlanmış bir öğrenme süreci yaşamalarını sağlamak amacıyla Erdem–Değer–Eylem
+    Çerçevesi'nde yapılandırılmış bir yaklaşımı esas almaktadır. Program; yapay zekânın temelleri, yapay zekâ geliştirme
+    ortamları, model geliştirme, bulanık mantık ve makine öğrenmesi konularında öğrencilerin aktif katılım ve deneyim
+    yoluyla öğrenmelerini destekleyecek şekilde tasarlanmıştır. Yapay zekâ uygulamaları öğretim süreci, Türkiye Yüzyılı
+    Maarif Modeli’nin esas aldığı birey ve toplum eksenli yaklaşım doğrultusunda yapılandırılmıştır. Öğrenme çıktıları; sosyal-
+    duygusal öğrenme becerileri, Erdem–Değer–Eylem Çerçevesi'nde ele alınan değerler ve dijital okuryazarlık başta olmak
+    üzere farklı okuryazarlık becerileriyle bütünleştirilerek çok yönlü birey gelişimini destekleyecek şekilde düzenlenmiştir.
+    Yapay Zekâ Uygulamaları Dersi Öğretim Programı, öğrenciyi odak noktası yapan bütüncül bir eğitim yaklaşımı
+    kullanmaktadır. Program; öğrencilerin bilgi edinmesini, değerlendirmesini, yeni bilgiler üretmesini ve tüm süreci etik ilkelere
+    göre yönlendirmesini; TYMM’nin beceri temelli, bütüncül ve değer odaklı yaklaşımı doğrultusunda yapılandırmaktadır.
+    Ayrıca öğrencilerin bilgi-işlemsel düşünme, problem çözme, algoritmik tasarım, eleştirel düşünme, yaratıcılık ve etkili
+    iletişim gibi 21. yüzyıl becerilerini ve aynı zamanda toplumsal sorumluluk bilincini geliştirmelerine yardımcı olmaktadır.
+    Programın en önemli hedeflerinden biri, öğrencilerin yapay zekâ teknolojilerini anlayan, anlamlandıran, etkin bir şekilde
+    kullanan ve kendi üretimlerini geliştiren bireyler olarak yetiştirilmesidir. Bu amaçla öğrencilerin yapay zekâ araçlarıyla
+    proje geliştirme süreçlerine aktif olarak katılmaları, bilgi temelli çözümler geliştirmeleri ve üretken bir dijital vatandaşlık
+    bilinci kazanmaları amaçlanmaktadır. Bu süreçte öğrenciler yapay zekânın temel kavramlarını öğrenmekte, bu bilgilerin
+    doğruluğunu sorgulamakta ve mantıklı sonuçlar çıkararak sistem bileşenlerini analiz edebilmektedir.
+    Yapay Zekâ Uygulamaları Dersi Öğretim Programı, Türkiye Yüzyılı Maarif Modeli doğrultusunda bireyi merkeze alan,
+    beceri temelli ve bütüncül bir eğitim anlayışıyla; dijital dönüşümün gerektirdiği beceri ve yeterliklerin yanı sıra kavramsal
+    beceriler, eğilimler ve programlar arası bileşenleri de kapsayacak şekilde tasarlanmıştır. Program, öğrencilerin dijital
+    teknolojileri özgün ve üretken biçimde kullanmalarını desteklemektedir. Programın temel yapı taşlarını dijital okuryazarlık,
+    siber güvenlik ve etik sorumluluk gibi konular oluşturmaktadır. Hedef; öğrencilerin dijital ortamda güvenli, sorumlu ve
+    bilinçli bireyler olarak hareket etmelerini sağlamaktır. Öğrenciler, proje temelli ve problem çözmeye dayalı uygulamalar
+    yoluyla farklı disiplinlerden edindikleri bilgileri yapay zekâ teknolojileriyle bütünleştirerek günlük yaşamın ihtiyaçlarına
+    yönelik dijital çözümler geliştirmektedirler. Bu süreçte blok tabanlı ve metin tabanlı geliştirme ortamlarında aktif rol alarak
+    yalnızca mevcut problemlere çözüm üretmekle kalmayıp olası riskleri öngörme, problemlerin ortaya çıkmasını önleyici
+    tedbirler geliştirme, yeni problemlere neden olmayacak güvenli, etik ve sorumlu teknolojik çözümler tasarlama ve bu
+    çözümleri gerçek yaşam bağlamlarına etkili biçimde uyarlama becerisi kazanmaktadırlar. Program, öğrencilerin yazılım
+    geliştirme ortamlarını tanımalarını ve bu ortamlardaki bileşenleri işlevlerine uygun şekilde kullanarak özgün modellemeler
+    yapmalarını desteklemektedir. Bu sayede öğrencilerin kendi fikirlerini teknolojik ürünlere dönüştürebilen bireyler olarak
+    yetiştirilmesi hedeflenmektedir.
+    Yapay Zekâ Uygulamaları Dersi Öğretim Programı, sürece dayalı bir öğrenme yaklaşımı kullanarak öğrencilerin alan,
+    kavramsal, sosyal-duygusal öğrenme ve okuryazarlık becerilerini geliştirmeyi amaçlamaktadır. Öğrencilerin derse aktif
+    olarak katıldığı, farklılıkların gözetildiği ve sürekli geri bildirim aldığı bir öğrenme ortamı oluşturulmaktadır. Bu durum,
+    öğrencilerin yapay zekâ süreçleriyle ilgili ileri düzey kavramlar hakkında daha fazla bilgi edinmelerine yardımcı olmaktadır.
+    Yapay zekâ destekli model geliştirme süreçlerine doğrudan katılmak, öğrencilerin üst düzey düşünme becerilerini
+    geliştirmelerine olanak tanımaktadır. Öğrenciler; bu süreçte model girdilerini belirleme, veri toplama, doğrulama ve
+    değerlendirme gibi temel aşamaları planlayıp uygulamaktadır. Bu süreçte öğrencilerin oluşturdukları yapay zekâ
+    modellerinin işleyişini ve elde edilen sonuçları sistematik olarak analiz etme yetkinlikleri de gelişmektedir.
+    1739 sayılı Millî Eğitim Temel Kanunu’nun 2. maddesinde ifade edilen “Türk Millî Eğitiminin Genel Amaçları” ile “Türk Millî
+
+
+
+4
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+     Eğitiminin Temel İlkeleri” esas alınarak hazırlanan Yapay Zekâ Uygulamaları Dersi Öğretim Programı ile öğrencilerin
+     •    Yapay zekâ ile ilgili temel kavramları tanımaları, sorgulamaları, değerlendirmeleri ve bu kavramlar arasında anlamlı
+          ilişkiler kurmaları,
+     •    Yapay zekâ uygulamalarını alt boyutlarına göre sınıflandırmaları ve bu sistemlerin bileşenlerini analiz etmeleri,
+     •    "Etik, güvenlik ve mahremiyet (kişisel verilerin korunması) boyutları dâhil olmak üzere yapay zekâ sistemlerinde
+          karşılaşılan temel sorunları tanımaları ve sorumlu teknoloji yaklaşımı doğrultusunda bu sorunlara yönelik çözüm
+          önerileri geliştirmeleri,
+     •    Yapay zekâ teknolojilerini amacına uygun biçimde belirlemeleri, kullanmaları ve etkililiğini değerlendirmeleri,
+     •    Blok ve metin tabanlı yapay zekâ uygulama-geliştirme ortamlarını tanımaları, hazırlamaları ve düzenlemeleri,
+     •    Geliştirme sürecinde kullanılan bileşenleri tanımaları, etkin şekilde kullanmaları ve bunların işlevselliğini analiz
+          etmeleri,
+     •    Gerçek hayat problemlerini tanımlayarak yapay zekâ destekli çözüm modelleri geliştirmeleri ve bu modellerin süreç
+          ve sonuçlarını değerlendirmeleri,
+     •    Yapay zekâ sistemlerinin ürettiği sonuçların her zaman kesin ve hatasız olmayabileceği dikkate alınarak kullanıcıların
+          elde edilen çıktıları eleştirel bir bakış açısıyla değerlendirmeleri,
+     •    Makine öğrenmesi, görüntü işleme, bulanık mantık ve doğal dil işleme gibi yapay zekâ alanlarına temel düzeyde hâkim
+          olmaları,
+     •    Bilgi-işlemsel düşünme, algoritma tasarımı, eleştirel düşünme ve problem çözme becerilerini; günlük yaşamda
+          karşılaşılan ihtiyaçları analiz etme, olası problemleri önceden öngörme, problemlerin ortaya çıkmasını önleyici
+          tedbirler geliştirme ve sorumlu kararlar alma süreçlerinde etkili şekilde kullanmaları,
+     •    Algoritmaları sözel-görsel olarak ifade etmeleri ve çözüm süreçlerine dönüştürmeleri,
+     •    Makine öğrenmesine ilişkin temel kavramları tanımaları, sorgulamaları ve bu kavramları eleştirel düşünce süzgecinden
+          geçirmeleri,
+     •    Bulanık mantık sistemlerinin temel kavramlarını analiz etmeleri ve bu kavramları farklı bağlamlarda değerlendirmeleri,
+     •    Geliştirme sürecinde kullanılan metin tabanlı bileşenleri tanıyıp bu bileşenlerin işlevselliğini değerlendirmeleri,
+     •    Metin tabanlı yapay zekâ uygulama-geliştirme süreçlerini adım adım yürüterek oluşturdukları modellerin
+          performanslarını değerlendirmeleri,
+     •    Öğrencilerin dijital vatandaşlık bilinci kazanarak dijital ortamlarda etik, güvenli ve sorumlu bireyler olarak hareket
+          etmeleri; ayrıca Türkiye Yüzyılı Maarif Modeli doğrultusunda Erdem–Değer–Eylem Çerçevesi'nde yer alan değerleri
+          benimseyerek bu değerleri eyleme dönüştürmeleri,
+     •    Disiplinler arası bağ kurma becerisi kazanarak yapay zekâ uygulamalarını Türkçe, matematik, fen, teknoloji,
+          mühendislik gibi alanlarla bütünleştirebilme becerilerini geliştirmeleri amaçlanmaktadır.
+
+     1.2. YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI’NIN UYGULANMASINA İLİŞKİN
+         ESASLAR
+     1.   Okulların teknolojik altyapıları farklılık gösterebileceğinden bilgisayar veya dijital araçlara erişimi sınırlı olan
+          öğrencilerin yapay zekâ kavramlarını kavramsal düzeyde öğrenebilmelerini sağlayacak çalışma kâğıtları, kart temelli
+          etkinlikler, rol oynama ve modelleme gibi alternatif öğretim yöntemleri Yapay Zekâ Uygulamaları Dersi Öğretim
+          Programı kapsamında planlanmalıdır. Bu sayede donanım farklılıklarının bulunduğu sınıflarda öğretim süreci etkili
+          bir şekilde yürütülebilir. Ayrıca çevrim dışı ortamlarda bulanık mantık ve makine öğrenmesi gibi temel kavramlar,
+          günlük yaşamdan örnekler, senaryo temelli etkinlikler, problem çözme uygulamaları ve iş birlikli öğrenme çalışmaları
+          aracılığıyla anlaşılabilir ve uygulanabilir hâle getirilebilir.
+     2.   Yapay Zekâ Uygulamaları Dersi Öğretim Programı, yalnızca teorik bilgilerle sınırlı kalmayıp öğrencilerin yapay zekâ
+          araçlarıyla projeler geliştirmelerine ve öğrendiklerini uygulamaya dönüştürmelerine imkân tanır. Program; proje
+          tabanlı öğrenme, problem çözme ve iş birliğine dayalı üretim süreçlerini kapsar. Her proje çalışması, öğrencilerin
+          aktif katılımını teşvik etmeli ve eski bilgileriyle yeni bilgileri birbirine bağlamalıdır.
+     3.   Yapay Zekâ Uygulamaları Dersi Öğretim Programı kapsamında öğretmenler, öğrencilerin katılımını artırmak için
+
+
+
+                                                                                                                                   5
+                                                                                   ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+         destekleyici ve yönlendirici stratejiler kullanmalıdır. Grup çalışmaları önceliklendirilmeli ve öğrencilerin bireysel
+         farklılıkları göz önünde bulundurularak kapsayıcı ve iş birliğine dayalı bir öğrenme ortamı oluşturulmalıdır. Bu ortamlar
+         öğrencilerin birlikte düşünme, oluşturma ve değerlendirme yeteneklerini geliştirmelerine yardımcı olmalıdır. Sosyal
+         öğrenme sürecini desteklemek için öğrencilerin birlikte çalışması, yapay zekâ modellerinin girdilerini belirlemesi,
+         bileşenleri bir araya getirmesi ve süreci birlikte değerlendirmesi önemli adımlardır.
+    4.   Öğrencilerin gelişim özellikleri ve blok tabanlı programlama ortamlarının yapısı dikkate alınarak yapay zekâ modeli
+         geliştirme süreçleri temel düzeyde ele alınmalıdır. Bu kapsamda çalışmalar; veri toplama, basit düzeyde etiketleme,
+         eşleştirme ve sınıflandırma gibi sınırlı ve yönlendirilmiş modelleme etkinlikleriyle yürütülmelidir. Oluşturulan
+         modellerin kapsamı, karmaşık algoritmik yapılardan ziyade öğrencilerin süreci anlamalarını ve deneyim kazanmalarını
+         sağlayacak nitelikte tutulmalıdır. Metin tabanlı yapay zekâ geliştirme ortamlarının sunduğu olanaklar doğrultusunda
+         yapay zekâ modeli geliştirme süreçleri, temel düzeye kıyasla daha ileri bir seviyede ele alınmalıdır. Bu kapsamda
+         çalışmalar; veri işleme, temel algoritma geliştirme, model oluşturma, test etme ve iyileştirme süreçlerini içerecek
+         şekilde yapılandırılmalıdır. Öğrencilerin değişkenler, koşul yapıları, döngüler gibi programlama unsurlarını kullanarak
+         daha kapsamlı çözümler üretmeleri teşvik edilmelidir. Ayrıca geliştirilen modellerin doğruluğunu değerlendirme, hata
+         analizi yapma ve modeli geliştirmeye yönelik düzenlemelerde bulunma becerilerinin desteklenmesi sağlanabilir.
+    5.   Öğrencilerin blok ya da metin tabanlı yapay zekâ geliştirme ortamlarında geliştirdikleri projeleri sosyal kodlama
+         platformları aracılığıyla arkadaşlarıyla paylaşmaları teşvik edilmelidir. İş birliğine dayalı yazılım geliştirme tekniklerini
+         öğrenme, ekip çalışmasına aktif katılım sağlama ve eleştirel geri bildirim alma gibi temel becerileri geliştirme fırsatı, bu
+         paylaşım kültürü sayesinde öğrencilere sunulabilir. Bu tür etkileşimli paylaşımlar; metin tabanlı geliştirme ortamlarının
+         kurulumu, bileşenlerin tanınması ve değerlendirilmesi gibi faydaları da pekiştirir.
+    6.   Öğrencilerin yapay zekâ kavramlarını ve yöntemlerini gerçek hayattaki sorunlarla ilişkilendirerek içselleştirmeleri
+         oldukça önemlidir. Bu bağlamda özellikle yaşlı bireylerin ihtiyaçları, özel gereksinimli bireylerin desteklenmesi ve
+         çevresel krizlerin yönetimi gibi toplumsal sorunlara çözüm üretecek yapay zekâ tabanlı uygulamaların geliştirilmesi
+         teşvik edilmeli ve desteklenmelidir. Bu yaklaşımın merkezinde yer alan temel öğrenme çıktıları, öğrencilerin seçtikleri
+         bir gerçek hayat problemini yapay zekâ modeline dönüştürmesi ve bu modeli uygulama sürecine taşımasıdır.
+    7.   Öğrencilerin ilgi alanlarına ve hazır bulunuşluk düzeylerine göre farklılaştırılmış ölçme-değerlendirme yaklaşımları
+         kullanılmalıdır. Bilgi, beceri ve tutumlar gerçek dünyadaki görevlerle ölçülmelidir. Değerlendirmeler süreç odaklı
+         olmalı ve geliştirici geri bildirimler içermelidir. Dijital araçlarla bu süreçlerin takip edilmesi gerekir.
+    8.   Yapay Zekâ Uygulamaları Dersi Öğretim Programı kapsamında öğrencilerin Türkçeyi doğru ve etkili bir şekilde
+         kullanmaları gerekir. Özellikle, algoritmaları açıklamak, problemleri tanımlamak ve projeleri sunmak gibi süreçlerde
+         sözlü ve yazılı ifade becerilerini geliştirmeleri gerekir. Bu süreçlerde Türkçe dersiyle disiplinler arası ilişki kurulmalıdır.
+         Öğrencilerin dinleme, konuşma, okuma ve yazma becerilerini grup çalışmaları, tartışmalar, proje sunumları, rapor
+         hazırlama ve akran geri bildirimi etkinlikleri aracılığıyla kullanmaları desteklenmelidir. Çevrim içi ve yüz yüze iletişim
+         arasındaki dengeyi korumak önemlidir. Çünkü dijital iletişimin olası etkileri dikkate alınmalıdır. Makine öğrenmesi,
+         bulanık mantık ve veri girdisi oluşturma gibi süreçlerde kullanılan teknik ifadelerin doğru kullanımı, bu becerileri
+         geliştirmeye yardımcı olur.
+    9.   Yapay zekâ teknolojilerini kullanırken öğrenciler sorumlu teknoloji yaklaşımı doğrultusunda toplumsal sorumluluk,
+         etik duyarlılık, dijital güvenlik ve mahremiyet gibi kavramlara yönelik farkındalık geliştirmelidir. Dijital ortamda ahlaki
+         seçimler yapma yeteneği, sosyal-duygusal öğrenme ile desteklenmelidir. Öğrencilerin proje geliştirirken yapay
+         zekâ modellerinin karar mekanizmalarını etik sorumluluk çerçevesinde değerlendirmesi, bu bilgilerin tüm alanlarda
+         kullanılmasını sağlar.
+    10. Öğretim sürecinde öğrencilerin bireysel ilgi, ihtiyaç ve potansiyelleri doğrultusunda zenginleştirme ve destekleme
+        çalışmaları planlanmalı; bu uygulamalar öğretmenler tarafından takip edilmeli ve yapılandırılmalıdır. Zenginleştirme
+        çalışmaları ileri düzey ilgisi olan öğrencilerin özel proje ve araştırmalarla derinleşmesini, destekleme çalışmaları ise
+        öğrenme sürecinde ek rehberliğe ihtiyaç duyan öğrencilerin temel becerilerini güçlendirmesini hedeflemelidir. Bu
+        uygulamalar; öğrencilerin veri toplama, doğrulama ve model oluşturma süreçlerini kendi öğrenme sorumluluğu içinde
+        deneyimlemelerine olanak tanır.
+    11. Yapay Zekâ Uygulamaları Dersi Öğretim Programı kapsamında kullanılacak öğretim materyalleri, öğrencilerin
+        öğrenme düzeylerini göz önünde bulundurarak çeşitlendirilmelidir. Bu materyaller arasında robotik kitler, yapay zekâ
+
+
+
+6
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+          simülasyonları, üç boyutlu yazıcılar, dijital çizim kalemleri ve dijital hikâyeleme araçları yer alabilir. Materyal geliştirme
+          sürecinde öğretmenler arası iş birliği ve paylaşım kültürü teşvik edilmelidir. Özellikle metin tabanlı yapay zekâ geliştirme
+          ortamlarında kullanılacak araçların tanınması ve kullanımı, materyal seçimini pedagojik amaçla uyumlu hâle getirir.
+     12. “Türkiye Yüzyılı Maarif Modeli Öğretim Programları Ortak Metni"ne göre esnek tasarıma dayalı öğretim programı yapısı
+         seçmeli dersler için kullanılabilmektedir. Yapay Zekâ Uygulamaları Dersi Öğretim Programı da bu yapı doğrultusunda
+         hazırlanmış olup programlar arası bileşenlerin öğrenme çıktıları ile ilişkilendirilerek işlenmesine ilişkin detaylar
+
+     1.2.1. Alan Becerileri, Kavramsal Beceriler ve Eğilimler
+     Yapay Zekâ Uygulamaları Dersi Öğretim Programı, Türkiye Yüzyılı Maarif Modeli’nde yapılandırılan beceri temelli ve bütüncül
+     gelişim yaklaşımı doğrultusunda tasarlanmıştır. Program; alan becerileri, kavramsal beceriler ve eğilimlerin etkileşimli ve
+     birbirini tamamlayan bir yapı içinde geliştirilmesini esas almaktadır.
+     Alan becerileri; yapay zekâ sistem geliştirme süreçlerinde kullanılan veri, algoritma, model ve geliştirme ortamlarının
+     bilinçli, güvenli, amaca uygun ve sistematik bir yaklaşımla kullanılmasını kapsamaktadır. Bu kapsamda program; yapay
+     zekâya ilişkin temel kavramları sorgulama, yapay zekâ uygulamalarını sınıflandırma, yapay zekâya ilişkin etik ve güvenlik-
+     mahremiyet önlemlerini yönetme, yapay zekâ teknolojileri ile çalışma, blok ve metin tabanlı yapay zekâ uygulama geliştirme
+     ortamını hazırlama, blok ve metin tabanlı yapay zekâ uygulama geliştirme sürecinde kullanılan bileşenlerden yararlanma,
+     yapay zekâ modeli geliştirmek için bilgi toplama, blok ve metin tabanlı ortamda yapay zekâ modeli geliştirebilme, makine
+     öğrenmesine ve bulanık mantığa ilişkin temel kavramları sorgulama, yapay zekâ bileşenlerini ayrıştırma becerileri
+     doğrultusunda yapılandırılmıştır.
+     Program, öğrencilerin yapay zekânın kavramsal temellerini anlamalarını ve bu alana ilişkin düşünsel süreçler geliştirmelerini
+     amaçlamaktadır. Bu kapsamda sorgulama kavramsal becerisine yer verilmiştir.
+     Öğrencilerin yapay zekâ sistem türlerini (makine öğrenmesi, bulanık mantık, görüntü işleme, doğal dil işleme vb.)
+     sınıflandırmaları, bir problemin veri–model–çıktı ilişkisini sorgulamaları, geliştirdikleri modelin doğruluğunu, güvenilirliğini
+     ve etik boyutunu değerlendirmeleri bu sürecin temel bileşenlerindendir.
+     Eğilimler, öğrencilerin öğrenme sürecine yaklaşım biçimlerini destekleyen ve becerilerin kalıcı biçimde gelişmesine katkı
+     sağlayan bir boyut olarak ele alınmaktadır.
+     Program kapsamında; merak, soru sorma, eleştirel bakma, açık fikirlilik, sistematiklik, yaratıcılık, gibi eğilimler yapay zekâ
+     model geliştirme ve problem çözme süreçleriyle bütünleştirilmiştir.
+     Bu yapı; alan becerileri ile kavramsal becerilerin eğilim boyutuyla birlikte gelişmesini sağlayarak yapay zekâ teknolojilerini
+     anlayan, veri temelli düşünen, algoritmik çözüm üretebilen ve geliştirdiği modeli işlevsellik ve etik açıdan değerlendirebilen
+     bireyler yetişmesine katkı sağlamaktadır.
+     1.2.2. Programlar Arası Bileşenler
+     Programlar arası bileşenler; bireyin kişisel, sosyal, entelektüel ve ahlaki yönden bütüncül gelişimini destekleyen yapısıyla
+     öğretim programlarının tamamlayıcı bir unsurudur. Bu yönüyle toplumsal yaşamın gereksinim duyduğu bilgi ve becerileri
+     kapsayan geniş tabanlı öğretim programlarının özünü oluşturur. Türkiye Yüzyılı Maarif Modeli, bu becerilerin okul kademeleri
+     boyunca sarmal bir biçimde ilerlemesi gerektiğini vurgulamakta, dolayısıyla programlar arası bileşenler öğrencinin
+     gelişimsel süreçlerini gözeterek öğrenme yaşantılarının süreklilik ve derinlik kazanmasına katkıda bulunmaktadır. Bu
+     çerçevede öğretim programlarında yer alan programlar arası bileşenler, öğretim sürecinin dinamik bir yapıda ilerlemesini
+     sağlarken aynı zamanda eğitimin örtük hedeflerini de yansıtır.
+     Yapay Zekâ Uygulamaları Dersi Öğretim Programı’nda programlar arası bileşenler; Türkiye Yüzyılı Maarif Modeli’nde
+     tanımlanan sosyal-duygusal öğrenme becerileri, değerler ve okuryazarlık becerileri çerçevesinde ele alınmaktadır. Bu
+     bileşenler, öğrenme çıktılarının gerçekleştirilmesini destekleyen tamamlayıcı unsurlar olarak yapılandırılmıştır.
+     Sosyal-Duygusal Öğrenme Becerileri
+     Sosyal-duygusal öğrenme becerileri; bireyin kendisi ve çevresi ile olumlu ilişkiler kurabilmesi, duygularını yönetebilmesi,
+     empati kurabilmesi ve sağlıklı bir benlik geliştirebilmesi için gerekli olan becerileri ifade eder. Sosyal-duygusal öğrenme
+     becerileri, kavramsal ve alan becerilerinin geliştirilme sürecinde destekleyici bir rol üstlenmeli; okuryazarlık becerileri ile
+     değerleri de kapsayan bütüncül bir gelişim anlayışı doğrultusunda ele alınmalıdır. Sosyal-duygusal öğrenme becerileri
+
+
+
+                                                                                                                                           7
+                                                                                  ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+    hem başlı başına bir beceri seti hem de diğer becerilerin kullanılmasına aracılık eden veya bu becerilerin ortaya konulmasını
+    kolaylaştıran bir destekleyici olarak tanımlanabilir. Yapay Zekâ Uygulamaları Dersi Öğretim Programı; öğrencilerin zihinsel,
+    sosyal, duygusal, fiziksel ve ahlaki gelişimlerini bütüncül bir anlayışla destekleyecek şekilde yapılandırılmıştır. Programda
+    sosyal-duygusal öğrenme becerilerine özel bir önem verilmekte; öğrencilerin kendi duygularını tanımaları, başkalarının
+    duygu ve düşüncelerine empatiyle yaklaşmaları, iş birliği içinde çalışmaları ve sağlıklı sosyal ilişkiler geliştirmeleri
+    amaçlanmaktadır.
+    Yapay zekâ uygulamaları süreçleri; veri toplama, model eğitimi, hata analizi ve performans değerlendirme aşamalarında
+    sabır, öz düzenleme ve sorumlu karar verme becerilerini desteklemektedir. Grup çalışmaları ve proje temelli uygulamalar
+    aracılığıyla öğrencilerin birlikte planlama yapmaları, süreç içinde rollerini fark etmeleri, görev paylaşımı gerçekleştirmeleri
+    ve karşılaşılan problemlere çözüm üretirken bilinçli kararlar almaları sağlanmaktadır. Öğrenciler, hata ayıklama ve test
+    süreçlerinde duygularını yönetmeyi öğrenmekte, ekip içinde farklı görüşlere uyum göstererek yapıcı iletişim kurmaktadır.
+    Sosyal yaşam becerileri kapsamında geliştirilen iletişim, dinleme, konuşma, tartışma, sunum yapma ve iş birliği becerileri
+    Türkçe dersiyle disiplinler arası bir yaklaşımla desteklenebilir. Özellikle grup tartışmaları, proje sunumları, rapor hazırlama
+    ve akran geri bildirimi süreçlerinde öğrencilerin etkili sözlü ve yazılı iletişim becerilerini kullanmaları teşvik edilmelidir.
+    Okuryazarlık Becerileri
+    Okuryazarlık becerileri, öğrenme çıktılarının kazandırılmasına aracılık eden önemli değişkenlerdendir. Toplumsal yaşamın
+    başarılı bir şekilde sürdürülmesinde bireylerin haklarını kullanabilmeleri ve sorumluluklarını yerine getirebilmeleri
+    önemlidir. Bunun için çağın gerektirdiği bilgi ve sürdürülebilirlik okuryazarlığı, dijital ve finansal okuryazarlık gibi
+    becerilerin bireylerde geliştirilmesine odaklanılmalıdır. Bilişim teknolojileri ve yazılım alan becerileri ile okuryazarlık
+    becerileri bütünleştirilerek sunulmalıdır. Günümüzde bireylerin bilinçli, etkili ve sorumlu katılımcılar olarak yetişebilmesi
+    için okuryazarlık becerilerinin teknoloji odaklı süreçlere uygun biçimde yeniden tanımlanması büyük önem taşımaktadır.
+    Bu doğrultuda Yapay Zekâ Uygulamaları Dersi Öğretim Programı; algoritmik düşünme ve sistemsel tasarım becerileri ile
+    problem temelli öğrenme yaklaşımını bütünleştirerek çok boyutlu bir öğretim anlayışı sunmaktadır. Ders kapsamında
+    öğrencilerin bilgi işlemsel düşünme, yazılım geliştirme, dijital ürün geliştirme ile bilişim teknolojilerini kullanma gibi bilişim
+    teknolojileri alanına özgü becerileri kazanmaları amaçlanmaktadır. Akış şemalarıyla düşünme süreçlerini görselleştirme,
+    oluşturdukları programları test etme ve işlevsel hâle getirme etkinlikleri bu becerilerin temel yapı taşlarını oluşturur. Ayrıca
+    öğrencilerin çevrim içi geliştirme ortamlarını tanıyıp değerlendirmeleri,veri, algoritma, model, çıktı gibi yapay zekâ sistem
+    bileşenlerinin çalışma mantığını anlayarak uygulayabilmeleri; onları teknoloji çağında üretim ve çözüm odaklı okuryazarlık
+    yetkinliğine sahip bireyler hâline getirir.
+    Program kapsamında; bilgi okuryazarlığı, görsel okuryazarlık, dijital okuryazarlık, veri okuryazarlığı, kültür okuryazarlığı,
+    finansal okuryazarlık öğrencilerin sistemlere ilişkin bilgileri eleştirel biçimde değerlendirmeleri, güvenilir kaynaklara
+    ulaşmaları, algoritma ve model çıktılarındaki verileri doğru yorumlamaları, dijital araç ve yazılım ortamlarını bilinçli
+    kullanmaları, yapay zekâ uygulamalarının toplumsal ve kültürel etkilerini fark etmeleri ve proje süreçlerinde kaynak
+    yönetimini planlı biçimde gerçekleştirmeleri bağlamında desteklenmektedir.
+    Değerler
+    Erdem-Değer-Eylem Çerçevesi bireyin dengeli, ölçülü ve tutarlı, kendisine, ailesine, ülkesine ve dünyaya faydalı, adil,
+    üretken, ahlaklı ve çalışkan bir şekilde yetişmesi için yürütülen çabaların öğretim programlarına yansıması olarak
+    değerlendirilmektedir. Değerler; etkileşimde olduğu insanları, yaşadığı toplumun dinamiklerini, çevresindeki doğal
+    güzelliklerin değerini anlayan, doğaya saygılı, çevresiyle uyumlu ilişkiler kuran, tarihî ve kültürel mirası koruyan bireyler
+    yetiştirmeyi amaç edinmektedir. Değerler; millî ve manevi kimliğimize uygun bilgi, tutum ve davranış boyutlarında
+    oluşturulmalı ve geliştirilmelidir.
+    Yapay Zekâ Uygulamaları Dersi Öğretim Programı; TYMM Erdem–Değer–Eylem Çerçevesi'yle uyumlu olarak değer
+    temelli bir anlayışla tasarlanmış; öğrencilerin birey, toplum ve insanlık yararına katkı sunma bilinciyle hareket etmelerini
+    desteklemektedir. Türkiye Yüzyılı Maarif Modeli’nde vurgulanan millî, insani ve toplumsal değerler, yapay zekâ öğretim
+    sürecine bütüncül bir yaklaşımla entegre edilmiştir. Programda yer alan değerler; yapay zekâ uygulamaları süreçleriyle
+    ilişkilendirilerek ele alınmaktadır. Öğrencilerin adalet duygusuyla hareket ederek grup çalışmalarında görev paylaşımını
+    dengeli biçimde yürütmeleri; sabır göstererek algoritma geliştirme ve model eğitimi-performans iyileştirme süreçlerini
+    sürdürmeleri; sorumluluk bilinciyle veri, yazılım ve dijital geliştirme araçlarını güvenli ve doğru kullanmaları ve tasarruf
+    anlayışı doğrultusunda zaman, enerji ve malzeme kullanımını planlı biçimde yönetmeleri desteklenmektedir. Yapay
+    zekâ modeli geliştirme sürecinde alınan kararların etik, bilinçli ve toplumsal faydayı gözeten bir yaklaşımla verilmesi
+    esas alınmaktadır. Yapay zekâ etiği, öğrencilerin geliştirdikleri yapay zekâ uygulamalarında adil, şeffaf ve sorumlu
+
+
+
+
+8
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+     davranmalarını sağlamayı hedefler. Program, öğrencilerin veri gizliliği, algoritmik tarafsızlık, güvenlik ve toplumsal etkiler
+     gibi etik boyutları göz önünde bulundurarak karar almasını teşvik eder. Bu yaklaşım; öğrencilerin yapay zekâ teknolojilerini
+     insan ve toplum yararına, etik ilkeler doğrultusunda kullanmalarını desteklemektedir.
+     Programlar arası bileşenlerin öğrenme çıktılarıyla ilişkilendirilmesine dair uygulama örnekleri ilgili temaların altında
+     sunulmaktadır.
+
+     1.2.3. İçerik Çerçevesi
+     Yapay Zekâ Uygulamaları Dersi Öğretim Programı’nın içerik çerçevesi öğrencilerin yapay zekânın temel kavramlarını
+     anlamalarını, bu kavramların farklı alanlarda nasıl kullanıldığını öğrenmelerini ve sınıflandırabilmelerini sağlayacak şekilde
+     yapılandırılmıştır. Program, öğrencilere yapay zekâ sistemlerinin bileşenlerini ve bu sistemlerin çalışma prensiplerini
+     sorgulayıcı bir bakış açısıyla inceleme fırsatı sunar.
+     İçerik; yatay boyutta yapay zekânın kavramsal temelleri, etik–güvenlik ilkeleri, uygulama alanları ve geliştirme ortamları
+     arasında ilişki kurularak bütüncül bir öğrenme deneyimi oluşturacak biçimde düzenlenmiştir. Dikey boyutta ise öğrencilerin
+     bilişsel gelişim düzeyleri gözetilerek yapay zekâ kavramları kademeli olarak derinleştirilmiş; 7. sınıfta farkındalık ve
+     uygulama temelli süreçlere, 8. sınıfta ise model geliştirme, veri kullanımı ve performans değerlendirme aşamalarına
+     odaklanılmıştır.
+     Bu yapı; öğrencilerin yalnızca yapay zekâ teknolojilerini tanımalarını değil aynı zamanda bu teknolojileri sorgulayan, etik
+     biçimde kullanan ve bilinçli üretim süreçlerine katkıda bulunan bireyler olarak yetişmelerini destekler.
+     “Hayatımızda Yapay Zekâ” teması öğrencilerin yapay zekânın temellerini, çeşitli uygulamalarını öğrenmelerini ve bu
+     teknolojilerin toplum üzerindeki etkilerini sorgulamalarını amaçlar. Öğrenciler, yapay zekâ sistemlerinin gündelik
+     yaşamdaki önemini kavrarken etik, güvenlik ve mahremiyet konusunda farkındalık kazanır. Öğrenciler; algoritma, veri,
+     makine öğrenmesi ve bulanık mantık gibi temel kavramları inceleme fırsatı bulurken yapay zekâ sistemlerinin bileşenlerini
+     analiz eder; etik, güvenlik ve mahremiyet gibi konular üzerine düşünerek dijital sorumluluk bilincini geliştirir.
+     “Yapay Zekâ Geliştirme Ortamları” teması, öğrencilerin yapay zekâ ile çalışabilecekleri blok ve metin tabanlı uygulama-
+     geliştirme ortamlarını tanımalarını amaçlar. Bu sayede öğrenciler, temel programlama becerilerini yapay zekâ teknolojileri
+     ile bütünleştirerek hem blok tabanlı hem de metin tabanlı araçlarla uygulama-geliştirme süreçlerine ve deneyimlemelerine
+     olanak tanır. Böylece öğrenciler veri toplama, model oluşturma ve test etme gibi temel adımları içeren bir proje süreci
+     yürütür.
+     Yapay Zekâ Uygulamaları Dersi Öğretim Programı içerik çerçevesi kapsamında öğrencilerin aşağıda verilen konularda
+     bilgi kazanmaları amaçlanmaktadır.
+        •    Yapay Zekâya Genel Bakış
+        •    Yapay Zekâ Uygulamalarını Tanıma ve Sınıflandırma
+        •    Yapay Zekâda Etik
+        •    Yapay Zekâ Araçlarını Tanıma ve Kullanma
+        •    Blok Tabanlı Yapay Zekâ Ortamını Tanıma ve Hazırlama
+        •    Blok Tabanlı Yapay Zekâ Uygulamalarının Temel Bileşenleri
+        •    Yapay Zekâ Modeli Girdilerini Toplama ve Doğrulama
+        •    Blok Tabanlı Ortamda Yapay Zekâ Modeli Geliştirme
+        •    Makine Öğrenmesinde Temel Kavramlar
+        •    Bulanık Mantığın Temel Kavramlarını Keşfetme
+        •    Yapay Zekâ Problemlerinde Çözüm Yöntemleri
+        •    Metin Tabanlı Yapay Zekâ Uygulama Ortamı
+        •    Metin Tabanlı Yapay Zekâ Uygulamalarında Bileşenlerle Çalışma
+     1.2.4. Öğrenme Kanıtları (Ölçme ve Değerlendirme)
+     Değerlendirme süreci, süreç ve ürün bütünlüğünü esas alan bir anlayışla ele alınmakta; öğrencilerin öğrenme sürecine
+     aktif katılımını ve ortaya koydukları ürünlerin niteliğini birlikte değerlendiren bütüncül bir yapı sunmaktadır. Bu kapsamda
+     öğrenme kanıtları; öğrencilerin kavramsal anlayışlarını, üretim süreçlerine katılım düzeylerini, model geliştirme ve
+     performanslarını değerlendirme yeterliklerini, estetik ölçütlere dayalı değerlendirme yapabilme becerilerini ve etik ilkelere
+     uygun davranma durumlarını ortaya koyacak şekilde planlanmaktadır.
+
+
+
+                                                                                                                                      9
+                                                                                 ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+     Ölçme ve değerlendirme sürecinde analitik dereceli puanlama anahtarları, gözlem formları, öz değerlendirme ve akran
+     değerlendirme araçları ile süreç temelli performans görevleri gibi çeşitli araç ve yöntemlerden yararlanılmaktadır. Bu
+     araçlar, öğrencilerin yalnızca ortaya koydukları ürünün niteliğini değil; aynı zamanda öğrenme sürecine katılım düzeylerini,
+     planlama becerilerini, iş birliği içinde çalışma durumlarını ve belirlenen ölçütlere uygunluklarını da değerlendirmeye imkân
+     tanımaktadır. Böylece değerlendirme süreci, öğrencilerin çok yönlü gelişimini destekleyen ve öğrenmeyi derinleştiren bir
+     yapı olarak kurgulanmaktadır.
+
+     1.2.5. Öğrenme-Öğrenme Yaşantıları
+     Program esnek yapıda tasarlanmıştır. Bu nedenle ayrıntılı öğrenme-öğretme yaşantıları program genelinde sunulmamış;
+     yönlendirici bir çerçeve oluşturulmuştur. Öğrenme-öğretme süreci; araştırma ve inceleme, analiz ve tartışma, tasarlama
+     ve üretme, değerlendirme ve geliştirme basamaklarını içerecek biçimde planlanmaktadır.
+     Temel Kabuller: Öğrenme-öğretme süreci; öğrencilerin dijital ortamlarla etkileşim hâlinde olduğu, ancak ilgi, ihtiyaç,
+     hazır bulunuşluk ve performans düzeylerinin farklılık gösterebileceği temel kabulüne dayalı olarak planlanmaktadır. Bu
+     doğrultuda öğretim süreci; programda yer alan temaların (Hayatımızda Yapay Zekâ, Yapay Zekâ Geliştirme Ortamları, Yapay
+     Zekâ Uygulamaları) her birinde öğrencilerin aktif katılımını sağlayacak, bireysel farklılıkları gözeten ve esnek uygulamalara
+     imkân tanıyan bir yapıda düzenlenebilir.
+     Temel kabuller kapsamında öğretmenlerin; öğrencilerin teknolojiye erişim durumlarını, önceki öğrenmelerini ve öğrenme
+     hızlarını dikkate alarak içerik, etkinlik ve uygulamaları uyarlamaları beklenebilir. Bu yaklaşım; özellikle model geliştirme,
+     veri toplama ve problem çözme süreçlerinde tüm öğrencilerin sürece katılımını destekleyecek şekilde farklılaştırılmış
+     öğrenme yaşantılarının planlanmasına imkân tanır.
+     Ön Değerlendirme: Ön değerlendirme, her temanın başlangıcında öğrencilerin konuya ilişkin mevcut bilgi, beceri ve
+     deneyimlerini belirlemek amacıyla yapılandırılmaktadır. Bu süreçte elde edilen veriler, öğretim sürecinin planlanmasında
+     temel bir referans olarak kullanılır.
+     Örneğin “Hayatımızda Yapay Zekâ” temasında öğrencilerin yapay zekâya ilişkin ön bilgileri ve günlük yaşam deneyimleri;
+     “Yapay Zekâ Geliştirme Ortamları” temasında dijital araç kullanma becerileri; “Yapay Zekâ Uygulamaları” temasında ise
+     problem çözme ve veri ile çalışma deneyimleri çeşitli tanılayıcı etkinliklerle belirlenebilir.
+     Bu kapsamda öğretmenler; kısa soru-cevap etkinlikleri, kavram haritaları, senaryo temelli tartışmalar veya dijital araçlar
+     aracılığıyla öğrencilerin hazır bulunuşluk düzeylerini belirleyebilir. Elde edilen sonuçlara göre öğrenme süreci yeniden
+     düzenlenir, gerekli durumlarda destekleyici ya da zenginleştirici uygulamalar planlanabilir.
+     Köprü Kurma: Köprü kurma süreci, öğrencilerin yeni öğrenmelerini mevcut bilgi ve deneyimleriyle ilişkilendirmelerini
+     sağlayacak şekilde yapılandırılmaktadır. Bu süreçte öğrenmeler; öğrencilerin günlük yaşam deneyimleri, dijital kültür
+     ortamları ve diğer derslerde edindikleri bilgi ve becerilerle bütünleştirilir.
+     Programda yer alan temalar kapsamında köprü kurma; “Hayatımızda Yapay Zekâ” temasında günlük yaşamda karşılaşılan
+     yapay zekâ uygulamalarıyla ilişkilendirme, “Yapay Zekâ Geliştirme Ortamları” temasında öğrencilerin daha önce kullandıkları
+     dijital araçlar üzerinden yeni ortamları anlamlandırma, “Yapay Zekâ Uygulamaları” temasında ise gerçek hayat problemleri
+     ile mod el geliştirme süreçleri arasında bağ kurma şeklinde gerçekleştirilebilir.
+     Bu doğrultuda öğretmenler; örnek olaylar, gerçek yaşam problemleri, disiplinler arası bağlantılar ve öğrencilerin kişisel
+     deneyimlerinden yararlanarak öğrenme sürecini anlamlı hâle getirilebilir. Böylece öğrencilerin yeni bilgileri içselleştirmeleri
+     ve farklı bağlamlarda kullanabilmeleri desteklenebilir.
+
+     1.2.6. Farklılaştırma
+     Farklılaştırmaya yönelik tüm uygulamalar; öğrencilerin ilgi, ihtiyaç ve istekleri göz önünde bulundurularak öğretmenler
+     tarafından hazırbulunuşluk düzeyi, öğrenme hızı ve öğrenme profillerine göre gruplandırma yapılarak; içerik, süreç,
+     öğrenme ortamı ve ürün boyutlarında uyarlamalar geliştirilerek; esnek öğretim yöntem ve teknikleri kullanılarak; süreç
+     içinde sürekli, geliştirici (biçimlendirici) değerlendirmelerle izlenip gerekli düzenlemeler yapılarak planlanır ve yürütülür.
+
+     Farklılaştırma; öğrencilerin ilgi, öğrenme gereksinimleri ve performans düzeylerindeki farklılıklar doğrultusunda öğretim
+     sürecinde gerçekleştirilir. Haftalık ders saati farklılıklarında öğrenme çıktıları değiştirilmemekte; etkinlik sayısı, uygulama
+     derinliği ve ürün kapsamı üzerinden esneklik sağlanmaktadır. Destek gerektiren öğrenciler için yönlendirici uygulamalar;
+     ileri düzey öğrenciler için özgün veri setleriyle model geliştirme ve performans optimizasyonu içeren zenginleştirilmiş
+     proje çalışmaları planlanarak tüm öğrencilerin öğrenme sürecine aktif katılımı desteklenmektedir.
+
+
+
+
+10
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+     1.3. YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI’NIN TEMA, ÖĞRENME ÇIKTILARI
+         SAYISI VE SÜRE TABLOSU
+
+                                               I. DÜZEY YAPAY ZEKÂ UYGULAMALARI DERSİ
+
+
+                                                                                               Öğrenme                                Süre
+                                            TEMA                                                Çıktıları
+                                                                                                                                             Yüzde Oranı
+                                                                                                  Sayısı              Ders Saati
+                                                                                                                                                 (%)
+
+        1.   HAYATIMIZDA YAPAY ZEKÂ                                                                  3                      12                      17
+
+        2.   YAPAY ZEKÂ GELIŞTIRME ORTAMLARI                                                         3                      22                      31
+
+        3.   YAPAY ZEKÂ UYGULAMALARI                                                                 2                      34                     47
+
+        OKUL TEMELLİ PLANLAMA*                                                                                               4                      5
+
+                                          TOPLAM                                                     8                      72                     100
+
+
+
+
+                                              II. DÜZEY YAPAY ZEKÂ UYGULAMALARI DERSİ
+
+
+                                                                                                Öğrenme                               Süre
+                                            TEMA                                                 Çıktıları
+                                                                                                                                             Yüzde Oranı
+                                                                                                  Sayısı               Ders Saati
+                                                                                                                                                 (%)
+
+        1.   HAYATIMIZDA YAPAY ZEKÂ                                                                  3                      16                      25
+
+        2.   YAPAY ZEKÂ GELIŞTIRME ORTAMLARI                                                         2                      20                      25
+
+        3.   YAPAY ZEKÂ UYGULAMALARI                                                                 2                      32                      44
+
+        OKUL TEMELLİ PLANLAMA*                                                                                               4                       6
+
+                                          TOPLAM                                                     7                      72                     100
+
+
+
+
+      * Zümre öğretmenler kurulu tarafından ders kapsamında yapılması kararlaştırılan okul dışı öğrenme etkinlikleri; yerel çalışmalar, sosyal etkinlikler,
+      proje ve okuma çalışmaları, araştırma ve gözlem gibi çalışmalar için ayrılan süredir. Söz konusu çalışmalar için ayrılan süre, eğitim öğretim yılı başın-
+      da planlanır ve yıllık planlarda ifade edilir. Eğitim öğretim yılı başında yapılması kararlaştırılan çalışmalar; okulun, öğrencinin ve çevrenin ihtiyaçları
+      dikkate alınarak yıl içerisinde güncellenebilir.
+
+
+
+
+                                                                                                                                                                    11
+                                                                                                      ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+     1.4. YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI’NIN YAPISI
+
+
+
+
+     Temanın adını ifade eder.                                1. TEMA: HAYATIMIZDA YAPAY ZEKÂ
+
+
+                                           Bu tema kapsamında öğrencilerin yapay zekâya ilişkin temel kavramları öğ-
+                                           renmesi, bu kavramlarla ilgili sorular sorabilmesi ve doğru bilgi toplayabilmesi,
+     Temada öğrenilmesi amaç-              yapay zekâ uygulamalarını tanıyıp sınıflandırabilmesi, çalışma sistemlerini
+     lanan bilgi ve becerilere yö-         ve alt boyutlarını anlayabilmesi, yapay zekâda etik ve güvenlik-mahremiyet
+     nelik açıklamayı ifade eder.          konularını fark ederek gerekli önlemleri ayırt edebilmesi ve uygulamaları bu
+                                           açıdan değerlendirebilmesi amaçlanmaktadır.
+
+
+                                                       DERS SAATİ       12                                                        Temanın işleneceği süreyi
+                                                                                                                                  ifade eder.
+
+
+
+     Disipline özgü şekilde ya-                               ALAN
+     pılandırılan becerileri ifade                                      BTYAB1. Bilişim Teknolojilerini Kullanma
+                                                       BECERİLERİ
+     eder.                                                              (BTYAB1.1. Bilişim Teknolojilerini Sınıflandırma),
+                                                                        BTYAB6. Dijital Güvenlik
+                                                                                                                                  Karmaşık bir süreç gerek-
+                                                                        Önlemleri Alma (BTYAB6.1. Dijital Güvenlik Ön-
+                                                                                                                                  tirmeden edinilen ve göz-
+                                                                        lemlerini Yönetme)
+                                                                                                                                  lenebilen temel beceriler
+                                                                                                                                  ile soyut fikirleri, karmaşık
+                                                      KAVRAMSAL         KB2.8. Sorgulama                                          süreçleri eyleme dönüştü-
+                                                                                                                                  rürken zihinsel faaliyetlerin
+                                                       BECERİLER
+                                                                                                                                  bir ürünü olarak işe koşu-
+                                                                                                                                  lan bütünleşik-üst düzey
+     Öğrenme-öğretme süreciy-                                                                                                     düşünme becerilerini ifade
+     le ilişkilendirilerek edinilen                                                                                               eder.
+     becerilerin niyet, duyarlılık,
+     isteklilik ve değerlendirme                        EĞİLİMLER       E3.10. Eleştirel Bakma
+     ögeleri doğrultusunda gerekli
+     durumlarda nasıl kullanıldığı
+     ile ilgili zihinsel örüntüleri ifa-
+     de eder.                                                                                                                     Öğrenme-öğretme sürecin-
+                                                    PROGRAMLAR
+                                                                                                                                  de ilişkilendirilen sosyal-duy-
+                                                             ARASI                                                                gusal öğrenme becerilerini,
+     Duyguları yönetmek, empati                       BİLEŞENLER                                                                  değerleri ve okuryazarlık
+     yapmak, destekleyici ilişkiler                                                                                               becerilerini ifade eder.
+     kurmak ve sağlıklı bir benlik               Sosyal-Duygusal
+     geliştirmek için gerekli bilgi                                     SDB1.1. Kendini Tanıma (Öz Farkındalık), SDB3.3.
+                                               Öğrenme Becerileri
+     ve beceriler bütününü ifade                                        Sorumlu Karar Verme
+     eder.
+
+
+                                                                                                                                  İnsani değerlerle birlikte
+                                                          Değerler      D1. Adalet, D3. Çalışkanlık                               millî ve manevi değerleri
+                                                                                                                                  ifade eder.
+     Yeni durumlara uyum sağla-
+     mayı, değişimi fark etmeyi ve
+     teknolojik yenilikleri günlük                    Okuryazarlık
+     hayatta uygulamayı sağla-                           Becerileri     OB1. Bilgi Okuryazarlığı, OB4. Görsel Okuryazarlık
+     yan becerileri ifade eder.
+                                                                                                                                  Öğrenme çıktılarında doğ-
+                                                                                                                                  rudan yer verilmeyen ancak
+                                                                                                                                  bu çıktılardaki becerilerle
+                                                       BECERİLER
+                                                                                                                                  ilişkilendirilerek     öğren-
+                                                  ARASI İLİŞKİLER       -
+                                                                                                                                  me-öğretme yaşantılarında
+                                                                                                                                  yer verilen alan ve kavram-
+                                                                                                                                  sal becerileri ifade eder.
+
+
+
+
+12
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+
+                                                                                                   Disiplin kodu
+                                                                                                   Sınıf düzeyi
+                                                                                                   Programdaki tema sırası
+                                          ÖĞRENME ÇIKTILARI VE                                     Temadaki öğrenme çıktısının sırası
+                                            SÜREÇ BİLEŞENLERİ     YZU.1.1.1. Yapay zekâya ilişkin temel kavramları sorgulaya­
+                                                                  bilme
+                                                                                                                                          Öğrenme yaşantıları so-
+                                                                                                                                          nunda öğrenciye kazan-
+                                                                      a) Yapay zekâya ilişkin temel kavramları tanımlar.                  dırılması amaçlanan bilgi,
+                                                                      b) Yapay zekâya ilişkin temel kavramlar ile ilgili sorular sorar.   beceri ve becerilerin süreç
+                                                                      c) Yapay zekâya ilişkin temel kavramlar ile ilgili bilgi toplar.    bileşenlerini ifade eder.
+
+                                                                      ç) Yapay zekâya ilişkin temel kavramlar ile ilgili toplanan bil-
+                                                                      gilerin doğruluğunu değerlendirir.
+                                                                      d) Toplanan bilgiler üzerinden çıkarım yapar.
+
+      Öğrenme-öğretme süre-
+      cinde ele alınan bilgi küme-                     İÇERİK
+      sini (bölüm-konu-alt konu-                    ÇERÇEVESİ     Yapay Zekâya Genel Bakış
+      ya ilişkin sınırları) ifade eder.
+                                                                  Yapay Zekâ Uygulamalarını Tanıma ve Sınıflandırma
+                                                                  Yapay Zekâda Etik
+
+                                                                                                                                          Disipline ait başlıca genel-
+                                              Anahtar kavramlar   akıllı sistemler, etik, güvenlik, mahremiyet, nesnelerin interneti,     leme, ilke, anahtar kavram
+                                                                  sensör, veri, yapay zekâ                                                ve sembolleri ifade eder.
+      Öğrenme çıktıları, prog-
+      ramlar arası bileşenler
+      arasında kurulan ve an-                PROGRAMLAR ARASI
+      lamlı ilişkilere dayanan
+                                          BİLEŞENLERE YÖNELİK
+      öğren­me-öğretme süreci-
+                                                 UYGULAMALAR      YZU.1.1.1
+      ni ifade eder.
+                                                                  •     Öğrencilerin çeşitli fikir ve argümanlara açık olmaları için
+                                                                        farklı bakış açılarıyla düşünmeleri teşvik edilir. Örneğin
+                                                                        bir öğrenci yapay zekânın insan gibi düşünebileceğini
+                                                                        savunurken, bir başkası bunun mümkün olmadığını belir­
+                                                                        terek kendi gerekçelerini ortaya koyabilir (D3.3, SDB3.3).
+                                                                  •     Öğrencilerin görüşleri alındıktan sonra yapay zekâya
+                                                                        ilişkin kısa ve günlük hayattan örnekler verilir (sesli asis­
+                                                                        tanlar, yüz algılama ve tanıma uygulamaları, otonom
+                                                                        arabalar vb.). Örneklerdeki yapay zekâ uygulamaları ile
+                                                                        nerelerde karşılaştıklarını ve bu uygulamalardan nasıl
+                                                                        faydalandıklarını düşünüp ifade etmeleri istenir (SDB1.1).
+
+
+      Öğretmen ile programın
+      güçlü ve iyileştirilmesi
+      gereken yönlerinin öğret-                      ÖĞRETMEN     Programa yönelik görüş ve önerileriniz için karekodu akıllı
+      menlerin kendileri tara-                                    cihazınıza okutunuz.
+                                                  YANSITMALARI
+      fından değerlendirilmesini
+      ifade eder.
+
+
+
+
+                                                                                                                                                                         13
+                                                                                       ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+     2. YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI’NIN DÜZEYLERİ
+
+           I. DÜZEY
+
+                                                         1. TEMA: HAYATIMIZDA YAPAY ZEKÂ
+
+                               Bu tema kapsamında öğrencilerin yapay zekâya ilişkin temel kavramları öğrenmesi, bu kavramlarla ilgili so-
+                               rular sorabilmesi ve doğru bilgi toplayabilmesi, yapay zekâ uygulamalarını tanıyıp sınıflandırabilmesi, çalış-
+                               ma sistemlerini ve alt boyutlarını anlayabilmesi, yapay zekâda etik ve güvenlik-mahremiyet konularını fark
+                               ederek gerekli önlemleri ayırt edebilmesi ve uygulamaları bu açıdan değerlendirebilmesi amaçlanmaktadır.
+
+
+                DERS SAATİ     12
+
+
+
+                     ALAN
+                BECERİLERİ     BTYAB1. Bilişim Teknolojilerini Kullanma (BTYAB1.1. Bilişim Teknolojilerini Sınıflandırma), BTYAB6. Dijital Gü-
+                               venlik Önlemleri Alma (BTYAB6.1. Dijital Güvenlik Önlemlerini Yönetme)
+
+               KAVRAMSAL
+                BECERİLER      KB2.8. Sorgulama
+
+
+
+
+                 EĞİLİMLER     E1.1. Merak, E3.8. Soru Sorma, E3.10. Eleştirel Bakma
+
+
+
+              PROGRAMLAR
+                     ARASI
+               BİLEŞENLER
+
+
+            Sosyal-Duygusal
+          Öğrenme Becerileri   SDB1.1. Kendini Tanıma (Öz Farkındalık), SDB2.1. İletişim, SDB3.1. Uyum, SDB3.3. Sorumlu Karar Verme
+
+
+
+                   Değerler    D1. Adalet, D3. Çalışkanlık, D8. Mahremiyet
+
+
+
+                Okuryazarlık
+                  Becerileri   OB1. Bilgi Okuryazarlığı, OB4. Görsel Okuryazarlık
+
+
+
+
+                BECERİLER
+            ARASI İLİŞKİLER    -
+
+
+
+
+14
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+        ÖĞRENME ÇIKTILARI VE
+        SÜREÇ BİLEŞENLERİ
+                                              YZU1.1.1. Yapay zekâya ilişkin temel kavramları sorgulayabilme
+                                                   a) Yapay zekâya ilişkin temel kavramları tanımlar.
+                                                   b) Yapay zekâya ilişkin temel kavramlar ile ilgili sorular sorar.
+                                                   c) Yapay zekâya ilişkin temel kavramlar ile ilgili bilgi toplar.
+                                                   ç) Yapay zekâya ilişkin temel kavramlar ile ilgili toplanan bilgilerin doğruluğunu değerlendirir.
+                                                   d) Toplanan bilgiler üzerinden çıkarım yapar.
+
+
+                                              YZU1.1.2. Yapay zekânın uygulamalarını sınıflandırabilme
+                                                   a) Yapay zekâ uygulamalarını belirler.
+                                                   b) Yapay zekâ uygulamalarının çalışma sistemi bileşenlerini ilişkilendirir.
+                                                   c) Yapay zekâ uygulamalarını alt boyutlara göre gruplandırır.
+
+
+                                              YZU1.1.3. Yapay zekâya ilişkin etik ve güvenlik-mahremiyet önlemlerini yönetebilme
+                                                   a) Yapay zekâda etik ve güvenlik/mahremiyet risklerini belirler.
+                                                   b) Yapay zekâda etik ve güvenlik/mahremiyet önlemlerini belirler.
+                                                   c) Yapay zekâda etik ilkelerin ve bilgi güvenliğinin/mahremiyetinin temel bileşenlerini ayırt eder.
+                                                   ç) Yapay zekâ uygulamalarını etik ilkeler ile güvenlik/mahremiyet açısından değerlendirir.
+
+
+              İÇERİK ÇERÇEVESİ                Yapay Zekâya Genel Bakış
+                                              Yapay Zekâ Uygulamalarını Tanıma ve Sınıflandırma
+                                              Yapay Zekâda Etik
+
+
+              Anahtar Kavramlar               akıllı sistemler, etik, güvenlik, mahremiyet, nesnelerin interneti, sensör, veri, yapay zekâ
+
+
+           PROGRAMLAR ARASI
+        BİLEŞENLERE YÖNELİK
+               UYGULAMALAR             YZU.1.1.1
+                                       •    Öğrencilerin çeşitli fikir ve argümanlara açık olmaları için farklı bakış açılarıyla düşünmeleri teşvik edilir.
+                                            Örneğin bir öğrenci yapay zekânın insan gibi düşünebileceğini savunurken bir başkası bunun mümkün
+                                            olmadığını belirterek araştırmacı ve sorgulayıcı bir şekilde kendi gerekçelerini ortaya koyabilir (D3.3,
+                                            SDB3.3).
+                                       •    Öğrencilerin görüşleri alındıktan sonra yapay zekâya ilişkin kısa ve günlük hayattan örnekler verilir
+                                            (sesli asistanlar, yüz algılama ve tanıma uygulamaları, otonom arabalar vb.). Örneklerdeki yapay zekâ
+                                            uygulamaları ile nerelerde karşılaştıklarını ve bu uygulamalardan nasıl faydalandıklarını düşünüp ifade
+                                            etmeleri istenir (SDB1.1).
+                                       YZU1.1.2
+                                       •    Yapay zekânın önemli kullanım alanları ile ilgili video izletilir. Teknolojik altyapı mevcut değilse bu kulla-
+                                            nım alanlarını gösteren bazı görsellerin çıktısı alınıp tahtaya asılır (OB4).
+                                       •    Öğrenciler; fikir üretme, karar alma ve uygulama süreçlerinde aktif rol almak amacıyla beş–altı kişilik
+                                            rastgele gruplara ayrılır (D3.4).
+                                       •    Öğrencilerden mevcut bilgilerini kullanarak bir konunun tam olarak öğrenilebilmesi için gerekli olan
+                                            adımların neler olduğuna ilişkin varsayımda bulunmaları ve düşüncelerini paylaşmaları istenir (SDB2.1).
+                                       YZU1.1.3
+                                       •    Öğrencilerin etik ve güvenlik kararlarını sorumlu teknoloji yaklaşımı doğrultusunda bilinçli, gerekçeli ve
+                                            tutarlı biçimde vermeleri beklenir (SDB3.1).
+                                       •    Öğrencilerin yapay zekâ uygulamalarında adil, doğru ve güvenli davranmaları, yapılan işlemlerin sonuç-
+                                            larını hukuki ve ahlaki açıdan değerlendirmeleri beklenir (D1.3).
+                                       •    Öğrencilerin yapay zekâ uygulamalarında etik kullanım ilkelerini açıklamaları ve kişisel verilerin gizlili-
+                                            ğini korumaları beklenir (D8.2).
+                                       •    Alınan kararların ahlaki olarak uygunluğunu değerlendirmeleri beklenir (SDB3.3).
+
+
+
+                     ÖĞRETMEN
+                  YANSITMALARI                Programa yönelik görüş ve önerileriniz için karekodu akıllı cihazınıza okutunuz.
+
+
+
+
+                                                                                                                                                              15
+                                                                              ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+     I. DÜZEY
+
+                                               2. TEMA: YAPAY ZEKÂ GELIŞTIRME ORTAMLARI
+
+
+                           Bu tema kapsamında öğrencilerin yapay zekâ araç ve teknolojilerini amacına uygun olarak kullanabilmesi,
+                           blok tabanlı yapay zekâ uygulama-geliştirme ortamlarını hazırlayıp düzenleyebilmesi ve uygulama-geliştir-
+                           me sürecinde bileşenleri etkin bir şekilde kullanabilmesi amaçlanmaktadır.
+
+
+           DERS SAATİ      22
+
+
+
+                ALAN
+           BECERİLERİ      BTYAB1. Bilişim Teknolojilerini Kullanma (BTYAB1.2. Bilişim Teknolojileri ile Çalışma), BTYAB3. Yazılım Geliştir-
+                           me (BTYAB3.1. Yazılım Geliştirme Ortamını Hazırlama), BTYAB3. Yazılım Geliştirme (BTYAB3.2. Yazılım Geliştir-
+                           me Sürecinde Kullanılan Bileşen/Yapı/Yöntemlerinden Yararlanma)
+
+
+          KAVRAMSAL
+           BECERİLER       -
+
+
+
+
+            EĞİLİMLER      E1.1. Merak, E3.6. Analitiklik, E3.7. Sistematiklik, E3.8. Soru Sorma, E3.10. Eleştirel Bakma
+
+
+
+         PROGRAMLAR
+                ARASI
+          BİLEŞENLER
+
+
+       Sosyal-Duygusal
+     Öğrenme Becerileri    SDB1.2. Kendini Düzenleme (Öz Düzenleme), SDB2.2. İş Birliği
+
+
+
+                Değerler   D1. Adalet, D6. Dürüstlük, D11. Özgürlük, D16. Sorumluluk
+
+
+
+           Okuryazarlık
+             Becerileri    OB2. Dijital Okuryazarlık
+
+
+
+
+           BECERİLER
+       ARASI İLİŞKİLER     -
+
+
+
+
+16
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+        ÖĞRENME ÇIKTILARI VE
+        SÜREÇ BİLEŞENLERİ                    YZU1.2.1. Yapay zekâ teknolojileri ile çalışabilme
+                                                  a) Yapay zekâ araç ve teknolojilerini amacına uygun olarak belirler.
+                                                  b) Yapay zekâ araç ve teknolojilerini amacına uygun olarak kullanır.
+                                                  c) Yapay zekâ araç ve teknolojilerini uygunluk/verimlilik kapsamında değerlendirir.
+
+
+                                             YZU1.2.2. Blok tabanlı yapay zekâ uygulama-geliştirme ortamını hazırlayabilme
+                                                  a) Blok tabanlı yapay zekâ uygulama-geliştirme ortamlarını tanır.
+                                                  b) Blok tabanlı yapay zekâ uygulama-geliştirme ortamını belirler.
+                                                  c) Blok tabanlı yapay zekâ uygulama-geliştirme ortamını düzenler.
+
+
+                                             YZU1.2.3. Blok tabanlı yapay zekâ uygulama-geliştirme sürecinde kullanılan bileşenlerden yarar-
+                                             lanabilme
+                                                  a) Blok tabanlı yapay zekâ uygulama-geliştirme süreci bileşenlerini tanır.
+                                                  b) Blok tabanlı yapay zekâ uygulama-geliştirme süreci bileşenlerini kullanır.
+                                                  c) Blok tabanlı yapay zekâ uygulama-geliştirme süreci bileşenlerini değerlendirir.
+
+
+              İÇERİK ÇERÇEVESİ               Yapay Zekâ Araçlarını Tanıma ve Kullanma
+                                             Blok Tabanlı Yapay Zekâ Ortamını Tanıma ve Hazırlama
+                                             Blok Tabanlı Yapay Zekâ Uygulamalarının Temel Bileşenleri
+
+
+              Anahtar Kavramlar              blok tabanlı programlama, çıktı, girdi, model bileşenleri
+
+
+           PROGRAMLAR ARASI
+        BİLEŞENLERE YÖNELİK
+               UYGULAMALAR             YZU1.2.1
+                                       •    Yapay zekâ araç ve teknolojilerini uygunluk ve verimlilik açısından değerlendirme sürecinde araçların
+                                            performansını ve sınırlarını objektif, abartıdan uzak ve gerçeğe dayalı biçimde değerlendirmeleri bek-
+                                            lenir (D6.2).
+                                       •    Öğrencilerin yapay zekâ araçlarını kullanırken kendilerini düzenleyerek görevi planlı ve dikkatli biçimde
+                                            tamamlamaları beklenir (SDB1.2).
+                                       •    Öğrencilerin yapay zekâ teknolojilerini seçme ve kullanma sürecinde hangi durumlarda hangi teknolo-
+                                            jiyi tercih etmeleri gerektiğini sorgulayarak, sorumluluk bilinciyle hareket etmeleri ve etik ilkelere uygun
+                                            davranmaları beklenir. (D16.3).
+                                       •    Öğrencilerin dijital ortamda kullandıkları yapay zekâ araçlarını amacına uygun biçimde seçmeleri bek-
+                                            lenir (OB2).
+                                       YZU1.2.2
+                                       •    Öğrencilerin geliştirme ortamını düzenleme sürecinde bu düzenlemelerin süreci nasıl etkilediğini merak
+                                            ederek dikkatlerini sürdürmeleri ve süreci bağımsız biçimde yönetmeleri beklenir (SDB1.2).
+                                       •    Öğrencilerin geliştirme ortamını hazırlarken verilen görevi zamanında ve doğru biçimde yerine getir-
+                                            meleri beklenir (D16.3).
+                                       •    Öğrencilerin geliştirme ortamını yapılandırırken dijital araçlarla etkin biçimde iş görmeleri beklenir
+                                            (OB2).
+                                       •    Öğrencilerin bu süreçte kendi kararlarını alma yeteneği göstermeleri ve verdiği kararların sorumluluğu-
+                                            nu almaları beklenir (D11.2).
+                                       YZU1.2.3
+                                       •    Öğrencilerin yapay zekâ uygulaması geliştirme sürecinde görev paylaşımı yaparak ekip içinde iş birliği
+                                            kurmaları beklenir (SDB2.2).
+                                       •    Öğrencilerin yapay zekâ bileşenlerini değerlendirirken adil ve nesnel davranmaları, teknolojik kararlarını
+                                            etik ilkeler doğrultusunda vermeleri beklenir (D1.3).
+
+
+                     ÖĞRETMEN
+                  YANSITMALARI               Programa yönelik görüş ve önerileriniz için karekodu akıllı cihazınıza okutunuz.
+
+
+
+
+                                                                                                                                                           17
+                                                                              ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+     I. DÜZEY
+
+                                                   3. TEMA: YAPAY ZEKÂ UYGULAMALARI
+
+                           Bu tema kapsamında öğrencilerin yapay zekâ modeli geliştirmek için gerekli girdileri belirleyip toplaması,
+                           doğrulaması ve kaydetmesi, blok tabanlı ortamda gerçek hayat problemleri için yapay zekâ modelleri oluş-
+                           turması, bu modelleri uygulaması ve süreç ile sonuçlarını değerlendirebilmesi amaçlanmaktadır.
+
+
+           DERS SAATİ      34
+
+
+
+                ALAN
+           BECERİLERİ      BTYAB4. Dijital Ürün Geliştirme (BTYAB4.4. Simülasyon/ Model Geliştirme)
+
+
+          KAVRAMSAL
+           BECERİLER       KB2.6. Bilgi Toplama
+
+
+
+
+            EĞİLİMLER      E1.1. Merak, E2.1. Empati, E3.8. Soru Sorma
+
+
+
+         PROGRAMLAR
+                ARASI
+          BİLEŞENLER
+
+
+       Sosyal-Duygusal
+     Öğrenme Becerileri    SDB2.1. İletişim, SDB2.2. İş Birliği, SDB2.3. Sosyal Farkındalık
+
+
+
+                Değerler   D4. Dostluk, D6. Dürüstlük, D7. Estetik, D14. Saygı, D19. Vatanseverlik
+
+
+
+           Okuryazarlık
+             Becerileri    OB2. Dijital Okuryazarlık
+
+
+
+
+           BECERİLER
+       ARASI İLİŞKİLER     -
+
+
+
+
+18
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+        ÖĞRENME ÇIKTILARI VE
+        SÜREÇ BİLEŞENLERİ
+                                              YZU1.3.1. Yapay zekâ modeli geliştirmek için bilgi toplayabilme
+                                                   a) Yapay zekâ modeli girdileri için uygun araçları belirler.
+                                                   b) Yapay zekâ modeli girdileri hakkında bilgileri bulur.
+                                                   c) Yapay zekâ modeli girdilerini doğrular.
+                                                   ç) Yapay zekâ modeli girdilerini kaydeder.
+
+
+                                              YZU1.3.2. Blok tabanlı ortamda yapay zekâ modeli geliştirme
+                                                   a) Blok tabanlı ortamda yapay zekâ modeli için gerçek hayat problemi belirler.
+                                                   b) Belirlenen problemin çözümü veya olası risklerin önlenmesi için girdileri kullanarak yapay zekâ
+                                                      modeli oluşturur.
+                                                   c) Yapay zekâ modelini uygular.
+                                                   ç) Yapay zekâ modelinin süreç ve sonuçlarını değerlendirir.
+
+
+               İÇERİK ÇERÇEVESİ               Yapay Zekâ Modeli Girdilerini Toplama ve Doğrulama
+                                              Blok Tabanlı Ortamda Yapay Zekâ Modeli Geliştirme
+
+
+               Anahtar Kavramlar              basit yapay zekâ modeli, problem tanımlama, veri doğrulama, veri kaydetme, veri toplama
+
+
+           PROGRAMLAR ARASI
+        BİLEŞENLERE YÖNELİK
+               UYGULAMALAR              YZU1.3.1
+                                        •    Yapay zekâ modeli girdileri hakkında bilgileri bulma sürecinde güvenilir ve doğrulanabilir kaynaklardan
+                                             elde edilen bilgileri esas almaları beklenir (D6.1).
+                                        •    Öğrencilerin bilgi toplama sürecinde grup arkadaşlarıyla görev paylaşımı yaparak etkili biçimde iş birliği
+                                             kurmaları beklenir (SDB2.2).
+                                        •    Öğrencilerin bilgi toplama araçlarını kullanırken dijital ortamda etkin biçimde iş görmeleri beklenir
+                                             (OB2).
+                                        •    Öğrencilerin bilgi toplama sürecinde farklı kaynaklardan elde edilen bilgilerin nasıl çeşitlenip zenginleş-
+                                             tiğini merak ederek birbirlerine destek olmaları beklenir (D4.1).
+                                        YZU1.3.2
+                                        •    Öğrencilerin yapay zekâ modelini geliştirirken grup üyeleriyle iş birliği içinde çalışmaları, fikirlerini pay-
+                                             laşmaları ve süreci birlikte yönetmeleri beklenir (SDB2.2).
+                                        •    Öğrencilerin model geliştirme sürecinde açık, saygılı ve etkili iletişim kurmaları, dijital ortamda uygun dil
+                                             kullanmaları beklenir (SDB2.1, D14.1).
+                                        •    Öğrencilerden grup çalışmalarında arkadaşlarının görüşlerine anlayışla yaklaşmaları, farklı düşünce-
+                                             lere empatiyle cevap vermeleri ve estetik bakış açısıyla özgün ürünler geliştirmeleri beklenir (SDB2.3,
+                                             D7.2).
+                                        •    Öğrencilerin blok tabanlı ortamda yapay zeka modeli için gerçek hayat problemi belirlerken kültürel
+                                             mirasımıza ait eserleri kullanmaları beklenir (D19.3).
+
+
+                      ÖĞRETMEN
+                   YANSITMALARI               Programa yönelik görüş ve önerileriniz için karekodu akıllı cihazınıza okutunuz.
+
+
+
+
+                                                                                                                                                              19
+                                                                             ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+     II. DÜZEY
+
+                                                     1. TEMA: HAYATIMIZDA YAPAY ZEKÂ
+
+
+                          Bu tema kapsamında öğrencilerin makine öğrenmesi ve bulanık mantığa ilişkin temel kavramları tanıyıp sor-
+                          gulayabilmesi, bu kavramlarla ilgili bilgi toplayıp bu bilgilerin doğruluğunu değerlendirebilmesi ve topladığı
+                          bilgiler üzerinden çıkarımlar yapabilmesi, yapay zekâ bileşenlerini içeren problemleri alt problemlere ayıra-
+                          bilmesi, her bir alt problemi uygun yaklaşımlarla çözebilmesi ve alt problemleri bütünsel bir çözüm için bir-
+                          leştirebilmesi amaçlanmaktadır.
+
+
+
+           DERS SAATİ     16
+
+
+
+                ALAN
+           BECERİLERİ     BTYAB2. Bilgi İşlemsel Düşünme (BTYAB2.3. Ayrıştırma)
+
+
+          KAVRAMSAL
+           BECERİLER      KB2.8. Sorgulama
+
+
+
+
+            EĞİLİMLER     E1.1. Merak, E3.6. Analitiklik, E3.8. Soru Sorma, E3.10. Eleştirel Bakma
+
+
+
+         PROGRAMLAR
+                ARASI
+          BİLEŞENLER
+
+
+       Sosyal-Duygusal
+     Öğrenme Becerileri   SDB2.2. İş Birliği
+
+
+
+              Değerler    D1. Adalet, D4. Dostluk, D6. Dürüstlük, D16. Sorumluluk
+
+
+
+           Okuryazarlık
+             Becerileri   OB1. Bilgi Okuryazarlığı
+
+
+
+
+           BECERİLER
+       ARASI İLİŞKİLER    -
+
+
+
+
+20
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+        ÖĞRENME ÇIKTILARI VE
+        SÜREÇ BİLEŞENLERİ                    YZU2.1.1. Makine öğrenmesine ilişkin temel kavramları sorgulayabilme
+                                                  a) Makine öğrenmesine ilişkin temel kavramları tanımlar.
+                                                  b) Makine öğrenmesine ilişkin temel kavramlar ile ilgili sorular sorar.
+                                                  c) Makine öğrenmesine ilişkin temel kavramlar ile ilgili bilgi toplar.
+                                                  ç) Makine öğrenmesine ilişkin temel kavramlar ile ilgili toplanan bilgilerin doğruluğunu, etik ve güven-
+                                                     lik/mahremiyet açısından uygunluğunu değerlendirir.
+                                                  d) Toplanan bilgiler üzerinden çıkarım yapar.
+
+
+                                             YZU2.1.2. Bulanık mantığa ilişkin temel kavramları sorgulayabilme
+                                                  a) Bulanık mantığa ilişkin temel kavramları tanımlar.
+                                                  b) Bulanık mantığa ilişkin temel kavramlar ile ilgili sorular sorar.
+                                                  c) Bulanık mantığa ilişkin temel kavramlar ile ilgili bilgi toplar.
+                                                  ç) Bulanık mantığa ilişkin temel kavramlar ile ilgili toplanan bilgilerin doğruluğunu, etik ve güvenlik/
+                                                     mahremiyet açısından uygunluğunu değerlendirir.
+                                                  d) Toplanan bilgiler üzerinden çıkarım yapar.
+
+
+                                             YZU2.1.3. Yapay zekâ bileşenlerini ayrıştırabilme
+                                                   a) Yapay zekâ bileşenlerini içeren problemi alt problemlere ayırır.
+                                                   b) Her bir alt problemi uygun yaklaşımlarla çözümler.
+                                                   c) Alt problemleri bütünsel bir çözüm için birleştirir.
+
+
+              İÇERİK ÇERÇEVESİ               Makine Öğrenmesinde Temel Kavramlar
+                                             Bulanık Mantığın Temel Kavramlarını Keşfetme
+                                             Yapay Zekâ Problemlerinde Çözüm Yöntemleri
+
+              Anahtar Kavramlar              bulanık mantık, makine öğrenmesi, mantıksal yaklaşım, örüntü tanıma, tahmin, veri kümesi
+
+
+           PROGRAMLAR ARASI
+        BİLEŞENLERE YÖNELİK
+               UYGULAMALAR             YZU2.1.1
+                                       •    Makine öğrenmesine ilişkin bilgi toplama sürecini kuralına uygun olarak getirir (D6.1).
+                                       •    Makine öğrenmesine ilişkin temel sorgulama, bilgilerin doğruluğunu ve etik/güvenlik boyutlarını değer-
+                                            lendirme ile çıkarım yapma süreçlerinde tarafsız, hakkaniyetli ve etik ilkelere uygun hareket etmeleri
+                                            beklenir (D1.2).
+                                       •    Öğrencilerin bilgi toplama sürecinde doğru, güvenilir ve etik bilgi kaynaklarını tercih etmeleri ve sorumlu
+                                            teknoloji yaklaşımı doğrultusunda bu bilgileri sorumluluk bilinciyle doğrulayıp amacına uygun kullan-
+                                            maları beklenir (D16.2).
+                                       YZU2.1.2
+                                       •    Öğrencilerin bulanık mantık uygulamalarının insan hayatına etkilerine karşı duyarlı olmaları, bu sistem-
+                                            leri güvenli ve adil kullanımını savunmaları beklenir (D6.1, D1.2).
+                                       •    Öğrencilerin bulanık mantığa ilişkin kavramları araştırırken bilgiye doğru kaynaklardan erişmeleri, bilgi-
+                                            yi doğruluk ve güvenilirlik açısından değerlendirmeleri beklenir (OB1).
+                                       YZU2.1.3
+                                       •    Öğrencilerin grup çalışmaları sırasında fikir alışverişinde bulunarak birlikte çözüm üretmeleri beklenir
+                                            (SDB2.2).
+                                       •    Öğrencilerin bu süreçte birbirlerine destek olmaları beklenir (D4.1).
+
+
+                     ÖĞRETMEN
+                  YANSITMALARI               Programa yönelik görüş ve önerileriniz için karekodu akıllı cihazınıza okutunuz.
+
+
+
+
+                                                                                                                                                             21
+                                                                            ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+     II. DÜZEY
+
+                                     2. TEMA: YAPAY ZEKÂ UYGULAMA-GELIŞTIRME ORTAMLARI
+
+
+                          Bu tema kapsamında öğrencilerin metin tabanlı yapay zekâ uygulama-geliştirme ortamlarını tanıyıp hazırla-
+                          yabilmesi, ortamı düzenleyebilmesi, geliştirme sürecinde kullanılan bileşenleri tanıyıp etkin bir şekilde kulla-
+                          nabilmesi ve değerlendirebilmesi amaçlanmaktadır.
+
+
+           DERS SAATİ     20
+
+
+
+                ALAN
+           BECERİLERİ     BTYAB3. Yazılım Geliştirme (BTYAB3.1. Yazılım Geliştirme Ortamını Hazırlama), BTYAB3. Yazılım Geliştirme (BT-
+                          YAB3.2. Yazılım Geliştirme Sürecinde Kullanılan Bileşen/Yapı/Yöntemlerinden Yararlanma)
+
+          KAVRAMSAL
+           BECERİLER      -
+
+
+
+
+            EĞİLİMLER     E1.6. Seçicilik, E3.7. Sistematiklik
+
+
+
+         PROGRAMLAR
+                ARASI
+          BİLEŞENLER
+
+
+       Sosyal-Duygusal
+     Öğrenme Becerileri   -
+
+
+
+              Değerler    D6. Dürüstlük, 12. Sabır, D16. Sorumluluk
+
+
+
+           Okuryazarlık
+             Becerileri   OB2. Dijital Okuryazarlık
+
+
+
+
+           BECERİLER
+       ARASI İLİŞKİLER    -
+
+
+
+
+22
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+        ÖĞRENME ÇIKTILARI VE
+        SÜREÇ BİLEŞENLERİ                    YZU2.2.1. Metin tabanlı yapay zekâ uygulama-geliştirme ortamını hazırlama
+                                                  a) Metin tabanlı yapay zekâ uygulama-geliştirme ortamlarını tanır.
+                                                  b) Metin tabanlı yapay zekâ uygulama-geliştirme ortamını belirler.
+                                                  c) Metin tabanlı yapay zekâ uygulama-geliştirme ortamını düzenler.
+
+
+                                             YZU2.2.2. Metin tabanlı yapay zekâ uygulama-geliştirme sürecinde kullanılan bileşenlerden yarar-
+                                             lanabilme
+                                                  a) Metin tabanlı yapay zekâ uygulama-geliştirme süreci bileşenlerini tanır.
+                                                  b) Metin tabanlı yapay zekâ uygulama-geliştirme süreci bileşenlerini kullanır.
+                                                  c) Metin tabanlı yapay zekâ uygulama-geliştirme süreci bileşenlerini değerlendirir.
+
+
+              İÇERİK ÇERÇEVESİ               Metin Tabanlı Yapay Zekâ Uygulama Ortamı
+                                             Metin Tabanlı Yapay Zekâ Uygulamalarında Bileşenlerle Çalışma
+
+
+              Anahtar Kavramlar              metin tabanlı programlama, yapay zekâ kütüphaneleri
+
+
+          PROGRAMLAR ARASI
+       BİLEŞENLERE YÖNELİK
+              UYGULAMALAR              YZU2.2.1
+                                       •    Öğrencilerin metin tabanlı kodlama ortamında kullandıkları araçları ihtiyaçlarına en uygun olanları se-
+                                            çerek amacına uygun ve etkin bir şekilde düzenlemeleri beklenir (OB2).
+                                       YZU2.2.2
+                                       •    Metin tabanlı yapay zekâ uygulama-geliştirme süreci bileşenlerinin değerlendirilmesinde elde edilen
+                                            sonuçları ve süreç çıktılarını olduğu gibi doğru değerlendirmeleri beklenir (D6.2).
+                                       •    Öğrencilerin bileşenlerin kullanımında süreklilik göstermeleri ve karşılaştıkları zorluklarda sabırla ve ka-
+                                            rarlılıkla davranmaları beklenir (D12.3).
+                                       •    Öğrencilerin bu süreçte üzerine düşen görevleri eksiksiz şekilde yapmaları beklenir (D16.3).
+
+
+                    ÖĞRETMEN
+                 YANSITMALARI                Programa yönelik görüş ve önerileriniz için karekodu akıllı cihazınıza okutunuz.
+
+
+
+
+                                                                                                                                                           23
+                                                                                ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+     II. DÜZEY
+
+                                                   3. TEMA: YAPAY ZEKÂ UYGULAMALARI
+
+                          Bu tema kapsamında öğrencilerin; yapay zekâ modeli geliştirmek için gerekli girdileri belirleyip toplaması,
+                          doğrulaması ve kaydetmesi, metin tabanlı ortamda gerçek hayat problemleri için yapay zekâ modelleri oluş-
+                          turması, bu modelleri uygulaması ve süreç ile sonuçlarını değerlendirebilmesi amaçlanmaktadır.
+
+
+           DERS SAATİ     32
+
+
+
+                ALAN
+           BECERİLERİ     BTYAB4. Dijital Ürün Geliştirme (BTYAB4.4. Simülasyon/ Model Geliştirme)
+
+
+          KAVRAMSAL
+           BECERİLER      KB2.6. Bilgi Toplama
+
+
+
+
+            EĞİLİMLER     E1.1. Merak, E3.3. Yaratıcılık, E3.7. Sistematiklik
+
+
+
+         PROGRAMLAR
+                ARASI
+          BİLEŞENLER
+
+
+       Sosyal-Duygusal
+     Öğrenme Becerileri   SDB2.1. İletişim, SDB2.2. İş Birliği
+
+
+
+              Değerler    D5. Duyarlılık, D7. Estetik, D9. Merhamet, D12. Sabır, D16. Sorumluluk, D17. Tasarruf
+
+
+
+           Okuryazarlık
+             Becerileri   OB2. Dijital Okuryazarlık
+
+
+
+
+           BECERİLER
+       ARASI İLİŞKİLER    -
+
+
+
+
+24
+ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+        ÖĞRENME ÇIKTILARI VE
+        SÜREÇ BİLEŞENLERİ
+                                             YZU2.3.1. Yapay zekâ modeli geliştirmek için bilgi toplayabilme
+                                                   a) Yapay zekâ modeli girdileri için uygun araçları belirler.
+                                                   b) Yapay zekâ modeli girdileri hakkındaki bilgileri bulur.
+                                                   c) Yapay zekâ modeli girdilerini doğrular.
+                                                   ç) Yapay zekâ modeli girdilerini kaydeder.
+
+
+                                             YZU2.3.2. Metin tabanlı ortamda yapay zekâ modeli geliştirme
+                                                  a) Metin tabanlı ortamda yapay zekâ modeli için gerçek hayat problemi belirler.
+                                                  b) Belirlenen problemin çözümü veya olası risklerin önlenmesi için girdileri kullanarak yapay zekâ mo-
+                                                     deli oluşturur.
+                                                  c) Yapay zekâ modelini uygular.
+                                                  ç) Yapay zekâ modelinin süreç ve sonuçlarını etik ve güvenlik/mahremiyet açısından uygunluğunu
+                                                     değerlendirir.
+
+
+              İÇERİK ÇERÇEVESİ               Yapay Zekâ Modeli Girdilerini Toplama ve Düzenleme
+                                             Metin Tabanlı Ortamda Yapay Zekâ Modeli Oluşturma
+
+
+              Anahtar Kavramlar              model değerlendirme, model eğitme, veri doğrulama, veri işleme, veri kaynağı, veri temizleme
+
+
+           PROGRAMLAR ARASI
+        BİLEŞENLERE YÖNELİK
+               UYGULAMALAR             YZU2.3.1
+                                       •    Bilgi arama sürecinde zaman, emek ve dijital kaynakları verimli kullanmaları beklenir (D17.2).
+                                       •    Öğrencilerin grup içinde çalışırken diğerlerinin fikirlerini dikkate alarak ortak bir karar geliştirmeleri
+                                            beklenir (SDB2.2).
+                                       •    Öğrencilerin bilgi kayıtlarını düzenlerken verilen görevi merak duygusuyla, özenle ve zamanında ta-
+                                            mamlamaları beklenir (D16.3).
+                                       YZU2.3.2
+                                       •    Modelin süreç ve sonuçlarının değerlendirilmesinde bireylerin haklarına, ve olası olumsuz etkilerine kar-
+                                            şı özenli davranmaları beklenir (D9.1).
+                                       •    Gerçek hayat probleminin belirlenmesi sürecinde bireysel ve toplumsal ihtiyaçları gözetmeleri beklenir
+                                            (D5.1).
+                                       •    Öğrencilerden kodlama sürecinde estetik bakış açısıyla özgün fikirler oluşturmaları, ortak çalışmayla
+                                            nitelikli çözümler geliştirmeleri ve bunları ifade etmeleri beklenir (SDB2.1, D7.1).
+                                       •    Öğrencilerin model geliştirme sürecinde karşılaştıkları teknik zorluklar karşısında sorumlu teknoloji
+                                            yaklaşımı doğrultusunda kararlı davranmaları ve görevlerini tamamlamaları beklenir (D12.3).
+                                       •    Öğrencilerin metin tabanlı geliştirme ortamında dijital araçları etkin kullanmaları beklenir (OB2).
+                                       •    Öğrencilerin model geliştirme sürecinde zaman, enerji ve işlem gücü gibi kaynakları verimli ve özenli
+                                            kullanmaları sağlanır (D17.2).
+                                       •    Öğrencilerin bu süreçte atık yönetimi kapsamında dijital atık üretmemeye dikkat etmesi beklenir (D5.1).
+
+
+                     ÖĞRETMEN
+                  YANSITMALARI               Programa yönelik görüş ve önerileriniz için karekodu akıllı cihazınıza okutunuz.
+
+
+
+
+                                                                                                                                                           25
+     ORTAOKUL YAPAY ZEKÂ UYGULAMALARI DERSİ ÖĞRETİM PROGRAMI
+
+
+
+
+26
+42
+43
+
