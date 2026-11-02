@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'app/app_state.dart';
 import 'app/speaker.dart';
 import 'data/content_repository.dart';
 import 'data/progress_store.dart';
+import 'data/web_storage.dart' if (dart.library.io) 'data/file_storage.dart';
+import 'demo.dart';
 import 'ui/screens/onboarding_screen.dart';
 import 'ui/screens/profile_picker_screen.dart';
 import 'ui/screens/shell_screen.dart';
@@ -14,12 +15,12 @@ import 'ui/theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final dir = await getApplicationSupportDirectory();
   final state = AppState(
-    store: ProgressStore(FileStorage(dir)),
+    store: ProgressStore(await createPlatformStorage()),
     content: ContentRepository(rootBundle.loadString),
     speaker: TtsSpeaker(),
   );
+  await applyDemo(state);
   runApp(DersKumbarasiApp(state: state));
 }
 
@@ -32,10 +33,17 @@ class DersKumbarasiApp extends StatefulWidget {
 }
 
 class _DersKumbarasiAppState extends State<DersKumbarasiApp> {
+  final _nav = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();
-    widget.state.load();
+    widget.state.load().then((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final nav = _nav.currentState;
+        if (nav != null) openDemoSession(nav);
+      });
+    });
   }
 
   @override
@@ -43,6 +51,7 @@ class _DersKumbarasiAppState extends State<DersKumbarasiApp> {
     return AppScope(
       state: widget.state,
       child: MaterialApp(
+        navigatorKey: _nav,
         title: 'Ders Kumbarası',
         debugShowCheckedModeBanner: false,
         theme: Kumbara.theme(),

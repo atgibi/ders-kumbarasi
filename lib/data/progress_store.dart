@@ -2,7 +2,6 @@
 library;
 
 import 'dart:convert';
-import 'dart:io';
 
 import '../core/srs/leitner.dart';
 
@@ -164,36 +163,6 @@ class MemoryStorage implements Storage {
       files[name] = content;
   @override
   Future<void> delete(String name) async => files.remove(name);
-}
-
-class FileStorage implements Storage {
-  FileStorage(this.dir);
-  final Directory dir;
-
-  File _f(String name) => File('${dir.path}/$name');
-
-  @override
-  Future<String?> read(String name) async {
-    final f = _f(name);
-    if (!await f.exists()) return null;
-    return f.readAsString();
-  }
-
-  /// Atomik yazma: önce geçici dosyaya yaz, sonra yerine taşı. Yazma
-  /// sırasında uygulama kapanırsa eski kayıt bozulmaz.
-  @override
-  Future<void> write(String name, String content) async {
-    await dir.create(recursive: true);
-    final tmp = _f('$name.tmp');
-    await tmp.writeAsString(content, flush: true);
-    await tmp.rename(_f(name).path);
-  }
-
-  @override
-  Future<void> delete(String name) async {
-    final f = _f(name);
-    if (await f.exists()) await f.delete();
-  }
 }
 
 class ProgressStore {
