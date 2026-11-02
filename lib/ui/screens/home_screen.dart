@@ -120,9 +120,10 @@ class _SubjectTile extends StatelessWidget {
                   future: app.dueCount(subject),
                   builder: (context, snap) {
                     final n = snap.data ?? 0;
-                    if (n == 0)
+                    if (n == 0) {
                       return const Icon(Icons.play_circle_fill_rounded,
                           size: 40, color: Kumbara.primary);
+                    }
                     return Chip(
                       label: Text('$n tekrar'),
                       backgroundColor: Kumbara.primary.withValues(alpha: 0.25),

@@ -120,8 +120,9 @@ class ParentScreen extends StatelessWidget {
               );
               if (ok == true) {
                 await app.deleteAll();
-                if (context.mounted)
+                if (context.mounted) {
                   Navigator.of(context).popUntil((r) => r.isFirst);
+                }
               }
             },
           ),
