@@ -71,8 +71,6 @@ void main() {
     await settle(t);
 
     // Yol ekranı: ilk konu açık, ikincisi kilitli
-    debugPrint(
-        'EKRAN: ${find.byType(Text).evaluate().map((e) => (e.widget as Text).data).join(' | ')}');
     expect(find.byKey(const Key('tab-path')), findsOneWidget);
     expect(find.text('BAŞLA'), findsOneWidget);
     await t.tap(find.byKey(const Key('node-MAT.1.1.2')));

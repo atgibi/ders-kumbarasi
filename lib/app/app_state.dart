@@ -154,9 +154,18 @@ class AppState extends ChangeNotifier {
 
   Future<void> selectChild(ChildProfile p) async {
     active = p;
-    subject = Subject.forGrade(p.grade).first;
+    subject = await _defaultSubject(p.grade);
     progress = await store.loadProgress(p.id);
     notifyListeners();
+  }
+
+  /// İçeriği hazır olan ilk ders; hiçbiri hazır değilse ilk ders.
+  Future<Subject> _defaultSubject(int grade) async {
+    final subjects = Subject.forGrade(grade);
+    for (final s in subjects) {
+      if ((await content.contentFor(s, grade)).isNotEmpty) return s;
+    }
+    return subjects.first;
   }
 
   void signOutChild() {
