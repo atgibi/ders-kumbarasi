@@ -1,0 +1,79 @@
+name: Müfredat kaynaklarını indir (geliştirme aracı)
+
+# MEB Türkiye Yüzyılı Maarif Modeli öğretim programlarını indirir, PDF'leri metne
+# çevirir ve "kaynaklar" dalına koyar. Uygulamanın parçası değildir; içerik
+# hazırlarken müfredat eşlemesi için kullanılır.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  indir:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Araçlar
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils unzip > /dev/null
+
+      - name: Ders sayfalarını bul ve program PDF'lerini indir
+        run: |
+          set -u
+          mkdir -p out/pdf out/txt out/html
+          BASE=https://tymm.meb.gov.tr
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130 Safari/537.36"
+          curl -sSL -A "$UA" "$BASE/ogretim-programlari" -o out/html/liste.html || true
+          grep -oE '/ogretim-programlari/ders/[a-z0-9-]+' out/html/liste.html | sort -u > slugs.txt || true
+          # Liste sayfası dersleri JS ile yüklüyorsa diye bilinen aday adlar
+          for s in ilkokul-turkce-dersi ilkokul-matematik-dersi matematik-dersi hayat-bilgisi-dersi \
+                   fen-bilimleri-dersi sosyal-bilgiler-dersi ingilizce-dersi \
+                   insan-haklari-vatandaslik-ve-demokrasi-dersi trafik-guvenligi-dersi \
+                   gorsel-sanatlar-dersi muzik-dersi beden-egitimi-ve-oyun-dersi; do
+            echo "/ogretim-programlari/ders/$s" >> slugs.txt
+          done
+          sort -u slugs.txt -o slugs.txt
+          echo "== Bulunan ders sayfaları"; cat slugs.txt
+          while read -r p; do
+            n=$(basename "$p")
+            code=$(curl -sSL -A "$UA" -w '%{http_code}' "$BASE$p" -o "out/html/$n.html" || echo 000)
+            [ "$code" = "200" ] || { echo "YOK $code $p"; rm -f "out/html/$n.html"; continue; }
+            grep -oE '/assets/pdf/[^"'"'"' ]+\.pdf' "out/html/$n.html" | sort -u | while read -r pdf; do
+              f=$(basename "$pdf")
+              curl -sSL -A "$UA" "$BASE$pdf" -o "out/pdf/$f" && echo "PDF $n -> $f"
+            done
+          done < slugs.txt
+
+      - name: İlkokul yıllık planları
+        run: |
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130 Safari/537.36"
+          mkdir -p out/plan
+          for u in \
+            https://tymm.meb.gov.tr/assets/file/ilkokul-turkce-dersi-yillik-planlar_20260831_210641_957.zip \
+            https://tymm.meb.gov.tr/assets/file/ilkokul-matematik-dersi-taslak-yillik-planlar_20260831_210844_369.zip \
+            https://tymm.meb.gov.tr/assets/file/hayat-bilgisi-dersi-taslak-yillik-planlar_20260831_211101_126.zip ; do
+            f=$(basename "$u"); curl -sSL -A "$UA" "$u" -o "out/plan/$f" && unzip -q -o "out/plan/$f" -d "out/plan/${f%.zip}" || echo "PLAN HATA $u"
+            rm -f "out/plan/$f"
+          done
+          find out/plan -type f | head -100
+
+      - name: PDF -> metin
+        run: |
+          for f in out/pdf/*.pdf; do
+            [ -e "$f" ] || continue
+            pdftotext -layout "$f" "out/txt/$(basename "${f%.pdf}").txt"
+          done
+          find out/plan -name '*.pdf' -exec sh -c 'pdftotext -layout "$1" "${1%.pdf}.txt"' _ {} \;
+          ls -la out/txt
+          wc -l out/txt/*.txt || true
+
+      - name: kaynaklar dalına gönder
+        run: |
+          rm -rf out/html out/pdf
+          find out/plan -name '*.pdf' -delete
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir pub && cd pub && git init -q -b kaynaklar
+          cp -r ../out/* .
+          git add -A && git commit -qm "Müfredat kaynak metinleri (MEB TYMM)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" kaynaklar
