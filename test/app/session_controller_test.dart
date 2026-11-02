@@ -183,7 +183,9 @@ void main() {
     });
   });
 
-  test('veliyle etkinlik: "Yaptık" kutu ilerletir, "Şimdi değil" kaydı değiştirmez', () async {
+  test(
+      'veliyle etkinlik: "Yaptık" kutu ilerletir, "Şimdi değil" kaydı değiştirmez',
+      () async {
     final now = DateTime(2026, 11, 2, 17);
     final progress = ChildProgress();
     final c = await SessionController.build(
@@ -202,14 +204,16 @@ void main() {
       if (q.activity) {
         sawActivity = true;
         c.skip();
-        expect(progress.cards.containsKey(c.steps[c.index - 1].card!.id), isFalse);
+        expect(
+            progress.cards.containsKey(c.steps[c.index - 1].card!.id), isFalse);
       } else {
         c.answer(q.answerIndex, elapsed: const Duration(seconds: 2));
         c.next();
       }
     }
     expect(sawActivity, isTrue);
-    final act = CardDef.fromJson('X', {'id': 'X#1', 'type': 'act', 'prompt': 'Birlikte yapın'});
+    final act = CardDef.fromJson(
+        'X', {'id': 'X#1', 'type': 'act', 'prompt': 'Birlikte yapın'});
     expect(act.fixed!.activity, isTrue);
     expect(generate(act, Random(1)).options, ['Yaptık', 'Şimdi değil']);
   });
