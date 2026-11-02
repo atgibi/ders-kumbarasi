@@ -94,6 +94,16 @@ def main():
     if not VISUAL_KINDS <= dart_kinds:
         errors.append(f"Dart'ta çizilmeyen görsel türleri: {sorted(VISUAL_KINDS - dart_kinds)}")
     out_dir = ROOT / "assets/content"
+    # Müfredat dosyaları uygulamaya da kopyalanır
+    for name in ("tymm_ciktilar.json", "uniteler.json"):
+        src = (ROOT / "curriculum" / name).read_text(encoding="utf-8")
+        dst = ROOT / "assets/curriculum" / name
+        if check_only:
+            if not dst.exists() or dst.read_text(encoding="utf-8") != src:
+                errors.append(f"assets/curriculum/{name} güncel değil: build.py çalıştırılmalı")
+        else:
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            dst.write_text(src, encoding="utf-8")
     report = []
     for mod in PACK_MODULES:
         pk = importlib.import_module(mod).PACK

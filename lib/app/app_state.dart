@@ -86,6 +86,14 @@ class AppState extends ChangeNotifier {
   ChildProfile? active;
   ChildProgress? progress;
 
+  /// Yol ekranında seçili ders (çocuk değişince sıfırlanır).
+  Subject? subject;
+
+  void selectSubject(Subject s) {
+    subject = s;
+    notifyListeners();
+  }
+
   Future<void> load() async {
     profiles = await store.loadProfiles();
     settings = AppSettings.fromJson(await store.loadSettings());
@@ -116,7 +124,12 @@ class AppState extends ChangeNotifier {
   Future<void> updateChild(ChildProfile p) async {
     profiles = [for (final x in profiles) x.id == p.id ? p : x];
     await store.saveProfiles(profiles);
-    if (active?.id == p.id) active = p;
+    if (active?.id == p.id) {
+      active = p;
+      if (!Subject.forGrade(p.grade).contains(subject)) {
+        subject = Subject.forGrade(p.grade).first;
+      }
+    }
     notifyListeners();
   }
 
@@ -141,6 +154,7 @@ class AppState extends ChangeNotifier {
 
   Future<void> selectChild(ChildProfile p) async {
     active = p;
+    subject = Subject.forGrade(p.grade).first;
     progress = await store.loadProgress(p.id);
     notifyListeners();
   }
@@ -148,6 +162,7 @@ class AppState extends ChangeNotifier {
   void signOutChild() {
     active = null;
     progress = null;
+    subject = null;
     notifyListeners();
   }
 

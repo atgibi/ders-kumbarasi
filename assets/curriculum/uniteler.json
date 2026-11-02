@@ -1,0 +1,27 @@
+{
+  "_kaynak": "MEB TYMM öğretim programları (tymm.meb.gov.tr), 'Tema/Ünite, öğrenme çıktıları sayısı ve süre' tabloları. Türkçe öğrenme çıktıları temalara değil beceri alanlarına bağlıdır; temalar içerik bağlamıdır.",
+  "turkce": {
+    "1": ["İlk Okuma Yazmaya Hazırlık Çalışmaları", "Güzel Davranışlarımız", "Mustafa Kemal'den Atatürk'e", "Çevremizdeki Yaşam", "Yol Arkadaşımız Kitaplar", "Yeteneklerimizi Keşfediyoruz", "Minik Kâşifler", "Atalarımızın İzleri", "Sorumluluklarımızın Farkındayız"],
+    "2": ["Değerlerimizle Varız", "Atatürk ve Çocuk", "Doğada Neler Oluyor?", "Okuma Serüvenimiz", "Yeteneklerimizi Tanıyoruz", "Mucit Çocuk", "Kültür Hazinemiz", "Haklarımızı Biliyoruz"],
+    "3": ["Değerlerimizle Yaşıyoruz", "Atatürk ve Kahramanlarımız", "Doğayı Tanıyoruz", "Bilgi Hazinemiz", "Yeteneklerimizi Kullanıyoruz", "Bilim Yolculuğu", "Millî Kültürümüz", "Hak ve Sorumluluklarımız"],
+    "4": ["Erdemler", "Millî Mücadele ve Atatürk", "Doğa ve İnsan", "Kütüphanemiz", "Kendimizi Geliştiriyoruz", "Bilim ve Teknoloji", "Geçmişten Geleceğe Mirasımız", "Demokratik Yaşam"]
+  },
+  "matematik": {
+    "1": {"1": "Sayılar ve Nicelikler", "2": "İşlemlerden Cebirsel Düşünmeye", "3": "Nesnelerin Geometrisi", "4": "Veriye Dayalı Araştırma"},
+    "2": {"1": "Sayılar ve Nicelikler", "2": "İşlemlerden Cebirsel Düşünmeye", "3": "Nesnelerin Geometrisi", "4": "Veriye Dayalı Araştırma"},
+    "3": {"1": "Sayılar ve Nicelikler", "2": "İşlemlerden Cebirsel Düşünmeye", "3": "Nesnelerin Geometrisi", "4": "Veriye Dayalı Araştırma"},
+    "4": {"1": "Sayılar ve Nicelikler", "2": "İşlemlerden Cebirsel Düşünmeye", "3": "Nesnelerin Geometrisi", "4": "Olayların Olasılığı ve Veriye Dayalı Araştırma"}
+  },
+  "hayat_bilgisi": {
+    "1": {"1": "Ben ve Okulum", "2": "Sağlığım ve Güvenliğim", "3": "Ailem ve Toplum", "4": "Yaşadığım Yer ve Ülkem", "5": "Doğa ve Çevre", "6": "Bilim, Teknoloji ve Sanat"},
+    "2": {"1": "Ben ve Okulum", "2": "Sağlığım ve Güvenliğim", "3": "Ailem ve Toplum", "4": "Yaşadığım Yer ve Ülkem", "5": "Doğa ve Çevre", "6": "Bilim, Teknoloji ve Sanat"},
+    "3": {"1": "Ben ve Okulum", "2": "Sağlığım ve Güvenliğim", "3": "Ailem ve Toplum", "4": "Yaşadığım Yer ve Ülkem", "5": "Doğa ve Çevre", "6": "Bilim, Teknoloji ve Sanat"}
+  },
+  "fen_bilimleri": {
+    "3": {"1": "Bilimsel Keşif Yolculuğu", "2": "Canlılar Dünyasına Yolculuk", "3": "Yer Bilimciler İş Başında", "4": "Maddeyi Tanıyalım, Karıştırıp Ayıralım", "5": "Hareketi Keşfediyorum", "6": "Yaşamımızı Kolaylaştıran Elektrik", "7": "Toprağı Tanıyorum, Tarımı Keşfediyorum", "8": "Canlıların Yaşam Alanlarına Yolculuk"},
+    "4": {"1": "Bilime Yolculuk", "2": "Sağlıklı Besleniyorum", "3": "Dünyamızı Keşfedelim", "4": "Maddenin Değişimi", "5": "Mıknatısı Keşfediyorum", "6": "Elektrik ve Enerji Kaynakları", "7": "Işığı Tanıyalım", "8": "Sürdürülebilir Yaşam Alanları"}
+  },
+  "sosyal_bilgiler": {
+    "4": {"1": "Birlikte Yaşamak", "2": "Evimiz Dünya", "3": "Ortak Mirasımız", "4": "Yaşayan Demokrasimiz", "5": "Hayatımızdaki Ekonomi", "6": "Teknoloji ve Sosyal Bilimler"}
+  }
+}

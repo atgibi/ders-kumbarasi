@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import '../widgets/chunky_button.dart';
 
 class ProfileFormResult {
   const ProfileFormResult(this.nickname, this.grade, this.avatar);
@@ -103,13 +104,13 @@ class _ProfileFormState extends State<ProfileForm> {
           ],
         ),
         const SizedBox(height: 24),
-        FilledButton(
+        ChunkyButton(
           key: const Key('profile-submit'),
+          label: widget.submitLabel,
           onPressed: _valid
               ? () => widget.onSubmit(
                   ProfileFormResult(_name.text.trim(), _grade, _avatar))
               : null,
-          child: Text(widget.submitLabel),
         ),
       ],
     );

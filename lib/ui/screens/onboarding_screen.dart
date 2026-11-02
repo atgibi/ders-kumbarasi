@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import '../widgets/chunky_button.dart';
+import '../widgets/mascot.dart';
 import 'profile_form.dart';
 
 /// İlk kurulum (veli için): uygulamanın ne yaptığını ve veriyi nasıl
@@ -37,13 +39,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ]
                   : [
-                      const Center(
-                          child: Text('🐷🪙', style: TextStyle(fontSize: 72))),
+                      const Center(child: Mascot(mood: MascotMood.celebrate, size: 150)),
                       const SizedBox(height: 8),
                       Center(
                           child:
                               Text('Ders Kumbarası', style: t.headlineMedium)),
                       const SizedBox(height: 16),
+                      const MascotSays(
+                        size: 0,
+                        text: 'Merhaba! Ben Fındık. Kış için fındık biriktirdiğim gibi, '
+                            'seninle her gün biraz bilgi biriktireceğiz.',
+                      ),
+                      const SizedBox(height: 12),
                       Text(
                         'Her gün 10–15 dakika: kısa bir konu anlatımı, birkaç soru ve '
                         'unutulmaya başlayan konuların tam zamanında tekrarı. İçerikler '

@@ -4,12 +4,22 @@ import '../../app/session_controller.dart';
 import '../../app/speaker.dart';
 import '../../data/models.dart';
 import '../theme.dart';
+import '../widgets/chunky_button.dart';
+import '../widgets/mascot.dart';
 import '../widgets/visual_view.dart';
 
-/// Bir dersin günlük oturumu: ısınma -> konu anlatımı -> uygulama -> tekrar.
+/// Çalışma oturumu: konu anlatımı -> seç, KONTROL ET -> geri bildirim -> DEVAM.
 class SessionScreen extends StatefulWidget {
-  const SessionScreen({super.key, required this.subject});
+  const SessionScreen({
+    super.key,
+    required this.subject,
+    this.focusOutcome,
+    this.reviewOnly = false,
+  });
+
   final Subject subject;
+  final String? focusOutcome;
+  final bool reviewOnly;
 
   @override
   State<SessionScreen> createState() => _SessionScreenState();
@@ -19,53 +29,13 @@ class _SessionScreenState extends State<SessionScreen> {
   SessionController? _c;
   Object? _error;
   bool _finished = false;
+  Speaker? _speaker;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _load());
   }
-
-  Future<void> _load() async {
-    final app = AppScope.read(context);
-    try {
-      final c = await SessionController.build(
-        repo: app.content,
-        subject: widget.subject,
-        grade: app.active!.grade,
-        progress: app.progress!,
-        clock: app.clock,
-      );
-      if (!mounted) return;
-      setState(() => _c = c);
-    } on Object catch (e) {
-      if (mounted) setState(() => _error = e);
-    }
-  }
-
-  void _say(String text) {
-    final app = AppScope.read(context);
-    if (app.settings.soundOn) app.speaker.speak(text);
-  }
-
-  Future<void> _finish() async {
-    final app = AppScope.read(context);
-    final c = _c!;
-    c.finish();
-    await app.saveProgress();
-    if (mounted) setState(() => _finished = true);
-  }
-
-  Future<void> _advance(VoidCallback step) async {
-    step();
-    if (_c!.isDone) {
-      await _finish();
-    } else {
-      setState(() {});
-    }
-  }
-
-  Speaker? _speaker;
 
   @override
   void didChangeDependencies() {
@@ -79,20 +49,107 @@ class _SessionScreenState extends State<SessionScreen> {
     super.dispose();
   }
 
+  Future<void> _load() async {
+    final app = AppScope.read(context);
+    try {
+      final c = await SessionController.build(
+        repo: app.content,
+        subject: widget.subject,
+        grade: app.active!.grade,
+        progress: app.progress!,
+        clock: app.clock,
+        focusOutcome: widget.focusOutcome,
+        reviewOnly: widget.reviewOnly,
+      );
+      if (mounted) setState(() => _c = c);
+    } on Object catch (e) {
+      if (mounted) setState(() => _error = e);
+    }
+  }
+
+  void _say(String text) {
+    final app = AppScope.read(context);
+    if (app.settings.soundOn) app.speaker.speak(text);
+  }
+
+  Future<void> _advance(VoidCallback step) async {
+    step();
+    if (_c!.isDone) {
+      _c!.finish();
+      await AppScope.read(context).saveProgress();
+      if (mounted) setState(() => _finished = true);
+      _say('Harika! Bugünlük bu kadar.');
+    } else {
+      setState(() {});
+    }
+  }
+
+  /// Oturum yarıda bırakılırsa çözülenler kaydedilir.
+  Future<void> _exit() async {
+    final c = _c;
+    if (c != null && !_finished && c.summary.answered > 0) {
+      c.finish();
+      await AppScope.read(context).saveProgress();
+    }
+    if (mounted) Navigator.of(context).pop();
+  }
+
+  Future<void> _confirmExit() async {
+    final c = _c;
+    if (c == null || _finished || c.steps.isEmpty) {
+      await _exit();
+      return;
+    }
+    final leave = await showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: Colors.white,
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Mascot(mood: MascotMood.think, size: 90),
+            const SizedBox(height: 8),
+            Text('Bırakmak istediğine emin misin?',
+                style: Theme.of(ctx).textTheme.titleLarge, textAlign: TextAlign.center),
+            const SizedBox(height: 6),
+            const Text('Şimdiye kadar çözdüklerin kaydedilecek.', textAlign: TextAlign.center),
+            const SizedBox(height: 20),
+            ChunkyButton(
+              key: const Key('keep-going'),
+              label: 'Devam et',
+              onPressed: () => Navigator.pop(ctx, false),
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              key: const Key('leave'),
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Çık', style: TextStyle(fontSize: 18, color: Kumbara.inkSoft)),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (leave == true) await _exit();
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = _c;
     Widget body;
     if (_error != null) {
-      body = _Message('😕',
-          'İçerik açılamadı. Lütfen uygulamayı yeniden başlatın.\n($_error)');
+      body = _Message(MascotMood.think, 'İçerik açılamadı. Lütfen uygulamayı yeniden başlat.\n($_error)');
     } else if (c == null) {
       body = const Center(child: CircularProgressIndicator());
     } else if (c.steps.isEmpty) {
-      body = const _Message('🧰',
-          'Bu ders için yeni içerik hazırlanıyor. Şimdilik başka bir derse ne dersin?');
+      body = _Message(
+        MascotMood.normal,
+        widget.reviewOnly
+            ? 'Şu an tekrar edecek bir şey yok. Yarın yine bak!'
+            : 'Bu ders için içerik hazırlanıyor. Şimdilik başka bir derse ne dersin?',
+      );
     } else if (_finished) {
-      body = _Summary(controller: c);
+      body = _Summary(controller: c, onDone: () => Navigator.of(context).pop());
     } else {
       final step = c.current;
       body = step.kind == StepKind.lesson
@@ -106,95 +163,80 @@ class _SessionScreenState extends State<SessionScreen> {
               key: ValueKey('Q${c.index}'),
               step: step,
               onSay: _say,
-              onAnswer: (i, elapsed, hint) =>
-                  c.answer(i, elapsed: elapsed, usedHint: hint),
+              onAnswer: (i, elapsed, hint) => c.answer(i, elapsed: elapsed, usedHint: hint),
               onNext: () => _advance(c.next),
             );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text('${widget.subject.icon} ${widget.subject.label}'),
-        leading: IconButton(
-          key: const Key('session-close'),
-          icon: const Icon(Icons.close_rounded, size: 32),
-          tooltip: 'Çık',
-          onPressed: () async {
-            if (c != null && !_finished && c.summary.answered > 0) {
-              c.finish();
-              await AppScope.read(context).saveProgress();
-            }
-            if (context.mounted) Navigator.of(context).pop();
-          },
-        ),
-        bottom: c == null || _finished
-            ? null
-            : PreferredSize(
-                preferredSize: const Size.fromHeight(10),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: LinearProgressIndicator(
-                        value: c.progressRatio, minHeight: 10),
+    final showBar = c != null && !_finished && c.steps.isNotEmpty;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _confirmExit();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          titleSpacing: 4,
+          title: Row(
+            children: [
+              IconButton(
+                key: const Key('session-close'),
+                icon: const Icon(Icons.close_rounded, size: 30, color: Kumbara.inkSoft),
+                tooltip: 'Çık',
+                onPressed: _confirmExit,
+              ),
+              if (showBar)
+                Expanded(
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween(end: c.progressRatio),
+                    duration: const Duration(milliseconds: 350),
+                    builder: (context, v, _) => ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: LinearProgressIndicator(
+                        value: v,
+                        minHeight: 16,
+                        backgroundColor: Kumbara.line,
+                        color: Kumbara.good,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              const SizedBox(width: 16),
+            ],
+          ),
+        ),
+        body: SafeArea(child: body),
       ),
-      body: SafeArea(child: body),
     );
   }
 }
 
 class _Message extends StatelessWidget {
-  const _Message(this.icon, this.text);
-  final String icon;
+  const _Message(this.mood, this.text);
+  final MascotMood mood;
   final String text;
 
   @override
   Widget build(BuildContext context) => Center(
         child: Padding(
-          padding: const EdgeInsets.all(32),
+          padding: const EdgeInsets.all(28),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(icon, style: const TextStyle(fontSize: 72)),
+              Mascot(mood: mood, size: 140),
               const SizedBox(height: 16),
-              Text(text,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(text, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 24),
-              FilledButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Geri dön'),
-              ),
+              ChunkyButton(label: 'Geri dön', onPressed: () => Navigator.of(context).pop()),
             ],
           ),
         ),
       );
 }
 
-class _ListenButton extends StatelessWidget {
-  const _ListenButton({required this.onTap});
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) => IconButton.filledTonal(
-        key: const Key('listen'),
-        iconSize: 32,
-        tooltip: 'Dinle',
-        onPressed: onTap,
-        icon: const Icon(Icons.hearing_rounded),
-      );
-}
-
 class _LessonView extends StatefulWidget {
-  const _LessonView(
-      {super.key,
-      required this.lesson,
-      required this.onSay,
-      required this.onDone});
+  const _LessonView({super.key, required this.lesson, required this.onSay, required this.onDone});
   final Lesson lesson;
   final void Function(String) onSay;
   final VoidCallback onDone;
@@ -209,8 +251,7 @@ class _LessonViewState extends State<_LessonView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => widget.onSay(widget.lesson.pages.first.spoken));
+    WidgetsBinding.instance.addPostFrameCallback((_) => widget.onSay(widget.lesson.pages.first.spoken));
   }
 
   void _go(int p) {
@@ -222,58 +263,67 @@ class _LessonViewState extends State<_LessonView> {
   Widget build(BuildContext context) {
     final page = widget.lesson.pages[_page];
     final last = _page == widget.lesson.pages.length - 1;
-    final t = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              Expanded(
-                  child:
-                      Text('📚 ${widget.lesson.title}', style: t.titleLarge)),
-              _ListenButton(onTap: () => widget.onSay(page.spoken)),
-            ],
-          ),
+          Text('YENİ KONU · ${widget.lesson.title}',
+              style: const TextStyle(color: Kumbara.primaryDark, fontWeight: FontWeight.w900, fontSize: 15)),
           const SizedBox(height: 12),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (page.visual != null) VisualView(page.visual!),
-                  const SizedBox(height: 12),
-                  Text(page.text,
-                      style: t.bodyLarge, textAlign: TextAlign.center),
+                  MascotSays(text: page.text, onTap: () => widget.onSay(page.spoken)),
+                  if (page.visual != null) ...[
+                    const SizedBox(height: 8),
+                    VisualView(page.visual!),
+                  ],
                 ],
               ),
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (_page > 0)
-                Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(64, 64)),
-                    onPressed: () => _go(_page - 1),
-                    child: const Text('Geri', style: TextStyle(fontSize: 20)),
+              for (var i = 0; i < widget.lesson.pages.length; i++)
+                Container(
+                  margin: const EdgeInsets.all(4),
+                  width: i == _page ? 22 : 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: i == _page ? Kumbara.primary : Kumbara.line,
+                    borderRadius: BorderRadius.circular(5),
                   ),
                 ),
-              if (_page > 0) const SizedBox(width: 12),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              if (_page > 0) ...[
+                SizedBox(
+                  width: 72,
+                  child: ChunkyButton(
+                    label: '←',
+                    color: Colors.white,
+                    shadow: Kumbara.line,
+                    textColor: Kumbara.ink,
+                    onPressed: () => _go(_page - 1),
+                  ),
+                ),
+                const SizedBox(width: 12),
+              ],
               Expanded(
-                flex: 2,
-                child: FilledButton(
+                child: ChunkyButton(
                   key: const Key('lesson-next'),
+                  label: last ? 'Hadi deneyelim' : 'Devam',
                   onPressed: last ? widget.onDone : () => _go(_page + 1),
-                  child: Text(last ? 'Hadi deneyelim!' : 'İleri'),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text('${_page + 1} / ${widget.lesson.pages.length}',
-              textAlign: TextAlign.center),
         ],
       ),
     );
@@ -291,8 +341,7 @@ class _QuestionView extends StatefulWidget {
 
   final SessionStep step;
   final void Function(String) onSay;
-  final AnswerResult Function(int index, Duration elapsed, bool usedHint)
-      onAnswer;
+  final AnswerResult Function(int index, Duration elapsed, bool usedHint) onAnswer;
   final VoidCallback onNext;
 
   @override
@@ -301,7 +350,7 @@ class _QuestionView extends StatefulWidget {
 
 class _QuestionViewState extends State<_QuestionView> {
   final _watch = Stopwatch()..start();
-  int? _chosen;
+  int? _selected;
   AnswerResult? _result;
   bool _hint = false;
 
@@ -313,169 +362,227 @@ class _QuestionViewState extends State<_QuestionView> {
     WidgetsBinding.instance.addPostFrameCallback((_) => widget.onSay(q.spoken));
   }
 
-  void _choose(int i) {
-    if (_result != null) return;
+  void _check() {
+    final i = _selected;
+    if (i == null || _result != null) return;
     _watch.stop();
     final r = widget.onAnswer(i, _watch.elapsed, _hint);
-    setState(() {
-      _chosen = i;
-      _result = r;
-    });
-    widget.onSay(r.correct
-        ? 'Aferin!'
-        : 'Bir daha bakalım. Doğru cevap ${q.answer}. ${q.explanation ?? ''}');
+    setState(() => _result = r);
+    widget.onSay(r.correct ? 'Harika!' : 'Doğru cevap: ${q.answer}. ${q.explanation ?? ''}');
   }
 
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
     final r = _result;
-    final phaseLabel = switch (widget.step.phase) {
-      StepPhase.warmup => 'Isınma',
-      StepPhase.practice => 'Yeni konu',
-      StepPhase.review => 'Tekrar',
-      StepPhase.retry => 'Bir kez daha',
-      StepPhase.newTopic => 'Yeni konu',
+    final label = switch (widget.step.phase) {
+      StepPhase.warmup => 'ISINMA',
+      StepPhase.practice || StepPhase.newTopic => 'YENİ KONU',
+      StepPhase.review => 'TEKRAR',
+      StepPhase.retry => 'BİR KEZ DAHA',
     };
-    return Padding(
-      padding: const EdgeInsets.all(20),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Text(label,
+                        style: const TextStyle(color: Kumbara.primaryDark, fontWeight: FontWeight.w900, fontSize: 15)),
+                    const Spacer(),
+                    if (q.hint != null && r == null)
+                      TextButton.icon(
+                        key: const Key('hint'),
+                        onPressed: _hint
+                            ? null
+                            : () {
+                                setState(() => _hint = true);
+                                widget.onSay(q.hint!);
+                              },
+                        icon: const Text('💡', style: TextStyle(fontSize: 20)),
+                        label: const Text('İpucu'),
+                      ),
+                    IconButton.filledTonal(
+                      key: const Key('listen'),
+                      tooltip: 'Dinle',
+                      onPressed: () => widget.onSay(q.spoken),
+                      icon: const Icon(Icons.volume_up_rounded),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(q.prompt, style: t.headlineMedium),
+                if (_hint && r == null) ...[
+                  const SizedBox(height: 8),
+                  Text('💡 ${q.hint}', style: t.bodyLarge?.copyWith(color: Kumbara.inkSoft)),
+                ],
+                if (q.visual != null) ...[
+                  const SizedBox(height: 12),
+                  VisualView(q.visual!),
+                ],
+                const SizedBox(height: 16),
+                for (var i = 0; i < q.options.length; i++)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _OptionCard(
+                      key: Key('option-$i'),
+                      label: q.options[i],
+                      state: r == null
+                          ? (i == _selected ? _OptState.selected : _OptState.idle)
+                          : i == q.answerIndex
+                              ? _OptState.right
+                              : i == _selected
+                                  ? _OptState.chosenWrong
+                                  : _OptState.dim,
+                      onTap: r == null ? () => setState(() => _selected = i) : null,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        _FeedbackBar(
+          result: r,
+          answer: q.answer,
+          explanation: q.explanation,
+          canCheck: _selected != null,
+          onCheck: _check,
+          onNext: widget.onNext,
+        ),
+      ],
+    );
+  }
+}
+
+/// Alt bant: KONTROL ET; cevaptan sonra yeşil/mavi geri bildirim + DEVAM.
+class _FeedbackBar extends StatelessWidget {
+  const _FeedbackBar({
+    required this.result,
+    required this.answer,
+    required this.explanation,
+    required this.canCheck,
+    required this.onCheck,
+    required this.onNext,
+  });
+
+  final AnswerResult? result;
+  final String answer;
+  final String? explanation;
+  final bool canCheck;
+  final VoidCallback onCheck;
+  final VoidCallback onNext;
+
+  @override
+  Widget build(BuildContext context) {
+    final r = result;
+    if (r == null) {
+      return Container(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+        decoration: const BoxDecoration(border: Border(top: BorderSide(color: Kumbara.line, width: 2))),
+        child: ChunkyButton(
+          key: const Key('check'),
+          label: 'Kontrol et',
+          color: Kumbara.good,
+          shadow: Kumbara.goodDark,
+          onPressed: canCheck ? onCheck : null,
+        ),
+      );
+    }
+    final ok = r.correct;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      color: ok ? Kumbara.goodBg : Kumbara.tryAgainBg,
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
-              Chip(label: Text(phaseLabel)),
-              const Spacer(),
-              if (q.hint != null && r == null)
-                TextButton.icon(
-                  key: const Key('hint'),
-                  onPressed: _hint
-                      ? null
-                      : () {
-                          setState(() => _hint = true);
-                          widget.onSay(q.hint!);
-                        },
-                  icon: const Text('💡', style: TextStyle(fontSize: 22)),
-                  label: const Text('İpucu'),
+              Mascot(mood: ok ? MascotMood.celebrate : MascotMood.think, size: 56),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      ok ? 'Harika!' : 'Doğru cevap: $answer',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                        color: ok ? Kumbara.goodDark : Kumbara.tryAgainDark,
+                      ),
+                    ),
+                    if (!ok && explanation != null)
+                      Text(explanation!, style: const TextStyle(fontSize: 16, color: Kumbara.tryAgainDark)),
+                  ],
                 ),
-              _ListenButton(onTap: () => widget.onSay(q.spoken)),
+              ),
             ],
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 8),
-                  if (q.visual != null) VisualView(q.visual!),
-                  const SizedBox(height: 8),
-                  Text(q.prompt,
-                      style: t.headlineMedium, textAlign: TextAlign.center),
-                  if (_hint && r == null) ...[
-                    const SizedBox(height: 8),
-                    Text('💡 ${q.hint}',
-                        style: t.bodyLarge, textAlign: TextAlign.center),
-                  ],
-                  const SizedBox(height: 20),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [
-                      for (var i = 0; i < q.options.length; i++)
-                        _OptionButton(
-                          key: Key('option-$i'),
-                          label: q.options[i],
-                          state: r == null
-                              ? _OptState.idle
-                              : i == q.answerIndex
-                                  ? _OptState.right
-                                  : i == _chosen
-                                      ? _OptState.chosenWrong
-                                      : _OptState.dim,
-                          onTap: () => _choose(i),
-                        ),
-                    ],
-                  ),
-                  if (r != null) ...[
-                    const SizedBox(height: 20),
-                    Text(
-                      r.correct
-                          ? '🎉 Aferin!'
-                          : '🤔 Bir daha bakalım: doğru cevap ${q.answer}.',
-                      style: t.titleLarge?.copyWith(
-                          color: r.correct ? Kumbara.good : Kumbara.tryAgain),
-                      textAlign: TextAlign.center,
-                    ),
-                    if (!r.correct && q.explanation != null) ...[
-                      const SizedBox(height: 8),
-                      Text(q.explanation!,
-                          style: t.bodyLarge, textAlign: TextAlign.center),
-                    ],
-                  ],
-                ],
-              ),
-            ),
+          const SizedBox(height: 12),
+          ChunkyButton(
+            key: const Key('next'),
+            label: 'Devam',
+            color: ok ? Kumbara.good : Kumbara.tryAgain,
+            shadow: ok ? Kumbara.goodDark : Kumbara.tryAgainDark,
+            onPressed: onNext,
           ),
-          if (r != null)
-            FilledButton(
-              key: const Key('next'),
-              onPressed: widget.onNext,
-              child: const Text('Devam'),
-            ),
         ],
       ),
     );
   }
 }
 
-enum _OptState { idle, right, chosenWrong, dim }
+enum _OptState { idle, selected, right, chosenWrong, dim }
 
-class _OptionButton extends StatelessWidget {
-  const _OptionButton(
-      {super.key,
-      required this.label,
-      required this.state,
-      required this.onTap});
+class _OptionCard extends StatelessWidget {
+  const _OptionCard({super.key, required this.label, required this.state, required this.onTap});
   final String label;
   final _OptState state;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final (bg, border) = switch (state) {
-      _OptState.idle => (Colors.white, Kumbara.primary),
-      _OptState.right => (Kumbara.good.withValues(alpha: 0.18), Kumbara.good),
-      _OptState.chosenWrong => (
-          Kumbara.tryAgain.withValues(alpha: 0.12),
-          Kumbara.tryAgain
-        ),
-      _OptState.dim => (Colors.white, Colors.black12),
+    final (Color bg, Color border) = switch (state) {
+      _OptState.idle => (Colors.white, Kumbara.line),
+      _OptState.selected => (const Color(0xFFFFEFD9), Kumbara.primary),
+      _OptState.right => (Kumbara.goodBg, Kumbara.good),
+      _OptState.chosenWrong => (Kumbara.tryAgainBg, Kumbara.tryAgain),
+      _OptState.dim => (Colors.white, Kumbara.line),
     };
-    final isEmoji = label.runes.length <= 2 &&
-        !RegExp(r'[0-9A-Za-zÇĞİÖŞÜçğıöşü]').hasMatch(label);
-    return SizedBox(
-      width: label.length > 12 ? 300 : 140,
-      child: Material(
-        color: bg,
-        borderRadius: BorderRadius.circular(20),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: state == _OptState.idle ? onTap : null,
-          child: Container(
-            constraints: const BoxConstraints(minHeight: 72),
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: border, width: 3),
-            ),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: isEmoji ? 40 : 26,
-                  fontWeight: FontWeight.w800,
-                  color: Kumbara.ink),
+    final emojiOnly = label.runes.length <= 3 && !RegExp(r'[0-9A-Za-zÇĞİÖŞÜçğıöşü]').hasMatch(label);
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 120),
+        constraints: const BoxConstraints(minHeight: 64),
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(16),
+          border: Border(
+            top: BorderSide(color: border, width: 2),
+            left: BorderSide(color: border, width: 2),
+            right: BorderSide(color: border, width: 2),
+            bottom: BorderSide(color: border, width: 5),
+          ),
+        ),
+        child: Opacity(
+          opacity: state == _OptState.dim ? 0.5 : 1,
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: emojiOnly ? 36 : 22,
+              fontWeight: FontWeight.w800,
+              color: Kumbara.ink,
             ),
           ),
         ),
@@ -485,39 +592,63 @@ class _OptionButton extends StatelessWidget {
 }
 
 class _Summary extends StatelessWidget {
-  const _Summary({required this.controller});
+  const _Summary({required this.controller, required this.onDone});
   final SessionController controller;
+  final VoidCallback onDone;
 
   @override
   Widget build(BuildContext context) {
     final s = controller.summary;
     final t = Theme.of(context).textTheme;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(28),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('🐷🪙', style: TextStyle(fontSize: 80)),
-            const SizedBox(height: 12),
-            Text('Bugünlük bu kadar!', style: t.headlineMedium),
-            const SizedBox(height: 12),
-            Text('${s.answered} sorudan ${s.correct} tanesini doğru yaptın.',
-                style: t.bodyLarge, textAlign: TextAlign.center),
-            if (s.newOutcomes.isNotEmpty)
-              Text('Kumbarana ${s.newOutcomes.length} yeni konu attın.',
-                  style: t.bodyLarge, textAlign: TextAlign.center),
-            if (s.retried > 0)
-              Text('Zorlandığın ${s.retried} soruyu yakında yine soracağım.',
-                  style: t.bodyLarge, textAlign: TextAlign.center),
-            const SizedBox(height: 28),
-            FilledButton(
-              key: const Key('summary-done'),
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Ana sayfa'),
+    final pct = s.answered == 0 ? 0 : (100 * s.correct / s.answered).round();
+    Widget box(String title, String value, Color color) => Expanded(
+          child: Container(
+            margin: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(16),
             ),
-          ],
-        ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Text(trUpper(title),
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13)),
+                ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(3, 0, 3, 3),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(13)),
+                  child: Text(value,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 22)),
+                ),
+              ],
+            ),
+          ),
+        );
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          const Spacer(),
+          const Mascot(mood: MascotMood.celebrate, size: 170),
+          const SizedBox(height: 12),
+          Text('Bugünlük bu kadar!', style: t.headlineMedium),
+          if (s.newOutcomes.isNotEmpty)
+            Text('Kumbarana yeni bir konu attın.', style: t.bodyLarge, textAlign: TextAlign.center),
+          if (s.retried > 0)
+            Text('Zorlandığın soruları yakında yine soracağım.',
+                style: t.bodyLarge?.copyWith(color: Kumbara.inkSoft), textAlign: TextAlign.center),
+          const SizedBox(height: 20),
+          Row(children: [
+            box('Fındık', '+${s.nutsEarned} 🌰', Kumbara.nut),
+            box('Doğruluk', '%$pct', Kumbara.good),
+          ]),
+          const Spacer(),
+          ChunkyButton(key: const Key('summary-done'), label: 'Devam', onPressed: onDone),
+        ],
       ),
     );
   }

@@ -7,9 +7,9 @@ import 'app/app_state.dart';
 import 'app/speaker.dart';
 import 'data/content_repository.dart';
 import 'data/progress_store.dart';
-import 'ui/screens/home_screen.dart';
 import 'ui/screens/onboarding_screen.dart';
 import 'ui/screens/profile_picker_screen.dart';
+import 'ui/screens/shell_screen.dart';
 import 'ui/theme.dart';
 
 Future<void> main() async {
@@ -66,6 +66,6 @@ class _Root extends StatelessWidget {
     }
     if (app.profiles.isEmpty) return const OnboardingScreen();
     if (app.active == null) return const ProfilePickerScreen();
-    return const HomeScreen();
+    return const ShellScreen();
   }
 }

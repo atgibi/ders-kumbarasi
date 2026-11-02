@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import '../widgets/mascot.dart';
 import 'parent_gate.dart';
 import 'parent_screen.dart';
 

@@ -15,6 +15,19 @@ class ContentRepository {
   final Map<String, Map<String, OutcomeContent>> _content = {};
 
   static const outcomesAsset = 'assets/curriculum/tymm_ciktilar.json';
+  static const unitsAsset = 'assets/curriculum/uniteler.json';
+
+  Map<String, Object?>? _units;
+
+  /// Ünite/tema adı (Matematik, Hayat Bilgisi, Fen, Sosyal). Türkçe'de null.
+  Future<String?> unitName(Subject s, int grade, int unit) async {
+    _units ??= jsonDecode(await _load(unitsAsset)) as Map<String, Object?>;
+    final bySubject = _units![s.id];
+    if (bySubject is! Map) return null;
+    final byGrade = bySubject['$grade'];
+    if (byGrade is! Map) return null;
+    return byGrade['$unit'] as String?;
+  }
   static String contentAsset(Subject s, int grade) =>
       'assets/content/${s.id}_$grade.json';
 

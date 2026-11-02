@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260">
+  <!-- Fındık: Ders Kumbarası'nın özgün sincap maskotu -->
+  <!-- Kuyruk -->
+  <path d="M150 210 C 235 205, 245 120, 205 70 C 185 45, 150 45, 140 75 C 175 70, 195 100, 180 135 C 168 162, 140 170, 140 200 Z" fill="#C9772E"/>
+  <path d="M158 195 C 215 185, 222 125, 198 88 C 186 70, 166 66, 156 80 C 182 82, 196 108, 186 140 C 178 165, 158 172, 158 195 Z" fill="#E79A4F"/>
+  <!-- Gövde -->
+  <ellipse cx="108" cy="190" rx="52" ry="58" fill="#D9843A"/>
+  <ellipse cx="108" cy="200" rx="34" ry="42" fill="#F6DDB8"/>
+  <!-- Ayaklar -->
+  <ellipse cx="80" cy="244" rx="20" ry="10" fill="#B8692B"/>
+  <ellipse cx="136" cy="244" rx="20" ry="10" fill="#B8692B"/>
+  <!-- Kulaklar -->
+  <path d="M62 62 L 52 18 L 88 46 Z" fill="#D9843A"/>
+  <path d="M66 56 L 60 30 L 82 48 Z" fill="#F2B8A0"/>
+  <path d="M154 62 L 164 18 L 128 46 Z" fill="#D9843A"/>
+  <path d="M150 56 L 156 30 L 134 48 Z" fill="#F2B8A0"/>
+  <!-- Baş -->
+  <ellipse cx="108" cy="92" rx="58" ry="52" fill="#D9843A"/>
+  <ellipse cx="108" cy="110" rx="38" ry="28" fill="#F6DDB8"/>
+  <!-- Gözler -->
+  <ellipse cx="86" cy="86" rx="12" ry="14" fill="#FFFFFF"/>
+  <ellipse cx="130" cy="86" rx="12" ry="14" fill="#FFFFFF"/>
+  <circle cx="88" cy="89" r="8" fill="#2B2A33"/>
+  <circle cx="128" cy="89" r="8" fill="#2B2A33"/>
+  <circle cx="91" cy="85" r="3" fill="#FFFFFF"/>
+  <circle cx="131" cy="85" r="3" fill="#FFFFFF"/>
+  <!-- Yanaklar -->
+  <ellipse cx="70" cy="108" rx="9" ry="6" fill="#F2A08A" opacity="0.8"/>
+  <ellipse cx="146" cy="108" rx="9" ry="6" fill="#F2A08A" opacity="0.8"/>
+  <!-- Burun ve ağız -->
+  <ellipse cx="108" cy="104" rx="7" ry="5" fill="#2B2A33"/>
+  <path d="M98 113 Q 108 124, 118 113" stroke="#2B2A33" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Dişler -->
+  <rect x="104" y="116" width="8" height="7" rx="2" fill="#FFFFFF" stroke="#2B2A33" stroke-width="1.5"/>
+  <!-- Fındık (elinde) -->
+  <ellipse cx="108" cy="168" rx="17" ry="15" fill="#8A5326"/>
+  <path d="M92 162 Q 108 145, 124 162 Q 108 156, 92 162 Z" fill="#5E3717"/>
+  <ellipse cx="102" cy="170" rx="4" ry="6" fill="#A86A36" opacity="0.8"/>
+  <!-- Patiler -->
+  <ellipse cx="88" cy="172" rx="10" ry="8" fill="#B8692B"/>
+  <ellipse cx="128" cy="172" rx="10" ry="8" fill="#B8692B"/>
+</svg>

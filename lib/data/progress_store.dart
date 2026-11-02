@@ -45,6 +45,7 @@ class ChildProgress {
     Set<String>? startedOutcomes,
     Map<String, int>? dailyMinutes,
     this.streakDays = 0,
+    this.nuts = 0,
     this.lastSessionDay,
     this.restDaysUsedThisWeek = 0,
     this.restWeek,
@@ -61,6 +62,9 @@ class ChildProgress {
   final Map<String, int> dailyMinutes;
 
   int streakDays;
+
+  /// Toplanan fındık (doğru cevap ve tamamlanan oturum ödülü).
+  int nuts;
   String? lastSessionDay;
   int restDaysUsedThisWeek;
   String? restWeek;
@@ -71,6 +75,7 @@ class ChildProgress {
         'started': startedOutcomes.toList()..sort(),
         'minutes': dailyMinutes,
         'streak': streakDays,
+        'nuts': nuts,
         'last': lastSessionDay,
         'rest': restDaysUsedThisWeek,
         'restWeek': restWeek,
@@ -89,6 +94,7 @@ class ChildProgress {
       dailyMinutes: (j['minutes'] as Map<String, Object?>? ?? const {})
           .map((k, v) => MapEntry(k, (v! as num).toInt())),
       streakDays: (j['streak'] as num?)?.toInt() ?? 0,
+      nuts: (j['nuts'] as num?)?.toInt() ?? 0,
       lastSessionDay: j['last'] as String?,
       restDaysUsedThisWeek: (j['rest'] as num?)?.toInt() ?? 0,
       restWeek: j['restWeek'] as String?,
