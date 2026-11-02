@@ -297,10 +297,15 @@ Question _ordinal(Map<String, Object?> p, Random r) {
   );
 }
 
-
 const _pairs = [
-  ('🍎', 'elma'), ('🍐', 'armut'), ('⭐', 'yıldız'), ('🎈', 'balon'),
-  ('🐟', 'balık'), ('🌼', 'çiçek'), ('🚗', 'araba'), ('⚽', 'top'),
+  ('🍎', 'elma'),
+  ('🍐', 'armut'),
+  ('⭐', 'yıldız'),
+  ('🎈', 'balon'),
+  ('🐟', 'balık'),
+  ('🌼', 'çiçek'),
+  ('🚗', 'araba'),
+  ('⚽', 'top'),
 ];
 
 /// İki grubu "daha çok / daha az / eşit" diye karşılaştırma (MAT.1.1.4).
@@ -350,12 +355,24 @@ String _plural(String word) {
 /// Günlük yaşam toplama/çıkarma problemi (MAT.1.2.1): hangi işlem?
 /// İyelik ekleri elle yazılmıştır (armut -> armudu, balık -> balığı).
 const _people = [
-  ('Ali', "Ali'nin"), ('Elif', "Elif'in"), ('Can', "Can'ın"), ('Zeynep', "Zeynep'in"),
-  ('Mert', "Mert'in"), ('Ayşe', "Ayşe'nin"), ('Emir', "Emir'in"), ('Defne', "Defne'nin"),
+  ('Ali', "Ali'nin"),
+  ('Elif', "Elif'in"),
+  ('Can', "Can'ın"),
+  ('Zeynep', "Zeynep'in"),
+  ('Mert', "Mert'in"),
+  ('Ayşe', "Ayşe'nin"),
+  ('Emir', "Emir'in"),
+  ('Defne', "Defne'nin"),
 ];
 const _things = [
-  ('elma', 'elması'), ('armut', 'armudu'), ('balon', 'balonu'), ('balık', 'balığı'),
-  ('çiçek', 'çiçeği'), ('araba', 'arabası'), ('top', 'topu'), ('kalem', 'kalemi'),
+  ('elma', 'elması'),
+  ('armut', 'armudu'),
+  ('balon', 'balonu'),
+  ('balık', 'balığı'),
+  ('çiçek', 'çiçeği'),
+  ('araba', 'arabası'),
+  ('top', 'topu'),
+  ('kalem', 'kalemi'),
 ];
 
 Question _wordAddSub(Map<String, Object?> p, Random r) {
@@ -402,7 +419,8 @@ Question _equalSides(Map<String, Object?> p, Random r) {
   final o = numericOptions(d, r, spread: 2, preferred: [s, d + 1]);
   return Question(
     prompt: '$a + $b = ☐ + $c',
-    say: 'Eşittir işaretinin iki yanı aynı olmalı. $a artı $b, kutu artı $c ediyor. Kutuya hangi sayı gelir?',
+    say:
+        'Eşittir işaretinin iki yanı aynı olmalı. $a artı $b, kutu artı $c ediyor. Kutuya hangi sayı gelir?',
     options: o.options,
     answerIndex: o.answerIndex,
     explanation: 'Sol taraf $s eder. $s olması için $d + $c gerekir.',
@@ -439,7 +457,8 @@ Question _countBack(Map<String, Object?> p, Random r) {
     say: 'Geriye doğru sayıyoruz: ${seq.join(', ')}. Sırada hangi sayı var?',
     options: o.options,
     answerIndex: o.answerIndex,
-    explanation: 'Geriye sayarken her seferinde 1 azalır: ${seq.last}den sonra $ans gelir.',
+    explanation:
+        'Geriye sayarken her seferinde 1 azalır: ${seq.last}den sonra $ans gelir.',
   );
 }
 

@@ -164,7 +164,9 @@ void main() {
       final isAdd = q.prompt.contains('daha alıyor');
       expect(q.answer.contains(isAdd ? '+' : '−'), isTrue, reason: q.prompt);
       final m = RegExp(r'^(\d+) [+−] (\d+) = (\d+)$').firstMatch(q.answer)!;
-      final a = int.parse(m.group(1)!), b = int.parse(m.group(2)!), c = int.parse(m.group(3)!);
+      final a = int.parse(m.group(1)!),
+          b = int.parse(m.group(2)!),
+          c = int.parse(m.group(3)!);
       expect(c, isAdd ? a + b : a - b);
       expect(c, inInclusiveRange(0, 10));
     }
@@ -180,7 +182,9 @@ void main() {
     for (var seed = 0; seed < 300; seed++) {
       final q = generate(card, Random(seed));
       final m = RegExp(r'^(\d+) \+ (\d+) = ☐ \+ (\d+)$').firstMatch(q.prompt)!;
-      final a = int.parse(m.group(1)!), b = int.parse(m.group(2)!), c = int.parse(m.group(3)!);
+      final a = int.parse(m.group(1)!),
+          b = int.parse(m.group(2)!),
+          c = int.parse(m.group(3)!);
       expect(int.parse(q.answer) + c, a + b, reason: q.prompt);
     }
   });

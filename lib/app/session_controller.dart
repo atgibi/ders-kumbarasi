@@ -183,7 +183,8 @@ class SessionController {
     if (!correct && !_retried.contains(card.id)) {
       _retried.add(card.id);
       summary.retried++;
-      steps.add(SessionStep.question(card, generate(card, random), StepPhase.retry));
+      steps.add(
+          SessionStep.question(card, generate(card, random), StepPhase.retry));
     }
     return AnswerResult(correct: correct, outcome: outcome);
   }

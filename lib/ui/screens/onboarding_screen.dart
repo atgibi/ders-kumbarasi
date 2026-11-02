@@ -37,9 +37,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ]
                   : [
-                      const Center(child: Text('🐷🪙', style: TextStyle(fontSize: 72))),
+                      const Center(
+                          child: Text('🐷🪙', style: TextStyle(fontSize: 72))),
                       const SizedBox(height: 8),
-                      Center(child: Text('Ders Kumbarası', style: t.headlineMedium)),
+                      Center(
+                          child:
+                              Text('Ders Kumbarası', style: t.headlineMedium)),
                       const SizedBox(height: 16),
                       Text(
                         'Her gün 10–15 dakika: kısa bir konu anlatımı, birkaç soru ve '
@@ -48,15 +51,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         style: t.bodyLarge,
                       ),
                       const SizedBox(height: 20),
-                      const _Fact('📱', 'Tüm veriler yalnızca bu cihazda tutulur. Hesap, e-posta veya telefon numarası istenmez.'),
-                      const _Fact('🚫', 'Reklam yok, uygulama içi satın alma yok, çocuklar arası mesajlaşma yok.'),
-                      const _Fact('⏱️', 'Günlük süre sınırı ve sessiz saatler veli panelinden ayarlanır (varsayılan 20 dakika, 21:00–07:00 kapalı).'),
-                      const _Fact('🧑‍🧒', 'Veli paneline yalnızca yetişkinlerin çözebileceği bir soruyla girilir.'),
+                      const _Fact('📱',
+                          'Tüm veriler yalnızca bu cihazda tutulur. Hesap, e-posta veya telefon numarası istenmez.'),
+                      const _Fact('🚫',
+                          'Reklam yok, uygulama içi satın alma yok, çocuklar arası mesajlaşma yok.'),
+                      const _Fact('⏱️',
+                          'Günlük süre sınırı ve sessiz saatler veli panelinden ayarlanır (varsayılan 20 dakika, 21:00–07:00 kapalı).'),
+                      const _Fact('🧑‍🧒',
+                          'Veli paneline yalnızca yetişkinlerin çözebileceği bir soruyla girilir.'),
                       const SizedBox(height: 12),
                       CheckboxListTile(
                         key: const Key('accept'),
                         value: _accepted,
-                        onChanged: (v) => setState(() => _accepted = v ?? false),
+                        onChanged: (v) =>
+                            setState(() => _accepted = v ?? false),
                         controlAffinity: ListTileControlAffinity.leading,
                         title: const Text(
                             'Bu cihazı kullanacak çocuğun velisiyim; yukarıdaki bilgileri okudum.'),
@@ -64,7 +72,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       const SizedBox(height: 12),
                       FilledButton(
                         key: const Key('onboarding-next'),
-                        onPressed: _accepted ? () => setState(() => _showForm = true) : null,
+                        onPressed: _accepted
+                            ? () => setState(() => _showForm = true)
+                            : null,
                         child: const Text('Devam'),
                       ),
                     ],
@@ -89,7 +99,9 @@ class _Fact extends StatelessWidget {
           children: [
             Text(icon, style: const TextStyle(fontSize: 24)),
             const SizedBox(width: 12),
-            Expanded(child: Text(text, style: Theme.of(context).textTheme.bodyMedium)),
+            Expanded(
+                child:
+                    Text(text, style: Theme.of(context).textTheme.bodyMedium)),
           ],
         ),
       );

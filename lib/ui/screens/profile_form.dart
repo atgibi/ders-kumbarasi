@@ -88,7 +88,9 @@ class _ProfileFormState extends State<ProfileForm> {
                   height: 64,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: a == _avatar ? Kumbara.primary.withValues(alpha: 0.3) : Colors.white,
+                    color: a == _avatar
+                        ? Kumbara.primary.withValues(alpha: 0.3)
+                        : Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: a == _avatar ? Kumbara.primary : Colors.black12,

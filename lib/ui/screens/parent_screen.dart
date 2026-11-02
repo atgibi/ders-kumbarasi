@@ -37,7 +37,8 @@ class ParentScreen extends StatelessWidget {
               key: const Key('add-child'),
               icon: const Icon(Icons.add),
               label: const Text('Çocuk ekle'),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
+              onPressed: () =>
+                  Navigator.of(context).push(MaterialPageRoute<void>(
                 builder: (_) => Scaffold(
                   appBar: AppBar(title: const Text('Çocuk ekle')),
                   body: ListView(
@@ -66,7 +67,8 @@ class ParentScreen extends StatelessWidget {
             max: 60,
             divisions: 10,
             label: '${s.dailyLimitMinutes} dk',
-            onChanged: (v) => app.updateSettings(s.copyWith(dailyLimitMinutes: v.round())),
+            onChanged: (v) =>
+                app.updateSettings(s.copyWith(dailyLimitMinutes: v.round())),
           ),
           SwitchListTile(
             title: const Text('Sessiz saatler (21:00–07:00)'),
@@ -104,16 +106,22 @@ class ParentScreen extends StatelessWidget {
                 context: context,
                 builder: (ctx) => AlertDialog(
                   title: const Text('Tüm veriler silinsin mi?'),
-                  content: const Text('Bütün çocuk profilleri ve ilerleme kayıtları kalıcı olarak silinir.'),
+                  content: const Text(
+                      'Bütün çocuk profilleri ve ilerleme kayıtları kalıcı olarak silinir.'),
                   actions: [
-                    TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Vazgeç')),
-                    FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Sil')),
+                    TextButton(
+                        onPressed: () => Navigator.pop(ctx, false),
+                        child: const Text('Vazgeç')),
+                    FilledButton(
+                        onPressed: () => Navigator.pop(ctx, true),
+                        child: const Text('Sil')),
                   ],
                 ),
               );
               if (ok == true) {
                 await app.deleteAll();
-                if (context.mounted) Navigator.of(context).popUntil((r) => r.isFirst);
+                if (context.mounted)
+                  Navigator.of(context).popUntil((r) => r.isFirst);
               }
             },
           ),
@@ -160,7 +168,8 @@ class _ChildReportScreenState extends State<ChildReportScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final p = await AppScope.read(context).store.loadProgress(widget.profile.id);
+      final p =
+          await AppScope.read(context).store.loadProgress(widget.profile.id);
       if (mounted) setState(() => _progress = p);
     });
   }
@@ -180,14 +189,17 @@ class _ChildReportScreenState extends State<ChildReportScreen> {
                 await Navigator.of(context).push(MaterialPageRoute<void>(
                   builder: (ctx) => Scaffold(
                     appBar: AppBar(title: const Text('Profili düzenle')),
-                    body: ListView(padding: const EdgeInsets.all(16), children: [
+                    body:
+                        ListView(padding: const EdgeInsets.all(16), children: [
                       ProfileForm(
                         initialName: p.nickname,
                         initialGrade: p.grade,
                         initialAvatar: p.avatar,
                         onSubmit: (r) async {
                           await app.updateChild(p.copyWith(
-                              nickname: r.nickname, grade: r.grade, avatar: r.avatar));
+                              nickname: r.nickname,
+                              grade: r.grade,
+                              avatar: r.avatar));
                           if (ctx.mounted) Navigator.of(ctx).pop();
                         },
                       ),
@@ -200,10 +212,15 @@ class _ChildReportScreenState extends State<ChildReportScreen> {
                   context: context,
                   builder: (ctx) => AlertDialog(
                     title: Text('${p.nickname} silinsin mi?'),
-                    content: const Text('Profil ve tüm ilerleme kayıtları kalıcı olarak silinir.'),
+                    content: const Text(
+                        'Profil ve tüm ilerleme kayıtları kalıcı olarak silinir.'),
                     actions: [
-                      TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Vazgeç')),
-                      FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Sil')),
+                      TextButton(
+                          onPressed: () => Navigator.pop(ctx, false),
+                          child: const Text('Vazgeç')),
+                      FilledButton(
+                          onPressed: () => Navigator.pop(ctx, true),
+                          child: const Text('Sil')),
                     ],
                   ),
                 );
@@ -227,7 +244,8 @@ class _ChildReportScreenState extends State<ChildReportScreen> {
               children: [
                 _Stats(progress: progress),
                 const SizedBox(height: 8),
-                const Text('Her öğrenme çıktısı dört düzeyle gösterilir: başlanmadı, '
+                const Text(
+                    'Her öğrenme çıktısı dört düzeyle gösterilir: başlanmadı, '
                     'başlangıç, gelişiyor, yeterli. Bu bir not değildir.'),
                 const SizedBox(height: 8),
                 for (final s in Subject.forGrade(p.grade))
@@ -236,19 +254,24 @@ class _ChildReportScreenState extends State<ChildReportScreen> {
                     builder: (context, snap) {
                       final m = snap.data;
                       if (m == null) return const SizedBox(height: 48);
-                      final done = m.values.where((l) => l == MasteryLevel.sufficient).length;
+                      final done = m.values
+                          .where((l) => l == MasteryLevel.sufficient)
+                          .length;
                       return Card(
                         child: ExpansionTile(
-                          leading: Text(s.icon, style: const TextStyle(fontSize: 28)),
+                          leading: Text(s.icon,
+                              style: const TextStyle(fontSize: 28)),
                           title: Text(s.label),
                           subtitle: Text('$done / ${m.length} çıktı yeterli'),
                           children: [
                             for (final e in m.entries)
                               ListTile(
                                 dense: true,
-                                leading: Icon(Icons.circle, size: 14, color: _levelColor[e.value]),
+                                leading: Icon(Icons.circle,
+                                    size: 14, color: _levelColor[e.value]),
                                 title: Text(e.key.title),
-                                subtitle: Text('${e.key.code} · ${_levelText[e.value]}'),
+                                subtitle: Text(
+                                    '${e.key.code} · ${_levelText[e.value]}'),
                               ),
                           ],
                         ),
@@ -270,7 +293,8 @@ class _Stats extends StatelessWidget {
     final now = DateTime.now();
     var week = 0;
     for (var i = 0; i < 7; i++) {
-      week += progress.dailyMinutes[dayKey(now.subtract(Duration(days: i)))] ?? 0;
+      week +=
+          progress.dailyMinutes[dayKey(now.subtract(Duration(days: i)))] ?? 0;
     }
     final learned = progress.cards.values.where((c) => c.isMastered).length;
     Widget box(String v, String l) => Expanded(

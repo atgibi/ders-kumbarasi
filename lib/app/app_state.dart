@@ -99,7 +99,8 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<ChildProfile> addChild(String nickname, int grade, String avatar) async {
+  Future<ChildProfile> addChild(
+      String nickname, int grade, String avatar) async {
     final id = '${clock().microsecondsSinceEpoch}${Random().nextInt(1 << 16)}';
     final p = ChildProfile(
         id: id, nickname: nickname.trim(), grade: grade, avatar: avatar);
@@ -157,8 +158,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  int minutesToday() =>
-      progress?.dailyMinutes[dayKey(clock())] ?? 0;
+  int minutesToday() => progress?.dailyMinutes[dayKey(clock())] ?? 0;
 
   bool get overDailyLimit => minutesToday() >= settings.dailyLimitMinutes;
 
@@ -166,7 +166,8 @@ class AppState extends ChangeNotifier {
   Future<int> dueCount(Subject s) async {
     final a = active, p = progress;
     if (a == null || p == null) return 0;
-    final codes = (await content.outcomesFor(s, a.grade)).map((o) => o.code).toSet();
+    final codes =
+        (await content.outcomesFor(s, a.grade)).map((o) => o.code).toSet();
     final now = clock();
     return p.cards.values
         .where((c) => !c.isNew && c.isDue(now))

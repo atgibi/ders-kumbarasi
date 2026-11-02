@@ -30,8 +30,13 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             tooltip: app.settings.soundOn ? 'Sesi kapat' : 'Sesi aç',
-            icon: Icon(app.settings.soundOn ? Icons.volume_up_rounded : Icons.volume_off_rounded, size: 32),
-            onPressed: () => app.updateSettings(app.settings.copyWith(soundOn: !app.settings.soundOn)),
+            icon: Icon(
+                app.settings.soundOn
+                    ? Icons.volume_up_rounded
+                    : Icons.volume_off_rounded,
+                size: 32),
+            onPressed: () => app.updateSettings(
+                app.settings.copyWith(soundOn: !app.settings.soundOn)),
           ),
         ],
       ),
@@ -43,12 +48,16 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(child.avatar, style: const TextStyle(fontSize: 56)),
                 const SizedBox(width: 12),
-                Expanded(child: Text('Merhaba ${child.nickname}!', style: t.headlineMedium)),
+                Expanded(
+                    child: Text('Merhaba ${child.nickname}!',
+                        style: t.headlineMedium)),
               ],
             ),
             const SizedBox(height: 8),
             if (progress.streakDays > 0)
-              Text('🔥 ${progress.streakDays} gündür kumbarana bilgi atıyorsun!', style: t.bodyLarge),
+              Text(
+                  '🔥 ${progress.streakDays} gündür kumbarana bilgi atıyorsun!',
+                  style: t.bodyLarge),
             const SizedBox(height: 16),
             if (quiet || over)
               Card(
@@ -67,7 +76,8 @@ class HomeScreen extends StatelessWidget {
             else ...[
               Text('Bugün hangi dersi çalışalım?', style: t.titleLarge),
               const SizedBox(height: 12),
-              for (final s in Subject.forGrade(child.grade)) _SubjectTile(subject: s),
+              for (final s in Subject.forGrade(child.grade))
+                _SubjectTile(subject: s),
             ],
           ],
         ),
@@ -103,13 +113,16 @@ class _SubjectTile extends StatelessWidget {
                 Text(subject.icon, style: const TextStyle(fontSize: 40)),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: Text(subject.label, style: Theme.of(context).textTheme.titleLarge),
+                  child: Text(subject.label,
+                      style: Theme.of(context).textTheme.titleLarge),
                 ),
                 FutureBuilder<int>(
                   future: app.dueCount(subject),
                   builder: (context, snap) {
                     final n = snap.data ?? 0;
-                    if (n == 0) return const Icon(Icons.play_circle_fill_rounded, size: 40, color: Kumbara.primary);
+                    if (n == 0)
+                      return const Icon(Icons.play_circle_fill_rounded,
+                          size: 40, color: Kumbara.primary);
                     return Chip(
                       label: Text('$n tekrar'),
                       backgroundColor: Kumbara.primary.withValues(alpha: 0.25),

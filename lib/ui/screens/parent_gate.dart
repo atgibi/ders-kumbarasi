@@ -24,7 +24,18 @@ class _GateDialog extends StatefulWidget {
 }
 
 class _GateDialogState extends State<_GateDialog> {
-  static const _words = ['', '', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz'];
+  static const _words = [
+    '',
+    '',
+    'iki',
+    'üç',
+    'dört',
+    'beş',
+    'altı',
+    'yedi',
+    'sekiz',
+    'dokuz'
+  ];
   final _controller = TextEditingController();
   bool _wrong = false;
 
@@ -50,7 +61,8 @@ class _GateDialogState extends State<_GateDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Devam etmek için yazın: ${_words[widget.a]} kere ${_words[widget.b]} kaç eder?'),
+          Text(
+              'Devam etmek için yazın: ${_words[widget.a]} kere ${_words[widget.b]} kaç eder?'),
           const SizedBox(height: 12),
           TextField(
             key: const Key('gate-answer'),
@@ -66,8 +78,13 @@ class _GateDialogState extends State<_GateDialog> {
         ],
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Vazgeç')),
-        FilledButton(key: const Key('gate-ok'), onPressed: _submit, child: const Text('Tamam')),
+        TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Vazgeç')),
+        FilledButton(
+            key: const Key('gate-ok'),
+            onPressed: _submit,
+            child: const Text('Tamam')),
       ],
     );
   }

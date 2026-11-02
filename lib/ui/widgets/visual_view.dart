@@ -13,7 +13,8 @@ class VisualView extends StatelessWidget {
   int _i(String k) => (visual.params[k] as num?)?.toInt() ?? 0;
   String _s(String k, [String d = '⭐']) => visual.params[k] as String? ?? d;
 
-  Widget _emojis(String e, int n, {double size = 40, Set<int> crossed = const {}}) {
+  Widget _emojis(String e, int n,
+      {double size = 40, Set<int> crossed = const {}}) {
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 6,
@@ -42,22 +43,25 @@ class VisualView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final child = switch (visual.kind) {
-      'objects' => _emojis(_s('emoji'), _i('count'),
-          size: _i('count') > 12 ? 30 : 40),
+      'objects' =>
+        _emojis(_s('emoji'), _i('count'), size: _i('count') > 12 ? 30 : 40),
       'objects2' => Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Flexible(child: _emojis(_s('emoji'), _i('a'), size: 32)),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Text('+', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800)),
+              child: Text('+',
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800)),
             ),
             Flexible(child: _emojis(_s('emoji'), _i('b'), size: 32)),
           ],
         ),
       'objects_crossed' => _emojis(_s('emoji'), _i('total'),
-          size: 34,
-          crossed: {for (var i = _i('total') - _i('crossed'); i < _i('total'); i++) i}),
+            size: 34,
+            crossed: {
+              for (var i = _i('total') - _i('crossed'); i < _i('total'); i++) i
+            }),
       'groups' => Wrap(
           alignment: WrapAlignment.center,
           spacing: 12,
@@ -111,13 +115,14 @@ class VisualView extends StatelessWidget {
             ),
           ],
         ),
-      'number_highlight' => _NumberHighlight(
-          number: '${visual.params['number']}', pos: _i('pos')),
+      'number_highlight' =>
+        _NumberHighlight(number: '${visual.params['number']}', pos: _i('pos')),
       'row' => Wrap(
           alignment: WrapAlignment.center,
           spacing: 8,
           children: [
-            for (final e in (visual.params['items'] as List<Object?>? ?? const []))
+            for (final e
+                in (visual.params['items'] as List<Object?>? ?? const []))
               Text('$e', style: const TextStyle(fontSize: 42)),
           ],
         ),
@@ -133,7 +138,8 @@ class VisualView extends StatelessWidget {
           spacing: 16,
           runSpacing: 16,
           children: [
-            for (final sh in (visual.params['items'] as List<Object?>? ?? const []))
+            for (final sh
+                in (visual.params['items'] as List<Object?>? ?? const []))
               SizedBox(
                 width: 84,
                 height: 84,
@@ -146,14 +152,16 @@ class VisualView extends StatelessWidget {
           spacing: 12,
           runSpacing: 12,
           children: [
-            for (final v in (visual.params['values'] as List<Object?>? ?? const []))
+            for (final v
+                in (visual.params['values'] as List<Object?>? ?? const []))
               _Money((v! as num).toInt()),
           ],
         ),
       'pictograph' => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            for (final row in (visual.params['rows'] as List<Object?>? ?? const []))
+            for (final row
+                in (visual.params['rows'] as List<Object?>? ?? const []))
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Row(
@@ -161,12 +169,16 @@ class VisualView extends StatelessWidget {
                     SizedBox(
                       width: 110,
                       child: Text('${(row! as Map)['label']}',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w700)),
                     ),
                     Expanded(
                       child: Wrap(spacing: 4, children: [
-                        for (var i = 0; i < ((row as Map)['count'] as num).toInt(); i++)
-                          Text('${row['emoji']}', style: const TextStyle(fontSize: 28)),
+                        for (var i = 0;
+                            i < ((row as Map)['count'] as num).toInt();
+                            i++)
+                          Text('${row['emoji']}',
+                              style: const TextStyle(fontSize: 28)),
                       ]),
                     ),
                   ],
@@ -185,8 +197,11 @@ class VisualView extends StatelessWidget {
             aspectRatio: 1,
             child: _Grid(
               size: _i('size') == 0 ? 5 : _i('size'),
-              start: (visual.params['start'] as List<Object?>?)?.cast<num>() ?? const [0, 0],
-              target: (visual.params['target'] as List<Object?>?)?.cast<num>() ?? const [4, 4],
+              start: (visual.params['start'] as List<Object?>?)?.cast<num>() ??
+                  const [0, 0],
+              target:
+                  (visual.params['target'] as List<Object?>?)?.cast<num>() ??
+                      const [4, 4],
               startEmoji: _s('start_emoji', '🐱'),
               targetEmoji: _s('target_emoji', '🥣'),
             ),
@@ -202,7 +217,8 @@ class VisualView extends StatelessWidget {
     };
     return Semantics(
       label: 'resim',
-      child: Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: child),
+      child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8), child: child),
     );
   }
 }
@@ -229,13 +245,13 @@ class _NumberHighlight extends StatelessWidget {
               border: Border.all(color: Kumbara.ink.withValues(alpha: 0.2)),
             ),
             child: Text(number[i],
-                style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w800)),
+                style:
+                    const TextStyle(fontSize: 40, fontWeight: FontWeight.w800)),
           ),
       ],
     );
   }
 }
-
 
 class _ShapePainter extends CustomPainter {
   _ShapePainter(this.shape);
@@ -250,7 +266,8 @@ class _ShapePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final fill = Paint()..color = (_colors[shape] ?? Colors.grey).withValues(alpha: 0.85);
+    final fill = Paint()
+      ..color = (_colors[shape] ?? Colors.grey).withValues(alpha: 0.85);
     final stroke = Paint()
       ..color = Kumbara.ink
       ..style = PaintingStyle.stroke
@@ -306,9 +323,11 @@ class _Money extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: const Color(0xFFE0C068),
-          border: Border.all(color: Kumbara.ink.withValues(alpha: 0.5), width: 2),
+          border:
+              Border.all(color: Kumbara.ink.withValues(alpha: 0.5), width: 2),
         ),
-        child: const Text('1 TL', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+        child: const Text('1 TL',
+            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
       );
     }
     return Container(
@@ -320,7 +339,8 @@ class _Money extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Kumbara.ink.withValues(alpha: 0.5), width: 2),
       ),
-      child: Text('$value TL', style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 22)),
+      child: Text('$value TL',
+          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 22)),
     );
   }
 }
@@ -343,7 +363,8 @@ class _TallyPainter extends CustomPainter {
         final lx = x + inGroup * gap;
         canvas.drawLine(Offset(lx, top), Offset(lx, bottom), p);
       } else {
-        canvas.drawLine(Offset(x - 4, bottom - 6), Offset(x + 3 * gap + 4, top + 6), p);
+        canvas.drawLine(
+            Offset(x - 4, bottom - 6), Offset(x + 3 * gap + 4, top + 6), p);
         x += 40;
       }
     }

@@ -36,7 +36,9 @@ AppState makeState(MemoryStorage storage, {DateTime? at}) => AppState(
 Future<void> settle(WidgetTester t) => t.pumpAndSettle();
 
 void main() {
-  testWidgets('ilk kurulum -> profil -> 1. sınıf matematik oturumu sonuna kadar', (t) async {
+  testWidgets(
+      'ilk kurulum -> profil -> 1. sınıf matematik oturumu sonuna kadar',
+      (t) async {
     t.view.physicalSize = const Size(1080, 2200);
     t.view.devicePixelRatio = 2.6;
     addTearDown(t.view.reset);
@@ -68,21 +70,24 @@ void main() {
 
     expect(find.text('Merhaba Elif!'), findsOneWidget);
     expect(find.byKey(const Key('subject-matematik')), findsOneWidget);
-    expect(find.byKey(const Key('subject-fen_bilimleri')), findsNothing, reason: '1. sınıfta Fen yok');
+    expect(find.byKey(const Key('subject-fen_bilimleri')), findsNothing,
+        reason: '1. sınıfta Fen yok');
 
     await t.tap(find.byKey(const Key('subject-matematik')));
     await settle(t);
 
     // Konu anlatımı sayfaları
     var guard = 0;
-    while (find.byKey(const Key('lesson-next')).evaluate().isNotEmpty && guard++ < 10) {
+    while (find.byKey(const Key('lesson-next')).evaluate().isNotEmpty &&
+        guard++ < 10) {
       await t.tap(find.byKey(const Key('lesson-next')));
       await t.pumpAndSettle();
     }
 
     // Sorular: her zaman ilk seçeneği seç, devam et
     guard = 0;
-    while (find.byKey(const Key('option-0')).evaluate().isNotEmpty && guard++ < 30) {
+    while (find.byKey(const Key('option-0')).evaluate().isNotEmpty &&
+        guard++ < 30) {
       await t.ensureVisible(find.byKey(const Key('option-0')));
       await t.pumpAndSettle();
       await t.tap(find.byKey(const Key('option-0')));
@@ -97,7 +102,8 @@ void main() {
     expect(find.text('Merhaba Elif!'), findsOneWidget);
 
     // İlerleme cihaza kaydedildi
-    final saved = storage.files.keys.where((k) => k.startsWith('progress_')).toList();
+    final saved =
+        storage.files.keys.where((k) => k.startsWith('progress_')).toList();
     expect(saved, hasLength(1));
     expect(storage.files[saved.single], contains('MAT.1.1.1#'));
   });
@@ -105,7 +111,8 @@ void main() {
   testWidgets('veli kapısı yanlış cevapta açılmaz', (t) async {
     final storage = MemoryStorage();
     final store = ProgressStore(storage);
-    await store.saveProfiles(const [ChildProfile(id: 'a', nickname: 'Can', grade: 3, avatar: '🐶')]);
+    await store.saveProfiles(
+        const [ChildProfile(id: 'a', nickname: 'Can', grade: 3, avatar: '🐶')]);
     await store.saveSettings(const AppSettings(onboarded: true).toJson());
     final state = makeState(storage);
     await t.pumpWidget(DersKumbarasiApp(state: state));
@@ -123,7 +130,8 @@ void main() {
   testWidgets('sessiz saatlerde çalışma ekranı kapalı', (t) async {
     final storage = MemoryStorage();
     final store = ProgressStore(storage);
-    await store.saveProfiles(const [ChildProfile(id: 'a', nickname: 'Can', grade: 3, avatar: '🐶')]);
+    await store.saveProfiles(
+        const [ChildProfile(id: 'a', nickname: 'Can', grade: 3, avatar: '🐶')]);
     final state = makeState(storage, at: DateTime(2026, 11, 2, 22, 30));
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);

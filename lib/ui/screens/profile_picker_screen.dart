@@ -19,8 +19,8 @@ class ProfilePickerScreen extends StatelessWidget {
             key: const Key('parent-entry'),
             onPressed: () async {
               if (await showParentGate(context) && context.mounted) {
-                await Navigator.of(context).push(
-                    MaterialPageRoute<void>(builder: (_) => const ParentScreen()));
+                await Navigator.of(context).push(MaterialPageRoute<void>(
+                    builder: (_) => const ParentScreen()));
               }
             },
             icon: const Icon(Icons.lock_rounded),
@@ -34,7 +34,8 @@ class ProfilePickerScreen extends StatelessWidget {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                Text('Kim çalışacak?', style: Theme.of(context).textTheme.headlineMedium),
+                Text('Kim çalışacak?',
+                    style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(height: 24),
                 Wrap(
                   alignment: WrapAlignment.center,
@@ -52,11 +53,13 @@ class ProfilePickerScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(28),
-                            border: Border.all(color: Kumbara.primary, width: 3),
+                            border:
+                                Border.all(color: Kumbara.primary, width: 3),
                           ),
                           child: Column(
                             children: [
-                              Text(p.avatar, style: const TextStyle(fontSize: 64)),
+                              Text(p.avatar,
+                                  style: const TextStyle(fontSize: 64)),
                               const SizedBox(height: 8),
                               Text(p.nickname,
                                   style: Theme.of(context).textTheme.titleLarge,

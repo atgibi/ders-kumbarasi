@@ -84,7 +84,8 @@ class _SessionScreenState extends State<SessionScreen> {
     final c = _c;
     Widget body;
     if (_error != null) {
-      body = _Message('😕', 'İçerik açılamadı. Lütfen uygulamayı yeniden başlatın.\n($_error)');
+      body = _Message('😕',
+          'İçerik açılamadı. Lütfen uygulamayı yeniden başlatın.\n($_error)');
     } else if (c == null) {
       body = const Center(child: CircularProgressIndicator());
     } else if (c.steps.isEmpty) {
@@ -105,7 +106,8 @@ class _SessionScreenState extends State<SessionScreen> {
               key: ValueKey('Q${c.index}'),
               step: step,
               onSay: _say,
-              onAnswer: (i, elapsed, hint) => c.answer(i, elapsed: elapsed, usedHint: hint),
+              onAnswer: (i, elapsed, hint) =>
+                  c.answer(i, elapsed: elapsed, usedHint: hint),
               onNext: () => _advance(c.next),
             );
     }
@@ -134,7 +136,8 @@ class _SessionScreenState extends State<SessionScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: LinearProgressIndicator(value: c.progressRatio, minHeight: 10),
+                    child: LinearProgressIndicator(
+                        value: c.progressRatio, minHeight: 10),
                   ),
                 ),
               ),
@@ -158,7 +161,9 @@ class _Message extends StatelessWidget {
             children: [
               Text(icon, style: const TextStyle(fontSize: 72)),
               const SizedBox(height: 16),
-              Text(text, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
+              Text(text,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 24),
               FilledButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -185,7 +190,11 @@ class _ListenButton extends StatelessWidget {
 }
 
 class _LessonView extends StatefulWidget {
-  const _LessonView({super.key, required this.lesson, required this.onSay, required this.onDone});
+  const _LessonView(
+      {super.key,
+      required this.lesson,
+      required this.onSay,
+      required this.onDone});
   final Lesson lesson;
   final void Function(String) onSay;
   final VoidCallback onDone;
@@ -200,7 +209,8 @@ class _LessonViewState extends State<_LessonView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => widget.onSay(widget.lesson.pages.first.spoken));
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => widget.onSay(widget.lesson.pages.first.spoken));
   }
 
   void _go(int p) {
@@ -220,7 +230,9 @@ class _LessonViewState extends State<_LessonView> {
         children: [
           Row(
             children: [
-              Expanded(child: Text('📚 ${widget.lesson.title}', style: t.titleLarge)),
+              Expanded(
+                  child:
+                      Text('📚 ${widget.lesson.title}', style: t.titleLarge)),
               _ListenButton(onTap: () => widget.onSay(page.spoken)),
             ],
           ),
@@ -231,7 +243,8 @@ class _LessonViewState extends State<_LessonView> {
                 children: [
                   if (page.visual != null) VisualView(page.visual!),
                   const SizedBox(height: 12),
-                  Text(page.text, style: t.bodyLarge, textAlign: TextAlign.center),
+                  Text(page.text,
+                      style: t.bodyLarge, textAlign: TextAlign.center),
                 ],
               ),
             ),
@@ -241,7 +254,8 @@ class _LessonViewState extends State<_LessonView> {
               if (_page > 0)
                 Expanded(
                   child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(minimumSize: const Size(64, 64)),
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(64, 64)),
                     onPressed: () => _go(_page - 1),
                     child: const Text('Geri', style: TextStyle(fontSize: 20)),
                   ),
@@ -258,7 +272,8 @@ class _LessonViewState extends State<_LessonView> {
             ],
           ),
           const SizedBox(height: 8),
-          Text('${_page + 1} / ${widget.lesson.pages.length}', textAlign: TextAlign.center),
+          Text('${_page + 1} / ${widget.lesson.pages.length}',
+              textAlign: TextAlign.center),
         ],
       ),
     );
@@ -276,7 +291,8 @@ class _QuestionView extends StatefulWidget {
 
   final SessionStep step;
   final void Function(String) onSay;
-  final AnswerResult Function(int index, Duration elapsed, bool usedHint) onAnswer;
+  final AnswerResult Function(int index, Duration elapsed, bool usedHint)
+      onAnswer;
   final VoidCallback onNext;
 
   @override
@@ -352,10 +368,12 @@ class _QuestionViewState extends State<_QuestionView> {
                   const SizedBox(height: 8),
                   if (q.visual != null) VisualView(q.visual!),
                   const SizedBox(height: 8),
-                  Text(q.prompt, style: t.headlineMedium, textAlign: TextAlign.center),
+                  Text(q.prompt,
+                      style: t.headlineMedium, textAlign: TextAlign.center),
                   if (_hint && r == null) ...[
                     const SizedBox(height: 8),
-                    Text('💡 ${q.hint}', style: t.bodyLarge, textAlign: TextAlign.center),
+                    Text('💡 ${q.hint}',
+                        style: t.bodyLarge, textAlign: TextAlign.center),
                   ],
                   const SizedBox(height: 20),
                   Wrap(
@@ -381,13 +399,17 @@ class _QuestionViewState extends State<_QuestionView> {
                   if (r != null) ...[
                     const SizedBox(height: 20),
                     Text(
-                      r.correct ? '🎉 Aferin!' : '🤔 Bir daha bakalım: doğru cevap ${q.answer}.',
-                      style: t.titleLarge?.copyWith(color: r.correct ? Kumbara.good : Kumbara.tryAgain),
+                      r.correct
+                          ? '🎉 Aferin!'
+                          : '🤔 Bir daha bakalım: doğru cevap ${q.answer}.',
+                      style: t.titleLarge?.copyWith(
+                          color: r.correct ? Kumbara.good : Kumbara.tryAgain),
                       textAlign: TextAlign.center,
                     ),
                     if (!r.correct && q.explanation != null) ...[
                       const SizedBox(height: 8),
-                      Text(q.explanation!, style: t.bodyLarge, textAlign: TextAlign.center),
+                      Text(q.explanation!,
+                          style: t.bodyLarge, textAlign: TextAlign.center),
                     ],
                   ],
                 ],
@@ -409,7 +431,11 @@ class _QuestionViewState extends State<_QuestionView> {
 enum _OptState { idle, right, chosenWrong, dim }
 
 class _OptionButton extends StatelessWidget {
-  const _OptionButton({super.key, required this.label, required this.state, required this.onTap});
+  const _OptionButton(
+      {super.key,
+      required this.label,
+      required this.state,
+      required this.onTap});
   final String label;
   final _OptState state;
   final VoidCallback onTap;
@@ -419,10 +445,14 @@ class _OptionButton extends StatelessWidget {
     final (bg, border) = switch (state) {
       _OptState.idle => (Colors.white, Kumbara.primary),
       _OptState.right => (Kumbara.good.withValues(alpha: 0.18), Kumbara.good),
-      _OptState.chosenWrong => (Kumbara.tryAgain.withValues(alpha: 0.12), Kumbara.tryAgain),
+      _OptState.chosenWrong => (
+          Kumbara.tryAgain.withValues(alpha: 0.12),
+          Kumbara.tryAgain
+        ),
       _OptState.dim => (Colors.white, Colors.black12),
     };
-    final isEmoji = label.runes.length <= 2 && !RegExp(r'[0-9A-Za-zÇĞİÖŞÜçğıöşü]').hasMatch(label);
+    final isEmoji = label.runes.length <= 2 &&
+        !RegExp(r'[0-9A-Za-zÇĞİÖŞÜçğıöşü]').hasMatch(label);
     return SizedBox(
       width: label.length > 12 ? 300 : 140,
       child: Material(
@@ -442,7 +472,10 @@ class _OptionButton extends StatelessWidget {
             child: Text(
               label,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: isEmoji ? 40 : 26, fontWeight: FontWeight.w800, color: Kumbara.ink),
+              style: TextStyle(
+                  fontSize: isEmoji ? 40 : 26,
+                  fontWeight: FontWeight.w800,
+                  color: Kumbara.ink),
             ),
           ),
         ),
