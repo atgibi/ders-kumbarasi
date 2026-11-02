@@ -28,6 +28,7 @@ class ContentRepository {
     if (byGrade is! Map) return null;
     return byGrade['$unit'] as String?;
   }
+
   static String contentAsset(Subject s, int grade) =>
       'assets/content/${s.id}_$grade.json';
 

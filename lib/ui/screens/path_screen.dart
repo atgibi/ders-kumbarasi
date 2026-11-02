@@ -62,8 +62,10 @@ Future<List<PathSection>> buildPath(AppState app, Subject subject) async {
     final o = group.first.outcome;
     final String title, subtitle;
     if (o.unit != null) {
-      title = subject == Subject.matematik ? 'Tema ${o.unit}' : 'Ünite ${o.unit}';
-      subtitle = await app.content.unitName(subject, child.grade, o.unit!) ?? '';
+      title =
+          subject == Subject.matematik ? 'Tema ${o.unit}' : 'Ünite ${o.unit}';
+      subtitle =
+          await app.content.unitName(subject, child.grade, o.unit!) ?? '';
     } else {
       title = 'Bölüm $n';
       subtitle = o.area ?? '';
@@ -88,7 +90,9 @@ class _PathScreenState extends State<PathScreen> {
 
   void _refreshIfNeeded(AppState app) {
     final started = app.progress?.startedOutcomes.length ?? 0;
-    if (_future == null || _forSubject != app.subject || _forStarted != started) {
+    if (_future == null ||
+        _forSubject != app.subject ||
+        _forStarted != started) {
       _forSubject = app.subject;
       _forStarted = started;
       _future = buildPath(app, app.subject!);
@@ -96,7 +100,8 @@ class _PathScreenState extends State<PathScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final ctx = _currentKey.currentContext;
           if (ctx != null && mounted) {
-            Scrollable.ensureVisible(ctx, alignment: 0.4, duration: const Duration(milliseconds: 300));
+            Scrollable.ensureVisible(ctx,
+                alignment: 0.4, duration: const Duration(milliseconds: 300));
           }
         });
       });
@@ -109,21 +114,26 @@ class _PathScreenState extends State<PathScreen> {
       case NodeState.locked:
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
-          ..showSnackBar(const SnackBar(content: Text('Önce sıradaki konuyu bitir, sonra burası açılacak.')));
+          ..showSnackBar(const SnackBar(
+              content:
+                  Text('Önce sıradaki konuyu bitir, sonra burası açılacak.')));
         return;
       case NodeState.soon:
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
-          ..showSnackBar(const SnackBar(content: Text('Bu konu hazırlanıyor. Çok yakında!')));
+          ..showSnackBar(const SnackBar(
+              content: Text('Bu konu hazırlanıyor. Çok yakında!')));
         return;
       case NodeState.current:
       case NodeState.done:
         if (app.overDailyLimit || app.settings.isQuietTime(app.clock())) {
-          await showRestDialog(context, quiet: app.settings.isQuietTime(app.clock()));
+          await showRestDialog(context,
+              quiet: app.settings.isQuietTime(app.clock()));
           return;
         }
         await Navigator.of(context).push(MaterialPageRoute<void>(
-          builder: (_) => SessionScreen(subject: app.subject!, focusOutcome: node.outcome.code),
+          builder: (_) => SessionScreen(
+              subject: app.subject!, focusOutcome: node.outcome.code),
         ));
         if (mounted) setState(() => _future = null);
     }
@@ -137,13 +147,16 @@ class _PathScreenState extends State<PathScreen> {
       future: _future,
       builder: (context, snap) {
         final sections = snap.data;
-        if (sections == null) return const Center(child: CircularProgressIndicator());
+        if (sections == null)
+          return const Center(child: CircularProgressIndicator());
         var idx = 0;
         return ListView(
           padding: const EdgeInsets.only(bottom: 32),
           children: [
             for (var s = 0; s < sections.length; s++) ...[
-              _UnitBanner(section: sections[s], color: Kumbara.unitColors[s % Kumbara.unitColors.length]),
+              _UnitBanner(
+                  section: sections[s],
+                  color: Kumbara.unitColors[s % Kumbara.unitColors.length]),
               const SizedBox(height: 12),
               for (final node in sections[s].nodes)
                 _NodeRow(
@@ -162,7 +175,8 @@ class _PathScreenState extends State<PathScreen> {
   }
 }
 
-Future<void> showRestDialog(BuildContext context, {required bool quiet}) => showDialog<void>(
+Future<void> showRestDialog(BuildContext context, {required bool quiet}) =>
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         content: Text(
@@ -172,7 +186,10 @@ Future<void> showRestDialog(BuildContext context, {required bool quiet}) => show
           style: Theme.of(ctx).textTheme.titleLarge,
           textAlign: TextAlign.center,
         ),
-        actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Tamam'))],
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(ctx), child: const Text('Tamam'))
+        ],
       ),
     );
 
@@ -190,7 +207,10 @@ class _UnitBanner extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: [BoxShadow(color: color.withValues(alpha: 0.5), offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+              color: color.withValues(alpha: 0.5), offset: const Offset(0, 4))
+        ],
       ),
       child: Row(
         children: [
@@ -199,15 +219,24 @@ class _UnitBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(trUpper(section.title),
-                    style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w800, fontSize: 14)),
+                    style: const TextStyle(
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 14)),
                 const SizedBox(height: 2),
                 Text(section.subtitle,
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 20)),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20)),
               ],
             ),
           ),
           Text('$done/${section.nodes.length}',
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16)),
         ],
       ),
     );
@@ -215,7 +244,12 @@ class _UnitBanner extends StatelessWidget {
 }
 
 class _NodeRow extends StatefulWidget {
-  const _NodeRow({super.key, required this.node, required this.index, required this.color, required this.onTap});
+  const _NodeRow(
+      {super.key,
+      required this.node,
+      required this.index,
+      required this.color,
+      required this.onTap});
   final PathNode node;
   final int index;
   final Color color;
@@ -225,7 +259,8 @@ class _NodeRow extends StatefulWidget {
   State<_NodeRow> createState() => _NodeRowState();
 }
 
-class _NodeRowState extends State<_NodeRow> with SingleTickerProviderStateMixin {
+class _NodeRowState extends State<_NodeRow>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _bounce = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 900),
@@ -250,18 +285,35 @@ class _NodeRowState extends State<_NodeRow> with SingleTickerProviderStateMixin 
     final n = widget.node;
     final (Color face, Color shade, Widget icon) = switch (n.state) {
       NodeState.done => (
-          n.level == MasteryLevel.sufficient ? const Color(0xFFF2C94C) : widget.color,
-          n.level == MasteryLevel.sufficient ? const Color(0xFFC9A227) : Color.lerp(widget.color, Colors.black, 0.25)!,
-          Icon(n.level == MasteryLevel.sufficient ? Icons.star_rounded : Icons.check_rounded,
-              color: Colors.white, size: 38),
+          n.level == MasteryLevel.sufficient
+              ? const Color(0xFFF2C94C)
+              : widget.color,
+          n.level == MasteryLevel.sufficient
+              ? const Color(0xFFC9A227)
+              : Color.lerp(widget.color, Colors.black, 0.25)!,
+          Icon(
+              n.level == MasteryLevel.sufficient
+                  ? Icons.star_rounded
+                  : Icons.check_rounded,
+              color: Colors.white,
+              size: 38),
         ),
       NodeState.current => (
           widget.color,
           Color.lerp(widget.color, Colors.black, 0.25)!,
           const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 44),
         ),
-      NodeState.locked => (Kumbara.locked, const Color(0xFFBDB7AE), const Icon(Icons.lock_rounded, color: Colors.white, size: 30)),
-      NodeState.soon => (Kumbara.locked, const Color(0xFFBDB7AE), const Icon(Icons.hourglass_empty_rounded, color: Colors.white, size: 30)),
+      NodeState.locked => (
+          Kumbara.locked,
+          const Color(0xFFBDB7AE),
+          const Icon(Icons.lock_rounded, color: Colors.white, size: 30)
+        ),
+      NodeState.soon => (
+          Kumbara.locked,
+          const Color(0xFFBDB7AE),
+          const Icon(Icons.hourglass_empty_rounded,
+              color: Colors.white, size: 30)
+        ),
     };
     final dx = _offsets[widget.index % _offsets.length];
     final node = GestureDetector(
@@ -276,7 +328,10 @@ class _NodeRowState extends State<_NodeRow> with SingleTickerProviderStateMixin 
               top: 8,
               left: 0,
               right: 0,
-              child: Container(height: 64, decoration: BoxDecoration(color: shade, shape: BoxShape.circle)),
+              child: Container(
+                  height: 64,
+                  decoration:
+                      BoxDecoration(color: shade, shape: BoxShape.circle)),
             ),
             Positioned(
               top: 0,
@@ -302,18 +357,22 @@ class _NodeRowState extends State<_NodeRow> with SingleTickerProviderStateMixin 
             if (n.state == NodeState.current)
               AnimatedBuilder(
                 animation: _bounce,
-                builder: (context, child) =>
-                    Transform.translate(offset: Offset(0, -4 * _bounce.value), child: child),
+                builder: (context, child) => Transform.translate(
+                    offset: Offset(0, -4 * _bounce.value), child: child),
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 6),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Kumbara.line, width: 2),
                   ),
                   child: Text('BAŞLA',
-                      style: TextStyle(color: widget.color, fontWeight: FontWeight.w900, fontSize: 16)),
+                      style: TextStyle(
+                          color: widget.color,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 16)),
                 ),
               ),
             node,
@@ -326,7 +385,10 @@ class _NodeRowState extends State<_NodeRow> with SingleTickerProviderStateMixin 
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
-                  color: n.state == NodeState.locked || n.state == NodeState.soon ? Kumbara.inkSoft : Kumbara.ink,
+                  color:
+                      n.state == NodeState.locked || n.state == NodeState.soon
+                          ? Kumbara.inkSoft
+                          : Kumbara.ink,
                   fontWeight: FontWeight.w600,
                 ),
               ),

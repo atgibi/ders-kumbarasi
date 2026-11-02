@@ -50,7 +50,8 @@ class _ChunkyButtonState extends State<ChunkyButton> {
               Positioned.fill(
                 top: depth,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(color: sh, borderRadius: BorderRadius.circular(16)),
+                  decoration: BoxDecoration(
+                      color: sh, borderRadius: BorderRadius.circular(16)),
                 ),
               ),
               AnimatedPositioned(
@@ -61,7 +62,8 @@ class _ChunkyButtonState extends State<ChunkyButton> {
                 height: widget.height,
                 child: Container(
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(color: c, borderRadius: BorderRadius.circular(16)),
+                  decoration: BoxDecoration(
+                      color: c, borderRadius: BorderRadius.circular(16)),
                   child: Text(
                     trUpper(widget.label),
                     style: TextStyle(

@@ -82,14 +82,16 @@ void main() {
 
     // Konu anlatımı sayfaları
     var guard = 0;
-    while (find.byKey(const Key('lesson-next')).evaluate().isNotEmpty && guard++ < 10) {
+    while (find.byKey(const Key('lesson-next')).evaluate().isNotEmpty &&
+        guard++ < 10) {
       await t.tap(find.byKey(const Key('lesson-next')));
       await t.pumpAndSettle();
     }
 
     // Sorular: seçmeden KONTROL ET pasif; ilk seçeneği seç, kontrol et, devam et
     guard = 0;
-    while (find.byKey(const Key('option-0')).evaluate().isNotEmpty && guard++ < 30) {
+    while (find.byKey(const Key('option-0')).evaluate().isNotEmpty &&
+        guard++ < 30) {
       await t.ensureVisible(find.byKey(const Key('option-0')));
       await t.pumpAndSettle();
       await t.tap(find.byKey(const Key('option-0')));
@@ -120,7 +122,8 @@ void main() {
     expect(find.text('Elif'), findsWidgets);
 
     // İlerleme cihaza kaydedildi
-    final saved = storage.files.keys.where((k) => k.startsWith('progress_')).toList();
+    final saved =
+        storage.files.keys.where((k) => k.startsWith('progress_')).toList();
     expect(saved, hasLength(1));
     expect(storage.files[saved.single], contains('MAT.1.1.1#'));
   });
@@ -130,8 +133,8 @@ void main() {
     t.view.devicePixelRatio = 2.6;
     addTearDown(t.view.reset);
     final storage = MemoryStorage();
-    await ProgressStore(storage)
-        .saveProfiles(const [ChildProfile(id: 'a', nickname: 'Can', grade: 1, avatar: '🐶')]);
+    await ProgressStore(storage).saveProfiles(
+        const [ChildProfile(id: 'a', nickname: 'Can', grade: 1, avatar: '🐶')]);
     final state = makeState(storage);
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);

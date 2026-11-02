@@ -39,7 +39,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ]
                   : [
-                      const Center(child: Mascot(mood: MascotMood.celebrate, size: 150)),
+                      const Center(
+                          child: Mascot(mood: MascotMood.celebrate, size: 150)),
                       const SizedBox(height: 8),
                       Center(
                           child:
@@ -47,7 +48,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       const SizedBox(height: 16),
                       const MascotSays(
                         size: 0,
-                        text: 'Merhaba! Ben Fındık. Kış için fındık biriktirdiğim gibi, '
+                        text:
+                            'Merhaba! Ben Fındık. Kış için fındık biriktirdiğim gibi, '
                             'seninle her gün biraz bilgi biriktireceğiz.',
                       ),
                       const SizedBox(height: 12),

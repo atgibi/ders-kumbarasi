@@ -112,14 +112,19 @@ class SessionController {
     }
 
     // Başlanmış bir çıktının alıştırması: en zayıf kartlardan 8 tane
-    if (focusOutcome != null && progress.startedOutcomes.contains(focusOutcome)) {
+    if (focusOutcome != null &&
+        progress.startedOutcomes.contains(focusOutcome)) {
       final cards = [...?pack[focusOutcome]?.cards]..sort((a, b) {
           final sa = progress.cards[a.id], sb = progress.cards[b.id];
           return (sa?.box ?? -1).compareTo(sb?.box ?? -1);
         });
       final ids = cards.take(8).map((c) => c.id).toList()..shuffle(rnd);
       final plan = SessionPlan(
-          warmup: const [], newOutcomeId: null, practice: const [], review: ids, isReviewDay: false);
+          warmup: const [],
+          newOutcomeId: null,
+          practice: const [],
+          review: ids,
+          isReviewDay: false);
       return SessionController._(
         subject: subject,
         progress: progress,

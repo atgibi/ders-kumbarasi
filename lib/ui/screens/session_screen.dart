@@ -111,9 +111,11 @@ class _SessionScreenState extends State<SessionScreen> {
             const Mascot(mood: MascotMood.think, size: 90),
             const SizedBox(height: 8),
             Text('Bırakmak istediğine emin misin?',
-                style: Theme.of(ctx).textTheme.titleLarge, textAlign: TextAlign.center),
+                style: Theme.of(ctx).textTheme.titleLarge,
+                textAlign: TextAlign.center),
             const SizedBox(height: 6),
-            const Text('Şimdiye kadar çözdüklerin kaydedilecek.', textAlign: TextAlign.center),
+            const Text('Şimdiye kadar çözdüklerin kaydedilecek.',
+                textAlign: TextAlign.center),
             const SizedBox(height: 20),
             ChunkyButton(
               key: const Key('keep-going'),
@@ -124,7 +126,8 @@ class _SessionScreenState extends State<SessionScreen> {
             TextButton(
               key: const Key('leave'),
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Çık', style: TextStyle(fontSize: 18, color: Kumbara.inkSoft)),
+              child: const Text('Çık',
+                  style: TextStyle(fontSize: 18, color: Kumbara.inkSoft)),
             ),
           ],
         ),
@@ -138,7 +141,8 @@ class _SessionScreenState extends State<SessionScreen> {
     final c = _c;
     Widget body;
     if (_error != null) {
-      body = _Message(MascotMood.think, 'İçerik açılamadı. Lütfen uygulamayı yeniden başlat.\n($_error)');
+      body = _Message(MascotMood.think,
+          'İçerik açılamadı. Lütfen uygulamayı yeniden başlat.\n($_error)');
     } else if (c == null) {
       body = const Center(child: CircularProgressIndicator());
     } else if (c.steps.isEmpty) {
@@ -163,7 +167,8 @@ class _SessionScreenState extends State<SessionScreen> {
               key: ValueKey('Q${c.index}'),
               step: step,
               onSay: _say,
-              onAnswer: (i, elapsed, hint) => c.answer(i, elapsed: elapsed, usedHint: hint),
+              onAnswer: (i, elapsed, hint) =>
+                  c.answer(i, elapsed: elapsed, usedHint: hint),
               onNext: () => _advance(c.next),
             );
     }
@@ -182,7 +187,8 @@ class _SessionScreenState extends State<SessionScreen> {
             children: [
               IconButton(
                 key: const Key('session-close'),
-                icon: const Icon(Icons.close_rounded, size: 30, color: Kumbara.inkSoft),
+                icon: const Icon(Icons.close_rounded,
+                    size: 30, color: Kumbara.inkSoft),
                 tooltip: 'Çık',
                 onPressed: _confirmExit,
               ),
@@ -226,9 +232,13 @@ class _Message extends StatelessWidget {
             children: [
               Mascot(mood: mood, size: 140),
               const SizedBox(height: 16),
-              Text(text, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
+              Text(text,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 24),
-              ChunkyButton(label: 'Geri dön', onPressed: () => Navigator.of(context).pop()),
+              ChunkyButton(
+                  label: 'Geri dön',
+                  onPressed: () => Navigator.of(context).pop()),
             ],
           ),
         ),
@@ -236,7 +246,11 @@ class _Message extends StatelessWidget {
 }
 
 class _LessonView extends StatefulWidget {
-  const _LessonView({super.key, required this.lesson, required this.onSay, required this.onDone});
+  const _LessonView(
+      {super.key,
+      required this.lesson,
+      required this.onSay,
+      required this.onDone});
   final Lesson lesson;
   final void Function(String) onSay;
   final VoidCallback onDone;
@@ -251,7 +265,8 @@ class _LessonViewState extends State<_LessonView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => widget.onSay(widget.lesson.pages.first.spoken));
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => widget.onSay(widget.lesson.pages.first.spoken));
   }
 
   void _go(int p) {
@@ -269,13 +284,17 @@ class _LessonViewState extends State<_LessonView> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text('YENİ KONU · ${widget.lesson.title}',
-              style: const TextStyle(color: Kumbara.primaryDark, fontWeight: FontWeight.w900, fontSize: 15)),
+              style: const TextStyle(
+                  color: Kumbara.primaryDark,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15)),
           const SizedBox(height: 12),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  MascotSays(text: page.text, onTap: () => widget.onSay(page.spoken)),
+                  MascotSays(
+                      text: page.text, onTap: () => widget.onSay(page.spoken)),
                   if (page.visual != null) ...[
                     const SizedBox(height: 8),
                     VisualView(page.visual!),
@@ -341,7 +360,8 @@ class _QuestionView extends StatefulWidget {
 
   final SessionStep step;
   final void Function(String) onSay;
-  final AnswerResult Function(int index, Duration elapsed, bool usedHint) onAnswer;
+  final AnswerResult Function(int index, Duration elapsed, bool usedHint)
+      onAnswer;
   final VoidCallback onNext;
 
   @override
@@ -368,7 +388,9 @@ class _QuestionViewState extends State<_QuestionView> {
     _watch.stop();
     final r = widget.onAnswer(i, _watch.elapsed, _hint);
     setState(() => _result = r);
-    widget.onSay(r.correct ? 'Harika!' : 'Doğru cevap: ${q.answer}. ${q.explanation ?? ''}');
+    widget.onSay(r.correct
+        ? 'Harika!'
+        : 'Doğru cevap: ${q.answer}. ${q.explanation ?? ''}');
   }
 
   @override
@@ -393,7 +415,10 @@ class _QuestionViewState extends State<_QuestionView> {
                 Row(
                   children: [
                     Text(label,
-                        style: const TextStyle(color: Kumbara.primaryDark, fontWeight: FontWeight.w900, fontSize: 15)),
+                        style: const TextStyle(
+                            color: Kumbara.primaryDark,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
                     const Spacer(),
                     if (q.hint != null && r == null)
                       TextButton.icon(
@@ -419,7 +444,8 @@ class _QuestionViewState extends State<_QuestionView> {
                 Text(q.prompt, style: t.headlineMedium),
                 if (_hint && r == null) ...[
                   const SizedBox(height: 8),
-                  Text('💡 ${q.hint}', style: t.bodyLarge?.copyWith(color: Kumbara.inkSoft)),
+                  Text('💡 ${q.hint}',
+                      style: t.bodyLarge?.copyWith(color: Kumbara.inkSoft)),
                 ],
                 if (q.visual != null) ...[
                   const SizedBox(height: 12),
@@ -433,13 +459,17 @@ class _QuestionViewState extends State<_QuestionView> {
                       key: Key('option-$i'),
                       label: q.options[i],
                       state: r == null
-                          ? (i == _selected ? _OptState.selected : _OptState.idle)
+                          ? (i == _selected
+                              ? _OptState.selected
+                              : _OptState.idle)
                           : i == q.answerIndex
                               ? _OptState.right
                               : i == _selected
                                   ? _OptState.chosenWrong
                                   : _OptState.dim,
-                      onTap: r == null ? () => setState(() => _selected = i) : null,
+                      onTap: r == null
+                          ? () => setState(() => _selected = i)
+                          : null,
                     ),
                   ),
               ],
@@ -483,7 +513,8 @@ class _FeedbackBar extends StatelessWidget {
     if (r == null) {
       return Container(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-        decoration: const BoxDecoration(border: Border(top: BorderSide(color: Kumbara.line, width: 2))),
+        decoration: const BoxDecoration(
+            border: Border(top: BorderSide(color: Kumbara.line, width: 2))),
         child: ChunkyButton(
           key: const Key('check'),
           label: 'Kontrol et',
@@ -504,7 +535,8 @@ class _FeedbackBar extends StatelessWidget {
         children: [
           Row(
             children: [
-              Mascot(mood: ok ? MascotMood.celebrate : MascotMood.think, size: 56),
+              Mascot(
+                  mood: ok ? MascotMood.celebrate : MascotMood.think, size: 56),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
@@ -519,7 +551,9 @@ class _FeedbackBar extends StatelessWidget {
                       ),
                     ),
                     if (!ok && explanation != null)
-                      Text(explanation!, style: const TextStyle(fontSize: 16, color: Kumbara.tryAgainDark)),
+                      Text(explanation!,
+                          style: const TextStyle(
+                              fontSize: 16, color: Kumbara.tryAgainDark)),
                   ],
                 ),
               ),
@@ -542,7 +576,11 @@ class _FeedbackBar extends StatelessWidget {
 enum _OptState { idle, selected, right, chosenWrong, dim }
 
 class _OptionCard extends StatelessWidget {
-  const _OptionCard({super.key, required this.label, required this.state, required this.onTap});
+  const _OptionCard(
+      {super.key,
+      required this.label,
+      required this.state,
+      required this.onTap});
   final String label;
   final _OptState state;
   final VoidCallback? onTap;
@@ -556,7 +594,8 @@ class _OptionCard extends StatelessWidget {
       _OptState.chosenWrong => (Kumbara.tryAgainBg, Kumbara.tryAgain),
       _OptState.dim => (Colors.white, Kumbara.line),
     };
-    final emojiOnly = label.runes.length <= 3 && !RegExp(r'[0-9A-Za-zÇĞİÖŞÜçğıöşü]').hasMatch(label);
+    final emojiOnly = label.runes.length <= 3 &&
+        !RegExp(r'[0-9A-Za-zÇĞİÖŞÜçğıöşü]').hasMatch(label);
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -613,16 +652,24 @@ class _Summary extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   child: Text(trUpper(title),
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13)),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 13)),
                 ),
                 Container(
                   margin: const EdgeInsets.fromLTRB(3, 0, 3, 3),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   width: double.infinity,
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(13)),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(13)),
                   child: Text(value,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 22)),
+                      style: TextStyle(
+                          color: color,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 22)),
                 ),
               ],
             ),
@@ -637,17 +684,22 @@ class _Summary extends StatelessWidget {
           const SizedBox(height: 12),
           Text('Bugünlük bu kadar!', style: t.headlineMedium),
           if (s.newOutcomes.isNotEmpty)
-            Text('Kumbarana yeni bir konu attın.', style: t.bodyLarge, textAlign: TextAlign.center),
+            Text('Kumbarana yeni bir konu attın.',
+                style: t.bodyLarge, textAlign: TextAlign.center),
           if (s.retried > 0)
             Text('Zorlandığın soruları yakında yine soracağım.',
-                style: t.bodyLarge?.copyWith(color: Kumbara.inkSoft), textAlign: TextAlign.center),
+                style: t.bodyLarge?.copyWith(color: Kumbara.inkSoft),
+                textAlign: TextAlign.center),
           const SizedBox(height: 20),
           Row(children: [
             box('Fındık', '+${s.nutsEarned} 🌰', Kumbara.nut),
             box('Doğruluk', '%$pct', Kumbara.good),
           ]),
           const Spacer(),
-          ChunkyButton(key: const Key('summary-done'), label: 'Devam', onPressed: onDone),
+          ChunkyButton(
+              key: const Key('summary-done'),
+              label: 'Devam',
+              onPressed: onDone),
         ],
       ),
     );

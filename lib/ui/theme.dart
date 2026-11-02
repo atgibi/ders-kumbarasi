@@ -18,7 +18,18 @@ class Kumbara {
   static const locked = Color(0xFFD9D4CC);
   static const nut = Color(0xFF8A5326);
 
-  static const avatars = ['🦊', '🐱', '🐶', '🐼', '🐸', '🦁', '🐰', '🐢', '🦉', '🐬'];
+  static const avatars = [
+    '🦊',
+    '🐱',
+    '🐶',
+    '🐼',
+    '🐸',
+    '🦁',
+    '🐰',
+    '🐢',
+    '🦉',
+    '🐬'
+  ];
 
   /// Ders renkleri (yol ekranındaki ünite bantları).
   static const unitColors = [
@@ -39,10 +50,13 @@ class Kumbara {
       colorScheme: scheme,
       useMaterial3: true,
       scaffoldBackgroundColor: soft,
-      appBarTheme: const AppBarTheme(backgroundColor: soft, surfaceTintColor: Colors.transparent),
+      appBarTheme: const AppBarTheme(
+          backgroundColor: soft, surfaceTintColor: Colors.transparent),
       textTheme: const TextTheme(
-        headlineMedium: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: ink),
-        titleLarge: TextStyle(fontSize: 21, fontWeight: FontWeight.w800, color: ink),
+        headlineMedium:
+            TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: ink),
+        titleLarge:
+            TextStyle(fontSize: 21, fontWeight: FontWeight.w800, color: ink),
         bodyLarge: TextStyle(fontSize: 19, color: ink, height: 1.35),
         bodyMedium: TextStyle(fontSize: 16, color: ink),
       ),
@@ -50,7 +64,8 @@ class Kumbara {
         style: FilledButton.styleFrom(
           minimumSize: const Size(64, 56),
           textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
       ),
     );
