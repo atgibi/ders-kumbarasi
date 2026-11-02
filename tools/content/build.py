@@ -22,7 +22,7 @@ PACK_MODULES = sorted(p.stem for p in Path(__file__).parent.glob("*_[1-4].py"))
 VISUAL_KINDS = {
     "objects", "objects2", "objects_crossed", "groups", "blocks", "number_highlight",
     "row", "emoji", "text", "compare_groups", "shapes", "money", "pictograph", "tally", "grid",
-    "clock", "fraction",
+    "clock", "fraction", "angle", "area",
 }
 
 

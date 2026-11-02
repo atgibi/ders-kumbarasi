@@ -839,6 +839,115 @@ Question _wordMulDiv(Map<String, Object?> p, Random r) {
   );
 }
 
+
+/// Kesir karşılaştırma: birim kesirler ya da paydaları eşit kesirler.
+Question _fractionCompare(Map<String, Object?> p, Random r) {
+  final unit = p['unit'] as bool? ?? false;
+  int an, ad, bn, bd;
+  if (unit) {
+    an = bn = 1;
+    ad = _between(r, 2, 10);
+    do {
+      bd = _between(r, 2, 10);
+    } while (bd == ad);
+  } else {
+    ad = bd = _between(r, 3, 12);
+    an = _between(r, 1, ad);
+    do {
+      bn = _between(r, 1, ad);
+    } while (bn == an);
+  }
+  final aBig = an * bd > bn * ad;
+  final askBig = r.nextBool();
+  final a = '$an/$ad', b = '$bn/$bd';
+  final opts = [a, b];
+  return Question(
+    prompt: askBig ? 'Hangi kesir daha büyük?' : 'Hangi kesir daha küçük?',
+    options: opts,
+    answerIndex: (askBig == aBig) ? 0 : 1,
+    explanation: unit
+        ? 'Payları 1 olan kesirlerde payda büyüdükçe parça küçülür.'
+        : 'Paydalar eşitse payı büyük olan kesir daha büyüktür.',
+  );
+}
+
+/// Kesirlerin okunuşu için bulunma hâli: 4 -> "dörtte" (dörtte üç).
+const _bulunma = {
+  2: 'ikide', 3: 'üçte', 4: 'dörtte', 5: 'beşte', 6: 'altıda',
+  7: 'yedide', 8: 'sekizde', 9: 'dokuzda', 10: 'onda', 12: 'on ikide',
+};
+
+/// Bir çokluğun kesir kadarı: 24'ün 3/4'ü kaçtır?
+Question _fractionOfSet(Map<String, Object?> p, Random r) {
+  final d = _between(r, 2, _p(p, 'd_max', 6));
+  final n = (p['unit'] as bool? ?? false) ? 1 : _between(r, 1, d - 1);
+  final total = d * _between(r, 1, _p(p, 'k_max', 6));
+  final ans = total ~/ d * n;
+  final o = numericOptions(ans, r, spread: 3, min: 1, preferred: [total ~/ d, total - ans]);
+  return Question(
+    prompt: '$total sayısının $n/$d kadarı kaçtır?',
+    say: '$total sayısının ${_bulunma[d] ?? '$d'} ${sayiOkunusu(n)} kadarı kaçtır?',
+    visual: total <= 24 ? Visual('groups', {'emoji': '🍬', 'groups': d, 'each': total ~/ d}) : null,
+    options: o.options,
+    answerIndex: o.answerIndex,
+    explanation: '$total ÷ $d = ${total ~/ d}; bunun $n katı $ans.',
+  );
+}
+
+/// Paydaları eşit kesirlerle toplama/çıkarma.
+Question _fractionAddSame(Map<String, Object?> p, Random r) {
+  final d = _between(r, 3, _p(p, 'd_max', 12));
+  final add = r.nextBool();
+  int a, b, c;
+  if (add) {
+    a = _between(r, 1, d - 1);
+    b = _between(r, 1, d - a);
+    c = a + b;
+  } else {
+    a = _between(r, 2, d);
+    b = _between(r, 1, a - 1);
+    c = a - b;
+  }
+  final right = '$c/$d';
+  final set = <String>{right, '$c/${d * 2}', '${add ? a + b + 1 : a - b + 1}/$d', '$c/${add ? d + d : d - 1}'};
+  set.removeWhere((e) => e.endsWith('/0'));
+  final opts = set.take(3).toList()..shuffle(r);
+  return Question(
+    prompt: '$a/$d ${add ? '+' : '−'} $b/$d = ?',
+    options: opts,
+    answerIndex: opts.indexOf(right),
+    explanation: 'Paydalar eşitse payları ${add ? 'toplar' : 'çıkarır'}, paydayı aynen yazarız: $right.',
+  );
+}
+
+/// Açı türü: dar, dik, geniş.
+Question _angleType(Map<String, Object?> p, Random r) {
+  final t = r.nextInt(3);
+  final deg = switch (t) { 0 => _between(r, 15, 80), 1 => 90, _ => _between(r, 100, 170) };
+  final opts = ['Dar açı', 'Dik açı', 'Geniş açı'];
+  return Question(
+    prompt: 'Bu açı hangi türdendir?',
+    visual: Visual('angle', {'deg': deg}),
+    options: opts,
+    answerIndex: t,
+    explanation: 'Dik açı tam köşe gibidir (90°). Ondan küçük açı dar, büyük açı geniştir.',
+  );
+}
+
+/// Birim karelerle alan: dikdörtgen kaç birim kare?
+Question _areaCount(Map<String, Object?> p, Random r) {
+  final w = _between(r, 2, _p(p, 'max', 6)), h = _between(r, 2, _p(p, 'max', 6));
+  final ans = w * h;
+  final o = numericOptions(ans, r, spread: 3, min: 1, preferred: [2 * (w + h), w + h]);
+  return Question(
+    prompt: 'Bu şeklin alanı kaç birim karedir?',
+    visual: Visual('area', {'w': w, 'h': h}),
+    options: o.options,
+    answerIndex: o.answerIndex,
+    explanation: '$h sıra, her sırada $w kare: $h × $w = $ans birim kare.',
+  );
+}
+
 final Map<String, QuestionGenerator> generators = {
   'count_objects': _countObjects,
   'compare': _compare,
@@ -868,6 +977,11 @@ final Map<String, QuestionGenerator> generators = {
   'fraction_read': _fractionRead,
   'perimeter': _perimeter,
   'word_mul_div': _wordMulDiv,
+  'fraction_compare': _fractionCompare,
+  'fraction_of_set': _fractionOfSet,
+  'fraction_add_same': _fractionAddSame,
+  'angle_type': _angleType,
+  'area_count': _areaCount,
 };
 
 Question generate(CardDef card, Random rnd) {

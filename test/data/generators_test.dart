@@ -128,6 +128,23 @@ void main() {
     'word_mul_div': [
       {'max': 10},
     ],
+    'fraction_compare': [
+      {},
+      {'unit': true},
+    ],
+    'fraction_of_set': [
+      {},
+      {'unit': true},
+    ],
+    'fraction_add_same': [
+      {},
+    ],
+    'angle_type': [
+      {},
+    ],
+    'area_count': [
+      {'max': 6},
+    ],
   };
 
   test('tüm üreteçler testte', () {
@@ -272,6 +289,18 @@ void main() {
         expect((n - ans).abs() <= to ~/ 2, isTrue,
             reason: '${q.prompt} -> ${q.answer}');
       }
+    }
+  });
+
+  test('kesir toplama: cevap doğru', () {
+    const card = CardDef(id: 't', outcomeCode: 'X', generator: 'fraction_add_same');
+    for (var seed = 0; seed < 300; seed++) {
+      final q = generate(card, Random(seed));
+      final m = RegExp(r'^(\d+)/(\d+) ([+−]) (\d+)/(\d+) = \?$').firstMatch(q.prompt)!;
+      final a = int.parse(m.group(1)!), d = int.parse(m.group(2)!), b = int.parse(m.group(4)!);
+      final c = m.group(3) == '+' ? a + b : a - b;
+      expect(q.answer, '$c/$d', reason: q.prompt);
+      expect(c, inInclusiveRange(0, d));
     }
   });
 

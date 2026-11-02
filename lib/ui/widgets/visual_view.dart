@@ -220,6 +220,12 @@ class VisualView extends StatelessWidget {
           child:
               CustomPaint(painter: _FractionPainter(_i('parts'), _i('shaded'))),
         ),
+      'angle' => SizedBox(
+          width: 200,
+          height: 130,
+          child: CustomPaint(painter: _AnglePainter(_i('deg'))),
+        ),
+      'area' => _AreaGrid(w: _i('w'), h: _i('h')),
       'emoji' => Text(_s('emoji'), style: const TextStyle(fontSize: 96)),
       'text' => Text(
           _s('text', ''),
@@ -525,4 +531,66 @@ class _FractionPainter extends CustomPainter {
   @override
   bool shouldRepaint(_FractionPainter old) =>
       old.parts != parts || old.shaded != shaded;
+}
+
+
+class _AnglePainter extends CustomPainter {
+  _AnglePainter(this.deg);
+  final int deg;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final o = Offset(size.width * 0.35, size.height - 12);
+    final len = size.height - 24;
+    final line = Paint()
+      ..color = Kumbara.ink
+      ..strokeWidth = 5
+      ..strokeCap = StrokeCap.round;
+    final a = -deg * math.pi / 180;
+    canvas
+      ..drawLine(o, o + Offset(len * 1.2, 0), line)
+      ..drawLine(o, o + Offset(math.cos(a), math.sin(a)) * len, line);
+    final arc = Paint()
+      ..color = Kumbara.primary
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4;
+    if (deg == 90) {
+      canvas.drawRect(Rect.fromLTWH(o.dx, o.dy - 24, 24, 24), arc);
+    } else {
+      canvas.drawArc(Rect.fromCircle(center: o, radius: 30), 0, a, false, arc);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_AnglePainter old) => old.deg != deg;
+}
+
+class _AreaGrid extends StatelessWidget {
+  const _AreaGrid({required this.w, required this.h});
+  final int w;
+  final int h;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var y = 0; y < h; y++)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var x = 0; x < w; x++)
+                Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: Kumbara.primary.withValues(alpha: 0.35),
+                    border: Border.all(color: Kumbara.ink.withValues(alpha: 0.6)),
+                  ),
+                ),
+            ],
+          ),
+      ],
+    );
+  }
 }
