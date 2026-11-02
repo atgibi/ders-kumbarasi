@@ -18,16 +18,18 @@ jobs:
     name: Analiz + test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: 3.47.9
           cache: true
       - run: flutter --version
       - name: Eksik platform klasörlerini oluştur
         run: |
           if [ ! -d android ] || [ ! -d ios ]; then
             flutter create --platforms=android,ios --org "$ORG" --project-name ders_kumbarasi .
+            rm -f test/widget_test.dart
           fi
       - run: flutter pub get
       - run: dart format --output=none --set-exit-if-changed lib test
@@ -39,7 +41,7 @@ jobs:
     needs: analyze-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -47,11 +49,13 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: 3.47.9
           cache: true
       - name: Eksik platform klasörlerini oluştur
         run: |
           if [ ! -d android ]; then
             flutter create --platforms=android,ios --org "$ORG" --project-name ders_kumbarasi .
+            rm -f test/widget_test.dart
           fi
       - run: flutter pub get
       - run: flutter build apk --release
@@ -66,15 +70,17 @@ jobs:
     needs: analyze-test
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: 3.47.9
           cache: true
       - name: Eksik platform klasörlerini oluştur
         run: |
           if [ ! -d ios ]; then
             flutter create --platforms=android,ios --org "$ORG" --project-name ders_kumbarasi .
+            rm -f test/widget_test.dart
           fi
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
