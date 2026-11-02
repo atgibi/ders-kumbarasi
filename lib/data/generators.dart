@@ -664,6 +664,154 @@ Question _multiplyAsAdd(Map<String, Object?> p, Random r) {
   );
 }
 
+
+/// Tek mi çift mi?
+Question _oddEven(Map<String, Object?> p, Random r) {
+  final n = _between(r, 0, _p(p, 'max', 100));
+  final opts = ['Tek', 'Çift'];
+  return Question(
+    prompt: '$n tek mi, çift mi?',
+    options: opts,
+    answerIndex: n.isEven ? 1 : 0,
+    explanation: 'Birler basamağı ${n % 10}: ${n.isEven ? 'çift (0, 2, 4, 6, 8)' : 'tek (1, 3, 5, 7, 9)'}.',
+  );
+}
+
+/// İki sayının toplamı tek mi çift mi? (tümevarımsal akıl yürütme)
+Question _oddEvenSum(Map<String, Object?> p, Random r) {
+  final max = _p(p, 'max', 50);
+  final a = _between(r, 1, max), b = _between(r, 1, max);
+  String te(int x) => x.isEven ? 'çift' : 'tek';
+  final opts = ['Tek', 'Çift'];
+  return Question(
+    prompt: '$a + $b toplamı tek mi, çift mi?',
+    options: opts,
+    answerIndex: (a + b).isEven ? 1 : 0,
+    explanation: '${te(a)} + ${te(b)} = ${te(a + b)} (${a + b}).',
+    hint: 'Tek + tek = çift, çift + çift = çift, tek + çift = tek.',
+  );
+}
+
+/// En yakın onluğa ya da yüzlüğe yuvarlama.
+Question _roundTo(Map<String, Object?> p, Random r) {
+  final to = _p(p, 'to', 10);
+  final n = _between(r, to + 1, _p(p, 'max', 999));
+  final lo = n ~/ to * to;
+  final ans = n - lo >= to ~/ 2 ? lo + to : lo;
+  final other = ans == lo ? lo + to : lo;
+  final opts = ['$lo', '${lo + to}', if (to == 10) '${lo + 2 * to}' else '${n ~/ 10 * 10}']
+      .toSet()
+      .toList()
+    ..shuffle(r);
+  return Question(
+    prompt: '$n sayısını en yakın ${to == 10 ? 'onluğa' : 'yüzlüğe'} yuvarla.',
+    options: opts,
+    answerIndex: opts.indexOf('$ans'),
+    explanation: '$n, $ans sayısına $other sayısından daha yakındır.',
+  );
+}
+
+/// Birim dönüştürme: m-cm, km-m, kg-g, ton-kg, L-mL, saat-dakika, dakika-saniye, gün-saat, yıl-ay, hafta-gün.
+Question _unitConvert(Map<String, Object?> p, Random r) {
+  final kinds = (p['kinds'] as List<Object?>?)?.cast<String>() ??
+      ['m_cm', 'km_m', 'kg_g', 'ton_kg', 'saat_dk', 'dk_sn', 'gun_saat', 'hafta_gun', 'yil_ay'];
+  final k = kinds[r.nextInt(kinds.length)];
+  final (String big, String small, int f) = switch (k) {
+    'm_cm' => ('metre', 'santimetre', 100),
+    'km_m' => ('kilometre', 'metre', 1000),
+    'kg_g' => ('kilogram', 'gram', 1000),
+    'ton_kg' => ('ton', 'kilogram', 1000),
+    'l_ml' => ('litre', 'mililitre', 1000),
+    'saat_dk' => ('saat', 'dakika', 60),
+    'dk_sn' => ('dakika', 'saniye', 60),
+    'gun_saat' => ('gün', 'saat', 24),
+    'hafta_gun' => ('hafta', 'gün', 7),
+    'yil_ay' => ('yıl', 'ay', 12),
+    _ => ('metre', 'santimetre', 100),
+  };
+  final n = _between(r, 1, f >= 1000 ? 5 : (f >= 60 ? 3 : 4));
+  final ans = n * f;
+  final o = numericOptions(ans, r, spread: f, min: 1, preferred: [n * 10, n * 100, ans + f]);
+  return Question(
+    prompt: '$n $big kaç $small eder?',
+    options: o.options.map((e) => '$e $small').toList(),
+    answerIndex: o.answerIndex,
+    explanation: '1 $big = $f $small, öyleyse $n $big = $ans $small.',
+  );
+}
+
+/// Kesir okuma: boyalı parçaların kesirle gösterimi.
+Question _fractionRead(Map<String, Object?> p, Random r) {
+  final allowed = (p['parts'] as List<Object?>?)?.cast<num>().map((e) => e.toInt()).toList() ?? [2, 3, 4, 6, 8];
+  final n = allowed[r.nextInt(allowed.length)];
+  final unit = p['unit'] as bool? ?? false;
+  final k = unit ? 1 : _between(r, 1, n);
+  final right = '$k/$n';
+  final set = <String>{right, '$n/$k', if (k < n) '${n - k}/$n', '$k/${n + 1}'};
+  final opts = set.take(3).toList()..shuffle(r);
+  return Question(
+    prompt: 'Boyalı kısmı gösteren kesir hangisi?',
+    visual: Visual('fraction', {'parts': n, 'shaded': k}),
+    options: opts,
+    answerIndex: opts.indexOf(right),
+    explanation: 'Bütün $n eş parçaya bölünmüş (payda $n), $k parça boyalı (pay $k): $right.',
+  );
+}
+
+/// Çevre uzunluğu: kare, dikdörtgen, üçgen.
+Question _perimeter(Map<String, Object?> p, Random r) {
+  final max = _p(p, 'max', 10);
+  final t = r.nextInt(3);
+  late final int ans;
+  late final String text;
+  switch (t) {
+    case 0:
+      final a = _between(r, 2, max);
+      ans = 4 * a;
+      text = 'Bir kenarı $a cm olan karenin çevresi kaç cm?';
+    case 1:
+      final a = _between(r, 3, max), b = _between(r, 1, a - 1);
+      ans = 2 * (a + b);
+      text = 'Kenarları $a cm ve $b cm olan dikdörtgenin çevresi kaç cm?';
+    default:
+      final a = _between(r, 2, max), b = _between(r, 2, max), c = _between(r, 2, max);
+      ans = a + b + c;
+      text = 'Kenarları $a cm, $b cm ve $c cm olan üçgenin çevresi kaç cm?';
+  }
+  final o = numericOptions(ans, r, spread: 4, min: 1, preferred: [ans ~/ 2]);
+  return Question(
+    prompt: text,
+    visual: Visual('shapes', {'items': [['kare', 'dikdortgen', 'ucgen'][t]]}),
+    options: o.options.map((e) => '$e cm').toList(),
+    answerIndex: o.answerIndex,
+    explanation: 'Çevre, bütün kenarların toplamıdır: $ans cm.',
+  );
+}
+
+/// Çarpma ve bölme gerektiren günlük yaşam problemi.
+Question _wordMulDiv(Map<String, Object?> p, Random r) {
+  final max = _p(p, 'max', 10);
+  final a = _between(r, 2, max), b = _between(r, 2, max);
+  final thing = _things[r.nextInt(_things.length)];
+  final mul = r.nextBool();
+  final String text;
+  final int ans;
+  if (mul) {
+    ans = a * b;
+    text = 'Her pakette $b ${thing.$1} var. $a pakette toplam kaç ${thing.$1} vardır?';
+  } else {
+    ans = b;
+    text = '${a * b} ${thing.$1} $a kişiye eşit paylaştırılıyor. Her kişi kaç ${thing.$1} alır?';
+  }
+  final o = numericOptions(ans, r, spread: 3, min: 1, preferred: [a + b, if (!mul) a]);
+  return Question(
+    prompt: text,
+    options: o.options,
+    answerIndex: o.answerIndex,
+    explanation: mul ? '$a × $b = $ans.' : '${a * b} ÷ $a = $ans.',
+  );
+}
+
 final Map<String, QuestionGenerator> generators = {
   'count_objects': _countObjects,
   'compare': _compare,
@@ -686,6 +834,13 @@ final Map<String, QuestionGenerator> generators = {
   'order3': _order3,
   'clock_read': _clockRead,
   'multiply_as_add': _multiplyAsAdd,
+  'odd_even': _oddEven,
+  'odd_even_sum': _oddEvenSum,
+  'round_to': _roundTo,
+  'unit_convert': _unitConvert,
+  'fraction_read': _fractionRead,
+  'perimeter': _perimeter,
+  'word_mul_div': _wordMulDiv,
 };
 
 Question generate(CardDef card, Random rnd) {

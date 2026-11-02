@@ -102,6 +102,32 @@ void main() {
     'multiply_as_add': [
       {'a_max': 5, 'b_max': 5},
     ],
+    'odd_even': [
+      {'max': 1000},
+    ],
+    'odd_even_sum': [
+      {'max': 50},
+    ],
+    'round_to': [
+      {'to': 10, 'max': 999},
+      {'to': 100, 'max': 999},
+    ],
+    'unit_convert': [
+      {},
+      {
+        'kinds': ['l_ml'],
+      },
+    ],
+    'fraction_read': [
+      {},
+      {'unit': true},
+    ],
+    'perimeter': [
+      {'max': 10},
+    ],
+    'word_mul_div': [
+      {'max': 10},
+    ],
   };
 
   test('tüm üreteçler testte', () {
@@ -229,6 +255,20 @@ void main() {
     expect(saatSoyle(6, 15), "Saat 6'yı çeyrek geçiyor");
     expect(saatSoyle(5, 45), "Saat 6'ya çeyrek var");
     expect(saatSoyle(12, 45), "Saat 1'e çeyrek var");
+  });
+
+  test('yuvarlama: cevap gerçekten en yakın onluk/yüzlük', () {
+    for (final to in [10, 100]) {
+      final card = CardDef(
+          id: 't', outcomeCode: 'X', generator: 'round_to', generatorParams: {'to': to, 'max': 999});
+      for (var seed = 0; seed < 300; seed++) {
+        final q = generate(card, Random(seed));
+        final n = int.parse(RegExp(r'^(\d+)').firstMatch(q.prompt)!.group(1)!);
+        final ans = int.parse(q.answer);
+        expect(ans % to, 0, reason: q.prompt);
+        expect((n - ans).abs() <= to ~/ 2, isTrue, reason: '${q.prompt} -> ${q.answer}');
+      }
+    }
   });
 
   test('aynı tohum aynı soruyu üretir (tekrarlanabilirlik)', () {

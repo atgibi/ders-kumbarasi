@@ -275,6 +275,8 @@ class _ShapePainter extends CustomPainter {
     'kare': Color(0xFF4A7BD0),
     'dikdortgen': Color(0xFF2E9E6B),
     'daire': Color(0xFFF2A93B),
+    'besgen': Color(0xFF9B59B6),
+    'altigen': Color(0xFF16A2B8),
   };
 
   @override
@@ -300,6 +302,17 @@ class _ShapePainter extends CustomPainter {
         path = Path()..addRect(Rect.fromLTWH(2, h * 0.25, w - 4, h * 0.5));
       case 'daire':
         path = Path()..addOval(Rect.fromLTWH(6, 6, w - 12, h - 12));
+      case 'besgen' || 'altigen':
+        final n = shape == 'besgen' ? 5 : 6;
+        final c = Offset(w / 2, h / 2);
+        final rad = w / 2 - 5;
+        path = Path();
+        for (var i = 0; i < n; i++) {
+          final a = -math.pi / 2 + i * 2 * math.pi / n;
+          final pt = c + Offset(math.cos(a), math.sin(a)) * rad;
+          i == 0 ? path.moveTo(pt.dx, pt.dy) : path.lineTo(pt.dx, pt.dy);
+        }
+        path.close();
       default:
         return;
     }
