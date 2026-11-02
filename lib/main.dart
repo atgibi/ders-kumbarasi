@@ -18,7 +18,7 @@ Future<void> main() async {
   final state = AppState(
     store: ProgressStore(await createPlatformStorage()),
     content: ContentRepository(rootBundle.loadString),
-    speaker: TtsSpeaker(),
+    speaker: HybridSpeaker(),
   );
   await applyDemo(state);
   runApp(DersKumbarasiApp(state: state));

@@ -1,0 +1,55 @@
+name: Seslendirme (Google TTS)
+
+# İçerik değişince eksik sesleri üretir ve depoya ekler. GOOGLE_TTS_API_KEY
+# tanımlı değilse hiçbir şey yapmadan başarıyla biter (uygulama cihaz sesini kullanır).
+
+on:
+  push:
+    branches: [main]
+    paths: ["assets/content/**", "tools/audio/**"]
+  workflow_dispatch:
+
+concurrency:
+  group: ses
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  ses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Anahtar var mı?
+        id: key
+        env:
+          K: ${{ secrets.GOOGLE_TTS_API_KEY }}
+        run: |
+          if [ -z "$K" ]; then
+            echo "::notice::GOOGLE_TTS_API_KEY tanımlı değil; seslendirme atlandı."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Eksik sesleri üret
+        if: steps.key.outputs.ok == 'true'
+        env:
+          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
+        run: python3 tools/audio/speech.py synthesize
+      - name: Depoya ekle ve uygulamayı yeniden derle
+        if: steps.key.outputs.ok == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/audio tools/audio/texts.json
+          if git commit -qm "Seslendirme: eksik sesler üretildi"; then
+            git push
+            gh workflow run ci.yml --ref main
+            gh workflow run web.yml --ref main
+          else
+            echo "Yeni ses yok."
+          fi
