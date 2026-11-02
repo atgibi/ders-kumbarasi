@@ -1,6 +1,8 @@
 /// İçerikteki görsel tanımlarını çizer (resim dosyası gerekmez).
 library;
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../data/models.dart';
@@ -206,6 +208,16 @@ class VisualView extends StatelessWidget {
               targetEmoji: _s('target_emoji', '🥣'),
             ),
           ),
+        ),
+      'clock' => SizedBox(
+          width: 170,
+          height: 170,
+          child: CustomPaint(painter: _ClockPainter(_i('h'), _i('m'))),
+        ),
+      'fraction' => SizedBox(
+          width: 140,
+          height: 140,
+          child: CustomPaint(painter: _FractionPainter(_i('parts'), _i('shaded'))),
         ),
       'emoji' => Text(_s('emoji'), style: const TextStyle(fontSize: 96)),
       'text' => Text(
@@ -413,4 +425,87 @@ class _Grid extends StatelessWidget {
       ],
     );
   }
+}
+
+
+/// Akrep ve yelkovanlı analog saat.
+class _ClockPainter extends CustomPainter {
+  _ClockPainter(this.h, this.m);
+  final int h;
+  final int m;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final c = size.center(Offset.zero);
+    final r = size.shortestSide / 2 - 4;
+    canvas.drawCircle(c, r, Paint()..color = Colors.white);
+    canvas.drawCircle(
+        c,
+        r,
+        Paint()
+          ..color = Kumbara.ink
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 5);
+    for (var i = 1; i <= 12; i++) {
+      final a = i * math.pi / 6 - math.pi / 2;
+      final tp = TextPainter(
+        text: TextSpan(
+            text: '$i',
+            style: const TextStyle(color: Kumbara.ink, fontSize: 17, fontWeight: FontWeight.w800)),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      final pos = c + Offset(math.cos(a), math.sin(a)) * (r - 18);
+      tp.paint(canvas, pos - Offset(tp.width / 2, tp.height / 2));
+    }
+    void hand(double angle, double len, double w, Color col) {
+      final a = angle - math.pi / 2;
+      canvas.drawLine(
+        c,
+        c + Offset(math.cos(a), math.sin(a)) * len,
+        Paint()
+          ..color = col
+          ..strokeWidth = w
+          ..strokeCap = StrokeCap.round,
+      );
+    }
+
+    // Akrep (kısa, kalın): saat + dakikaya göre ilerler
+    hand(((h % 12) + m / 60) * math.pi / 6, r * 0.5, 8, Kumbara.ink);
+    // Yelkovan (uzun, ince)
+    hand(m * math.pi / 30, r * 0.78, 5, Kumbara.primary);
+    canvas.drawCircle(c, 6, Paint()..color = Kumbara.ink);
+  }
+
+  @override
+  bool shouldRepaint(_ClockPainter old) => old.h != h || old.m != m;
+}
+
+/// Bütün, yarım, çeyrek: daire dilimleri.
+class _FractionPainter extends CustomPainter {
+  _FractionPainter(this.parts, this.shaded);
+  final int parts;
+  final int shaded;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final n = parts < 1 ? 1 : parts;
+    final sweep = 2 * math.pi / n;
+    for (var i = 0; i < n; i++) {
+      final paint = Paint()..color = i < shaded ? Kumbara.primary : Colors.white;
+      canvas.drawArc(rect.deflate(3), -math.pi / 2 + i * sweep, sweep, true, paint);
+      canvas.drawArc(
+          rect.deflate(3),
+          -math.pi / 2 + i * sweep,
+          sweep,
+          true,
+          Paint()
+            ..color = Kumbara.ink
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 3);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_FractionPainter old) => old.parts != parts || old.shaded != shaded;
 }

@@ -478,6 +478,137 @@ Question _estimate(Map<String, Object?> p, Random r) {
   );
 }
 
+
+const _birler = ['', 'bir', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz'];
+const _onlar = ['', 'on', 'yirmi', 'otuz', 'kırk', 'elli', 'altmış', 'yetmiş', 'seksen', 'doksan'];
+
+/// Sayının Türkçe okunuşu (0 - 999 999): 1000 -> "bin", 100 -> "yüz".
+String sayiOkunusu(int n) {
+  if (n == 0) return 'sıfır';
+  String uc(int x) {
+    final y = x ~/ 100, o = (x % 100) ~/ 10, b = x % 10;
+    return [
+      if (y == 1) 'yüz' else if (y > 1) '${_birler[y]} yüz',
+      if (o > 0) _onlar[o],
+      if (b > 0) _birler[b],
+    ].join(' ');
+  }
+
+  final binler = n ~/ 1000, kalan = n % 1000;
+  return [
+    if (binler == 1) 'bin' else if (binler > 1) '${uc(binler)} bin',
+    if (kalan > 0) uc(kalan),
+  ].join(' ');
+}
+
+/// Okunuşu verilen sayıyı bulma ya da sayının okunuşunu seçme.
+Question _numberWords(Map<String, Object?> p, Random r) {
+  final max = _p(p, 'max', 100);
+  final n = _between(r, _p(p, 'min', 11), max);
+  final toWord = r.nextBool();
+  final o = numericOptions(n, r, spread: 2,
+      preferred: [
+        if (n >= 10 && n % 10 != 0 && n < 100) (n % 10) * 10 + n ~/ 10,
+        n + 10,
+        if (n > 10) n - 10,
+      ]);
+  if (toWord) {
+    final words = o.options.map((e) => sayiOkunusu(int.parse(e))).toList();
+    return Question(
+      prompt: '$n sayısı nasıl okunur?',
+      options: words,
+      answerIndex: o.answerIndex,
+      explanation: '$n: ${sayiOkunusu(n)}.',
+    );
+  }
+  return Question(
+    prompt: '“${sayiOkunusu(n)}” hangisidir?',
+    say: '${sayiOkunusu(n)} sayısı hangisi?',
+    options: o.options,
+    answerIndex: o.answerIndex,
+    explanation: '${sayiOkunusu(n)} rakamlarla $n diye yazılır.',
+  );
+}
+
+/// Sıralama: en küçük, en büyük ya da arada kalan sayı.
+Question _order3(Map<String, Object?> p, Random r) {
+  final max = _p(p, 'max', 100);
+  final set = <int>{};
+  while (set.length < 3) {
+    set.add(_between(r, 0, max));
+  }
+  final nums = set.toList()..sort();
+  final kind = r.nextInt(3);
+  final ans = switch (kind) { 0 => nums.first, 1 => nums.last, _ => nums[1] };
+  final shown = List.of(nums)..shuffle(r);
+  return Question(
+    prompt: switch (kind) {
+      0 => 'En küçük sayı hangisi?',
+      1 => 'En büyük sayı hangisi?',
+      _ => '${nums.first} ile ${nums.last} arasındaki sayı hangisi?',
+    },
+    options: shown.map((e) => '$e').toList(),
+    answerIndex: shown.indexOf(ans),
+    explanation: 'Küçükten büyüğe: ${nums.join(' < ')}.',
+  );
+}
+
+const _hal = ['', "1'i", "2'yi", "3'ü", "4'ü", "5'i", "6'yı", "7'yi", "8'i", "9'u", "10'u", "11'i", "12'yi"];
+const _yonelme = ['', "1'e", "2'ye", "3'e", "4'e", "5'e", "6'ya", "7'ye", "8'e", "9'a", "10'a", "11'e", "12'ye"];
+
+/// Saatin Türkçe söylenişi: 3:00, 3:30, 3:15, 3:45 (12 saatlik).
+String saatSoyle(int h, int m) {
+  final next = h == 12 ? 1 : h + 1;
+  return switch (m) {
+    0 => 'Saat $h',
+    30 => 'Saat $h buçuk',
+    15 => "Saat ${_hal[h]} çeyrek geçiyor",
+    45 => "Saat ${_yonelme[next]} çeyrek var",
+    _ => 'Saat $h:${m.toString().padLeft(2, '0')}',
+  };
+}
+
+Question _clockRead(Map<String, Object?> p, Random r) {
+  final mins = (p['minutes'] as List<Object?>?)?.cast<num>().map((e) => e.toInt()).toList() ?? [0, 30];
+  final h = _between(r, 1, 12), m = mins[r.nextInt(mins.length)];
+  final right = saatSoyle(h, m);
+  final set = <String>{right};
+  var guard = 0;
+  while (set.length < 3 && guard++ < 50) {
+    final hh = r.nextBool() ? h : _between(r, 1, 12);
+    final mm = mins.length > 1 ? mins[r.nextInt(mins.length)] : m;
+    set.add(saatSoyle(hh, mm));
+    // Akrep-yelkovan karışıklığı çeldiricisi
+    if (m == 0 && h <= 6) set.add(saatSoyle(h * 2 > 12 ? 12 : h * 2, 30));
+  }
+  final opts = set.take(3).toList();
+  if (!opts.contains(right)) opts[0] = right;
+  opts.shuffle(r);
+  return Question(
+    prompt: 'Saat kaç?',
+    visual: Visual('clock', {'h': h, 'm': m}),
+    options: opts,
+    answerIndex: opts.indexOf(right),
+    explanation: 'Kısa kol (akrep) saati, uzun kol (yelkovan) dakikayı gösterir: $right.',
+  );
+}
+
+/// Çarpmayı tekrarlı toplama olarak görme (MAT.2.2.4).
+Question _multiplyAsAdd(Map<String, Object?> p, Random r) {
+  final a = _between(r, 2, _p(p, 'a_max', 5));
+  final b = _between(r, 1, _p(p, 'b_max', 5));
+  final sum = List.filled(a, b).join(' + ');
+  final o = numericOptions(a, r, spread: 2, min: 1, preferred: [b, a * b]);
+  return Question(
+    prompt: '$sum = ? × $b',
+    say: '$a tane $b toplanıyor. Kaç kere $b eder?',
+    visual: a * b <= 30 ? Visual('groups', {'emoji': '🍓', 'groups': a, 'each': b}) : null,
+    options: o.options,
+    answerIndex: o.answerIndex,
+    explanation: '$b sayısını $a kez topladık: $a × $b = ${a * b}.',
+  );
+}
+
 final Map<String, QuestionGenerator> generators = {
   'count_objects': _countObjects,
   'compare': _compare,
@@ -496,6 +627,10 @@ final Map<String, QuestionGenerator> generators = {
   'fact_family': _factFamily,
   'count_back': _countBack,
   'estimate': _estimate,
+  'number_words': _numberWords,
+  'order3': _order3,
+  'clock_read': _clockRead,
+  'multiply_as_add': _multiplyAsAdd,
 };
 
 Question generate(CardDef card, Random rnd) {

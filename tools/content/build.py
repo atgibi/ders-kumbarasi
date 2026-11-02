@@ -22,13 +22,14 @@ PACK_MODULES = sorted(p.stem for p in Path(__file__).parent.glob("*_[1-4].py"))
 VISUAL_KINDS = {
     "objects", "objects2", "objects_crossed", "groups", "blocks", "number_highlight",
     "row", "emoji", "text", "compare_groups", "shapes", "money", "pictograph", "tally", "grid",
+    "clock", "fraction",
 }
 
 
 def dart_generators():
     src = (ROOT / "lib/data/generators.dart").read_text(encoding="utf-8")
     block = src[src.index("final Map<String, QuestionGenerator> generators"):]
-    return set(re.findall(r"'([a-z_]+)':\s*_", block))
+    return set(re.findall(r"'([a-z_0-9]+)':\s*_", block))
 
 
 def visual_kinds_in_dart():

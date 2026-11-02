@@ -84,6 +84,24 @@ void main() {
     'estimate': [
       {},
     ],
+    'number_words': [
+      {'max': 100},
+      {'min': 100, 'max': 999},
+      {'min': 1000, 'max': 999999},
+    ],
+    'order3': [
+      {'max': 100},
+      {'max': 9999},
+    ],
+    'clock_read': [
+      {},
+      {
+        'minutes': [0, 15, 30, 45],
+      },
+    ],
+    'multiply_as_add': [
+      {'a_max': 5, 'b_max': 5},
+    ],
   };
 
   test('tüm üreteçler testte', () {
@@ -187,6 +205,29 @@ void main() {
           c = int.parse(m.group(3)!);
       expect(int.parse(q.answer) + c, a + b, reason: q.prompt);
     }
+  });
+
+  test('sayı okunuşları', () {
+    expect(sayiOkunusu(0), 'sıfır');
+    expect(sayiOkunusu(7), 'yedi');
+    expect(sayiOkunusu(10), 'on');
+    expect(sayiOkunusu(47), 'kırk yedi');
+    expect(sayiOkunusu(100), 'yüz');
+    expect(sayiOkunusu(105), 'yüz beş');
+    expect(sayiOkunusu(260), 'iki yüz altmış');
+    expect(sayiOkunusu(1000), 'bin');
+    expect(sayiOkunusu(1999), 'bin dokuz yüz doksan dokuz');
+    expect(sayiOkunusu(23045), 'yirmi üç bin kırk beş');
+    expect(sayiOkunusu(100000), 'yüz bin');
+    expect(sayiOkunusu(999999), 'dokuz yüz doksan dokuz bin dokuz yüz doksan dokuz');
+  });
+
+  test('saat söyleyişi', () {
+    expect(saatSoyle(3, 0), 'Saat 3');
+    expect(saatSoyle(3, 30), 'Saat 3 buçuk');
+    expect(saatSoyle(6, 15), "Saat 6'yı çeyrek geçiyor");
+    expect(saatSoyle(5, 45), "Saat 6'ya çeyrek var");
+    expect(saatSoyle(12, 45), "Saat 1'e çeyrek var");
   });
 
   test('aynı tohum aynı soruyu üretir (tekrarlanabilirlik)', () {
