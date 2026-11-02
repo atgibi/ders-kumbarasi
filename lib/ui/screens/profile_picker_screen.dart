@@ -35,6 +35,8 @@ class ProfilePickerScreen extends StatelessWidget {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
+                const Mascot(size: 110),
+                const SizedBox(height: 8),
                 Text('Kim çalışacak?',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(height: 24),

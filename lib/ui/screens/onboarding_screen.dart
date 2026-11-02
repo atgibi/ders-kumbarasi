@@ -79,12 +79,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             'Bu cihazı kullanacak çocuğun velisiyim; yukarıdaki bilgileri okudum.'),
                       ),
                       const SizedBox(height: 12),
-                      FilledButton(
+                      ChunkyButton(
                         key: const Key('onboarding-next'),
+                        label: 'Devam',
                         onPressed: _accepted
                             ? () => setState(() => _showForm = true)
                             : null,
-                        child: const Text('Devam'),
                       ),
                     ],
             ),

@@ -147,8 +147,9 @@ class _PathScreenState extends State<PathScreen> {
       future: _future,
       builder: (context, snap) {
         final sections = snap.data;
-        if (sections == null)
+        if (sections == null) {
           return const Center(child: CircularProgressIndicator());
+        }
         var idx = 0;
         return ListView(
           padding: const EdgeInsets.only(bottom: 32),
