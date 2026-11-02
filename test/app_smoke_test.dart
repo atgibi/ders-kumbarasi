@@ -15,6 +15,7 @@ import 'package:ders_kumbarasi/ui/widgets/chunky_button.dart';
 final Map<String, String> _assets = {
   for (final f in [
     File(ContentRepository.outcomesAsset),
+    File(ContentRepository.unitsAsset),
     ...Directory('assets/content').listSync().whereType<File>(),
   ])
     f.path.replaceAll(r'\\', '/'): f.readAsStringSync(),

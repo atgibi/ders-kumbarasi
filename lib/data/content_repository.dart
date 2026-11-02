@@ -21,7 +21,11 @@ class ContentRepository {
 
   /// Ünite/tema adı (Matematik, Hayat Bilgisi, Fen, Sosyal). Türkçe'de null.
   Future<String?> unitName(Subject s, int grade, int unit) async {
-    _units ??= jsonDecode(await _load(unitsAsset)) as Map<String, Object?>;
+    try {
+      _units ??= jsonDecode(await _load(unitsAsset)) as Map<String, Object?>;
+    } on Object {
+      return null; // ünite adı yoksa yol yine de açılır
+    }
     final bySubject = _units![s.id];
     if (bySubject is! Map) return null;
     final byGrade = bySubject['$grade'];

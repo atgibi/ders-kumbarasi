@@ -146,6 +146,14 @@ class _PathScreenState extends State<PathScreen> {
     return FutureBuilder<List<PathSection>>(
       future: _future,
       builder: (context, snap) {
+        if (snap.hasError) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text('Yol açılamadı: ${snap.error}', textAlign: TextAlign.center),
+            ),
+          );
+        }
         final sections = snap.data;
         if (sections == null) {
           return const Center(child: CircularProgressIndicator());
