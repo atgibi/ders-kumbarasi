@@ -699,11 +699,11 @@ Question _roundTo(Map<String, Object?> p, Random r) {
   final lo = n ~/ to * to;
   final ans = n - lo >= to ~/ 2 ? lo + to : lo;
   final other = ans == lo ? lo + to : lo;
-  final opts = [
+  final opts = <String>{
     '$lo',
     '${lo + to}',
-    if (to == 10) '${lo + 2 * to}' else '${n ~/ 10 * 10}'
-  ].toSet().toList()
+    if (to == 10) '${lo + 2 * to}' else '${n ~/ 10 * 10}',
+  }.toList()
     ..shuffle(r);
   return Question(
     prompt: '$n sayısını en yakın ${to == 10 ? 'onluğa' : 'yüzlüğe'} yuvarla.',
