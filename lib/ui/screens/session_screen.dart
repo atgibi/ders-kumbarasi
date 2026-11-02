@@ -524,7 +524,25 @@ class _QuestionViewState extends State<_QuestionView> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(q.prompt, style: t.headlineMedium),
+                // Okuma metni varsa (metin + boş satır + soru) metin kartta, soru büyük
+                if (q.prompt.contains('\n\n')) ...[
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Kumbara.line, width: 2),
+                    ),
+                    child: Text(
+                      q.prompt.substring(0, q.prompt.lastIndexOf('\n\n')),
+                      style: t.bodyLarge,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(q.prompt.substring(q.prompt.lastIndexOf('\n\n') + 2),
+                      style: t.titleLarge),
+                ] else
+                  Text(q.prompt, style: t.headlineMedium),
                 if (_hint && r == null) ...[
                   const SizedBox(height: 8),
                   Text('💡 ${q.hint}',

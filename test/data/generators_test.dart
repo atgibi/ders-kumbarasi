@@ -145,6 +145,19 @@ void main() {
     'area_count': [
       {'max': 6},
     ],
+    'first_letter': [
+      {
+        'letters': ['a', 'n', 'e', 't', 'i', 'l'],
+      },
+      {},
+    ],
+    'syllables': [
+      {},
+    ],
+    'word_pair': [
+      {'kind': 'es'},
+      {'kind': 'zit'},
+    ],
   };
 
   test('tüm üreteçler testte', () {
@@ -323,6 +336,18 @@ void main() {
     }
     expect(positions, {0, 1, 2},
         reason: 'doğru cevap her konumda görünebilmeli');
+  });
+
+  test('harf-ses: doğru resim gerçekten o harfle başlıyor', () {
+    const card = CardDef(id: 't', outcomeCode: 'X', generator: 'first_letter');
+    for (var seed = 0; seed < 300; seed++) {
+      final q = generate(card, Random(seed));
+      final letter = q.prompt.split(' ')[1];
+      final word = q.answer.split(' ')[1];
+      expect(word.startsWith(letter), isTrue, reason: '${q.prompt} -> ${q.answer}');
+      final wrong = [for (var i = 0; i < q.options.length; i++) if (i != q.answerIndex) q.options[i].split(' ')[1]];
+      expect(wrong.any((w) => w.startsWith(letter)), isFalse, reason: '${q.prompt} ${q.options}');
+    }
   });
 
   test('aynı tohum aynı soruyu üretir (tekrarlanabilirlik)', () {

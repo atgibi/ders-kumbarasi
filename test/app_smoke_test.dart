@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ders_kumbarasi/app/app_state.dart';
 import 'package:ders_kumbarasi/app/speaker.dart';
 import 'package:ders_kumbarasi/data/content_repository.dart';
+import 'package:ders_kumbarasi/data/models.dart';
 import 'package:ders_kumbarasi/data/progress_store.dart';
 import 'package:ders_kumbarasi/main.dart';
 import 'package:ders_kumbarasi/ui/widgets/chunky_button.dart';
@@ -76,6 +77,8 @@ void main() {
     // Profil seçimi
     expect(find.text('Kim çalışacak?'), findsOneWidget);
     await t.tap(find.text('Elif'));
+    await settle(t);
+    state.selectSubject(Subject.matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
     await settle(t);
 
     // Yol ekranı: ilk konu açık, ikincisi kilitli
@@ -150,6 +153,8 @@ void main() {
     await settle(t);
     await t.tap(find.text('Can'));
     await settle(t);
+    state.selectSubject(Subject.matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
+    await settle(t);
     await t.tap(find.byKey(const Key('node-MAT.1.1.1')));
     await settle(t);
     expect(find.byKey(const Key('lesson-next')), findsOneWidget);
@@ -198,6 +203,8 @@ void main() {
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
     await t.tap(find.text('Can'));
+    await settle(t);
+    state.selectSubject(Subject.matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
     await settle(t);
     await t.tap(find.byKey(const Key('node-MAT.1.1.1')));
     await t.pumpAndSettle();
