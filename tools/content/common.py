@@ -18,13 +18,24 @@ def page(text, visual=None, say=None):
     return d
 
 
-def lesson(title, pages):
-    return {"title": title, "pages": pages}
+def lesson(title, pages, alt=False):
+    """alt=True: "farklı yoldan" ikinci anlatım (oturumda kendiliğinden
+    gösterilmez; zorlanan çocuk için)."""
+    d = {"title": title, "pages": pages}
+    if alt:
+        d["alt"] = True
+    return d
 
 
-def mc(prompt, options, answer, *, say=None, visual=None, explain=None, hint=None, fast=None):
+def mc(prompt, options, answer, *, say=None, visual=None, explain=None, hint=None, fast=None, why=None):
+    """why: yanlış seçeneklere özel açıklama, {seçenek sırası: metin}.
+    Her çeldirici gerçek bir kavram yanılgısından gelmeli."""
     d = {"type": "mc", "prompt": prompt, "options": options, "answer": answer}
-    for k, v in (("say", say), ("visual", visual), ("explain", explain), ("hint", hint), ("fast", fast)):
+    if why is not None:
+        if answer in why:
+            raise ValueError(f"Doğru seçeneğe yanılgı notu yazılmaz: {prompt}")
+        why = {str(k): v for k, v in why.items()}
+    for k, v in (("say", say), ("visual", visual), ("explain", explain), ("hint", hint), ("fast", fast), ("why", why)):
         if v is not None:
             d[k] = v
     return d

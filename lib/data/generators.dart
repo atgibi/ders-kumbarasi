@@ -47,6 +47,10 @@ int _between(Random r, int min, int max) => min + r.nextInt(max - min + 1);
   );
 }
 
+/// Seçeneklerden her biri için, cevaba göre kavram yanılgısı açıklaması.
+List<String?> _notesFor(List<String> options, String? Function(int v) note) =>
+    [for (final o in options) note(int.parse(o))];
+
 const _objects = ['🍎', '⭐', '🎈', '🐟', '🌼', '🚗', '🐞', '⚽', '🍐', '🐥'];
 
 Question _countObjects(Map<String, Object?> p, Random r) {
@@ -61,6 +65,13 @@ Question _countObjects(Map<String, Object?> p, Random r) {
     options: o.options,
     answerIndex: o.answerIndex,
     explanation: 'Tek tek saydığımızda $n tane buluruz.',
+    optionNotes: _notesFor(
+        o.options,
+        (v) => v == n
+            ? null
+            : v > n
+                ? '$v dedin. Bir tanesini iki kez saymış olabilir misin? Saydığına parmağınla dokun, sonra yanındakine geç. Doğrusu $n.'
+                : '$v dedin. Birini atlamış olabilir misin? Hepsine sırayla dokunarak say. Doğrusu $n.'),
   );
 }
 
@@ -111,6 +122,17 @@ Question _add(Map<String, Object?> p, Random r) {
     answerIndex: o.answerIndex,
     explanation: '$a ile $b toplanınca $s olur.',
     hint: maxSum <= 20 ? 'Büyük sayıdan başla, $b tane ileri say.' : null,
+    optionNotes: _notesFor(
+        o.options,
+        (v) => v == s
+            ? null
+            : v == s - 1
+                ? 'İleri sayarken ilk sayıyı da saymış olabilir misin? $a + $b için saymaya ${a + 1} sayısından başla ve $b adım ileri git.'
+                : v == s + 1
+                    ? 'Bir adım fazla saymış olabilirsin. $b parmak aç, her parmakta bir sayı ileri git.'
+                    : (v - s).abs() == 10
+                        ? 'Onlukları karıştırmış olabilir misin? Önce birlikleri, sonra onlukları topla.'
+                        : null),
   );
 }
 
@@ -135,6 +157,15 @@ Question _sub(Map<String, Object?> p, Random r) {
     answerIndex: o.answerIndex,
     explanation: '$a içinden $b çıkarılınca $d kalır.',
     hint: max <= 20 ? '$a sayısından $b tane geri say.' : null,
+    optionNotes: _notesFor(
+        o.options,
+        (v) => v == d
+            ? null
+            : v == a + b
+                ? 'Burada toplama değil çıkarma var: “−” işareti “eksilt” demek. $a sayısından $b tane geri say.'
+                : v == d + 1
+                    ? 'Geri sayarken $a sayısını da saymış olabilir misin? İlk adımda ${a - 1} dersin.'
+                    : null),
   );
 }
 

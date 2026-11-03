@@ -22,7 +22,7 @@ PACK_MODULES = sorted(p.stem for p in Path(__file__).parent.glob("*_[1-4].py"))
 VISUAL_KINDS = {
     "objects", "objects2", "objects_crossed", "groups", "blocks", "number_highlight",
     "row", "emoji", "text", "compare_groups", "shapes", "money", "pictograph", "tally", "grid",
-    "clock", "fraction", "angle", "area",
+    "clock", "fraction", "angle", "area", "number_line",
 }
 
 
@@ -83,6 +83,9 @@ def validate(pk, curriculum, gens, errors, warnings):
                     errors.append(f"{cid}: tekrarlı seçenek {opts}")
                 if not (0 <= c["answer"] < len(opts)):
                     errors.append(f"{cid}: cevap indeksi geçersiz")
+                for k in c.get("why", {}):
+                    if not (0 <= int(k) < len(opts)) or int(k) == c["answer"]:
+                        errors.append(f"{cid}: geçersiz yanılgı notu sırası {k}")
                 check_visual(c.get("visual"), cid, errors)
         if len(oc["cards"]) < 3:
             warnings.append(f"{code}: yalnızca {len(oc['cards'])} kart")

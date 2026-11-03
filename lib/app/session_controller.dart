@@ -67,7 +67,13 @@ class SessionController {
     required this.random,
     required this.clock,
     required this.plan,
+    this.altLessons = const [],
   }) : startedAt = clock();
+
+  /// Yeni konunun "farklı yoldan" anlatımları: alıştırmada ilk yanlışta
+  /// bir kez araya girer.
+  final List<Lesson> altLessons;
+  bool _altShown = false;
 
   final Subject subject;
   final ChildProgress progress;
@@ -245,6 +251,12 @@ class SessionController {
       random: rnd,
       clock: clock ?? DateTime.now,
       plan: plan,
+      altLessons: plan.newOutcomeId == null
+          ? const []
+          : [
+              for (final l in pack[plan.newOutcomeId]!.lessons)
+                if (l.alt) l
+            ],
     );
   }
 
@@ -357,6 +369,16 @@ class SessionController {
       // Konu anlatımı olmayan çıktılarda da çıktı başlatılmış sayılır
       progress.startedOutcomes.add(plan.newOutcomeId!);
       summary.newOutcomes.add(plan.newOutcomeId!);
+    }
+
+    // Yeni konunun alıştırmasında ilk yanlış: konu farklı yoldan bir kez daha
+    if (!correct &&
+        step.phase == StepPhase.practice &&
+        !_altShown &&
+        altLessons.isNotEmpty) {
+      _altShown = true;
+      steps.insert(index + 1,
+          SessionStep.lesson(altLessons.first, StepPhase.newTopic));
     }
 
     // Yanlış cevaplanan kart oturum sonunda farklı bir varyantla bir kez daha

@@ -129,6 +129,12 @@ class VisualView extends StatelessWidget {
             ),
           ],
         ),
+      'number_line' => _NumberLine(
+          from: _i('from'),
+          to: _i('to'),
+          mark: visual.params['mark'] as num?,
+          missing: visual.params['missing'] as num?,
+        ),
       'number_highlight' =>
         _NumberHighlight(number: '${visual.params['number']}', pos: _i('pos')),
       'row' => Wrap(
@@ -285,8 +291,52 @@ class VisualView extends StatelessWidget {
       'money' => 'Para',
       'shapes' => 'Geometrik şekiller',
       'text' => _s('text', ''),
+      'number_line' => '${_i('from')} ile ${_i('to')} arası sayı doğrusu'
+          '${visual.params['mark'] != null ? ', ${visual.params['mark']} işaretli' : ''}'
+          '${visual.params['missing'] != null ? ', bir sayı eksik' : ''}',
       _ => 'Resim',
     };
+  }
+}
+
+/// Sayı doğrusu: kutucuklar, işaretli sayı safran, eksik sayı "?".
+class _NumberLine extends StatelessWidget {
+  const _NumberLine(
+      {required this.from, required this.to, this.mark, this.missing});
+  final int from;
+  final int to;
+  final num? mark;
+  final num? missing;
+
+  @override
+  Widget build(BuildContext context) {
+    final cells = [for (var i = from; i <= to; i++) i];
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 4,
+      runSpacing: 6,
+      children: [
+        for (final v in cells)
+          Container(
+            width: 36,
+            height: 44,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: v == mark
+                  ? K.reward
+                  : v == missing
+                      ? K.againBg
+                      : K.card,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                  color: v == mark ? K.rewardShade : K.line, width: 2),
+            ),
+            child: Text(v == missing ? '?' : '$v',
+                style: const TextStyle(
+                    fontSize: 19, fontWeight: FontWeight.w900, color: K.ink)),
+          ),
+      ],
+    );
   }
 }
 
