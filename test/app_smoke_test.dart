@@ -156,8 +156,8 @@ void main() {
     await settle(t);
 
     await tapKey(t, 'node-MAT.1.1.2');
-    expect(find.textContaining('Önce sıradaki konuyu bitirelim'),
-        findsOneWidget);
+    expect(
+        find.textContaining('Önce sıradaki konuyu bitirelim'), findsOneWidget);
     await t.pumpAndSettle(const Duration(seconds: 3));
 
     await tapKey(t, 'node-MAT.1.1.1');
@@ -178,8 +178,7 @@ void main() {
     expect(has('today-card'), isTrue);
   });
 
-  testWidgets('veli kapısı: yanlış cevapta açılmaz, doğruda açılır',
-      (t) async {
+  testWidgets('veli kapısı: yanlış cevapta açılmaz, doğruda açılır', (t) async {
     reduceMotion(t);
     phone(t);
     final storage = MemoryStorage();
@@ -197,8 +196,8 @@ void main() {
     await tapKey(t, 'gate-key-1');
     await tapKey(t, 'gate-key-ok');
     expect(find.text('Veli paneli'), findsNothing);
-    expect(find.text('Bu cevap değil. 2 deneme hakkınız kaldı.'),
-        findsOneWidget);
+    expect(
+        find.text('Bu cevap değil. 2 deneme hakkınız kaldı.'), findsOneWidget);
 
     final q = t.widget<Text>(find.byKey(const Key('gate-question'))).data!;
     final m = RegExp(r'(\d+) × (\d+)').firstMatch(q)!;

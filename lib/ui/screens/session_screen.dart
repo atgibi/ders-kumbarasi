@@ -14,7 +14,11 @@ import '../widgets/visual_view.dart';
 import 'system_screens.dart';
 
 const _okTitles = ['Harika!', 'Tam isabet!', 'Dikkatle düşündün!'];
-const _okBodies = ['Dikkatle çalıştın.', 'Adım adım düşündün.', 'Güzel çalıştın.'];
+const _okBodies = [
+  'Dikkatle çalıştın.',
+  'Adım adım düşündün.',
+  'Güzel çalıştın.'
+];
 
 enum _Phase { loading, empty, error, run, summary, streak }
 
@@ -77,7 +81,8 @@ class _SessionScreenState extends State<SessionScreen> {
         reviewOnly: widget.reviewOnly,
         extraPractice: widget.extraPractice,
       );
-      final pack = await app.content.contentFor(widget.subject, app.active!.grade);
+      final pack =
+          await app.content.contentFor(widget.subject, app.active!.grade);
       for (final e in pack.entries) {
         if (e.value.lessons.isNotEmpty) {
           _lessonTitles[e.key] = e.value.lessons.first.title;
@@ -137,7 +142,8 @@ class _SessionScreenState extends State<SessionScreen> {
   void _summaryDone() {
     if (_c!.summary.streakGrew) {
       setState(() => _phase = _Phase.streak);
-      _say('${AppScope.read(context).progress!.streakDays} gündür birlikteyiz!');
+      _say(
+          '${AppScope.read(context).progress!.streakDays} gündür birlikteyiz!');
     } else {
       _end();
     }
@@ -293,8 +299,8 @@ class _SessionScreenState extends State<SessionScreen> {
                             return r;
                           },
                           onNext: (wasWrong) => _advance(c.next,
-                              retryNote: wasWrong &&
-                                  step.phase != StepPhase.retry),
+                              retryNote:
+                                  wasWrong && step.phase != StepPhase.retry),
                         ),
             ),
           ],
@@ -337,8 +343,8 @@ class _TopBar extends StatelessWidget {
               width: 64,
               height: 64,
               child: Center(
-                  child: DkIcon(DkIcons.x,
-                      size: 30, color: K.inkSoft, stroke: 3)),
+                  child:
+                      DkIcon(DkIcons.x, size: 30, color: K.inkSoft, stroke: 3)),
             ),
           ),
           const SizedBox(width: 8),
@@ -600,8 +606,7 @@ class _QuestionViewState extends State<_QuestionView> {
                 const SizedBox(height: 16),
               ],
               EmojiText(prompt,
-                  style: T.question
-                      .copyWith(fontSize: hasPassage ? 21 : 24)),
+                  style: T.question.copyWith(fontSize: hasPassage ? 21 : 24)),
               if (_hint && r == null) ...[
                 const SizedBox(height: 16),
                 _HintBox(text: q.hint!),
@@ -654,9 +659,8 @@ class _QuestionViewState extends State<_QuestionView> {
         else
           FeedbackBand(
             correct: r.correct,
-            title: r.correct
-                ? _okTitles[widget.praise]
-                : 'Doğrusu: ${q.answer}',
+            title:
+                r.correct ? _okTitles[widget.praise] : 'Doğrusu: ${q.answer}',
             body: r.correct ? _okBodies[widget.praise] : q.explanation,
             onNext: () => widget.onNext(!r.correct),
           ),
@@ -941,11 +945,8 @@ class FeedbackBand extends StatelessWidget {
                         decoration: BoxDecoration(
                             color: correct ? K.goodShadow : K.againStrong,
                             shape: BoxShape.circle),
-                        child: DkIcon(
-                            correct ? DkIcons.check : DkIcons.again,
-                            size: 16,
-                            color: Colors.white,
-                            stroke: 3.5),
+                        child: DkIcon(correct ? DkIcons.check : DkIcons.again,
+                            size: 16, color: Colors.white, stroke: 3.5),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
@@ -983,8 +984,8 @@ class FeedbackBand extends StatelessWidget {
       tween: Tween(begin: 1, end: 0),
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeOut,
-      builder: (context, v, child) => FractionalTranslation(
-          translation: Offset(0, v), child: child),
+      builder: (context, v, child) =>
+          FractionalTranslation(translation: Offset(0, v), child: child),
       child: band,
     );
   }
@@ -1227,8 +1228,8 @@ class _SummaryView extends StatelessWidget {
                                           color: t.$4,
                                           borderRadius:
                                               BorderRadius.circular(K.rSm)),
-                                      child: DkIcon(t.$1,
-                                          size: 22, color: t.$5),
+                                      child:
+                                          DkIcon(t.$1, size: 22, color: t.$5),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(t.$2,
@@ -1281,8 +1282,7 @@ class _SummaryView extends StatelessWidget {
                     ],
                     if (s.retried > 0) ...[
                       const SizedBox(height: 12),
-                      const Text(
-                          'Zorlandığın soruları yakında yine soracağım.',
+                      const Text('Zorlandığın soruları yakında yine soracağım.',
                           style: T.help),
                     ],
                   ],
@@ -1292,7 +1292,9 @@ class _SummaryView extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           ChunkyButton(
-              key: const Key('summary-done'), label: 'Tamam', onPressed: onDone),
+              key: const Key('summary-done'),
+              label: 'Tamam',
+              onPressed: onDone),
         ],
       ),
     );

@@ -44,8 +44,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         .map((o) => o.code)
         .firstOrNull;
     nav.push(MaterialPageRoute<void>(
-        builder: (_) =>
-            SessionScreen(subject: subject, focusOutcome: first)));
+        builder: (_) => SessionScreen(subject: subject, focusOutcome: first)));
   }
 
   @override
@@ -111,7 +110,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     SizedBox(height: 18),
                     Text('Her gün 10 dakika, kalıcı öğrenme', style: T.hero),
                     SizedBox(height: 18),
-                    Text('1–4. sınıf için kısa konu anlatımları ve akıllı tekrar.',
+                    Text(
+                        '1–4. sınıf için kısa konu anlatımları ve akıllı tekrar.',
                         style: T.bodySoft),
                   ],
                 ),
@@ -160,8 +160,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 key: const Key('back'),
                 icon: DkIcons.left,
                 label: 'Geri',
-                onPressed: () =>
-                    _how > 0 ? setState(() => _how--) : _go(0)),
+                onPressed: () => _how > 0 ? setState(() => _how--) : _go(0)),
             const Spacer(),
             TextBtn(
                 key: const Key('skip'),
@@ -262,9 +261,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 16),
           DailyLimitCard(
             value: _settings.dailyLimitMinutes,
-            onChanged: (v) => setState(() =>
-                _settings = _settings.copyWith(dailyLimitMinutes: v)),
-            help: 'Süre dolarsa oturum yarıda kesilmez; bitince dinlenme ekranı gelir.',
+            onChanged: (v) => setState(
+                () => _settings = _settings.copyWith(dailyLimitMinutes: v)),
+            help:
+                'Süre dolarsa oturum yarıda kesilmez; bitince dinlenme ekranı gelir.',
           ),
           const SizedBox(height: 16),
           ToggleRow(
@@ -367,8 +367,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           height: 72,
           child: Align(
             alignment: Alignment.centerRight,
-            child: ListenButton(
-                onListen: () => app.say('Hazır mısın, $name?')),
+            child: ListenButton(onListen: () => app.say('Hazır mısın, $name?')),
           ),
         ),
         Expanded(

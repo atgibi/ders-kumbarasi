@@ -168,8 +168,8 @@ class ChunkyButton extends StatelessWidget {
           ),
         );
         return Padding(
-          padding: EdgeInsets.only(
-              top: down ? depth : 0, bottom: down ? 0 : depth),
+          padding:
+              EdgeInsets.only(top: down ? depth : 0, bottom: down ? 0 : depth),
           child: face,
         );
       },
@@ -329,9 +329,7 @@ class _ListenButtonState extends State<ListenButton> {
               shape: BoxShape.circle,
               boxShadow: down
                   ? null
-                  : const [
-                      BoxShadow(color: K.againLine, offset: Offset(0, 4))
-                    ],
+                  : const [BoxShadow(color: K.againLine, offset: Offset(0, 4))],
             ),
             child: DkIcon(DkIcons.volume,
                 size: widget.iconSize,
@@ -386,8 +384,7 @@ class _ListenSplitState extends State<ListenSplit> {
                   ? K.againLine
                   : K.againBg,
           child: DkIcon(icon,
-              size: iconSize,
-              color: _playing == i ? Colors.white : K.againInk),
+              size: iconSize, color: _playing == i ? Colors.white : K.againInk),
         ),
       );
 
@@ -507,8 +504,8 @@ class Pill extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         padding: padding,
-        decoration: BoxDecoration(
-            color: bg, borderRadius: BorderRadius.circular(999)),
+        decoration:
+            BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999)),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           if (icon != null) ...[
             DkIcon(icon!, size: fontSize + 6, color: fg, stroke: 2),
@@ -576,8 +573,8 @@ class DkSwitch extends StatelessWidget {
             margin: const EdgeInsets.all(3),
             width: 26,
             height: 26,
-            decoration:
-                const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+                color: Colors.white, shape: BoxShape.circle),
           ),
         ),
       );
@@ -612,8 +609,8 @@ class ToggleRow extends StatelessWidget {
         focusRadius: 16,
         builder: (context, down) => Container(
           constraints: BoxConstraints(minHeight: boxed ? 72 : 64),
-          padding: EdgeInsets.symmetric(
-              horizontal: 16, vertical: boxed ? 12 : 10),
+          padding:
+              EdgeInsets.symmetric(horizontal: 16, vertical: boxed ? 12 : 10),
           decoration: boxed
               ? BoxDecoration(
                   color: K.card,
@@ -629,15 +626,9 @@ class ToggleRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: parent
-                          ? T.pStrong
-                          : T.strong),
+                  Text(title, style: parent ? T.pStrong : T.strong),
                   const SizedBox(height: 2),
-                  Text(subtitle,
-                      style: parent
-                          ? T.pSmall
-                          : T.help),
+                  Text(subtitle, style: parent ? T.pSmall : T.help),
                 ],
               ),
             ),
@@ -725,8 +716,8 @@ class _DashPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final r = RRect.fromRectAndRadius(
-        Offset.zero & size, Radius.circular(radius));
+    final r =
+        RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius));
     canvas.drawRRect(r, Paint()..color = fill);
     final p = Path()..addRRect(r.deflate(1));
     final paint = Paint()
@@ -807,7 +798,8 @@ void showDkToast(BuildContext context, DkIcons icon, String text) {
               liveRegion: true,
               child: Container(
                 key: const Key('toast'),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 decoration: BoxDecoration(
                   color: K.againStrong,
                   borderRadius: BorderRadius.circular(18),
@@ -913,8 +905,7 @@ class NavRow extends StatelessWidget {
             color: down ? K.bgParent : null,
             border: last
                 ? null
-                : const Border(
-                    bottom: BorderSide(color: K.lineSoft, width: 2)),
+                : const Border(bottom: BorderSide(color: K.lineSoft, width: 2)),
           ),
           child: Row(children: [
             if (icon != null) ...[

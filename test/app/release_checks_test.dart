@@ -11,8 +11,8 @@ import 'package:ders_kumbarasi/ui/widgets/emoji_text.dart';
 void main() {
   test('uygulama içindeki sürüm pubspec ile aynı', () {
     final pubspec = File('pubspec.yaml').readAsStringSync();
-    final m = RegExp(r'^version:\s*([0-9.]+)\+', multiLine: true)
-        .firstMatch(pubspec);
+    final m =
+        RegExp(r'^version:\s*([0-9.]+)\+', multiLine: true).firstMatch(pubspec);
     expect(m, isNotNull);
     expect(appVersion, m![1]);
   });

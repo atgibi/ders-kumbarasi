@@ -91,10 +91,7 @@ class SessionController {
   /// Kalan soru sayısı (süre sınırı uyarısı için).
   int get remainingQuestions => index >= steps.length
       ? 0
-      : steps
-          .sublist(index)
-          .where((s) => s.kind == StepKind.question)
-          .length;
+      : steps.sublist(index).where((s) => s.kind == StepKind.question).length;
 
   /// Günlük süre doluyor: şu anki adımdan sonra en fazla [n] soru kalsın.
   /// Oturum yarıda kesilmez; kısalır.
@@ -164,9 +161,7 @@ class SessionController {
                 ...?pack[code]?.cards,
             ]
           : [...?pack[focusOutcome]?.cards];
-      final cards = source
-          .where((c) => !(c.fixed?.activity ?? false))
-          .toList()
+      final cards = source.where((c) => !(c.fixed?.activity ?? false)).toList()
         ..sort((a, b) {
           final sa = progress.cards[a.id], sb = progress.cards[b.id];
           final c = (sa?.box ?? -1).compareTo(sb?.box ?? -1);

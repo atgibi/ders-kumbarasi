@@ -115,7 +115,8 @@ Future<List<PathSection>> buildPath(AppState app, Subject subject) async {
     final o = group.first.outcome;
     final String title, subtitle;
     if (o.unit != null) {
-      title = subject == Subject.matematik ? 'TEMA ${o.unit}' : 'ÜNİTE ${o.unit}';
+      title =
+          subject == Subject.matematik ? 'TEMA ${o.unit}' : 'ÜNİTE ${o.unit}';
       subtitle =
           await app.content.unitName(subject, child.grade, o.unit!) ?? '';
     } else {
@@ -152,8 +153,8 @@ class _PathScreenState extends State<PathScreen> {
     final key = '${app.active?.id}|${app.subject}|${p?.startedOutcomes.length}|'
         '${p?.cards.length}|${p?.lastSessionDay}|${p?.nuts}';
     if (_future == null || key != _forKey) {
-      final first = _future == null || !_forKey.startsWith(
-          '${app.active?.id}|${app.subject}|');
+      final first = _future == null ||
+          !_forKey.startsWith('${app.active?.id}|${app.subject}|');
       _forKey = key;
       _future = _build(app);
       if (first) {
@@ -163,8 +164,8 @@ class _PathScreenState extends State<PathScreen> {
             if (ctx != null && mounted) {
               Scrollable.ensureVisible(ctx,
                   alignment: 0.4,
-                  duration: Duration(
-                      milliseconds: reduceMotion(context) ? 0 : 300));
+                  duration:
+                      Duration(milliseconds: reduceMotion(context) ? 0 : 300));
             }
           });
         });
@@ -194,8 +195,10 @@ class _PathScreenState extends State<PathScreen> {
       builder: (ctx) => _NodeSheet(
         section: section,
         node: node,
-        onListen: () => app.say(
-            [node.label, if (node.firstPage != null) node.firstPage!].join('. ')),
+        onListen: () => app.say([
+          node.label,
+          if (node.firstPage != null) node.firstPage!
+        ].join('. ')),
       ),
     );
     if (start == true && mounted) {
@@ -220,8 +223,8 @@ class _PathScreenState extends State<PathScreen> {
         if (data == null) return const SizedBox.shrink();
         final (sections, due) = data;
         var idx = 0;
-        final hasCurrent =
-            sections.any((s) => s.nodes.any((n) => n.state == NodeState.current));
+        final hasCurrent = sections
+            .any((s) => s.nodes.any((n) => n.state == NodeState.current));
         return ListView(
           key: const Key('path-list'),
           padding: const EdgeInsets.only(bottom: 24),
@@ -302,8 +305,7 @@ class _TodayCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(10, 14, 14, 14),
       radius: K.rLg,
       child: Row(children: [
-        Mascot(
-            mood: done ? MascotMood.celebrate : MascotMood.normal, size: 58),
+        Mascot(mood: done ? MascotMood.celebrate : MascotMood.normal, size: 58),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
@@ -342,7 +344,9 @@ class _UnitBanner extends StatelessWidget {
       decoration: BoxDecoration(
         color: section.color,
         borderRadius: BorderRadius.circular(K.rLg),
-        boxShadow: [BoxShadow(color: section.shade, offset: const Offset(0, 5))],
+        boxShadow: [
+          BoxShadow(color: section.shade, offset: const Offset(0, 5))
+        ],
       ),
       child: Row(children: [
         Expanded(
@@ -353,7 +357,8 @@ class _UnitBanner extends StatelessWidget {
                   bg: Colors.white,
                   fg: K.ink,
                   fontSize: 13,
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3)),
               if (section.subtitle.isNotEmpty) ...[
                 const SizedBox(height: 6),
                 Text(section.subtitle,
@@ -388,7 +393,10 @@ class _UnitBanner extends StatelessWidget {
 /// Yol düğümü (88 halka + 68 yüz, 6 px blok gölge).
 class PathNodeView extends StatelessWidget {
   const PathNodeView(
-      {super.key, required this.node, required this.color, required this.shade});
+      {super.key,
+      required this.node,
+      required this.color,
+      required this.shade});
   final PathNode node;
   final Color color;
   final Color shade;
@@ -558,8 +566,8 @@ class _NodeItemState extends State<_NodeItem>
             AnimatedBuilder(
               animation: _bounce,
               builder: (context, child) => Transform.translate(
-                  offset: Offset(
-                      0, -6 * Curves.easeInOut.transform(_bounce.value)),
+                  offset:
+                      Offset(0, -6 * Curves.easeInOut.transform(_bounce.value)),
                   child: child),
               child: Container(
                 margin: const EdgeInsets.only(bottom: 4),
@@ -646,8 +654,8 @@ class _NodeSheet extends StatelessWidget {
                     bg: section.color,
                     fg: K.ink,
                     fontSize: 13,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 3)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 3)),
                 const SizedBox(height: 6),
                 EmojiText(node.label, style: T.title),
                 const SizedBox(height: 6),
@@ -700,7 +708,9 @@ Future<void> showSubjectSheet(BuildContext context) async {
     final m = await app.masteryMap(child, app.progress!, s);
     info[s] = (
       pack.length,
-      outcomes.where((o) => app.progress!.startedOutcomes.contains(o.code)).length,
+      outcomes
+          .where((o) => app.progress!.startedOutcomes.contains(o.code))
+          .length,
       m.values.where((l) => l == MasteryLevel.sufficient).length,
     );
     if (outcomes.isEmpty) info[s] = (0, 0, 0);
@@ -716,7 +726,9 @@ Future<void> showSubjectSheet(BuildContext context) async {
           const Expanded(
               child: Text('Hangi ders?',
                   style: TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w900, color: K.ink))),
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                      color: K.ink))),
           CircleBtn.close(onPressed: () => Navigator.pop(ctx)),
         ]),
         const SizedBox(height: 10),

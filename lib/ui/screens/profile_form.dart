@@ -62,8 +62,8 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
     if (!_valid || _busy) return;
     setState(() => _busy = true);
     try {
-      await widget.onSubmit(
-          ProfileFormResult(_name.text.trim(), _grade, '$_avatar'));
+      await widget
+          .onSubmit(ProfileFormResult(_name.text.trim(), _grade, '$_avatar'));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -109,7 +109,9 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                     onChanged: (_) => setState(() {}),
                     onSubmitted: (_) => _submit(),
                     style: const TextStyle(
-                        fontSize: 19, fontWeight: FontWeight.w700, color: K.ink),
+                        fontSize: 19,
+                        fontWeight: FontWeight.w700,
+                        color: K.ink),
                     decoration: InputDecoration(
                       hintText: 'ör. Elif',
                       hintStyle: const TextStyle(
@@ -125,7 +127,8 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(K.rMd),
-                        borderSide: const BorderSide(color: K.primary, width: 2),
+                        borderSide:
+                            const BorderSide(color: K.primary, width: 2),
                       ),
                     ),
                   ),

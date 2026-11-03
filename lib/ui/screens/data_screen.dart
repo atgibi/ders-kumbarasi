@@ -35,7 +35,8 @@ class _DataScreenState extends State<DataScreen> {
     if (_busy) return;
     final app = AppScope.read(context);
     if (kIsWeb) {
-      _say('Yedekleme web sürümünde yok; telefon ya da tablet uygulamasını kullanın.',
+      _say(
+          'Yedekleme web sürümünde yok; telefon ya da tablet uygulamasını kullanın.',
           ok: false);
       return;
     }
@@ -57,7 +58,8 @@ class _DataScreenState extends State<DataScreen> {
         sharePositionOrigin:
             box == null ? null : box.localToGlobal(Offset.zero) & box.size,
       );
-      _say('Yedek dosyası hazırlandı. Güvenli bir yere (ör. Dosyalar, Drive) kaydedin.');
+      _say(
+          'Yedek dosyası hazırlandı. Güvenli bir yere (ör. Dosyalar, Drive) kaydedin.');
     } on Object catch (e) {
       debugPrint('Yedekleme: $e');
       _say('Yedek hazırlanamadı. Lütfen tekrar deneyin.', ok: false);
@@ -205,15 +207,17 @@ class _DataScreenState extends State<DataScreen> {
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(color: K.ink, width: 2),
                         ),
-                        child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                          DkIcon(DkIcons.trash, size: 20, color: K.ink),
-                          SizedBox(width: 10),
-                          Text('Tüm verileri sil',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w800,
-                                  color: K.ink)),
-                        ]),
+                        child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              DkIcon(DkIcons.trash, size: 20, color: K.ink),
+                              SizedBox(width: 10),
+                              Text('Tüm verileri sil',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800,
+                                      color: K.ink)),
+                            ]),
                       ),
                     ),
                   )

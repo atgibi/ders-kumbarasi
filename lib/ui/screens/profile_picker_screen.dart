@@ -24,8 +24,7 @@ class ProfilePickerScreen extends StatelessWidget {
               SizedBox(
                 height: 72,
                 child: Row(children: [
-                  const Expanded(
-                      child: Text('Kim çalışacak?', style: T.title)),
+                  const Expanded(child: Text('Kim çalışacak?', style: T.title)),
                   ListenButton(onListen: () => app.say('Kim çalışacak?')),
                 ]),
               ),
@@ -49,8 +48,7 @@ class ProfilePickerScreen extends StatelessWidget {
                             padding: EdgeInsets.only(
                                 top: down ? 5 : 0, bottom: down ? 0 : 5),
                             child: Container(
-                              constraints:
-                                  const BoxConstraints(minHeight: 200),
+                              constraints: const BoxConstraints(minHeight: 200),
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
                                 color: K.card,
@@ -60,8 +58,7 @@ class ProfilePickerScreen extends StatelessWidget {
                                     ? null
                                     : const [
                                         BoxShadow(
-                                            color: K.line,
-                                            offset: Offset(0, 5))
+                                            color: K.line, offset: Offset(0, 5))
                                       ],
                               ),
                               child: Column(

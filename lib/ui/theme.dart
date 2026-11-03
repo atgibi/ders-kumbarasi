@@ -182,8 +182,8 @@ class T {
       height: 28 / 21,
       fontWeight: FontWeight.w800,
       color: K.ink);
-  static const body = TextStyle(
-      fontFamily: _f, fontSize: 19, height: 26 / 19, color: K.ink);
+  static const body =
+      TextStyle(fontFamily: _f, fontSize: 19, height: 26 / 19, color: K.ink);
   static const bodySoft = TextStyle(
       fontFamily: _f, fontSize: 19, height: 26 / 19, color: K.inkSoft);
   static const strong = TextStyle(
@@ -213,14 +213,14 @@ class T {
   // Veli alanı
   static const pTitle = TextStyle(
       fontFamily: _f, fontSize: 21, fontWeight: FontWeight.w800, color: K.ink);
-  static const pBody = TextStyle(
-      fontFamily: _f, fontSize: 16, height: 22 / 16, color: K.ink);
-  static const pBodySoft = TextStyle(
-      fontFamily: _f, fontSize: 16, height: 22 / 16, color: K.ink2);
+  static const pBody =
+      TextStyle(fontFamily: _f, fontSize: 16, height: 22 / 16, color: K.ink);
+  static const pBodySoft =
+      TextStyle(fontFamily: _f, fontSize: 16, height: 22 / 16, color: K.ink2);
   static const pStrong = TextStyle(
       fontFamily: _f, fontSize: 16, fontWeight: FontWeight.w800, color: K.ink);
-  static const pSmall = TextStyle(
-      fontFamily: _f, fontSize: 14, height: 18 / 14, color: K.ink2);
+  static const pSmall =
+      TextStyle(fontFamily: _f, fontSize: 14, height: 18 / 14, color: K.ink2);
   static const pSection = TextStyle(
       fontFamily: _f,
       fontSize: 14,
@@ -258,6 +258,9 @@ class AppScope extends InheritedNotifier<AppState> {
 /// Hareketi azalt: cihaz ayarı ya da veli ayarı.
 bool reduceMotion(BuildContext context) =>
     MediaQuery.of(context).disableAnimations ||
-    (context.getInheritedWidgetOfExactType<AppScope>()?.notifier?.settings
+    (context
+            .getInheritedWidgetOfExactType<AppScope>()
+            ?.notifier
+            ?.settings
             .reduceMotion ??
         false);

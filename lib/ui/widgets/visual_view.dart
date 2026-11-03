@@ -147,14 +147,14 @@ class VisualView extends StatelessWidget {
             Expanded(
                 child: DashedBox(
                     minHeight: 120,
-                    child: Center(
-                        child: _emojis(_s('ea'), _i('a'), size: 34)))),
+                    child:
+                        Center(child: _emojis(_s('ea'), _i('a'), size: 34)))),
             const SizedBox(width: 10),
             Expanded(
                 child: DashedBox(
                     minHeight: 120,
-                    child: Center(
-                        child: _emojis(_s('eb'), _i('b'), size: 34)))),
+                    child:
+                        Center(child: _emojis(_s('eb'), _i('b'), size: 34)))),
           ],
         ),
       'shapes' => Wrap(
@@ -446,8 +446,7 @@ class _Money extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: const Color(0xFFE0C068),
-          border:
-              Border.all(color: K.ink.withValues(alpha: 0.5), width: 2),
+          border: Border.all(color: K.ink.withValues(alpha: 0.5), width: 2),
         ),
         child: const Text('1 TL',
             style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
@@ -600,8 +599,7 @@ class _FractionPainter extends CustomPainter {
     final n = parts < 1 ? 1 : parts;
     final sweep = 2 * math.pi / n;
     for (var i = 0; i < n; i++) {
-      final paint = Paint()
-        ..color = i < shaded ? K.primary : Colors.white;
+      final paint = Paint()..color = i < shaded ? K.primary : Colors.white;
       canvas.drawArc(
           rect.deflate(3), -math.pi / 2 + i * sweep, sweep, true, paint);
       canvas.drawArc(
@@ -672,8 +670,7 @@ class _AreaGrid extends StatelessWidget {
                   height: 30,
                   decoration: BoxDecoration(
                     color: K.primary.withValues(alpha: 0.35),
-                    border:
-                        Border.all(color: K.ink.withValues(alpha: 0.6)),
+                    border: Border.all(color: K.ink.withValues(alpha: 0.6)),
                   ),
                 ),
             ],

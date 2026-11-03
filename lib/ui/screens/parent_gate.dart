@@ -124,8 +124,7 @@ class _ParentGateScreenState extends State<ParentGateScreen> {
                   style: T.pBodySoft),
               const SizedBox(height: 14),
               Text('${widget.a} × ${widget.b} kaç?',
-                  key: const Key('gate-question'),
-                  style: T.hero),
+                  key: const Key('gate-question'), style: T.hero),
               const SizedBox(height: 14),
               Semantics(
                 label: 'Cevap',
@@ -202,7 +201,11 @@ class _Key extends StatelessWidget {
     return Pressable(
       key: Key('gate-key-$k'),
       onTap: () => onTap(k),
-      label: k == 'del' ? 'Sil' : ok ? 'Onayla' : k,
+      label: k == 'del'
+          ? 'Sil'
+          : ok
+              ? 'Onayla'
+              : k,
       excludeChildSemantics: true,
       focusRadius: K.rMd,
       builder: (context, down) => Padding(

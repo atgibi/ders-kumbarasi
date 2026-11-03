@@ -141,9 +141,7 @@ class _TopBar extends StatelessWidget {
                   border: Border.all(color: K.line, width: 2),
                   boxShadow: down
                       ? null
-                      : const [
-                          BoxShadow(color: K.line, offset: Offset(0, 3))
-                        ],
+                      : const [BoxShadow(color: K.line, offset: Offset(0, 3))],
                 ),
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                   Container(
@@ -362,7 +360,8 @@ class _ReviewTabState extends State<_ReviewTab> {
     final now = app.clock();
     final tomorrowEnd = dayStart(now).add(const Duration(days: 1));
     final tomorrow = app.progress!.cards.values
-        .where((c) => !c.isNew && c.due.isAfter(now) && !c.due.isAfter(tomorrowEnd))
+        .where((c) =>
+            !c.isNew && c.due.isAfter(now) && !c.due.isAfter(tomorrowEnd))
         .length;
     final subject = app.subject!;
     final m = await app.masteryMap(app.active!, app.progress!, subject);
@@ -376,10 +375,7 @@ class _ReviewTabState extends State<_ReviewTab> {
       };
       strengths.add((await app.outcomeLabel(e.key), lv));
     }
-    return _ReviewData(
-        due,
-        due > 0 ? bySubject.first.$1 : null,
-        tomorrow,
+    return _ReviewData(due, due > 0 ? bySubject.first.$1 : null, tomorrow,
         strengths.reversed.toList());
   }
 
@@ -629,8 +625,7 @@ class _ProfileTabState extends State<_ProfileTab> {
                       fontSize: 19, fontWeight: FontWeight.w800, color: K.ink)),
               const SizedBox(height: 12),
               Row(children: [
-                for (final d in week)
-                  Expanded(child: _DayDot(day: d)),
+                for (final d in week) Expanded(child: _DayDot(day: d)),
               ]),
               const SizedBox(height: 12),
               const Text(
@@ -713,7 +708,7 @@ class _DayDot extends StatelessWidget {
 Future<void> openParentArea(BuildContext context) async {
   final nav = Navigator.of(context);
   if (await showParentGate(context)) {
-    await nav.push(
-        MaterialPageRoute<void>(builder: (_) => const ParentScreen()));
+    await nav
+        .push(MaterialPageRoute<void>(builder: (_) => const ParentScreen()));
   }
 }

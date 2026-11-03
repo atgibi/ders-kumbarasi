@@ -35,7 +35,11 @@ class LevelChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final (Color bg, Color fg, int bars) = switch (level) {
       MasteryLevel.notStarted => (K.stone, K.ink2, 0),
-      MasteryLevel.beginning => (const Color(0xFFFBEBD0), const Color(0xFF6B4300), 1),
+      MasteryLevel.beginning => (
+          const Color(0xFFFBEBD0),
+          const Color(0xFF6B4300),
+          1
+        ),
       MasteryLevel.developing => (K.againBg, K.againInk, 2),
       MasteryLevel.sufficient => (K.goodBg, K.goodInk, 3),
     };
@@ -245,8 +249,7 @@ class _StorageNotice extends StatelessWidget {
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const DkIcon(DkIcons.info, size: 24, color: K.againInk),
         const SizedBox(width: 10),
-        Expanded(
-            child: Text(text, style: T.pBody.copyWith(color: K.againInk))),
+        Expanded(child: Text(text, style: T.pBody.copyWith(color: K.againInk))),
       ]),
     );
   }
@@ -271,8 +274,7 @@ class _KidTab extends StatelessWidget {
           decoration: BoxDecoration(
             color: selected ? K.card : Colors.transparent,
             borderRadius: BorderRadius.circular(999),
-            border:
-                Border.all(color: selected ? K.ink : K.line, width: 2),
+            border: Border.all(color: selected ? K.ink : K.line, width: 2),
           ),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             Avatar(index: profile.avatarIndex, size: 34),
@@ -330,7 +332,9 @@ class _Overview extends StatelessWidget {
       );
     }
 
-    Widget section(String title, List<(Subject, Outcome, String, MasteryLevel)> rows,
+    Widget section(
+            String title,
+            List<(Subject, Outcome, String, MasteryLevel)> rows,
             String empty) =>
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -537,8 +541,8 @@ class _ReportScreenState extends State<ReportScreen> {
                         children: [
                           Row(children: [
                             const Expanded(
-                                child: Text('Haftalık dakika',
-                                    style: T.pStrong)),
+                                child:
+                                    Text('Haftalık dakika', style: T.pStrong)),
                             Text('Toplam $total dk', style: T.pSmall),
                           ]),
                           const SizedBox(height: 10),
@@ -554,8 +558,11 @@ class _ReportScreenState extends State<ReportScreen> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(children: [
-                        for (final s in Subject.forGrade(widget.profile.grade)) ...[
-                          chip(s.label, s == _subject,
+                        for (final s
+                            in Subject.forGrade(widget.profile.grade)) ...[
+                          chip(
+                              s.label,
+                              s == _subject,
                               () => setState(() => _subject = s),
                               Key('report-subject-${s.id}')),
                           const SizedBox(width: 8),
@@ -566,12 +573,16 @@ class _ReportScreenState extends State<ReportScreen> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(children: [
-                        chip('Tümü', _filter == null,
+                        chip(
+                            'Tümü',
+                            _filter == null,
                             () => setState(() => _filter = null),
                             const Key('filter-all')),
                         for (final l in MasteryLevel.values) ...[
                           const SizedBox(width: 8),
-                          chip(levelText[l]!, _filter == l,
+                          chip(
+                              levelText[l]!,
+                              _filter == l,
                               () => setState(() => _filter = l),
                               Key('filter-${l.name}')),
                         ],
@@ -582,8 +593,8 @@ class _ReportScreenState extends State<ReportScreen> {
                       if (rows.isEmpty)
                         const Padding(
                           padding: EdgeInsets.all(16),
-                          child: Text('Bu düzeyde konu yok.',
-                              style: T.pBodySoft),
+                          child:
+                              Text('Bu düzeyde konu yok.', style: T.pBodySoft),
                         ),
                       for (var i = 0; i < rows.length; i++)
                         NavRow(
@@ -664,8 +675,7 @@ class _OutcomeScreenState extends State<OutcomeScreen> {
   String _day(String key) {
     final app = AppScope.read(context);
     final today = dayKey(app.clock());
-    final yesterday =
-        dayKey(app.clock().subtract(const Duration(days: 1)));
+    final yesterday = dayKey(app.clock().subtract(const Duration(days: 1)));
     if (key == today) return 'Bugün';
     if (key == yesterday) return 'Dün';
     final d = DateTime.tryParse(key);
@@ -892,8 +902,8 @@ class SettingsScreen extends StatelessWidget {
                             Expanded(
                               child: Pressable(
                                 key: Key('text-size-$i'),
-                                onTap: () => app
-                                    .updateSettings(s.copyWith(textSize: i)),
+                                onTap: () =>
+                                    app.updateSettings(s.copyWith(textSize: i)),
                                 selected: s.textSize == i,
                                 label: t,
                                 excludeChildSemantics: true,

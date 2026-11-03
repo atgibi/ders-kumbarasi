@@ -310,7 +310,8 @@ class AppState extends ChangeNotifier {
         .subtract(Duration(days: today.weekday - 1));
     var answered = 0, first = 0;
     for (var i = 0; i < 7; i++) {
-      final key = dayKey(DateTime(monday.year, monday.month, monday.day + i, 12));
+      final key =
+          dayKey(DateTime(monday.year, monday.month, monday.day + i, 12));
       final a = p.dailyAnswers[key];
       if (a != null && a.length >= 2) {
         answered += a[0];
@@ -325,7 +326,8 @@ class AppState extends ChangeNotifier {
   }
 
   /// Bir ders için vadesi gelmiş tekrar sayısı.
-  Future<int> dueCount(Subject s, {ChildProfile? child, ChildProgress? p}) async {
+  Future<int> dueCount(Subject s,
+      {ChildProfile? child, ChildProgress? p}) async {
     final a = child ?? active, pr = p ?? progress;
     if (a == null || pr == null) return 0;
     final codes =

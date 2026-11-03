@@ -158,11 +158,10 @@ class ChildProgress {
       restDaysUsedThisWeek: (j['rest'] as num?)?.toInt() ?? 0,
       restWeek: j['restWeek'] as String?,
       dailyAnswers: (j['answers'] as Map<String, Object?>? ?? const {}).map(
-          (k, v) => MapEntry(k, [
-                for (final x in (v! as List<Object?>)) (x! as num).toInt()
-              ])),
-      attempts: (j['attempts'] as Map<String, Object?>? ?? const {}).map(
-          (k, v) => MapEntry(k, [
+          (k, v) => MapEntry(
+              k, [for (final x in (v! as List<Object?>)) (x! as num).toInt()])),
+      attempts: (j['attempts'] as Map<String, Object?>? ?? const {})
+          .map((k, v) => MapEntry(k, [
                 for (final x in (v! as List<Object?>))
                   if (Attempt.fromJson(x) case final a?) a
               ])),
@@ -331,8 +330,7 @@ class ProgressStore {
   }
 
   Future<Map<String, Object?>> loadSettings() async =>
-      await _readJson(_settingsFile, (j) => j! as Map<String, Object?>) ??
-      {};
+      await _readJson(_settingsFile, (j) => j! as Map<String, Object?>) ?? {};
 
   Future<void> saveSettings(Map<String, Object?> settings) =>
       _writeJson(_settingsFile, settings);

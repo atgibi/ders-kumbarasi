@@ -53,7 +53,8 @@ Future<void> openSession(
     await nav.push(MaterialPageRoute<void>(
         builder: (_) => SystemScreen(
               kind: SystemKind.doneToday,
-              onExtra: () => SessionScreen(subject: subject, extraPractice: true),
+              onExtra: () =>
+                  SessionScreen(subject: subject, extraPractice: true),
             )));
     return;
   }
@@ -84,8 +85,13 @@ class SystemScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final night = kind == SystemKind.quiet;
-    final (MascotMood mood, String alt, String kicker, String title, String text) =
-        switch (kind) {
+    final (
+      MascotMood mood,
+      String alt,
+      String kicker,
+      String title,
+      String text
+    ) = switch (kind) {
       SystemKind.quiet => (
           MascotMood.sleepy,
           'Fındık uyuyor',
