@@ -298,6 +298,15 @@ Question _skipCount(Map<String, Object?> p, Random r) {
     options: o.options,
     answerIndex: o.answerIndex,
     explanation: 'Her seferinde $st ekliyoruz: ${seq.last} + $st = $ans.',
+    optionNotes: _notesFor(
+        o.options,
+        (v) => v == ans
+            ? null
+            : v == seq.last + 1 && st != 1
+                ? 'Burada sayılar birer birer değil, ${_dagitma(st)} ${_dagitma(st)} artıyor. ${seq.last} sayısına $st ekle.'
+                : v < seq.last
+                    ? 'Sayılar artıyor, yani sıradaki sayı ${seq.last} sayısından büyük olmalı.'
+                    : 'İki sayı arasındaki farka bak: hep $st. ${seq.last} + $st = $ans.'),
   );
 }
 
@@ -489,7 +498,14 @@ Question _countBack(Map<String, Object?> p, Random r) {
     options: o.options,
     answerIndex: o.answerIndex,
     explanation:
-        'Geriye sayarken her seferinde 1 azalır: ${seq.last}den sonra $ans gelir.',
+        'Geriye sayarken her seferinde 1 azalır: ${seq.last} sayısından sonra $ans gelir.',
+    optionNotes: _notesFor(
+        o.options,
+        (v) => v == ans
+            ? null
+            : v > seq.last
+                ? 'Geriye sayıyoruz, sayılar küçülüyor. Sıradaki sayı ${seq.last} sayısından küçük olmalı.'
+                : 'Bir sayıyı atlamış olabilir misin? ${seq.last} sayısından bir eksik: $ans.'),
   );
 }
 
