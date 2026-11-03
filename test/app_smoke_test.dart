@@ -263,7 +263,7 @@ void main() {
     expect(locked.intersection(rs[2].outcomes.map((o) => o.code).toSet()),
         isEmpty);
     await tapRegion(t, 3);
-    expect(find.textContaining('Bu yol henüz açılmadı'), findsOneWidget);
+    expect(find.textContaining('Bir büyüğüne sorabilirsin'), findsOneWidget);
     await t.pumpAndSettle(const Duration(seconds: 3));
 
     await tapRegion(t, 0);

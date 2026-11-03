@@ -70,9 +70,16 @@ void main() {
       expect(progress.startedOutcomes, contains('MAT.1.1.1'));
 
       var first = true;
+      var altSeen = 0;
       while (!c.isDone) {
         final step = c.current;
-        expect(step.kind, StepKind.question);
+        if (step.kind == StepKind.lesson) {
+          // İlk yanlıştan sonra konu "farklı yoldan" bir kez anlatılır
+          expect(step.lesson!.alt, isTrue);
+          altSeen++;
+          c.completeLesson();
+          continue;
+        }
         final q = step.question!;
         // İlk soruyu bilerek yanlış cevapla
         final pick =
@@ -81,6 +88,7 @@ void main() {
         first = false;
         c.next();
       }
+      expect(altSeen, 1);
       expect(c.summary.answered, 6);
       expect(c.summary.correct, 5);
       expect(c.summary.retried, 1);
@@ -159,6 +167,10 @@ void main() {
           random: Random(5));
       c.completeLesson();
       while (c.current.phase != StepPhase.retry) {
+        if (c.current.kind == StepKind.lesson) {
+          c.completeLesson(); // farklı yoldan anlatım
+          continue;
+        }
         final q = c.current.question!;
         c.answer((q.answerIndex + 1) % q.options.length,
             elapsed: const Duration(seconds: 2));
