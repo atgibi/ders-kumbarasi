@@ -26,14 +26,15 @@ async function shot(page, name) {
 
 // Erişilebilirlik etiketiyle (ya da görünen metinle) dokun
 async function tap(page, label) {
-  const sels = [
-    `flt-semantics[aria-label="${label}"]`,
-    `flt-semantics[aria-label^="${label}"]`,
-    `[role="button"]:text-is("${label}")`,
-    `flt-semantics:text-is("${label}")`,
+  const cands = [
+    page.getByRole('button', { name: label, exact: true }),
+    page.getByRole('button', { name: label }),
+    page.getByRole('radio', { name: label }),
+    page.getByRole('tab', { name: label }),
+    page.getByText(label, { exact: true }),
   ];
-  for (const s of sels) {
-    const el = page.locator(s).first();
+  for (const c of cands) {
+    const el = c.first();
     if ((await el.count()) > 0) {
       try {
         await el.click({ timeout: 3000, force: true });
@@ -107,6 +108,24 @@ await step('B', async () => {
 
 await step('C2', async () => {
   const p = await open('lesson');
+  // Isınma sorularını geç (ilk seçenek, kontrol, devam)
+  for (let k = 0; k < 4; k++) {
+    if ((await p.getByRole('button', { name: 'İleri' }).count()) > 0) break;
+    const opts = p.getByRole('button');
+    const n = await opts.count();
+    for (let i = 0; i < n; i++) {
+      const b = await opts.nth(i).boundingBox();
+      if (b && b.y > 250 && b.y < 700 && b.width > 250) {
+        await opts.nth(i).click({ force: true });
+        break;
+      }
+    }
+    await p.waitForTimeout(500);
+    await tap(p, 'Kontrol et');
+    if (k === 0) await shot(p, 'C7-dogru-ya-da-tekrar');
+    if (!(await tap(p, 'Devam'))) await tap(p, 'Anladım');
+    await p.waitForTimeout(2600);
+  }
   await shot(p, 'C2-konu-anlatimi');
   await tap(p, 'İleri');
   await shot(p, 'C2-sayfa-2');
@@ -116,12 +135,13 @@ await step('C2', async () => {
 await step('C3', async () => {
   const p = await open('question');
   await shot(p, 'C3-soru');
-  const opts = p.locator('flt-semantics[role="button"]');
+  const opts = p.getByRole('button');
   const n = await opts.count();
   for (let i = 0; i < n; i++) {
     const b = await opts.nth(i).boundingBox();
     if (b && b.y > 250 && b.y < 700 && b.width > 250) {
       await opts.nth(i).click({ force: true });
+      await p.waitForTimeout(600);
       break;
     }
   }

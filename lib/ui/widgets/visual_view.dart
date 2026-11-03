@@ -305,8 +305,7 @@ class _RowItem extends StatelessWidget {
     }
     return Container(
       constraints: const BoxConstraints(minWidth: 56, minHeight: 56),
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: text == '?' ? K.tint : K.card,
         borderRadius: BorderRadius.circular(14),
@@ -315,6 +314,7 @@ class _RowItem extends StatelessWidget {
             width: text == '?' ? 3 : 2),
       ),
       child: EmojiText(text == '?' ? '' : text,
+          textAlign: TextAlign.center,
           style: const TextStyle(
               fontSize: 28, fontWeight: FontWeight.w900, color: K.ink)),
     );

@@ -125,7 +125,9 @@ class _TopBar extends StatelessWidget {
           border: Border(bottom: BorderSide(color: K.line, width: 2))),
       child: Row(children: [
         if (tab == 0)
-          Flexible(
+          Expanded(
+            child: Align(
+            alignment: Alignment.centerLeft,
             child: Pressable(
               key: const Key('subject-picker'),
               onTap: () => showSubjectSheet(context),
@@ -167,12 +169,14 @@ class _TopBar extends StatelessWidget {
                 ]),
               ),
             ),
+          ),
           )
-        else
+        else ...[
           Text(tab == 1 ? 'Tekrar' : 'Profil',
               style: const TextStyle(
                   fontSize: 24, fontWeight: FontWeight.w900, color: K.ink)),
-        const Spacer(),
+          const Spacer(),
+        ],
         _Counter(
           key: const Key('streak'),
           icon: DkIcons.leaf,
@@ -301,9 +305,8 @@ class _TabBar extends StatelessWidget {
                                 child: Container(
                                   constraints: const BoxConstraints(
                                       minWidth: 24, minHeight: 24),
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 6),
-                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 2),
                                   decoration: BoxDecoration(
                                     color: K.primary,
                                     borderRadius: BorderRadius.circular(12),
@@ -311,6 +314,7 @@ class _TabBar extends StatelessWidget {
                                         color: Colors.white, width: 2),
                                   ),
                                   child: Text(badge > 99 ? '99+' : '$badge',
+                                      textAlign: TextAlign.center,
                                       textScaler: TextScaler.noScaling,
                                       style: const TextStyle(
                                           fontSize: 13,
@@ -606,14 +610,17 @@ class _ProfileTabState extends State<_ProfileTab> {
         const SizedBox(height: 18),
         FutureBuilder<int>(
           future: _stars,
-          builder: (context, snap) => Row(children: [
+          builder: (context, snap) => IntrinsicHeight(
+              child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
             stat(DkIcons.leaf, K.leafInk, '${p.streakDays}', 'gündür birlikte'),
             const SizedBox(width: 10),
             stat(DkIcons.nut, K.nut, '${p.nuts}', 'fındık'),
             const SizedBox(width: 10),
             stat(DkIcons.star, K.rewardShade, '${snap.data ?? 0}',
                 'yıldızlı konu'),
-          ]),
+          ])),
         ),
         const SizedBox(height: 18),
         DkCard(

@@ -22,9 +22,20 @@ AUDIO = ROOT / "assets/audio"
 
 # Uygulama kodunda sabit olarak sesli okunan cümleler
 UI_PHRASES = [
+    # Geri bildirim (lib/ui/screens/session_screen.dart)
     "Harika!",
-    "Harika! Bugünlük bu kadar.",
+    "Tam isabet!",
+    "Dikkatle düşündün!",
     "Harika! Birlikte yaptınız.",
+    "Bugün çok çalıştın!",
+    # Sabit ekran metinleri
+    "Kim çalışacak?",
+    "Fındık uyuyor. Sabah görüşürüz!",
+    "Bugünlük süremiz bitti. Yarın devam!",
+    "Bugünlük bu kadar!",
+    "Bugünlük bu kadar! Yarın görüşürüz.",
+    "Şu an yapılacak bir şey yok",
+    "Bu ders şu an açılamadı",
 ]
 
 

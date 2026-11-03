@@ -368,7 +368,8 @@ class _Overview extends StatelessWidget {
       children: [
         const Text('BU HAFTA', style: T.pSection),
         const SizedBox(height: 8),
-        Row(children: [
+        IntrinsicHeight(
+            child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           for (final (v, l) in [
             ('$days gün', 'çalıştı'),
             ('$minutes dk', 'toplam süre'),
@@ -393,7 +394,7 @@ class _Overview extends StatelessWidget {
               ),
             ),
           ],
-        ]),
+        ])),
         const SizedBox(height: 16),
         section('DESTEKLENMESİ GEREKEN', support,
             'Şu an desteğe ihtiyaç duyduğu bir konu görünmüyor.'),

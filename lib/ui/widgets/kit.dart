@@ -200,10 +200,13 @@ class TextBtn extends StatelessWidget {
         focusRadius: 12,
         builder: (context, down) => Opacity(
           opacity: down ? .6 : 1,
-          child: Container(
+          child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 52, minWidth: 48),
+            child: Center(
+              widthFactor: 1,
+              heightFactor: 1,
+              child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            alignment: Alignment.center,
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               if (icon != null) ...[
                 DkIcon(icon!, size: 16, color: color),
@@ -219,6 +222,8 @@ class TextBtn extends StatelessWidget {
                         color: color)),
               ),
             ]),
+          ),
+            ),
           ),
         ),
       );

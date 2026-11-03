@@ -99,7 +99,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget _welcome() => _page(
         children: [
           const Expanded(
-            child: Center(
+            child: Align(
+              alignment: Alignment.centerLeft,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -371,7 +372,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
         ),
         Expanded(
-          child: Center(
+          child: Align(
+              alignment: Alignment.centerLeft,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

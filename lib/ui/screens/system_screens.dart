@@ -147,7 +147,8 @@ class SystemScreen extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: Center(
+                  child: Align(
+              alignment: Alignment.centerLeft,
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
