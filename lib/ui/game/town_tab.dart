@@ -190,8 +190,9 @@ class _BuildingRow extends StatelessWidget {
         ),
         if (!maxed)
           SizedBox(
-            width: 104,
+            width: 136,
             child: ChunkyButton(
+              key: Key('build-${def.id}'),
               label: level == 0 ? 'Kur' : 'Yükselt',
               height: 48,
               kind: canBuild ? BtnKind.good : BtnKind.secondary,
@@ -221,6 +222,7 @@ class NotebookScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(12, 8, 16, 4),
               child: Row(children: [
                 CircleBtn(
+                  key: const Key('notebook-back'),
                   icon: DkIcons.left,
                   label: 'Geri',
                   onPressed: () => Navigator.of(context).pop(),

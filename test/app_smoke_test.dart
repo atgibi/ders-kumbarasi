@@ -9,6 +9,7 @@ import 'package:ders_kumbarasi/data/content_repository.dart';
 import 'package:ders_kumbarasi/data/models.dart';
 import 'package:ders_kumbarasi/data/progress_store.dart';
 import 'package:ders_kumbarasi/game/game_state.dart';
+import 'package:ders_kumbarasi/game/world.dart';
 import 'package:ders_kumbarasi/main.dart';
 
 /// Widget testlerinde gerçek dosya G/Ç'si sahte zamanlayıcıyla çakışır;
@@ -165,6 +166,17 @@ void main() {
 
     await tapKey(t, 'tab-town');
     expect(has('town-list'), isTrue);
+    await tapKey(t, 'notebook-open');
+    expect(find.text('Kahraman Defteri'), findsOneWidget);
+    expect(find.textContaining('Elif bugün'), findsWidgets);
+    await tapKey(t, 'notebook-back');
+    // İlk yapı: ışık ve demirle hemen kurulur
+    final before = state.progress!.nuts;
+    if (state.canBuild(buildings.first)) {
+      await tapKey(t, 'build-ev');
+      expect(state.progress!.game.built['ev'], 1);
+      expect(state.progress!.nuts, lessThan(before));
+    }
 
     await tapKey(t, 'tab-review');
     expect(has('review-card'), isTrue);
