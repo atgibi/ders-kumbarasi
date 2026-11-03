@@ -227,7 +227,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       label: 'Geri',
                       onPressed: onBack),
                   const SizedBox(width: 12),
-                  Text(kicker, style: T.kicker),
+                  Expanded(child: Text(kicker, style: T.kicker)),
                 ]),
               ),
             ),

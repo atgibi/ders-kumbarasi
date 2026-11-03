@@ -114,13 +114,16 @@ class ProfilePickerScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w800,
                                         color: K.inkSoft)),
                                 SizedBox(height: 4),
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                Wrap(
+                                    alignment: WrapAlignment.center,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    spacing: 4,
                                     children: [
                                       DkIcon(DkIcons.lock,
                                           size: 14, color: K.inkSoft),
-                                      SizedBox(width: 4),
                                       Text('Veli izniyle',
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: 13,
                                               fontWeight: FontWeight.w700,

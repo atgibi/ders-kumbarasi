@@ -175,7 +175,7 @@ void main() {
 
     await tapKey(t, 'session-close');
     await tapKey(t, 'leave');
-    expect(has('today-card'), isTrue);
+    expect(has('path-list'), isTrue);
   });
 
   testWidgets('veli kapısı: yanlış cevapta açılmaz, doğruda açılır', (t) async {
@@ -236,7 +236,7 @@ void main() {
     expect(find.text('Fındık uyuyor. Sabah görüşürüz!'), findsOneWidget);
     expect(has('lesson-next'), isFalse);
     await tapKey(t, 'system-ok');
-    expect(has('today-card'), isTrue);
+    expect(has('path-list'), isTrue);
   });
 
   test('sessiz saat hesabı', () {
