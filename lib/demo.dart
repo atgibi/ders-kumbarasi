@@ -3,7 +3,10 @@
 ///
 /// - `onboarding` : ilk açılış
 /// - `picker`     : iki çocuklu profil seçici
-/// - `path`       : birkaç konusu bitmiş örnek profil, yol ekranı
+/// - `path`       : birkaç konusu bitmiş örnek profil, krallık haritası
+/// - `hero`       : kahraman oluşturma
+/// - `region`     : bir bölgenin konuları ve bekçi kartı
+/// - `duel`       : bekçi düellosu
 /// - `lesson`     : sıradaki konunun anlatımı
 /// - `question`   : bitmiş bir konunun alıştırma sorusu
 /// - `parent`     : veli paneli (kapı atlanır)
@@ -18,6 +21,9 @@ import 'app/app_state.dart';
 import 'core/srs/leitner.dart';
 import 'data/models.dart';
 import 'data/progress_store.dart';
+import 'game/game_state.dart';
+import 'game/world.dart';
+import 'ui/game/region_screen.dart';
 import 'ui/screens/parent_screen.dart';
 import 'ui/screens/session_screen.dart';
 import 'ui/screens/system_screens.dart';
@@ -68,9 +74,35 @@ Future<void> applyDemo(AppState state) async {
   }
   p.streakDays = 5;
   p.nuts = 128;
+  if (demo != 'hero') {
+    final g = p.game
+      ..hero = const HeroLook(girl: true, path: 1, skin: 2, hair: 2, hairColor: 1)
+      ..addSupply(Supply.demir, 9)
+      ..addSupply(Supply.ekmek, 2)
+      ..built['ev'] = 1
+      ..built['ocak'] = 1
+      ..banners.add('matematik-1-0')
+      ..rescued.add('matematik-1-0');
+    g.addPage(dayKey(now.subtract(const Duration(days: 3))),
+        "Elif bugün Demirdağ'da \"Sayılar ve rakamlar\" konusunu öğrendi.");
+    g.addPage(dayKey(now.subtract(const Duration(days: 1))),
+        "Elif, Demirdağ'da Dişli Geçidi bölgesine sancağını dikti. Taş Golem sisten kurtuldu.");
+  }
   await state.saveProgress();
   // Kerem: henüz çalışmadı (veli panelinde boş durum)
   await state.store.saveProgress(kerem.id, ChildProgress());
+  await prepareDemoRegions(state);
+}
+
+List<Outcome> _regionOutcomes = const [];
+List<Outcome> _duelOutcomes = const [];
+
+/// Bölge/düello demoları için çıktıları önceden yükler.
+Future<void> prepareDemoRegions(AppState state) async {
+  if (demoMode != 'region' && demoMode != 'duel') return;
+  final rs = await state.regions(Subject.matematik, 1);
+  _duelOutcomes = rs[0].outcomes;
+  _regionOutcomes = rs[1].outcomes;
 }
 
 /// Uygulama açıldıktan sonra demo ekranını açar.
@@ -82,6 +114,19 @@ void openDemoSession(NavigatorState nav) {
     'question' => const SessionScreen(
         subject: Subject.matematik, focusOutcome: 'MAT.1.1.2'),
     'parent' => const ParentScreen(),
+    'region' => RegionScreen(
+        region: RegionDef(
+            subject: Subject.matematik,
+            grade: 1,
+            index: 1,
+            outcomes: _regionOutcomes)),
+    'duel' => SessionScreen(
+        subject: Subject.matematik,
+        duel: RegionDef(
+            subject: Subject.matematik,
+            grade: 1,
+            index: 0,
+            outcomes: _duelOutcomes)),
     'quiet' => const SystemScreen(kind: SystemKind.quiet),
     'timeup' => const SystemScreen(kind: SystemKind.timeUp),
     'done' => const SystemScreen(kind: SystemKind.doneToday),
