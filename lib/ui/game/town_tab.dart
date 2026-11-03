@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/material.dart';
 
-import '../../app/app_state.dart';
 import '../../game/game_state.dart';
 import '../../game/world.dart';
 import '../theme.dart';
@@ -109,7 +108,7 @@ class _TownTabState extends State<TownTab> {
           ]),
           const SizedBox(height: 8),
           if (rescued.isNotEmpty) ...[
-            Text('Kurtardığın bekçiler kasabanda yaşıyor:', style: G.soft),
+            const Text('Kurtardığın bekçiler kasabanda yaşıyor:', style: G.soft),
             const SizedBox(height: 6),
             Wrap(spacing: 8, runSpacing: 8, children: [
               for (final r in rescued)
@@ -130,7 +129,7 @@ class _TownTabState extends State<TownTab> {
             const SizedBox(height: 10),
           ],
           const SizedBox(height: 6),
-          Text(
+          const Text(
               'Yapılar ışık ve krallık malzemesiyle hemen yükselir. Malzemeyi ders çalışarak kazanırsın; satın alınmaz.',
               style: G.soft),
         ],

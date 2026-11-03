@@ -51,7 +51,7 @@ class SubscriptionScreen extends StatelessWidget {
                       Text(s.premium ? 'Diyarın tamamı açık' : 'Diyarın tamamını açın',
                           style: T.pTitle),
                       const SizedBox(height: 8),
-                      Text(
+                      const Text(
                           'Ücretsiz sürümde her krallığın ilk $freeRegionsPerKingdom bölümü açıktır. Abonelikle:',
                           style: T.pBodySoft),
                       const SizedBox(height: 10),
@@ -66,27 +66,27 @@ class SubscriptionScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                DkCard(
+                const DkCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text('$trialDays gün ücretsiz, sonra $subscriptionPrice / ay',
+                      Text('$trialDays gün ücretsiz, sonra $subscriptionPrice / ay',
                           style: T.pStrong),
-                      const SizedBox(height: 6),
-                      const Text(
+                      SizedBox(height: 6),
+                      Text(
                           'Abonelik deneme süresi bitince her ay kendiliğinden yenilenir. App Store ya da Google Play abonelik ayarlarından istediğiniz zaman iptal edebilirsiniz; iptal, o ayın sonunda geçerli olur.',
                           style: T.pSmall),
-                      const SizedBox(height: 12),
-                      const ChunkyButton(
+                      SizedBox(height: 12),
+                      ChunkyButton(
                         key: Key('subscribe'),
                         label: '$trialDays günü ücretsiz başlat',
                         onPressed: null,
                       ),
-                      const SizedBox(height: 8),
-                      const Text(
+                      SizedBox(height: 8),
+                      Text(
                           'Mağaza bağlantısı henüz kurulmadı; satın alma uygulama mağazaya çıkmadan önce açılacak.',
                           style: T.pSmall),
-                      const TextBtn(
+                      TextBtn(
                         label: 'Satın alımları geri yükle',
                         onPressed: null,
                       ),

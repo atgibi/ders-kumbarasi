@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/material.dart';
 
-import '../../app/app_state.dart';
 import '../../game/game_state.dart';
 import '../../game/world.dart';
 import '../theme.dart';
