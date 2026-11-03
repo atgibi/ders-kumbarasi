@@ -195,7 +195,7 @@ class _SessionScreenState extends State<SessionScreen> {
         key: const Key('exit-sheet'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(children: const [
+          const Row(children: [
             Mascot(mood: MascotMood.think, size: 84),
             SizedBox(width: 12),
             Expanded(
@@ -1198,8 +1198,8 @@ class _SummaryView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _Pop(
-                        child: const Mascot(
+                    const _Pop(
+                        child: Mascot(
                             mood: MascotMood.celebrate,
                             size: 150,
                             label: 'Fındık kutluyor')),

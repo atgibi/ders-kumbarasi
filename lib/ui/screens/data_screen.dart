@@ -40,6 +40,9 @@ class _DataScreenState extends State<DataScreen> {
           ok: false);
       return;
     }
+    final box = context.findRenderObject() as RenderBox?;
+    final origin =
+        box == null ? null : box.localToGlobal(Offset.zero) & box.size;
     setState(() => _busy = true);
     try {
       final json = await app.store.exportAll();
@@ -47,7 +50,6 @@ class _DataScreenState extends State<DataScreen> {
       String two(int n) => n.toString().padLeft(2, '0');
       final name =
           'ders-kumbarasi-yedek-${now.year}${two(now.month)}${two(now.day)}.json';
-      final box = context.findRenderObject() as RenderBox?;
       await Share.shareXFiles(
         [
           XFile.fromData(utf8.encode(json),
@@ -55,8 +57,7 @@ class _DataScreenState extends State<DataScreen> {
         ],
         fileNameOverrides: [name],
         subject: 'Ders Kumbarası yedeği',
-        sharePositionOrigin:
-            box == null ? null : box.localToGlobal(Offset.zero) & box.size,
+        sharePositionOrigin: origin,
       );
       _say(
           'Yedek dosyası hazırlandı. Güvenli bir yere (ör. Dosyalar, Drive) kaydedin.');

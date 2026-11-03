@@ -98,12 +98,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _welcome() => _page(
         children: [
-          Expanded(
+          const Expanded(
             child: Center(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Mascot(size: 190, label: 'Fındık'),
                     SizedBox(height: 18),
                     Text('DERS KUMBARASI', style: T.kicker),

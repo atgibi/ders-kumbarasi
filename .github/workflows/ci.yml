@@ -77,11 +77,31 @@ jobs:
             rm -f test/widget_test.dart
           fi
       - run: flutter pub get
-      - run: flutter build apk --release
+      - name: Yayın anahtarı (varsa)
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+            echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
+            echo "Yayın anahtarıyla imzalanacak."
+          else
+            echo "ANDROID_KEYSTORE_BASE64 yok: hata ayıklama anahtarıyla imzalanır (yalnızca deneme)."
+          fi
+      - name: APK ve App Bundle (AAB)
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          flutter build apk --release
+          flutter build appbundle --release
       - uses: actions/upload-artifact@v4
         with:
-          name: ders-kumbarasi-android-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: ders-kumbarasi-android
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/bundle/release/app-release.aab
           retention-days: 14
 
   ios:

@@ -35,7 +35,10 @@ jobs:
           done
       - run: flutter pub get
       - name: Web derlemesi
-        run: flutter build web --release --base-href /ders-kumbarasi/
+        run: |
+          flutter build web --release --base-href /ders-kumbarasi/
+          # Mağaza kayıtları için gizlilik politikası adresi: .../ders-kumbarasi/gizlilik.html
+          cp docs/gizlilik.html build/web/gizlilik.html
 
       - name: Ekran görüntüleri
         continue-on-error: true

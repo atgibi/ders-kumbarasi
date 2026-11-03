@@ -739,9 +739,9 @@ class _DashPainter extends CustomPainter {
 }
 
 /// Alttan açılan sayfa (tutamak çizgili).
-Future<T?> showDkSheet<T>(BuildContext context,
+Future<R?> showDkSheet<R>(BuildContext context,
         {required WidgetBuilder builder}) =>
-    showModalBottomSheet<T>(
+    showModalBottomSheet<R>(
       context: context,
       backgroundColor: K.card,
       barrierColor: const Color(0x732B2A33),
