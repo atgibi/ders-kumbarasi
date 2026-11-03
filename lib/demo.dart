@@ -77,10 +77,10 @@ Future<void> applyDemo(AppState state) async {
 void openDemoSession(NavigatorState nav) {
   final demo = demoMode;
   final Widget? page = switch (demo) {
-    'lesson' =>
-      const SessionScreen(subject: Subject.matematik, focusOutcome: 'MAT.1.1.5'),
-    'question' =>
-      const SessionScreen(subject: Subject.matematik, focusOutcome: 'MAT.1.1.2'),
+    'lesson' => const SessionScreen(
+        subject: Subject.matematik, focusOutcome: 'MAT.1.1.5'),
+    'question' => const SessionScreen(
+        subject: Subject.matematik, focusOutcome: 'MAT.1.1.2'),
     'parent' => const ParentScreen(),
     'quiet' => const SystemScreen(kind: SystemKind.quiet),
     'timeup' => const SystemScreen(kind: SystemKind.timeUp),

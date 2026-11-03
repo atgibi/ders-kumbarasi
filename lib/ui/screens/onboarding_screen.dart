@@ -373,7 +373,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
         Expanded(
           child: Align(
-              alignment: Alignment.centerLeft,
+            alignment: Alignment.centerLeft,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

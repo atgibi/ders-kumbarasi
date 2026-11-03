@@ -206,23 +206,23 @@ class TextBtn extends StatelessWidget {
               widthFactor: 1,
               heightFactor: 1,
               child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              if (icon != null) ...[
-                DkIcon(icon!, size: 16, color: color),
-                const SizedBox(width: 6),
-              ],
-              Flexible(
-                child: Text(upper ? trUpper(label) : label,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: fontSize,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: .6,
-                        color: color)),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  if (icon != null) ...[
+                    DkIcon(icon!, size: 16, color: color),
+                    const SizedBox(width: 6),
+                  ],
+                  Flexible(
+                    child: Text(upper ? trUpper(label) : label,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: fontSize,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: .6,
+                            color: color)),
+                  ),
+                ]),
               ),
-            ]),
-          ),
             ),
           ),
         ),

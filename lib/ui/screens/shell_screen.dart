@@ -127,49 +127,51 @@ class _TopBar extends StatelessWidget {
         if (tab == 0)
           Expanded(
             child: Align(
-            alignment: Alignment.centerLeft,
-            child: Pressable(
-              key: const Key('subject-picker'),
-              onTap: () => showSubjectSheet(context),
-              label: 'Ders seç: ${subject.label}',
-              excludeChildSemantics: true,
-              focusRadius: K.rMd,
-              builder: (context, down) => Container(
-                constraints: const BoxConstraints(minHeight: 52),
-                padding: const EdgeInsets.only(left: 6, right: 10),
-                decoration: BoxDecoration(
-                  color: K.card,
-                  borderRadius: BorderRadius.circular(K.rMd),
-                  border: Border.all(color: K.line, width: 2),
-                  boxShadow: down
-                      ? null
-                      : const [BoxShadow(color: K.line, offset: Offset(0, 3))],
+              alignment: Alignment.centerLeft,
+              child: Pressable(
+                key: const Key('subject-picker'),
+                onTap: () => showSubjectSheet(context),
+                label: 'Ders seç: ${subject.label}',
+                excludeChildSemantics: true,
+                focusRadius: K.rMd,
+                builder: (context, down) => Container(
+                  constraints: const BoxConstraints(minHeight: 52),
+                  padding: const EdgeInsets.only(left: 6, right: 10),
+                  decoration: BoxDecoration(
+                    color: K.card,
+                    borderRadius: BorderRadius.circular(K.rMd),
+                    border: Border.all(color: K.line, width: 2),
+                    boxShadow: down
+                        ? null
+                        : const [
+                            BoxShadow(color: K.line, offset: Offset(0, 3))
+                          ],
+                  ),
+                  child: Row(mainAxisSize: MainAxisSize.min, children: [
+                    Container(
+                      width: 38,
+                      height: 38,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: tint, borderRadius: BorderRadius.circular(12)),
+                      child: DkIcon(icon, size: 22, color: ink),
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(subject.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w900,
+                              color: K.ink)),
+                    ),
+                    const SizedBox(width: 4),
+                    const DkIcon(DkIcons.down, size: 20, color: K.inkSoft),
+                  ]),
                 ),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Container(
-                    width: 38,
-                    height: 38,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: tint, borderRadius: BorderRadius.circular(12)),
-                    child: DkIcon(icon, size: 22, color: ink),
-                  ),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Text(subject.label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w900,
-                            color: K.ink)),
-                  ),
-                  const SizedBox(width: 4),
-                  const DkIcon(DkIcons.down, size: 20, color: K.inkSoft),
-                ]),
               ),
             ),
-          ),
           )
         else ...[
           Text(tab == 1 ? 'Tekrar' : 'Profil',
@@ -614,13 +616,14 @@ class _ProfileTabState extends State<_ProfileTab> {
               child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-            stat(DkIcons.leaf, K.leafInk, '${p.streakDays}', 'gündür birlikte'),
-            const SizedBox(width: 10),
-            stat(DkIcons.nut, K.nut, '${p.nuts}', 'fındık'),
-            const SizedBox(width: 10),
-            stat(DkIcons.star, K.rewardShade, '${snap.data ?? 0}',
-                'yıldızlı konu'),
-          ])),
+                stat(DkIcons.leaf, K.leafInk, '${p.streakDays}',
+                    'gündür birlikte'),
+                const SizedBox(width: 10),
+                stat(DkIcons.nut, K.nut, '${p.nuts}', 'fındık'),
+                const SizedBox(width: 10),
+                stat(DkIcons.star, K.rewardShade, '${snap.data ?? 0}',
+                    'yıldızlı konu'),
+              ])),
         ),
         const SizedBox(height: 18),
         DkCard(

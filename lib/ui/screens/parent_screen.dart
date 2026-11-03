@@ -369,7 +369,8 @@ class _Overview extends StatelessWidget {
         const Text('BU HAFTA', style: T.pSection),
         const SizedBox(height: 8),
         IntrinsicHeight(
-            child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            child:
+                Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           for (final (v, l) in [
             ('$days gün', 'çalıştı'),
             ('$minutes dk', 'toplam süre'),
