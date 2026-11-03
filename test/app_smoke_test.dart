@@ -61,10 +61,8 @@ Future<void> tapKey(WidgetTester t, String key) async {
 }
 
 /// Kahramanı hazır bir çocuk (kahraman oluşturma ekranı atlanır).
-Future<void> seedHero(ProgressStore store, String id) => store.saveProgress(
-    id,
-    ChildProgress(
-        game: GameState(hero: const HeroLook(girl: false, path: 1))));
+Future<void> seedHero(ProgressStore store, String id) => store.saveProgress(id,
+    ChildProgress(game: GameState(hero: const HeroLook(girl: false, path: 1))));
 
 /// Haritadaki bölgeye kaydırıp dokunur (liste tembel kurulur).
 Future<void> tapRegion(WidgetTester t, int i) async {

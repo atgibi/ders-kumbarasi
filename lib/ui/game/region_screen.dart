@@ -112,11 +112,14 @@ class _DuelCard extends StatelessWidget {
     final g = region.guardian;
     final String text;
     if (freed) {
-      text = '${g.name} kurtarıldı ve kasabanda yaşıyor. İstersen yeniden düello yap, konuları tekrar et.';
+      text =
+          '${g.name} kurtarıldı ve kasabanda yaşıyor. İstersen yeniden düello yap, konuları tekrar et.';
     } else if (ready) {
-      text = '${g.name} geçidi kapatıyor. Her doğru cevap sis zırhından bir parça düşürür!';
+      text =
+          '${g.name} geçidi kapatıyor. Her doğru cevap sis zırhından bir parça düşürür!';
     } else {
-      text = 'Bölgenin bütün konularına başlayınca ${g.name} ile düello yapabilirsin.';
+      text =
+          'Bölgenin bütün konularına başlayınca ${g.name} ile düello yapabilirsin.';
     }
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),

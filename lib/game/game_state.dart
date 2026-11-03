@@ -114,8 +114,7 @@ class GameState {
   final List<NotebookPage> notebook;
 
   int supply(Supply s) => supplies[s.id] ?? 0;
-  void addSupply(Supply s, int n) =>
-      supplies[s.id] = (supplies[s.id] ?? 0) + n;
+  void addSupply(Supply s, int n) => supplies[s.id] = (supplies[s.id] ?? 0) + n;
 
   int levelOf(BuildingDef b) => built[b.id] ?? 0;
 

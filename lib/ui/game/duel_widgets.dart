@@ -35,7 +35,8 @@ class DuelHeader extends StatelessWidget {
           margin: const EdgeInsets.fromLTRB(16, 4, 16, 4),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: Color.lerp(G.fogLight, G.paper, fallen / (pieces == 0 ? 1 : pieces)),
+            color: Color.lerp(
+                G.fogLight, G.paper, fallen / (pieces == 0 ? 1 : pieces)),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: G.ink, width: 2),
           ),
@@ -51,7 +52,9 @@ class DuelHeader extends StatelessWidget {
                 children: [
                   Text(guardian.name,
                       style: const TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.w900, color: G.ink)),
+                          fontSize: 17,
+                          fontWeight: FontWeight.w900,
+                          color: G.ink)),
                   const SizedBox(height: 4),
                   Wrap(spacing: 4, runSpacing: 4, children: [
                     for (var i = 0; i < pieces; i++)
@@ -73,7 +76,9 @@ class DuelHeader extends StatelessWidget {
             ),
             Text(left == 0 ? 'Zırh düştü!' : '$left parça',
                 style: const TextStyle(
-                    fontSize: 15, fontWeight: FontWeight.w900, color: G.indigo)),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                    color: G.indigo)),
           ]),
         ),
       ),
@@ -163,7 +168,8 @@ class DuelWinView extends StatelessWidget {
                       ]),
                     ],
                     const SizedBox(height: 8),
-                    Text('${g.name} kasabana taşınıyor. Onu Kasaba sekmesinde görebilirsin.',
+                    Text(
+                        '${g.name} kasabana taşınıyor. Onu Kasaba sekmesinde görebilirsin.',
                         style: G.soft),
                   ],
                 ),

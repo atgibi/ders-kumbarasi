@@ -164,7 +164,8 @@ List<RegionDef> regionsOf(Subject s, int grade, List<Outcome> outcomes) {
     while (i < outcomes.length && keyOf(outcomes[i]) == k) {
       group.add(outcomes[i++]);
     }
-    final parts = (group.length + maxOutcomesPerRegion - 1) ~/ maxOutcomesPerRegion;
+    final parts =
+        (group.length + maxOutcomesPerRegion - 1) ~/ maxOutcomesPerRegion;
     var start = 0;
     for (var p = 0; p < parts; p++) {
       final size = group.length ~/ parts + (p < group.length % parts ? 1 : 0);
@@ -183,24 +184,56 @@ List<RegionDef> regionsOf(Subject s, int grade, List<Outcome> outcomes) {
 String regionTitle(Kingdom k, int index) {
   const names = {
     Subject.matematik: [
-      'Dişli Geçidi', 'Örs Köyü', 'Saat Avlusu', 'Maden Ağzı', 'Çark Köprüsü',
-      'Demir Pazarı', 'Terazi Kapısı', 'Kule Eteği', 'Kristal Tünel', 'Zirve Ocağı',
+      'Dişli Geçidi',
+      'Örs Köyü',
+      'Saat Avlusu',
+      'Maden Ağzı',
+      'Çark Köprüsü',
+      'Demir Pazarı',
+      'Terazi Kapısı',
+      'Kule Eteği',
+      'Kristal Tünel',
+      'Zirve Ocağı',
     ],
     Subject.turkce: [
-      'Yaprak Kapısı', 'Hece Deresi', 'Masal Korusu', 'Söz Köprüsü', 'Kalem Ağacı',
-      'Ozan Meydanı', 'Mektup Yolu', 'Kitap Tepesi',
+      'Yaprak Kapısı',
+      'Hece Deresi',
+      'Masal Korusu',
+      'Söz Köprüsü',
+      'Kalem Ağacı',
+      'Ozan Meydanı',
+      'Mektup Yolu',
+      'Kitap Tepesi',
     ],
     Subject.hayatBilgisi: [
-      'Ocak Başı', 'Komşu Sokağı', 'Bostan Kapısı', 'Pazar Yeri', 'Değirmen Yolu',
-      'Çeşme Başı', 'Hasat Tarlası', 'Sofra Tepesi',
+      'Ocak Başı',
+      'Komşu Sokağı',
+      'Bostan Kapısı',
+      'Pazar Yeri',
+      'Değirmen Yolu',
+      'Çeşme Başı',
+      'Hasat Tarlası',
+      'Sofra Tepesi',
     ],
     Subject.fenBilimleri: [
-      'Kristal Kapı', 'Rüzgâr Değirmeni', 'Gözlem Taşı', 'Işık Mağarası',
-      'Mıknatıs Tepesi', 'Ses Vadisi', 'Gölge Bahçesi', 'Yıldız Kulesi',
+      'Kristal Kapı',
+      'Rüzgâr Değirmeni',
+      'Gözlem Taşı',
+      'Işık Mağarası',
+      'Mıknatıs Tepesi',
+      'Ses Vadisi',
+      'Gölge Bahçesi',
+      'Yıldız Kulesi',
     ],
     Subject.sosyalBilgiler: [
-      'Han Kapısı', 'Harita Odası', 'Liman Yolu', 'Pazar Köprüsü', 'Yol Taşı',
-      'Kervan Yurdu', 'Bayrak Tepesi', 'Meclis Avlusu',
+      'Han Kapısı',
+      'Harita Odası',
+      'Liman Yolu',
+      'Pazar Köprüsü',
+      'Yol Taşı',
+      'Kervan Yurdu',
+      'Bayrak Tepesi',
+      'Meclis Avlusu',
     ],
   };
   final list = names[k.subject]!;
@@ -274,8 +307,8 @@ const heroPaths = [
       'Maceraperest', Color(0xFFA8552B)),
   HeroPath('usta', 'Usta', 'Çekiç ve cetvel', '🔨', 'Kunduz', '🦫',
       'Yaratıcı ve inşacı', Color(0xFF6E5A9C)),
-  HeroPath('ozan', 'Ozan', 'Saz', '🪕', 'Serçe', '🐦',
-      'Neşeli ve anlatıcı', Color(0xFFB9862A)),
+  HeroPath('ozan', 'Ozan', 'Saz', '🪕', 'Serçe', '🐦', 'Neşeli ve anlatıcı',
+      Color(0xFFB9862A)),
 ];
 
 const skinTones = [
@@ -310,8 +343,8 @@ enum HeroStage {
 
 /// Kasaba yapısı. Her seviyenin maliyeti seviyeyle büyür.
 class BuildingDef {
-  const BuildingDef(this.id, this.name, this.emoji, this.light, this.materials,
-      this.note);
+  const BuildingDef(
+      this.id, this.name, this.emoji, this.light, this.materials, this.note);
   final String id;
   final String name;
   final String emoji;

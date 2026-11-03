@@ -76,7 +76,8 @@ Future<void> applyDemo(AppState state) async {
   p.nuts = 128;
   if (demo != 'hero') {
     final g = p.game
-      ..hero = const HeroLook(girl: true, path: 1, skin: 2, hair: 2, hairColor: 1)
+      ..hero =
+          const HeroLook(girl: true, path: 1, skin: 2, hair: 2, hairColor: 1)
       ..addSupply(Supply.demir, 9)
       ..addSupply(Supply.ekmek, 2)
       ..built['ev'] = 1

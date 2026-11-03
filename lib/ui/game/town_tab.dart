@@ -41,7 +41,8 @@ class _TownTabState extends State<TownTab> {
     final app = AppScope.of(context);
     final p = app.progress!;
     final g = p.game;
-    final key = '${p.startedOutcomes.length}|${g.banners.length}|${p.cards.length}';
+    final key =
+        '${p.startedOutcomes.length}|${g.banners.length}|${p.cards.length}';
     if (_stage == null || key != _key) {
       _key = key;
       _stage = app.heroStage();
@@ -69,9 +70,11 @@ class _TownTabState extends State<TownTab> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(hero.name ?? app.active!.nickname, style: G.title),
+                          Text(hero.name ?? app.active!.nickname,
+                              style: G.title),
                           Text('${hero.heroPath.name} · ${st.label}',
-                              style: G.sub.copyWith(color: hero.heroPath.color)),
+                              style:
+                                  G.sub.copyWith(color: hero.heroPath.color)),
                           const SizedBox(height: 4),
                           Text(nextStageHint(st), style: G.soft),
                         ],
@@ -90,7 +93,8 @@ class _TownTabState extends State<TownTab> {
               onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
                   builder: (_) => const NotebookScreen())),
               builder: (context, down) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: down ? G.paper2 : Colors.white,
                   borderRadius: BorderRadius.circular(6),
@@ -101,14 +105,17 @@ class _TownTabState extends State<TownTab> {
                   const SizedBox(width: 6),
                   Text('Defter (${g.notebook.length})',
                       style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w900, color: G.ink)),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w900,
+                          color: G.ink)),
                 ]),
               ),
             ),
           ]),
           const SizedBox(height: 8),
           if (rescued.isNotEmpty) ...[
-            const Text('Kurtardığın bekçiler kasabanda yaşıyor:', style: G.soft),
+            const Text('Kurtardığın bekçiler kasabanda yaşıyor:',
+                style: G.soft),
             const SizedBox(height: 6),
             Wrap(spacing: 8, runSpacing: 8, children: [
               for (final r in rescued)
@@ -196,7 +203,8 @@ class _BuildingRow extends StatelessWidget {
               label: level == 0 ? 'Kur' : 'Yükselt',
               height: 48,
               kind: canBuild ? BtnKind.good : BtnKind.secondary,
-              semanticsLabel: '${def.name}: ${level == 0 ? 'kur' : 'yükselt'}, $cost',
+              semanticsLabel:
+                  '${def.name}: ${level == 0 ? 'kur' : 'yükselt'}, $cost',
               onPressed: canBuild ? onBuild : null,
             ),
           ),
@@ -271,8 +279,18 @@ class NotebookScreen extends StatelessWidget {
 
   static String _date(String day) {
     const months = [
-      'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz',
-      'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+      'Ocak',
+      'Şubat',
+      'Mart',
+      'Nisan',
+      'Mayıs',
+      'Haziran',
+      'Temmuz',
+      'Ağustos',
+      'Eylül',
+      'Ekim',
+      'Kasım',
+      'Aralık'
     ];
     final p = day.split('-');
     if (p.length != 3) return day;

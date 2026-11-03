@@ -455,7 +455,10 @@ class AppState extends ChangeNotifier {
     final next = p.game.levelOf(b) + 1;
     if (next > BuildingDef.maxLevel) return false;
     if (p.nuts < b.lightCost(next)) return false;
-    return b.materialCost(next).entries.every((e) => p.game.supply(e.key) >= e.value);
+    return b
+        .materialCost(next)
+        .entries
+        .every((e) => p.game.supply(e.key) >= e.value);
   }
 
   /// Yapıyı kurar ya da bir seviye yükseltir. Bekleme süresi yok.

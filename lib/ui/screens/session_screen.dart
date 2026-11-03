@@ -155,7 +155,8 @@ class _SessionScreenState extends State<SessionScreen> {
         await app.saveProgress();
         if (!mounted) return;
         setState(() => _phase = _Phase.duelWin);
-        _say('${widget.duel!.guardian.name} kurtuldu! ${widget.duel!.guardian.thanks}');
+        _say(
+            '${widget.duel!.guardian.name} kurtuldu! ${widget.duel!.guardian.thanks}');
         return;
       }
       _writeNotebook(app, c);
@@ -1276,9 +1277,22 @@ class _SummaryView extends StatelessWidget {
     final tiles = [
       (DkIcons.check, '${s.correct}', 'doğru cevap', K.goodBg, K.goodInk, null),
       (DkIcons.nut, '+${s.nutsEarned}', 'ışık', K.peach, K.peachInk, null),
-      (DkIcons.blocks, '+${s.suppliesEarned}', supply.label.toLowerCase(),
-          K.rewardBg, K.rewardInk, supply.emoji),
-      (DkIcons.leaf, '$streak gün', 'meşalen yanıyor', K.goodBg, K.goodInk, '🔥'),
+      (
+        DkIcons.blocks,
+        '+${s.suppliesEarned}',
+        supply.label.toLowerCase(),
+        K.rewardBg,
+        K.rewardInk,
+        supply.emoji
+      ),
+      (
+        DkIcons.leaf,
+        '$streak gün',
+        'meşalen yanıyor',
+        K.goodBg,
+        K.goodInk,
+        '🔥'
+      ),
     ];
     final newTitles = [
       for (final code in s.newOutcomes) lessonTitles[code] ?? code,
@@ -1334,8 +1348,7 @@ class _SummaryView extends StatelessWidget {
                                               BorderRadius.circular(K.rSm)),
                                       child: t.$6 != null
                                           ? EmojiImage(t.$6!, size: 24)
-                                          : DkIcon(t.$1,
-                                              size: 22, color: t.$5),
+                                          : DkIcon(t.$1, size: 22, color: t.$5),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(t.$2,

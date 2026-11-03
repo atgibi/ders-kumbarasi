@@ -130,7 +130,8 @@ class _TopBar extends StatelessWidget {
           border: Border(bottom: BorderSide(color: K.line, width: 2))),
       child: Row(children: [
         Expanded(
-          child: Text(const ['Bilgelik Diyarı', 'Kasaba', 'Tekrar', 'Profil'][tab],
+          child: Text(
+              const ['Bilgelik Diyarı', 'Kasaba', 'Tekrar', 'Profil'][tab],
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(

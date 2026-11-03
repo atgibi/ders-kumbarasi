@@ -247,7 +247,9 @@ class CardDef {
 /// 'why': seçenek sırasıyla açıklama listesi ya da {"2": "..."} haritası.
 List<String?>? _notes(Object? raw, int n) {
   if (raw is List) {
-    return [for (var i = 0; i < n; i++) i < raw.length ? raw[i] as String? : null];
+    return [
+      for (var i = 0; i < n; i++) i < raw.length ? raw[i] as String? : null
+    ];
   }
   if (raw is Map) {
     return [for (var i = 0; i < n; i++) raw['$i'] as String?];

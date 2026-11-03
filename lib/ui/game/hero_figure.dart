@@ -117,7 +117,8 @@ class _HeroPainter extends CustomPainter {
       ..moveTo(cx - w * 0.15, h * 0.4)
       ..quadraticBezierTo(cx, h * 0.37, cx + w * 0.15, h * 0.4)
       ..lineTo(cx + (look.girl ? w * 0.24 : w * 0.18), h * 0.76)
-      ..quadraticBezierTo(cx, h * 0.79, cx - (look.girl ? w * 0.24 : w * 0.18), h * 0.76)
+      ..quadraticBezierTo(
+          cx, h * 0.79, cx - (look.girl ? w * 0.24 : w * 0.18), h * 0.76)
       ..close();
     canvas.drawPath(body, fill(tunic));
     canvas.drawPath(body, line);
@@ -142,11 +143,14 @@ class _HeroPainter extends CustomPainter {
     }
     canvas.drawPath(zig, trim);
     // Kemer
-    canvas.drawLine(Offset(cx - w * 0.16, h * 0.56), Offset(cx + w * 0.16, h * 0.56),
+    canvas.drawLine(
+        Offset(cx - w * 0.16, h * 0.56),
+        Offset(cx + w * 0.16, h * 0.56),
         Paint()
           ..color = const Color(0xFF4A2E1C)
           ..strokeWidth = w * 0.035);
-    canvas.drawCircle(Offset(cx, h * 0.56), w * 0.028, fill(const Color(0xFFE3A535)));
+    canvas.drawCircle(
+        Offset(cx, h * 0.56), w * 0.028, fill(const Color(0xFFE3A535)));
 
     // Omuzluk (Muhafız ve üstü)
     if (stage.index >= HeroStage.muhafiz.index) {
@@ -165,7 +169,8 @@ class _HeroPainter extends CustomPainter {
     for (final s in [-1.0, 1.0]) {
       final arm = Path()
         ..moveTo(cx + s * w * 0.14, h * 0.42)
-        ..quadraticBezierTo(cx + s * w * 0.26, h * 0.5, cx + s * w * 0.25, h * 0.62);
+        ..quadraticBezierTo(
+            cx + s * w * 0.26, h * 0.5, cx + s * w * 0.25, h * 0.62);
       canvas.drawPath(
           arm,
           Paint()
@@ -173,20 +178,25 @@ class _HeroPainter extends CustomPainter {
             ..style = PaintingStyle.stroke
             ..strokeWidth = w * 0.08
             ..strokeCap = StrokeCap.round);
-      canvas.drawCircle(Offset(cx + s * w * 0.25, h * 0.63), w * 0.04, fill(skin));
+      canvas.drawCircle(
+          Offset(cx + s * w * 0.25, h * 0.63), w * 0.04, fill(skin));
       canvas.drawCircle(Offset(cx + s * w * 0.25, h * 0.63), w * 0.04, line);
     }
 
     // Boyun ve baş
     canvas.drawRect(
-        Rect.fromCenter(center: Offset(cx, h * 0.37), width: w * 0.08, height: h * 0.05),
+        Rect.fromCenter(
+            center: Offset(cx, h * 0.37), width: w * 0.08, height: h * 0.05),
         fill(skin));
 
     // Saçın arkası (uzun, örgü)
     final hairP = fill(hair);
     if (look.hair == 1) {
       final back = RRect.fromRectAndRadius(
-          Rect.fromCenter(center: Offset(cx, h * 0.3), width: headR * 2.3, height: h * 0.26),
+          Rect.fromCenter(
+              center: Offset(cx, h * 0.3),
+              width: headR * 2.3,
+              height: h * 0.26),
           Radius.circular(headR));
       canvas.drawRRect(back, hairP);
       canvas.drawRRect(back, line);
@@ -194,7 +204,8 @@ class _HeroPainter extends CustomPainter {
       for (final s in [-1.0, 1.0]) {
         final braid = Path()
           ..moveTo(cx + s * headR * 0.9, h * 0.26)
-          ..quadraticBezierTo(cx + s * headR * 1.4, h * 0.36, cx + s * headR * 1.1, h * 0.46);
+          ..quadraticBezierTo(
+              cx + s * headR * 1.4, h * 0.36, cx + s * headR * 1.1, h * 0.46);
         canvas.drawPath(
             braid,
             Paint()
@@ -208,7 +219,9 @@ class _HeroPainter extends CustomPainter {
       // Başörtüsü
       final scarf = Path()
         ..addOval(Rect.fromCenter(
-            center: headC.translate(0, h * 0.01), width: headR * 2.5, height: headR * 2.6));
+            center: headC.translate(0, h * 0.01),
+            width: headR * 2.5,
+            height: headR * 2.6));
       canvas.drawPath(scarf, fill(const Color(0xFF2F7A5B)));
       canvas.drawPath(scarf, line);
     }
@@ -220,7 +233,8 @@ class _HeroPainter extends CustomPainter {
     switch (look.hair) {
       case 4:
         final band = Path()
-          ..addArc(Rect.fromCircle(center: headC, radius: headR * 1.02), 3.3, 2.8);
+          ..addArc(
+              Rect.fromCircle(center: headC, radius: headR * 1.02), 3.3, 2.8);
         canvas.drawPath(
             band,
             Paint()
@@ -237,7 +251,8 @@ class _HeroPainter extends CustomPainter {
         canvas.drawPath(hat, line);
         final feather = Path()
           ..moveTo(cx + headR * 0.6, h * 0.13)
-          ..quadraticBezierTo(cx + headR * 1.6, h * 0.02, cx + headR * 1.5, h * 0.12);
+          ..quadraticBezierTo(
+              cx + headR * 1.6, h * 0.02, cx + headR * 1.5, h * 0.12);
         canvas.drawPath(
             feather,
             Paint()
@@ -248,12 +263,13 @@ class _HeroPainter extends CustomPainter {
       case 3:
         for (var i = 0; i < 7; i++) {
           final a = 3.3 + i * 0.47;
-          canvas.drawCircle(
-              headC + Offset.fromDirection(a, headR * 0.92), headR * 0.32, hairP);
+          canvas.drawCircle(headC + Offset.fromDirection(a, headR * 0.92),
+              headR * 0.32, hairP);
         }
       default:
         final cap = Path()
-          ..addArc(Rect.fromCircle(center: headC, radius: headR * 1.04), 3.2, 3.0)
+          ..addArc(
+              Rect.fromCircle(center: headC, radius: headR * 1.04), 3.2, 3.0)
           ..close();
         canvas.drawPath(cap, hairP);
         canvas.drawPath(cap, line);
@@ -269,15 +285,18 @@ class _HeroPainter extends CustomPainter {
 
     // Yüz
     final eyeY = headC.dy + headR * 0.12;
-    canvas.drawCircle(Offset(cx - headR * 0.38, eyeY), headR * 0.11, fill(_ink));
-    canvas.drawCircle(Offset(cx + headR * 0.38, eyeY), headR * 0.11, fill(_ink));
-    canvas.drawCircle(Offset(cx - headR * 0.6, eyeY + headR * 0.3), headR * 0.14,
-        fill(const Color(0x55B8432F)));
-    canvas.drawCircle(Offset(cx + headR * 0.6, eyeY + headR * 0.3), headR * 0.14,
-        fill(const Color(0x55B8432F)));
+    canvas.drawCircle(
+        Offset(cx - headR * 0.38, eyeY), headR * 0.11, fill(_ink));
+    canvas.drawCircle(
+        Offset(cx + headR * 0.38, eyeY), headR * 0.11, fill(_ink));
+    canvas.drawCircle(Offset(cx - headR * 0.6, eyeY + headR * 0.3),
+        headR * 0.14, fill(const Color(0x55B8432F)));
+    canvas.drawCircle(Offset(cx + headR * 0.6, eyeY + headR * 0.3),
+        headR * 0.14, fill(const Color(0x55B8432F)));
     final smile = Path()
       ..moveTo(cx - headR * 0.25, eyeY + headR * 0.38)
-      ..quadraticBezierTo(cx, eyeY + headR * 0.58, cx + headR * 0.25, eyeY + headR * 0.38);
+      ..quadraticBezierTo(
+          cx, eyeY + headR * 0.58, cx + headR * 0.25, eyeY + headR * 0.38);
     canvas.drawPath(
         smile,
         Paint()

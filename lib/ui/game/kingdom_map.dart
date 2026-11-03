@@ -68,8 +68,9 @@ Future<List<RegionView>> buildRegionViews(AppState app, Subject s) async {
   final out = <RegionView>[];
   var nextGiven = false;
   for (final r in await app.regions(s)) {
-    final ready =
-        r.outcomes.where((o) => pack[o.code]?.cards.isNotEmpty ?? false).toList();
+    final ready = r.outcomes
+        .where((o) => pack[o.code]?.cards.isNotEmpty ?? false)
+        .toList();
     var started = 0, mastered = 0;
     var due = false;
     for (final o in ready) {
@@ -124,7 +125,8 @@ String ankaLine(Kingdom k, List<RegionView> regions) {
     return '${g.def.guardian.name} ${regionTitle(k, g.def.index)} geçidini kapatıyor. Düelloya hazırsın!';
   }
   final w = regions
-      .where((r) => r.state == RegionState.waking || r.state == RegionState.next)
+      .where(
+          (r) => r.state == RegionState.waking || r.state == RegionState.next)
       .firstOrNull;
   if (w != null) {
     return '${regionTitle(k, w.def.index)} sisin altında. ${k.leader} yardımını bekliyor!';
@@ -223,7 +225,8 @@ class _KingdomPicker extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: sel ? k.color : Colors.white,
                       borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: sel ? G.ink : G.paper2, width: 2),
+                      border:
+                          Border.all(color: sel ? G.ink : G.paper2, width: 2),
                     ),
                     child: Row(mainAxisSize: MainAxisSize.min, children: [
                       EmojiImage(k.emoji, size: 22),
@@ -292,7 +295,9 @@ class SupplyStrip extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text('${i.$3}',
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w900, color: G.ink)),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: G.ink)),
               ]),
           ]),
         ),
@@ -330,7 +335,8 @@ class _KingdomHeader extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 4),
-              ListenButton(size: 52, iconSize: 24, onListen: () => app.say(line)),
+              ListenButton(
+                  size: 52, iconSize: 24, onListen: () => app.say(line)),
             ],
           ),
         ],
@@ -425,9 +431,11 @@ class _RegionNode extends StatelessWidget {
                       width: st == RegionState.glowing ? 6 : 3),
                   boxShadow: [
                     if (st == RegionState.next || st == RegionState.guardian)
-                      const BoxShadow(color: G.saffron, blurRadius: 18, spreadRadius: 4),
+                      const BoxShadow(
+                          color: G.saffron, blurRadius: 18, spreadRadius: 4),
                     if (st == RegionState.glowing)
-                      const BoxShadow(color: G.gold, blurRadius: 22, spreadRadius: 6),
+                      const BoxShadow(
+                          color: G.gold, blurRadius: 22, spreadRadius: 6),
                   ],
                 ),
                 child: Stack(alignment: Alignment.center, children: [
@@ -471,8 +479,8 @@ class _RegionNode extends StatelessWidget {
             height: 34,
             child: CustomPaint(
               size: const Size(200, 34),
-              painter: _TrailPainter(dx, const <double>[0, 70, 0, -70]
-                  [(view.def.index + 1) % 4]),
+              painter: _TrailPainter(
+                  dx, const <double>[0, 70, 0, -70][(view.def.index + 1) % 4]),
             ),
           ),
       ]),
@@ -495,7 +503,8 @@ class _TrailPainter extends CustomPainter {
     final b = Offset(size.width / 2 + to, size.height);
     const n = 6;
     for (var i = 0; i < n; i += 2) {
-      canvas.drawLine(Offset.lerp(a, b, i / n)!, Offset.lerp(a, b, (i + 1) / n)!, p);
+      canvas.drawLine(
+          Offset.lerp(a, b, i / n)!, Offset.lerp(a, b, (i + 1) / n)!, p);
     }
   }
 

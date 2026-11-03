@@ -48,14 +48,18 @@ class SubscriptionScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(s.premium ? 'Diyarın tamamı açık' : 'Diyarın tamamını açın',
+                      Text(
+                          s.premium
+                              ? 'Diyarın tamamı açık'
+                              : 'Diyarın tamamını açın',
                           style: T.pTitle),
                       const SizedBox(height: 8),
                       const Text(
                           'Ücretsiz sürümde her krallığın ilk $freeRegionsPerKingdom bölümü açıktır. Abonelikle:',
                           style: T.pBodySoft),
                       const SizedBox(height: 10),
-                      bullet('Tüm krallıkların bütün bölümleri ve bekçi düelloları'),
+                      bullet(
+                          'Tüm krallıkların bütün bölümleri ve bekçi düelloları'),
                       bullet('Tüm sınıfların soruları ve konu anlatımları'),
                       bullet('Yıl boyunca gelen yeni maceralar ve şenlikler'),
                       const SizedBox(height: 4),
@@ -70,7 +74,8 @@ class SubscriptionScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text('$trialDays gün ücretsiz, sonra $subscriptionPrice / ay',
+                      Text(
+                          '$trialDays gün ücretsiz, sonra $subscriptionPrice / ay',
                           style: T.pStrong),
                       SizedBox(height: 6),
                       Text(

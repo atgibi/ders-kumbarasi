@@ -34,8 +34,10 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
   bool _busy = false;
 
   String get _line => switch (_step) {
-        0 => 'Diyarı bir sis kapladı. Bana yardım edecek kahraman sen misin? Önce seç: kız mı, erkek mi?',
-        1 => 'Her kahramanın bir yolu ve bir yol arkadaşı var. Hiçbiri diğerinden güçlü değil. Hangisi sana benziyor?',
+        0 =>
+          'Diyarı bir sis kapladı. Bana yardım edecek kahraman sen misin? Önce seç: kız mı, erkek mi?',
+        1 =>
+          'Her kahramanın bir yolu ve bir yol arkadaşı var. Hiçbiri diğerinden güçlü değil. Hangisi sana benziyor?',
         _ => 'Şimdi kahramanını kendine benzet.',
       };
 
@@ -161,7 +163,8 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
                     path: heroPaths[i],
                     look: _look.copyWith(path: i),
                     selected: _look.path == i,
-                    onTap: () => setState(() => _look = _look.copyWith(path: i)),
+                    onTap: () =>
+                        setState(() => _look = _look.copyWith(path: i)),
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -213,7 +216,14 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
           ],
         );
 
-    const hairNames = ['Kısa', 'Uzun', 'Örgü', 'Kıvırcık', 'Başörtüsü', 'Şapka'];
+    const hairNames = [
+      'Kısa',
+      'Uzun',
+      'Örgü',
+      'Kıvırcık',
+      'Başörtüsü',
+      'Şapka'
+    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -223,9 +233,14 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
             children: [
               Center(child: HeroFigure(look: _look, size: 150)),
               const SizedBox(height: 12),
-              row('Ten rengi', skinTones.length, _look.skin,
-                  (i) => CircleAvatar(radius: 20, backgroundColor: skinTones[i]),
-                  (i) => _look = _look.copyWith(skin: i), 'skin'),
+              row(
+                  'Ten rengi',
+                  skinTones.length,
+                  _look.skin,
+                  (i) =>
+                      CircleAvatar(radius: 20, backgroundColor: skinTones[i]),
+                  (i) => _look = _look.copyWith(skin: i),
+                  'skin'),
               row(
                   'Saç',
                   hairNames.length,
@@ -233,12 +248,19 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
                   (i) => Text(hairNames[i],
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                          fontSize: 11, fontWeight: FontWeight.w800, color: G.ink)),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          color: G.ink)),
                   (i) => _look = _look.copyWith(hair: i),
                   'hair'),
-              row('Saç rengi', hairColors.length, _look.hairColor,
-                  (i) => CircleAvatar(radius: 20, backgroundColor: hairColors[i]),
-                  (i) => _look = _look.copyWith(hairColor: i), 'haircolor'),
+              row(
+                  'Saç rengi',
+                  hairColors.length,
+                  _look.hairColor,
+                  (i) =>
+                      CircleAvatar(radius: 20, backgroundColor: hairColors[i]),
+                  (i) => _look = _look.copyWith(hairColor: i),
+                  'haircolor'),
             ],
           ),
         ),
@@ -279,7 +301,8 @@ class _PathCard extends StatelessWidget {
             color: selected ? Colors.white : G.paper,
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-                color: selected ? path.color : G.paper2, width: selected ? 4 : 2),
+                color: selected ? path.color : G.paper2,
+                width: selected ? 4 : 2),
           ),
           child: Row(children: [
             HeroFigure(look: look, size: 70),
@@ -292,12 +315,14 @@ class _PathCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(path.trait, style: G.body),
                   const SizedBox(height: 4),
-                  EmojiText('${path.toolEmoji} ${path.tool} · ${path.companionEmoji} ${path.companion}',
+                  EmojiText(
+                      '${path.toolEmoji} ${path.tool} · ${path.companionEmoji} ${path.companion}',
                       style: G.soft),
                 ],
               ),
             ),
-            if (selected) const Icon(Icons.check_circle, color: K.good, size: 30),
+            if (selected)
+              const Icon(Icons.check_circle, color: K.good, size: 30),
           ]),
         ),
       );

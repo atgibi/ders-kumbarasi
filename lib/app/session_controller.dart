@@ -278,10 +278,10 @@ class SessionController {
     final pools = <List<CardDef>>[
       for (final code in outcomeCodes)
         ([...?pack[code]?.cards]
-              ..removeWhere((c) => c.fixed?.activity ?? false)
-              ..shuffle(rnd)
-              ..sort((a, b) => (progress.cards[a.id]?.box ?? -1)
-                  .compareTo(progress.cards[b.id]?.box ?? -1)))
+          ..removeWhere((c) => c.fixed?.activity ?? false)
+          ..shuffle(rnd)
+          ..sort((a, b) => (progress.cards[a.id]?.box ?? -1)
+              .compareTo(progress.cards[b.id]?.box ?? -1)))
     ]..removeWhere((p) => p.isEmpty);
     final picked = <CardDef>[];
     var round = 0;
@@ -377,8 +377,8 @@ class SessionController {
         !_altShown &&
         altLessons.isNotEmpty) {
       _altShown = true;
-      steps.insert(index + 1,
-          SessionStep.lesson(altLessons.first, StepPhase.newTopic));
+      steps.insert(
+          index + 1, SessionStep.lesson(altLessons.first, StepPhase.newTopic));
     }
 
     // Yanlış cevaplanan kart oturum sonunda farklı bir varyantla bir kez daha
@@ -435,7 +435,8 @@ class SessionController {
       summary.nutsEarned += nutsSessionBonus;
       progress.nuts += nutsSessionBonus;
       // Krallık malzemesi: her 3 doğruya 1 (en az 1), her yeni konuya 2
-      final earned = max(1, summary.correct ~/ 3) + 2 * summary.newOutcomes.length;
+      final earned =
+          max(1, summary.correct ~/ 3) + 2 * summary.newOutcomes.length;
       summary.suppliesEarned = earned;
       progress.game.addSupply(Kingdom.of(subject).material, earned);
     }

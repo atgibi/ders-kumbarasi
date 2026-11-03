@@ -41,7 +41,8 @@ void main() {
   test('oyun durumu kaydedilip geri okunur', () {
     final p = ChildProgress(nuts: 40);
     p.game
-      ..hero = const HeroLook(girl: true, path: 3, skin: 2, hair: 4, hairColor: 1)
+      ..hero =
+          const HeroLook(girl: true, path: 3, skin: 2, hair: 4, hairColor: 1)
       ..addSupply(Supply.demir, 7)
       ..built['ev'] = 2
       ..banners.add('matematik-1-0')

@@ -127,7 +127,8 @@ Future<List<PathSection>> buildPath(AppState app, Subject subject) async {
 
 /// B2 Yol (ana sayfa): bugün kartı + ünite ünite zikzak düğümler.
 class PathScreen extends StatefulWidget {
-  const PathScreen({super.key, this.subject, this.region, this.header, this.footer});
+  const PathScreen(
+      {super.key, this.subject, this.region, this.header, this.footer});
 
   /// Verilirse bu ders (yoksa seçili ders).
   final Subject? subject;
@@ -156,7 +157,8 @@ class _PathScreenState extends State<PathScreen> {
 
   void _refreshIfNeeded(AppState app) {
     final p = app.progress;
-    final key = '${app.active?.id}|${_subject(app)}|${p?.startedOutcomes.length}|'
+    final key =
+        '${app.active?.id}|${_subject(app)}|${p?.startedOutcomes.length}|'
         '${p?.cards.length}|${p?.lastSessionDay}|${p?.nuts}';
     if (_future == null || key != _forKey) {
       final first = _future == null ||
@@ -229,9 +231,8 @@ class _PathScreenState extends State<PathScreen> {
         if (data == null) return const SizedBox.shrink();
         final (all, due) = data;
         final region = widget.region;
-        final sections = region == null
-            ? all
-            : [if (region < all.length) all[region]];
+        final sections =
+            region == null ? all : [if (region < all.length) all[region]];
         var idx = 0;
         final hasCurrent = sections
             .any((s) => s.nodes.any((n) => n.state == NodeState.current));
