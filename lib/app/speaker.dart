@@ -15,6 +15,10 @@ abstract class Speaker {
   Future<void> speak(String text, {bool slow = false});
   Future<void> stop();
   bool get available;
+
+  /// Cihazda kullanılabilir bir Türkçe ses (ya da kayıt) var mı? Gerekirse
+  /// metin okuma motorunu yoklar.
+  Future<bool> checkAvailable();
 }
 
 class NoopSpeaker implements Speaker {
@@ -26,6 +30,8 @@ class NoopSpeaker implements Speaker {
   Future<void> stop() async {}
   @override
   bool get available => false;
+  @override
+  Future<bool> checkAvailable() async => false;
 }
 
 const _symbolRanges = [
@@ -91,6 +97,12 @@ class TtsSpeaker implements Speaker {
   @override
   bool get available => _available;
 
+  @override
+  Future<bool> checkAvailable() async {
+    await _init();
+    return _available;
+  }
+
   Future<void> _init() async {
     if (_ready) return;
     _ready = true;
@@ -155,6 +167,10 @@ class HybridSpeaker implements Speaker {
 
   @override
   bool get available => (_recorded?.isNotEmpty ?? false) || _tts.available;
+
+  @override
+  Future<bool> checkAvailable() async =>
+      (await _manifest()).isNotEmpty || await _tts.checkAvailable();
 
   @override
   Future<void> speak(String text, {bool slow = false}) async {

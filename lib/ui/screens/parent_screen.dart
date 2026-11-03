@@ -820,8 +820,15 @@ class _OutcomeScreenState extends State<OutcomeScreen> {
 }
 
 /// D5 Ayarlar.
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  Future<bool>? _voice;
 
   @override
   Widget build(BuildContext context) {
@@ -857,17 +864,20 @@ class SettingsScreen extends StatelessWidget {
                     onChanged: (v) => app.updateSettings(s.withQuiet(v)),
                   ),
                   const Divider(height: 2, thickness: 2, color: K.lineSoft),
-                  ToggleRow(
-                    key: const Key('set-sound'),
-                    boxed: false,
-                    parent: true,
-                    title: 'Ses ve sesli okuma',
-                    subtitle: app.speaker.available || !s.soundOn
-                        ? 'Yönergeler sıcak, yavaş bir sesle okunur'
-                        : 'Bu cihazda Türkçe ses bulunamadı. Cihaz ayarlarından Türkçe metin okuma sesi yüklenebilir.',
-                    value: s.soundOn,
-                    onChanged: (v) =>
-                        app.updateSettings(s.copyWith(soundOn: v)),
+                  FutureBuilder<bool>(
+                    future: _voice ??= app.speaker.checkAvailable(),
+                    builder: (context, snap) => ToggleRow(
+                      key: const Key('set-sound'),
+                      boxed: false,
+                      parent: true,
+                      title: 'Ses ve sesli okuma',
+                      subtitle: snap.data == false && s.soundOn
+                          ? 'Bu cihazda Türkçe ses bulunamadı. Cihaz ayarlarından Türkçe metin okuma sesi yüklenebilir.'
+                          : 'Yönergeler sıcak, yavaş bir sesle okunur',
+                      value: s.soundOn,
+                      onChanged: (v) =>
+                          app.updateSettings(s.copyWith(soundOn: v)),
+                    ),
                   ),
                   const Divider(height: 2, thickness: 2, color: K.lineSoft),
                   ToggleRow(
