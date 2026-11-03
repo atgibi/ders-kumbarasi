@@ -68,6 +68,16 @@ class _DersKumbarasiAppState extends State<DersKumbarasiApp> {
         locale: const Locale('tr', 'TR'),
         supportedLocales: const [Locale('tr', 'TR')],
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        // Tabletlerde içerik ortada, en fazla 640 genişlikte
+        builder: (context, child) => ColoredBox(
+          color: K.bg,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 640),
+              child: child,
+            ),
+          ),
+        ),
         home: const _Root(),
       ),
     );
