@@ -129,10 +129,13 @@ class _TopBar extends StatelessWidget {
       decoration: const BoxDecoration(
           border: Border(bottom: BorderSide(color: K.line, width: 2))),
       child: Row(children: [
-        Text(const ['Bilgelik Diyarı', 'Kasaba', 'Tekrar', 'Profil'][tab],
-            style: const TextStyle(
-                fontSize: 24, fontWeight: FontWeight.w900, color: K.ink)),
-        const Spacer(),
+        Expanded(
+          child: Text(const ['Bilgelik Diyarı', 'Kasaba', 'Tekrar', 'Profil'][tab],
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontSize: 22, fontWeight: FontWeight.w900, color: K.ink)),
+        ),
         _Counter(
           key: const Key('streak'),
           icon: DkIcons.flame,

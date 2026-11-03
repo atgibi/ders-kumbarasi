@@ -65,6 +65,22 @@ Future<void> seedHero(ProgressStore store, String id) => store.saveProgress(
     ChildProgress(
         game: GameState(hero: const HeroLook(girl: false, path: 1))));
 
+/// Haritadaki bölgeye kaydırıp dokunur (liste tembel kurulur).
+Future<void> tapRegion(WidgetTester t, int i) async {
+  final f = find.byKey(Key('region-$i'));
+  await t.drag(find.byKey(const Key('map-list')), const Offset(0, 4000));
+  await t.pumpAndSettle();
+  await t.scrollUntilVisible(f, 200,
+      scrollable: find
+          .descendant(
+              of: find.byKey(const Key('map-list')),
+              matching: find.byType(Scrollable))
+          .first);
+  await t.pumpAndSettle();
+  await t.tap(f);
+  await t.pumpAndSettle();
+}
+
 bool has(String key) => find.byKey(Key(key)).evaluate().isNotEmpty;
 
 /// Oturumu sonuna kadar götürür (anlatım, soru, etkinlik).
@@ -182,10 +198,10 @@ void main() {
     await tapKey(t, 'kingdom-matematik');
 
     // Sisli bölge açılmaz; ilk bölge açılır
-    await tapKey(t, 'region-1');
+    await tapRegion(t, 1);
     expect(find.textContaining('Sis burada çok yoğun'), findsOneWidget);
     await t.pumpAndSettle(const Duration(seconds: 3));
-    await tapKey(t, 'region-0');
+    await tapRegion(t, 0);
 
     await tapKey(t, 'node-MAT.1.1.2');
     expect(
@@ -246,11 +262,11 @@ void main() {
     expect(locked, containsAll(rs[3].outcomes.map((o) => o.code)));
     expect(locked.intersection(rs[2].outcomes.map((o) => o.code).toSet()),
         isEmpty);
-    await tapKey(t, 'region-3');
+    await tapRegion(t, 3);
     expect(find.textContaining('Bu yol henüz açılmadı'), findsOneWidget);
     await t.pumpAndSettle(const Duration(seconds: 3));
 
-    await tapKey(t, 'region-0');
+    await tapRegion(t, 0);
     await tapKey(t, 'duel-start');
     expect(has('duel-header'), isTrue);
     await playSession(t);
@@ -315,7 +331,7 @@ void main() {
     await settle(t);
     await tapKey(t, 'kid-a');
     await tapKey(t, 'kingdom-matematik');
-    await tapKey(t, 'region-0');
+    await tapRegion(t, 0);
     await tapKey(t, 'node-MAT.1.1.1');
     await tapKey(t, 'node-start');
     expect(find.text('Anka uyuyor. Sabah görüşürüz!'), findsOneWidget);
