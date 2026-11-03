@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 import '../../data/models.dart';
 import '../theme.dart';
+import 'emoji_text.dart';
+import 'kit.dart';
 
 class VisualView extends StatelessWidget {
   const VisualView(this.visual, {super.key});
@@ -28,13 +30,13 @@ class VisualView extends StatelessWidget {
             children: [
               Opacity(
                 opacity: crossed.contains(i) ? 0.35 : 1,
-                child: Text(e, style: TextStyle(fontSize: size)),
+                child: EmojiImage(e, size: size),
               ),
               if (crossed.contains(i))
                 Text('✕',
                     style: TextStyle(
                         fontSize: size * 0.9,
-                        color: Kumbara.tryAgain,
+                        color: K.again,
                         fontWeight: FontWeight.w900)),
             ],
           ),
@@ -48,15 +50,25 @@ class VisualView extends StatelessWidget {
       'objects' =>
         _emojis(_s('emoji'), _i('count'), size: _i('count') > 12 ? 30 : 40),
       'objects2' => Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Flexible(child: _emojis(_s('emoji'), _i('a'), size: 32)),
+            Expanded(
+                child: DashedBox(
+                    minHeight: 120,
+                    child: Center(
+                        child: _emojis(_s('emoji'), _i('a'), size: 34)))),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Text('+',
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800)),
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Text('ve',
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w900,
+                      color: K.inkSoft)),
             ),
-            Flexible(child: _emojis(_s('emoji'), _i('b'), size: 32)),
+            Expanded(
+                child: DashedBox(
+                    minHeight: 120,
+                    child: Center(
+                        child: _emojis(_s('emoji'), _i('b'), size: 34)))),
           ],
         ),
       'objects_crossed' => _emojis(_s('emoji'), _i('total'),
@@ -73,7 +85,7 @@ class VisualView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Kumbara.primary, width: 2),
+                  border: Border.all(color: K.primary, width: 2),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: ConstrainedBox(
@@ -93,9 +105,9 @@ class VisualView extends StatelessWidget {
                 width: 14,
                 height: 140,
                 decoration: BoxDecoration(
-                  color: Kumbara.primary,
+                  color: K.primary,
                   borderRadius: BorderRadius.circular(3),
-                  border: Border.all(color: Kumbara.ink.withValues(alpha: 0.4)),
+                  border: Border.all(color: K.ink.withValues(alpha: 0.4)),
                 ),
               ),
             const SizedBox(width: 14),
@@ -109,7 +121,7 @@ class VisualView extends StatelessWidget {
                     width: 14,
                     height: 14,
                     decoration: BoxDecoration(
-                      color: Kumbara.good,
+                      color: K.good,
                       borderRadius: BorderRadius.circular(3),
                     ),
                   ),
@@ -122,17 +134,27 @@ class VisualView extends StatelessWidget {
       'row' => Wrap(
           alignment: WrapAlignment.center,
           spacing: 8,
+          runSpacing: 8,
           children: [
             for (final e
                 in (visual.params['items'] as List<Object?>? ?? const []))
-              Text('$e', style: const TextStyle(fontSize: 42)),
+              _RowItem('$e'),
           ],
         ),
-      'compare_groups' => Column(
+      'compare_groups' => Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _emojis(_s('ea'), _i('a'), size: 34),
-            const Divider(height: 20),
-            _emojis(_s('eb'), _i('b'), size: 34),
+            Expanded(
+                child: DashedBox(
+                    minHeight: 120,
+                    child: Center(
+                        child: _emojis(_s('ea'), _i('a'), size: 34)))),
+            const SizedBox(width: 10),
+            Expanded(
+                child: DashedBox(
+                    minHeight: 120,
+                    child: Center(
+                        child: _emojis(_s('eb'), _i('b'), size: 34)))),
           ],
         ),
       'shapes' => Wrap(
@@ -179,8 +201,7 @@ class VisualView extends StatelessWidget {
                         for (var i = 0;
                             i < ((row as Map)['count'] as num).toInt();
                             i++)
-                          Text('${row['emoji']}',
-                              style: const TextStyle(fontSize: 28)),
+                          EmojiImage('${row['emoji']}', size: 28),
                       ]),
                     ),
                   ],
@@ -226,20 +247,90 @@ class VisualView extends StatelessWidget {
           child: CustomPaint(painter: _AnglePainter(_i('deg'))),
         ),
       'area' => _AreaGrid(w: _i('w'), h: _i('h')),
-      'emoji' => Text(_s('emoji'), style: const TextStyle(fontSize: 96)),
-      'text' => Text(
+      'emoji' => _BigEmoji(_s('emoji')),
+      'text' => EmojiText(
           _s('text', ''),
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w800),
+          style: const TextStyle(
+              fontSize: 40, fontWeight: FontWeight.w900, color: K.ink),
         ),
       _ => const SizedBox.shrink(),
     };
     return Semantics(
-      label: 'resim',
-      child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8), child: child),
+      image: true,
+      label: describe(),
+      child: ExcludeSemantics(
+        child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8), child: child),
+      ),
     );
   }
+
+  /// Ekran okuyucu için görselin açıklaması.
+  String describe() {
+    String n(int k, String what) => '$k $what';
+    return switch (visual.kind) {
+      'objects' => n(_i('count'), 'nesne'),
+      'objects2' => 'Solda ${_i('a')}, sağda ${_i('b')} nesne',
+      'objects_crossed' =>
+        '${_i('total')} nesne, ${_i('crossed')} tanesinin üstü çizili',
+      'groups' => '${_i('groups')} grup, her grupta ${_i('each')} nesne',
+      'blocks' => '${_i('tens')} onluk, ${_i('ones')} birlik blok',
+      'compare_groups' => 'Bir grupta ${_i('a')}, diğerinde ${_i('b')} nesne',
+      'clock' => 'Analog saat',
+      'fraction' => '${_i('parts')} eş parçadan ${_i('shaded')} tanesi boyalı',
+      'angle' => 'Bir açı',
+      'area' => '${_i('w')} çarpı ${_i('h')} birim kare',
+      'tally' => n(_i('count'), 'çetele çizgisi'),
+      'money' => 'Para',
+      'shapes' => 'Geometrik şekiller',
+      'text' => _s('text', ''),
+      _ => 'Resim',
+    };
+  }
+}
+
+class _RowItem extends StatelessWidget {
+  const _RowItem(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final isEmoji = emojiAsset(text) != null ||
+        text.runes.every((r) => r > 0x2000) && text.isNotEmpty;
+    if (isEmoji && text.characters.length <= 3) {
+      return Row(mainAxisSize: MainAxisSize.min, children: [
+        for (final g in text.characters) EmojiImage(g, size: 42),
+      ]);
+    }
+    return Container(
+      constraints: const BoxConstraints(minWidth: 56, minHeight: 56),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: text == '?' ? K.tint : K.card,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+            color: text == '?' ? K.primary : K.line,
+            width: text == '?' ? 3 : 2),
+      ),
+      child: EmojiText(text == '?' ? '' : text,
+          style: const TextStyle(
+              fontSize: 28, fontWeight: FontWeight.w900, color: K.ink)),
+    );
+  }
+}
+
+class _BigEmoji extends StatelessWidget {
+  const _BigEmoji(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 6,
+        children: [for (final g in text.characters) EmojiImage(g, size: 88)],
+      );
 }
 
 class _NumberHighlight extends StatelessWidget {
@@ -258,10 +349,10 @@ class _NumberHighlight extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
               color: number.length - 1 - i == pos
-                  ? Kumbara.primary.withValues(alpha: 0.35)
+                  ? K.primary.withValues(alpha: 0.35)
                   : Colors.white,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Kumbara.ink.withValues(alpha: 0.2)),
+              border: Border.all(color: K.ink.withValues(alpha: 0.2)),
             ),
             child: Text(number[i],
                 style:
@@ -290,7 +381,7 @@ class _ShapePainter extends CustomPainter {
     final fill = Paint()
       ..color = (_colors[shape] ?? Colors.grey).withValues(alpha: 0.85);
     final stroke = Paint()
-      ..color = Kumbara.ink
+      ..color = K.ink
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3;
     final w = size.width, h = size.height;
@@ -356,7 +447,7 @@ class _Money extends StatelessWidget {
           shape: BoxShape.circle,
           color: const Color(0xFFE0C068),
           border:
-              Border.all(color: Kumbara.ink.withValues(alpha: 0.5), width: 2),
+              Border.all(color: K.ink.withValues(alpha: 0.5), width: 2),
         ),
         child: const Text('1 TL',
             style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
@@ -369,7 +460,7 @@ class _Money extends StatelessWidget {
       decoration: BoxDecoration(
         color: _noteColors[value] ?? Colors.grey.shade300,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Kumbara.ink.withValues(alpha: 0.5), width: 2),
+        border: Border.all(color: K.ink.withValues(alpha: 0.5), width: 2),
       ),
       child: Text('$value TL',
           style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 22)),
@@ -384,7 +475,7 @@ class _TallyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final p = Paint()
-      ..color = Kumbara.ink
+      ..color = K.ink
       ..strokeWidth = 4
       ..strokeCap = StrokeCap.round;
     const top = 8.0, bottom = 62.0, gap = 7.0;
@@ -433,14 +524,11 @@ class _Grid extends StatelessWidget {
               margin: const EdgeInsets.all(1),
               alignment: Alignment.center,
               color: Colors.white,
-              child: Text(
-                x == start[0] && y == start[1]
-                    ? startEmoji
-                    : x == target[0] && y == target[1]
-                        ? targetEmoji
-                        : '',
-                style: const TextStyle(fontSize: 26),
-              ),
+              child: x == start[0] && y == start[1]
+                  ? EmojiImage(startEmoji, size: 26)
+                  : x == target[0] && y == target[1]
+                      ? EmojiImage(targetEmoji, size: 26)
+                      : null,
             ),
       ],
     );
@@ -462,7 +550,7 @@ class _ClockPainter extends CustomPainter {
         c,
         r,
         Paint()
-          ..color = Kumbara.ink
+          ..color = K.ink
           ..style = PaintingStyle.stroke
           ..strokeWidth = 5);
     for (var i = 1; i <= 12; i++) {
@@ -471,7 +559,7 @@ class _ClockPainter extends CustomPainter {
         text: TextSpan(
             text: '$i',
             style: const TextStyle(
-                color: Kumbara.ink, fontSize: 17, fontWeight: FontWeight.w800)),
+                color: K.ink, fontSize: 17, fontWeight: FontWeight.w800)),
         textDirection: TextDirection.ltr,
       )..layout();
       final pos = c + Offset(math.cos(a), math.sin(a)) * (r - 18);
@@ -490,10 +578,10 @@ class _ClockPainter extends CustomPainter {
     }
 
     // Akrep (kısa, kalın): saat + dakikaya göre ilerler
-    hand(((h % 12) + m / 60) * math.pi / 6, r * 0.5, 8, Kumbara.ink);
+    hand(((h % 12) + m / 60) * math.pi / 6, r * 0.5, 8, K.ink);
     // Yelkovan (uzun, ince)
-    hand(m * math.pi / 30, r * 0.78, 5, Kumbara.primary);
-    canvas.drawCircle(c, 6, Paint()..color = Kumbara.ink);
+    hand(m * math.pi / 30, r * 0.78, 5, K.primary);
+    canvas.drawCircle(c, 6, Paint()..color = K.ink);
   }
 
   @override
@@ -513,7 +601,7 @@ class _FractionPainter extends CustomPainter {
     final sweep = 2 * math.pi / n;
     for (var i = 0; i < n; i++) {
       final paint = Paint()
-        ..color = i < shaded ? Kumbara.primary : Colors.white;
+        ..color = i < shaded ? K.primary : Colors.white;
       canvas.drawArc(
           rect.deflate(3), -math.pi / 2 + i * sweep, sweep, true, paint);
       canvas.drawArc(
@@ -522,7 +610,7 @@ class _FractionPainter extends CustomPainter {
           sweep,
           true,
           Paint()
-            ..color = Kumbara.ink
+            ..color = K.ink
             ..style = PaintingStyle.stroke
             ..strokeWidth = 3);
     }
@@ -542,7 +630,7 @@ class _AnglePainter extends CustomPainter {
     final o = Offset(size.width * 0.35, size.height - 12);
     final len = size.height - 24;
     final line = Paint()
-      ..color = Kumbara.ink
+      ..color = K.ink
       ..strokeWidth = 5
       ..strokeCap = StrokeCap.round;
     final a = -deg * math.pi / 180;
@@ -550,7 +638,7 @@ class _AnglePainter extends CustomPainter {
       ..drawLine(o, o + Offset(len * 1.2, 0), line)
       ..drawLine(o, o + Offset(math.cos(a), math.sin(a)) * len, line);
     final arc = Paint()
-      ..color = Kumbara.primary
+      ..color = K.primary
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4;
     if (deg == 90) {
@@ -583,9 +671,9 @@ class _AreaGrid extends StatelessWidget {
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                    color: Kumbara.primary.withValues(alpha: 0.35),
+                    color: K.primary.withValues(alpha: 0.35),
                     border:
-                        Border.all(color: Kumbara.ink.withValues(alpha: 0.6)),
+                        Border.all(color: K.ink.withValues(alpha: 0.6)),
                   ),
                 ),
             ],

@@ -34,19 +34,22 @@ jobs:
             flutter create --platforms=android,ios --org "$ORG" --project-name ders_kumbarasi .
             rm -f test/widget_test.dart
           fi
-      - name: İçerik paketlerini doğrula
-        run: python3 tools/content/build.py --check
+      - name: İçerik paketlerini ve emoji görsellerini doğrula
+        run: |
+          python3 tools/content/build.py --check
+          pip install --quiet regex
+          python3 tools/emoji/fetch.py --check
       - run: flutter pub get
-      - name: Biçimlendir (main dalında otomatik düzeltilir)
+      - name: Biçimlendir (otomatik düzeltilir)
         run: dart format lib test
-      - name: Biçim değişikliklerini gönder
+      - name: Biçim ve pubspec.lock değişikliklerini gönder
         if: github.event_name != 'pull_request'
         run: |
-          if [ -n "$(git status --porcelain lib test)" ]; then
+          if [ -n "$(git status --porcelain lib test pubspec.lock)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add lib test
-            git commit -m "dart format (otomatik)"
+            git add lib test pubspec.lock
+            git commit -m "dart format / pubspec.lock (otomatik)"
             git push
           fi
       - run: flutter analyze

@@ -1,0 +1,3 @@
+Twemoji grafikleri: Copyright 2019 Twitter, Inc ve diğer katkıda bulunanlar.
+CC-BY 4.0 lisansı ile kullanılmıştır: https://creativecommons.org/licenses/by/4.0/
+Kaynak: https://github.com/jdecked/twemoji

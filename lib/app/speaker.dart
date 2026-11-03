@@ -11,7 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 abstract class Speaker {
-  Future<void> speak(String text);
+  /// [slow]: kaplumbağa düğmesi, daha yavaş okuma.
+  Future<void> speak(String text, {bool slow = false});
   Future<void> stop();
   bool get available;
 }
@@ -19,11 +20,50 @@ abstract class Speaker {
 class NoopSpeaker implements Speaker {
   final List<String> spoken = [];
   @override
-  Future<void> speak(String text) async => spoken.add(text);
+  Future<void> speak(String text, {bool slow = false}) async =>
+      spoken.add(speakable(text));
   @override
   Future<void> stop() async {}
   @override
   bool get available => false;
+}
+
+const _symbolRanges = [
+  [0x200D, 0x200D],
+  [0x2190, 0x21FF],
+  [0x2300, 0x23FF],
+  [0x25A0, 0x25FF],
+  [0x2600, 0x27BF],
+  [0x2900, 0x297F],
+  [0x2B00, 0x2BFF],
+  [0xFE00, 0xFE0F],
+  [0x1F000, 0x1FAFF],
+  [0xE0000, 0xE007F],
+];
+
+bool _isSymbol(int cp) {
+  for (final r in _symbolRanges) {
+    if (cp >= r[0] && cp <= r[1]) return true;
+  }
+  return false;
+}
+
+/// Sesli okunacak metin: emoji ve işaretler atılır, boşluk çizgileri
+/// duraklamaya çevrilir (tools/audio/speech.py ile aynı kural).
+String speakable(String text) {
+  final b = StringBuffer();
+  for (final cp in text.runes) {
+    if (_isSymbol(cp)) {
+      b.write(' ');
+    } else {
+      b.writeCharCode(cp);
+    }
+  }
+  return b
+      .toString()
+      .replaceAll(RegExp(r'_{2,}'), ' ... ')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
 }
 
 int _fnv32(Uint8List data, int offset) {
@@ -69,12 +109,15 @@ class TtsSpeaker implements Speaker {
   }
 
   @override
-  Future<void> speak(String text) async {
+  Future<void> speak(String text, {bool slow = false}) async {
     await _init();
     if (!_available) return;
+    final t = speakable(text);
+    if (t.isEmpty) return;
     try {
       await _tts.stop();
-      await _tts.speak(text);
+      await _tts.setSpeechRate(slow ? 0.3 : 0.45);
+      await _tts.speak(t);
     } on Object {
       // sesli okuma hatası uygulamayı durdurmamalı
     }
@@ -114,20 +157,27 @@ class HybridSpeaker implements Speaker {
   bool get available => (_recorded?.isNotEmpty ?? false) || _tts.available;
 
   @override
-  Future<void> speak(String text) async {
-    final id = speechId(text);
+  Future<void> speak(String text, {bool slow = false}) async {
+    final t = speakable(text);
+    if (t.isEmpty) return;
+    final id = speechId(t);
     if ((await _manifest()).contains(id)) {
       try {
         await _tts.stop();
         await _player.stop();
+        await _player.setPlaybackRate(slow ? 0.75 : 1.0);
         await _player.play(AssetSource('audio/$id.mp3'));
         return;
       } on Object {
         // kayıt çalınamazsa cihaz sesine düş
       }
     }
-    await _player.stop().catchError((_) {});
-    await _tts.speak(text);
+    try {
+      await _player.stop();
+    } on Object {
+      // yok say
+    }
+    await _tts.speak(t, slow: slow);
   }
 
   @override

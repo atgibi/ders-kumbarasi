@@ -26,7 +26,8 @@ Future<void> applyDemo(AppState state) async {
   await state.load();
   await state.deleteAll();
   if (demo == 'onboarding') return;
-  await state.addChild('Elif', 1, '🦊');
+  await state.updateSettings(state.settings.copyWith(onboarded: true));
+  await state.addChild('Elif', 1, '1');
   await state.selectChild(state.profiles.first);
   final p = state.progress!;
   final now = state.clock();

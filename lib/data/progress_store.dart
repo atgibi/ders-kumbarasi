@@ -16,7 +16,16 @@ class ChildProfile {
   final String id;
   final String nickname;
   final int grade;
+
+  /// Avatar sırası ('0'..'11'). Eski sürümlerin emoji avatarları da okunur.
   final String avatar;
+
+  /// 12 hayvan avatarından hangisi (eski emoji kayıtları sabit bir sıraya düşer).
+  int get avatarIndex {
+    final i = int.tryParse(avatar);
+    if (i != null) return i.clamp(0, avatarCount - 1);
+    return avatar.runes.fold<int>(0, (a, b) => a + b) % avatarCount;
+  }
 
   ChildProfile copyWith({String? nickname, int? grade, String? avatar}) =>
       ChildProfile(
@@ -37,6 +46,30 @@ class ChildProfile {
       );
 }
 
+const int avatarCount = 12;
+
+/// Bir sorunun son denemesi (veli raporu, "Son denemeler").
+class Attempt {
+  const Attempt(this.day, this.prompt, this.result);
+
+  /// 'YYYY-MM-DD'
+  final String day;
+
+  /// Sorunun kısa metni.
+  final String prompt;
+
+  /// first: ilk denemede doğru, hint: ipucuyla doğru, slow: doğru ama yavaş,
+  /// retry: bir kez daha soruldu.
+  final String result;
+
+  List<Object?> toJson() => [day, prompt, result];
+
+  static Attempt? fromJson(Object? j) {
+    if (j is! List || j.length < 3) return null;
+    return Attempt('${j[0]}', '${j[1]}', '${j[2]}');
+  }
+}
+
 /// Bir çocuğun tüm öğrenme durumu.
 class ChildProgress {
   ChildProgress({
@@ -48,9 +81,31 @@ class ChildProgress {
     this.lastSessionDay,
     this.restDaysUsedThisWeek = 0,
     this.restWeek,
+    Map<String, List<int>>? dailyAnswers,
+    Map<String, List<Attempt>>? attempts,
   })  : cards = cards ?? {},
         startedOutcomes = startedOutcomes ?? {},
-        dailyMinutes = dailyMinutes ?? {};
+        dailyMinutes = dailyMinutes ?? {},
+        dailyAnswers = dailyAnswers ?? {},
+        attempts = attempts ?? {};
+
+  /// 'YYYY-MM-DD' -> [cevaplanan, ilk denemede doğru].
+  final Map<String, List<int>> dailyAnswers;
+
+  /// Çıktı kodu -> son denemeler (en yenisi başta, en fazla 5).
+  final Map<String, List<Attempt>> attempts;
+
+  void addAttempt(String outcome, Attempt a) {
+    final list = attempts.putIfAbsent(outcome, () => []);
+    list.insert(0, a);
+    if (list.length > 5) list.removeRange(5, list.length);
+  }
+
+  void countAnswer(String day, {required bool firstTry}) {
+    final d = dailyAnswers.putIfAbsent(day, () => [0, 0]);
+    d[0]++;
+    if (firstTry) d[1]++;
+  }
 
   final Map<String, CardState> cards;
 
@@ -78,6 +133,11 @@ class ChildProgress {
         'last': lastSessionDay,
         'rest': restDaysUsedThisWeek,
         'restWeek': restWeek,
+        'answers': dailyAnswers,
+        'attempts': {
+          for (final e in attempts.entries)
+            e.key: [for (final a in e.value) a.toJson()],
+        },
       };
 
   factory ChildProgress.fromJson(Map<String, Object?> j) {
@@ -97,6 +157,15 @@ class ChildProgress {
       lastSessionDay: j['last'] as String?,
       restDaysUsedThisWeek: (j['rest'] as num?)?.toInt() ?? 0,
       restWeek: j['restWeek'] as String?,
+      dailyAnswers: (j['answers'] as Map<String, Object?>? ?? const {}).map(
+          (k, v) => MapEntry(k, [
+                for (final x in (v! as List<Object?>)) (x! as num).toInt()
+              ])),
+      attempts: (j['attempts'] as Map<String, Object?>? ?? const {}).map(
+          (k, v) => MapEntry(k, [
+                for (final x in (v! as List<Object?>))
+                  if (Attempt.fromJson(x) case final a?) a
+              ])),
     );
   }
 }
@@ -165,68 +234,162 @@ class MemoryStorage implements Storage {
   Future<void> delete(String name) async => files.remove(name);
 }
 
+/// Kayıt okunurken ne oldu (veli paneli uyarısı için).
+enum LoadIssue { none, recoveredFromBackup, unreadable }
+
 class ProgressStore {
   ProgressStore(this.storage);
   final Storage storage;
 
   static const _profilesFile = 'profiles.json';
+  static const _settingsFile = 'settings.json';
   String _progressFile(String id) => 'progress_$id.json';
 
-  Future<List<ChildProfile>> loadProfiles() async {
-    final s = await storage.read(_profilesFile);
-    if (s == null) return [];
+  /// Son okumada sorun çıktıysa (ör. dosya bozuk) burada görünür.
+  LoadIssue lastIssue = LoadIssue.none;
+
+  /// Okunamayan bir kayıt varsa, üzerine yazmadan önce kenara alınır.
+  final Set<String> _quarantine = {};
+
+  /// JSON'u çözer; bozuksa yedekten dener. İkisi de bozuksa null.
+  Future<T?> _readJson<T>(String name, T Function(Object? json) parse) async {
+    final s = await storage.read(name);
+    if (s == null) return null;
     try {
-      final list = jsonDecode(s) as List<Object?>;
-      return list
-          .map((e) => ChildProfile.fromJson(e! as Map<String, Object?>))
-          .toList();
-    } on FormatException {
-      return [];
+      return parse(jsonDecode(s));
+    } on Object {
+      final bak = await storage.read('$name.bak');
+      if (bak != null) {
+        try {
+          final v = parse(jsonDecode(bak));
+          lastIssue = LoadIssue.recoveredFromBackup;
+          return v;
+        } on Object {
+          // yedek de bozuk
+        }
+      }
+      lastIssue = LoadIssue.unreadable;
+      _quarantine.add(name);
+      return null;
     }
   }
 
-  Future<void> saveProfiles(List<ChildProfile> profiles) => storage.write(
-      _profilesFile, jsonEncode([for (final p in profiles) p.toJson()]));
-
-  Future<ChildProgress> loadProgress(String childId) async {
-    final s = await storage.read(_progressFile(childId));
-    if (s == null) return ChildProgress();
-    try {
-      return ChildProgress.fromJson(jsonDecode(s) as Map<String, Object?>);
-    } on FormatException {
-      // Bozuk kayıt: çocuğu engellemek yerine boş başlat.
-      return ChildProgress();
+  /// Önce eski sürüm yedeğe alınır, sonra yeni içerik atomik yazılır.
+  /// Okunamamış bir dosyanın üzerine yazılmadan önce kopyası saklanır.
+  Future<void> _writeJson(String name, Object json) async {
+    final old = await storage.read(name);
+    if (old != null) {
+      if (_quarantine.remove(name)) {
+        await storage.write('$name.bozuk', old);
+      } else {
+        await storage.write('$name.bak', old);
+      }
     }
+    await storage.write(name, jsonEncode(json));
   }
+
+  Future<List<ChildProfile>> loadProfiles() async =>
+      await _readJson(
+          _profilesFile,
+          (j) => (j! as List<Object?>)
+              .map((e) => ChildProfile.fromJson(e! as Map<String, Object?>))
+              .toList()) ??
+      [];
+
+  Future<void> saveProfiles(List<ChildProfile> profiles) =>
+      _writeJson(_profilesFile, [for (final p in profiles) p.toJson()]);
+
+  Future<ChildProgress> loadProgress(String childId) async =>
+      await _readJson(_progressFile(childId),
+          (j) => ChildProgress.fromJson(j! as Map<String, Object?>)) ??
+      ChildProgress();
 
   Future<void> saveProgress(String childId, ChildProgress p) =>
-      storage.write(_progressFile(childId), jsonEncode(p.toJson()));
+      _writeJson(_progressFile(childId), p.toJson());
+
+  Future<void> _deleteWithBackups(String name) async {
+    await storage.delete(name);
+    await storage.delete('$name.bak');
+    await storage.delete('$name.bozuk');
+  }
 
   /// Profil ve tüm ilerlemeyi siler (veli "verileri sil").
   Future<void> deleteChild(String childId) async {
-    await storage.delete(_progressFile(childId));
+    await _deleteWithBackups(_progressFile(childId));
     final profiles = await loadProfiles();
     await saveProfiles(profiles.where((p) => p.id != childId).toList());
   }
 
   Future<void> deleteAll() async {
     for (final p in await loadProfiles()) {
-      await storage.delete(_progressFile(p.id));
+      await _deleteWithBackups(_progressFile(p.id));
     }
-    await storage.delete(_profilesFile);
-    await storage.delete('settings.json');
+    await _deleteWithBackups(_profilesFile);
+    await _deleteWithBackups(_settingsFile);
+    _quarantine.clear();
+    lastIssue = LoadIssue.none;
   }
 
-  Future<Map<String, Object?>> loadSettings() async {
-    final s = await storage.read('settings.json');
-    if (s == null) return {};
-    try {
-      return jsonDecode(s) as Map<String, Object?>;
-    } on FormatException {
-      return {};
-    }
-  }
+  Future<Map<String, Object?>> loadSettings() async =>
+      await _readJson(_settingsFile, (j) => j! as Map<String, Object?>) ??
+      {};
 
   Future<void> saveSettings(Map<String, Object?> settings) =>
-      storage.write('settings.json', jsonEncode(settings));
+      _writeJson(_settingsFile, settings);
+
+  /// Tüm verilerin tek dosyalık yedeği (veli: Yedekle).
+  Future<String> exportAll() async {
+    final profiles = await loadProfiles();
+    return const JsonEncoder.withIndent(' ').convert({
+      'uygulama': backupAppId,
+      'surum': 1,
+      'tarih': DateTime.now().toIso8601String(),
+      'ayarlar': await loadSettings(),
+      'profiller': [for (final p in profiles) p.toJson()],
+      'ilerleme': {
+        for (final p in profiles) p.id: (await loadProgress(p.id)).toJson(),
+      },
+    });
+  }
+
+  /// Yedekten geri yükler. Dosya geçersizse hiçbir şey değişmez ve
+  /// [FormatException] fırlatılır.
+  Future<int> importAll(String content) async {
+    final Map<String, Object?> j;
+    try {
+      j = jsonDecode(content) as Map<String, Object?>;
+    } on Object {
+      throw const FormatException('Bu dosya bir Ders Kumbarası yedeği değil.');
+    }
+    if (j['uygulama'] != backupAppId) {
+      throw const FormatException('Bu dosya bir Ders Kumbarası yedeği değil.');
+    }
+    final List<ChildProfile> profiles;
+    final Map<String, ChildProgress> progress;
+    try {
+      profiles = [
+        for (final e in j['profiller']! as List<Object?>)
+          ChildProfile.fromJson(e! as Map<String, Object?>)
+      ];
+      final raw = j['ilerleme'] as Map<String, Object?>? ?? const {};
+      progress = {
+        for (final p in profiles)
+          p.id: raw[p.id] == null
+              ? ChildProgress()
+              : ChildProgress.fromJson(raw[p.id]! as Map<String, Object?>),
+      };
+    } on Object {
+      throw const FormatException('Yedek dosyası okunamadı (bozuk olabilir).');
+    }
+    await deleteAll();
+    final settings = j['ayarlar'];
+    if (settings is Map<String, Object?>) await saveSettings(settings);
+    await saveProfiles(profiles);
+    for (final e in progress.entries) {
+      await saveProgress(e.key, e.value);
+    }
+    return profiles.length;
+  }
 }
+
+const backupAppId = 'ders-kumbarasi';

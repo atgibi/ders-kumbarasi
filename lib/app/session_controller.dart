@@ -47,6 +47,11 @@ class SessionSummary {
   int correct = 0;
   int retried = 0;
   int nutsEarned = 0;
+  int activities = 0;
+  int minutes = 0;
+
+  /// Bu oturumda seri bir gün arttı mı (C12 seri kutlaması).
+  bool streakGrew = false;
   final Set<String> newOutcomes = {};
 }
 
@@ -70,10 +75,46 @@ class SessionController {
   final SessionSummary summary = SessionSummary();
   final Set<String> _retried = {};
   int index = 0;
+  double _maxRatio = 0;
+  bool finished = false;
 
   bool get isDone => index >= steps.length;
   SessionStep get current => steps[index];
-  double get progressRatio => steps.isEmpty ? 1 : index / steps.length;
+
+  /// İlerleme çubuğu: yeniden sorulan kart sona eklense de geri gitmez.
+  double get progressRatio {
+    final r = steps.isEmpty ? 1.0 : index / steps.length;
+    if (r > _maxRatio) _maxRatio = r;
+    return _maxRatio;
+  }
+
+  /// Kalan soru sayısı (süre sınırı uyarısı için).
+  int get remainingQuestions => index >= steps.length
+      ? 0
+      : steps
+          .sublist(index)
+          .where((s) => s.kind == StepKind.question)
+          .length;
+
+  /// Günlük süre doluyor: şu anki adımdan sonra en fazla [n] soru kalsın.
+  /// Oturum yarıda kesilmez; kısalır.
+  void limitRemaining(int n) {
+    var kept = 0;
+    var cut = steps.length;
+    for (var i = index + 1; i < steps.length; i++) {
+      if (steps[i].kind == StepKind.question) {
+        if (kept == n) {
+          cut = i;
+          break;
+        }
+        kept++;
+      } else {
+        cut = i; // yarıda konu anlatımına başlanmaz
+        break;
+      }
+    }
+    if (cut < steps.length) steps.removeRange(cut, steps.length);
+  }
 
   /// Oturumu kurar. İçeriği olmayan ders/sınıf için boş oturum döner.
   ///
@@ -90,6 +131,7 @@ class SessionController {
     SessionConfig config = const SessionConfig(),
     String? focusOutcome,
     bool reviewOnly = false,
+    bool extraPractice = false,
   }) async {
     final now = (clock ?? DateTime.now)();
     final rnd = random ?? Random();
@@ -111,12 +153,24 @@ class SessionController {
       return SessionStep.question(c, generate(c, rnd), phase);
     }
 
-    // Başlanmış bir çıktının alıştırması: en zayıf kartlardan 8 tane
-    if (focusOutcome != null &&
-        progress.startedOutcomes.contains(focusOutcome)) {
-      final cards = [...?pack[focusOutcome]?.cards]..sort((a, b) {
+    // Başlanmış bir çıktının alıştırması (ya da bugünkü işler bitince ekstra
+    // tekrar): en zayıf kartlardan 8 tane
+    if (extraPractice ||
+        (focusOutcome != null &&
+            progress.startedOutcomes.contains(focusOutcome))) {
+      final source = extraPractice
+          ? [
+              for (final code in progress.startedOutcomes)
+                ...?pack[code]?.cards,
+            ]
+          : [...?pack[focusOutcome]?.cards];
+      final cards = source
+          .where((c) => !(c.fixed?.activity ?? false))
+          .toList()
+        ..sort((a, b) {
           final sa = progress.cards[a.id], sb = progress.cards[b.id];
-          return (sa?.box ?? -1).compareTo(sb?.box ?? -1);
+          final c = (sa?.box ?? -1).compareTo(sb?.box ?? -1);
+          return c != 0 ? c : a.id.compareTo(b.id);
         });
       final ids = cards.take(8).map((c) => c.id).toList()..shuffle(rnd);
       final plan = SessionPlan(
@@ -229,6 +283,22 @@ class SessionController {
         summary.nutsEarned += nutsPerCorrect;
         progress.nuts += nutsPerCorrect;
       }
+      final day = dayKey(now);
+      progress.countAnswer(day, firstTry: correct && !usedHint);
+      progress.addAttempt(
+        card.outcomeCode,
+        Attempt(
+          day,
+          _short(step.question!.prompt),
+          !correct
+              ? 'retry'
+              : usedHint
+                  ? 'hint'
+                  : outcome == ReviewOutcome.correctFast
+                      ? 'first'
+                      : 'slow',
+        ),
+      );
     }
     if (step.phase == StepPhase.practice && plan.newOutcomeId != null) {
       // Konu anlatımı olmayan çıktılarda da çıktı başlatılmış sayılır
@@ -246,19 +316,47 @@ class SessionController {
     return AnswerResult(correct: correct, outcome: outcome);
   }
 
+  /// Veliyle etkinlik yapıldı ("Yaptık"). Puanlanmaz: doğru/yanlış sayısına
+  /// girmez; kart tekrar takvimine "yapıldı" olarak işlenir.
+  void completeActivity() {
+    final step = current;
+    final card = step.card!;
+    final now = clock();
+    final prev = progress.cards[card.id] ?? CardState.fresh(card.id, now);
+    progress.cards[card.id] = review(prev, ReviewOutcome.correctFast, now);
+    summary.activities++;
+    if (step.phase == StepPhase.practice && plan.newOutcomeId != null) {
+      progress.startedOutcomes.add(plan.newOutcomeId!);
+      summary.newOutcomes.add(plan.newOutcomeId!);
+    }
+  }
+
   void next() => index++;
 
   /// Etkinliği şimdi yapmadan geç: kayıt değişmez.
   void skip() => index++;
 
+  static String _short(String prompt) {
+    final p = prompt.contains('\n\n')
+        ? prompt.substring(prompt.lastIndexOf('\n\n') + 2)
+        : prompt;
+    final t = p.replaceAll(RegExp(r'\s+'), ' ').trim();
+    return t.length <= 60 ? t : '${t.substring(0, 57)}…';
+  }
+
   /// Oturumu kapatır: süre ve seri kaydı.
   void finish() {
+    if (finished) return;
+    finished = true;
     final now = clock();
     final minutes = max(1, (now.difference(startedAt).inSeconds / 60).ceil());
     final key = dayKey(now);
     progress.dailyMinutes[key] = (progress.dailyMinutes[key] ?? 0) + minutes;
-    if (summary.answered > 0) {
+    summary.minutes = minutes;
+    if (summary.answered > 0 || summary.activities > 0) {
+      final before = progress.lastSessionDay;
       recordSessionDay(progress, now);
+      summary.streakGrew = before != progress.lastSessionDay;
       summary.nutsEarned += nutsSessionBonus;
       progress.nuts += nutsSessionBonus;
     }

@@ -1,7 +1,8 @@
 """İçerik paketleri için yardımcılar. Kartlara kimlik otomatik verilir:
-<çıktı kodu>#<sıra>. Sıra değişirse öğrencinin ilerlemesi kaybolur; yeni kart
-eklerken listenin SONUNA ekleyin.
+<çıktı kodu>#<içerik karması>. Kartların sırası serbestçe değiştirilebilir.
 """
+import hashlib
+import json
 
 
 def V(kind, **params):
@@ -46,11 +47,28 @@ def gen(name, fast=None, **params):
     return d
 
 
+def card_id(code, card, taken):
+    """Kart kimliği içerikten türetilir: kartların sırası değişse ya da araya
+    kart eklense de çocuğun o karttaki tekrar geçmişi korunur. Kartın metni
+    değişirse yeni kart sayılır (eski geçmiş artık o soruya ait değildir)."""
+    body = {k: v for k, v in card.items() if k != "id"}
+    digest = hashlib.sha1(
+        json.dumps(body, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
+    cid = f"{code}#{digest[:8]}"
+    n = 2
+    while cid in taken:  # aynı kart iki kez yazılmışsa
+        cid = f"{code}#{digest[:8]}-{n}"
+        n += 1
+    taken.add(cid)
+    return cid
+
+
 def outcome(code, lessons, cards):
     for i, l in enumerate(lessons, 1):
         l["id"] = f"{code}/L{i}"
-    for i, c in enumerate(cards, 1):
-        c["id"] = f"{code}#{i}"
+    taken = set()
+    for c in cards:
+        c["id"] = card_id(code, c, taken)
     return {"kod": code, "lessons": lessons, "cards": cards}
 
 

@@ -12,6 +12,7 @@ import base64
 import glob
 import json
 import os
+import re
 import sys
 import urllib.request
 from pathlib import Path
@@ -25,6 +26,27 @@ UI_PHRASES = [
     "Harika! Bugünlük bu kadar.",
     "Harika! Birlikte yaptınız.",
 ]
+
+
+# Sesli okunmayan işaretler: emoji, ok, kutu, şekil (lib/app/speaker.dart ile aynı)
+_SYMBOL_RANGES = (
+    (0x200D, 0x200D), (0x2190, 0x21FF), (0x2300, 0x23FF), (0x25A0, 0x25FF),
+    (0x2600, 0x27BF), (0x2900, 0x297F), (0x2B00, 0x2BFF), (0xFE00, 0xFE0F),
+    (0x1F000, 0x1FAFF), (0xE0000, 0xE007F),
+)
+
+
+def _is_symbol(cp: int) -> bool:
+    return any(a <= cp <= b for a, b in _SYMBOL_RANGES)
+
+
+def speakable(text: str) -> str:
+    """Sesli okunacak hale getirir: emoji ve işaretler atılır, boşluk çizgileri
+    duraklamaya çevrilir, boşluklar sadeleşir."""
+    s = "".join(" " if _is_symbol(ord(ch)) else ch for ch in text)
+    s = re.sub(r"_{2,}", " ... ", s)
+    s = re.sub(r"\s+", " ", s)
+    return s.strip()
 
 
 def fnv32(data: bytes, offset: int) -> int:
@@ -55,7 +77,8 @@ def collect() -> dict:
                     for k in ("explain", "hint"):
                         if c.get(k):
                             texts.add(c[k])
-    mapping = {speech_id(t): t.strip() for t in texts if t.strip()}
+    spoken = {speakable(t) for t in texts}
+    mapping = {speech_id(t): t for t in spoken if t}
     AUDIO.mkdir(parents=True, exist_ok=True)
     (ROOT / "tools/audio/texts.json").write_text(
         json.dumps(mapping, ensure_ascii=False, indent=0, sort_keys=True), encoding="utf-8")

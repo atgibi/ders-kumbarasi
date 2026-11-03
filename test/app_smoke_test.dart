@@ -9,7 +9,6 @@ import 'package:ders_kumbarasi/data/content_repository.dart';
 import 'package:ders_kumbarasi/data/models.dart';
 import 'package:ders_kumbarasi/data/progress_store.dart';
 import 'package:ders_kumbarasi/main.dart';
-import 'package:ders_kumbarasi/ui/widgets/chunky_button.dart';
 
 /// Widget testlerinde gerçek dosya G/Ç'si sahte zamanlayıcıyla çakışır;
 /// içerik dosyaları önceden belleğe okunur.
@@ -38,145 +37,151 @@ AppState makeState(MemoryStorage storage, {DateTime? at}) => AppState(
 
 Future<void> settle(WidgetTester t) => t.pumpAndSettle();
 
-/// Yol ekranındaki sürekli animasyonları kapatır ("hareketi azalt").
+/// Sürekli animasyonları kapatır ("hareketi azalt").
 void reduceMotion(WidgetTester t) {
   t.platformDispatcher.accessibilityFeaturesTestValue =
       const FakeAccessibilityFeatures(disableAnimations: true);
   addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
 }
 
+void phone(WidgetTester t) {
+  t.view.physicalSize = const Size(1170, 2532);
+  t.view.devicePixelRatio = 3;
+  addTearDown(t.view.reset);
+}
+
+Future<void> tapKey(WidgetTester t, String key) async {
+  final f = find.byKey(Key(key));
+  await t.ensureVisible(f);
+  await t.pumpAndSettle();
+  await t.tap(f);
+  await t.pumpAndSettle();
+}
+
+bool has(String key) => find.byKey(Key(key)).evaluate().isNotEmpty;
+
+/// Oturumu sonuna kadar götürür (anlatım, soru, etkinlik).
+Future<void> playSession(WidgetTester t) async {
+  var guard = 0;
+  while (guard++ < 80) {
+    if (has('lesson-next')) {
+      await tapKey(t, 'lesson-next');
+    } else if (has('option-0')) {
+      // Seçmeden KONTROL ET pasif
+      expect(find.byKey(const Key('band-ok')), findsNothing);
+      await tapKey(t, 'option-0');
+      await tapKey(t, 'check');
+      expect(has('next'), isTrue);
+      await tapKey(t, 'next');
+    } else if (has('activity-done')) {
+      await tapKey(t, 'activity-done');
+      await tapKey(t, 'next');
+    } else {
+      break;
+    }
+  }
+  await t.pumpAndSettle(const Duration(seconds: 3)); // bilgi notları kapansın
+}
+
 void main() {
-  testWidgets(
-      'ilk kurulum -> profil -> 1. sınıf matematik oturumu sonuna kadar',
+  testWidgets('ilk açılış (A1–A6) -> ilk ders -> özet -> seri -> yol',
       (t) async {
     reduceMotion(t);
-    t.view.physicalSize = const Size(1080, 2200);
-    t.view.devicePixelRatio = 2.6;
-    addTearDown(t.view.reset);
-
+    phone(t);
     final storage = MemoryStorage();
     final state = makeState(storage);
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
 
-    // İlk kurulum: onay kutusu işaretlenmeden devam edilemez
-    expect(find.text('Ders Kumbarası'), findsOneWidget);
-    final next = find.byKey(const Key('onboarding-next'));
-    await t.scrollUntilVisible(next, 200);
-    expect(t.widget<ChunkyButton>(next).onPressed, isNull);
-    await t.tap(find.byKey(const Key('accept')));
-    await t.pump();
-    await t.tap(next);
-    await t.pumpAndSettle();
-
+    expect(find.text('Her gün 10 dakika, kalıcı öğrenme'), findsOneWidget);
+    await tapKey(t, 'onboarding-start');
+    for (var i = 0; i < 3; i++) {
+      await tapKey(t, 'onboarding-next');
+    }
+    // A3: ad girilmeden devam edilemez
+    expect(find.text('Çocuğunuzu tanıyalım'), findsOneWidget);
     await t.enterText(find.byKey(const Key('nickname')), 'Elif');
     await t.pump();
-    await t.tap(find.byKey(const Key('profile-submit')));
-    await settle(t);
+    await tapKey(t, 'grade-1');
+    await tapKey(t, 'avatar-3');
+    await tapKey(t, 'profile-submit');
+    expect(find.text('Süre ve saatler'), findsOneWidget);
+    await tapKey(t, 'settings-next');
+    expect(find.text('Verileriniz cihazda kalır'), findsOneWidget);
+    await tapKey(t, 'privacy-ok');
+    expect(find.text('Hazır mısın, Elif?'), findsOneWidget);
+    await tapKey(t, 'first-lesson');
 
-    // Profil seçimi
-    expect(find.text('Kim çalışacak?'), findsOneWidget);
-    await t.tap(find.text('Elif'));
-    await settle(t);
-    state.selectSubject(Subject
-        .matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
-    await settle(t);
+    await playSession(t);
+    expect(find.text('Bugün çok çalıştın!'), findsOneWidget);
+    await tapKey(t, 'summary-done');
+    // İlk oturum: seri 1 gün
+    expect(find.text('1 gündür birlikteyiz!'), findsOneWidget);
+    await tapKey(t, 'streak-done');
 
-    // Yol ekranı: ilk konu açık, ikincisi kilitli
-    expect(find.byKey(const Key('tab-path')), findsOneWidget);
-    expect(find.text('BAŞLA'), findsOneWidget);
-    await t.tap(find.byKey(const Key('node-MAT.1.1.2')));
-    await t.pump();
-    expect(find.textContaining('Önce sıradaki konuyu bitir'), findsOneWidget);
-    await t.pumpAndSettle(const Duration(seconds: 5));
-
-    await t.tap(find.byKey(const Key('node-MAT.1.1.1')));
-    await settle(t);
-
-    // Konu anlatımı sayfaları
-    var guard = 0;
-    while (find.byKey(const Key('lesson-next')).evaluate().isNotEmpty &&
-        guard++ < 10) {
-      await t.tap(find.byKey(const Key('lesson-next')));
-      await t.pumpAndSettle();
-    }
-
-    // Sorular: seçmeden KONTROL ET pasif; ilk seçeneği seç, kontrol et, devam et
-    guard = 0;
-    while (find.byKey(const Key('option-0')).evaluate().isNotEmpty &&
-        guard++ < 30) {
-      await t.ensureVisible(find.byKey(const Key('option-0')));
-      await t.pumpAndSettle();
-      await t.tap(find.byKey(const Key('option-0')));
-      await t.pump();
-      await t.tap(find.byKey(const Key('check')));
-      await t.pumpAndSettle();
-      expect(find.byKey(const Key('next')), findsOneWidget);
-      await t.tap(find.byKey(const Key('next')));
-      await settle(t);
-    }
-    expect(find.text('Bugünlük bu kadar!'), findsOneWidget);
-    expect(find.textContaining('🌰'), findsWidgets);
-
-    await t.tap(find.byKey(const Key('summary-done')));
-    await settle(t);
-
-    // Yola dönüldü: ilk konu tamam, sıradaki konu başlatılabilir
-    expect(find.text('BAŞLA'), findsOneWidget);
-    expect(state.progress!.startedOutcomes, contains('MAT.1.1.1'));
+    // Yol: bugün kartı, sekmeler
+    expect(has('today-card'), isTrue);
+    expect(state.progress!.startedOutcomes, isNotEmpty);
     expect(state.progress!.nuts, greaterThan(0));
+    expect(state.profiles.single.avatar, '3');
 
-    // Sekmeler: Tekrar ve Profil
-    await t.tap(find.byKey(const Key('tab-review')));
-    await settle(t);
-    expect(find.textContaining('tam zamanında tekrar'), findsOneWidget);
-    await t.tap(find.byKey(const Key('tab-profile')));
-    await settle(t);
+    await tapKey(t, 'tab-review');
+    expect(has('review-card'), isTrue);
+    await tapKey(t, 'tab-profile');
     expect(find.text('Elif'), findsWidgets);
+    expect(find.text('1. sınıf'), findsOneWidget);
+    await tapKey(t, 'tab-path');
 
-    // İlerleme cihaza kaydedildi
-    final saved =
-        storage.files.keys.where((k) => k.startsWith('progress_')).toList();
+    // İlerleme cihaza kaydedildi (yedek dosyasıyla)
+    final saved = storage.files.keys
+        .where((k) => k.startsWith('progress_') && k.endsWith('.json'))
+        .toList();
     expect(saved, hasLength(1));
-    expect(storage.files[saved.single], contains('MAT.1.1.1#'));
+    expect(storage.files[saved.single], contains('#'));
   });
 
-  testWidgets('oturumdan çıkış onay ister; vazgeçince oturum sürer', (t) async {
+  testWidgets('kilitli düğüm not gösterir; oturumdan çıkış onay ister',
+      (t) async {
     reduceMotion(t);
-    t.view.physicalSize = const Size(1080, 2200);
-    t.view.devicePixelRatio = 2.6;
-    addTearDown(t.view.reset);
+    phone(t);
     final storage = MemoryStorage();
     await ProgressStore(storage).saveProfiles(
-        const [ChildProfile(id: 'a', nickname: 'Can', grade: 1, avatar: '🐶')]);
+        const [ChildProfile(id: 'a', nickname: 'Can', grade: 1, avatar: '2')]);
     final state = makeState(storage);
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
-    await t.tap(find.text('Can'));
+    expect(find.text('Kim çalışacak?'), findsOneWidget);
+    await tapKey(t, 'kid-a');
+    state.selectSubject(Subject.matematik);
     await settle(t);
-    state.selectSubject(Subject
-        .matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
-    await settle(t);
-    await t.tap(find.byKey(const Key('node-MAT.1.1.1')));
-    await settle(t);
-    expect(find.byKey(const Key('lesson-next')), findsOneWidget);
 
-    await t.tap(find.byKey(const Key('session-close')));
-    await t.pumpAndSettle();
-    expect(find.text('Bırakmak istediğine emin misin?'), findsOneWidget);
-    await t.tap(find.byKey(const Key('keep-going')));
-    await t.pumpAndSettle();
-    expect(find.byKey(const Key('lesson-next')), findsOneWidget);
+    await tapKey(t, 'node-MAT.1.1.2');
+    expect(find.textContaining('Önce sıradaki konuyu bitirelim'),
+        findsOneWidget);
+    await t.pumpAndSettle(const Duration(seconds: 3));
 
-    await t.tap(find.byKey(const Key('session-close')));
-    await t.pumpAndSettle();
-    await t.tap(find.byKey(const Key('leave')));
-    await settle(t);
-    expect(find.text('BAŞLA'), findsOneWidget);
+    await tapKey(t, 'node-MAT.1.1.1');
+    expect(has('node-sheet'), isTrue);
+    await tapKey(t, 'node-start');
+    expect(has('lesson-next'), isTrue);
+
+    await tapKey(t, 'session-close');
+    expect(
+        find.text(
+            'Şimdiye kadar yaptıkların kaydedildi. Çıkmak istiyor musun?'),
+        findsOneWidget);
+    await tapKey(t, 'keep-going');
+    expect(has('lesson-next'), isTrue);
+
+    await tapKey(t, 'session-close');
+    await tapKey(t, 'leave');
+    expect(has('today-card'), isTrue);
   });
 
-  testWidgets('veli kapısı yanlış cevapta açılmaz', (t) async {
+  testWidgets('veli kapısı: yanlış cevapta açılmaz, doğruda açılır',
+      (t) async {
     reduceMotion(t);
+    phone(t);
     final storage = MemoryStorage();
     final store = ProgressStore(storage);
     await store.saveProfiles(
@@ -185,34 +190,54 @@ void main() {
     final state = makeState(storage);
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
+    await tapKey(t, 'kid-a');
+    await tapKey(t, 'tab-profile');
+    await tapKey(t, 'parent-entry');
 
-    await t.tap(find.byKey(const Key('parent-entry')));
-    await t.pumpAndSettle();
-    await t.enterText(find.byKey(const Key('gate-answer')), '1');
-    await t.tap(find.byKey(const Key('gate-ok')));
-    await t.pumpAndSettle();
+    await tapKey(t, 'gate-key-1');
+    await tapKey(t, 'gate-key-ok');
     expect(find.text('Veli paneli'), findsNothing);
-    expect(find.text('Cevap doğru değil.'), findsOneWidget);
+    expect(find.text('Bu cevap değil. 2 deneme hakkınız kaldı.'),
+        findsOneWidget);
+
+    final q = t.widget<Text>(find.byKey(const Key('gate-question'))).data!;
+    final m = RegExp(r'(\d+) × (\d+)').firstMatch(q)!;
+    final answer = int.parse(m[1]!) * int.parse(m[2]!);
+    for (final d in '$answer'.split('')) {
+      await tapKey(t, 'gate-key-$d');
+    }
+    await tapKey(t, 'gate-key-ok');
+    expect(find.text('Veli paneli'), findsOneWidget);
+    expect(has('parent-empty'), isTrue);
+
+    await tapKey(t, 'nav-settings');
+    expect(find.text('Yazı boyutu'), findsOneWidget);
+    await tapKey(t, 'text-size-1');
+    expect(state.settings.textSize, 1);
+    await tapKey(t, 'back');
+    await tapKey(t, 'to-child');
+    expect(has('tab-profile'), isTrue);
   });
 
   testWidgets('sessiz saatlerde oturum açılmaz', (t) async {
     reduceMotion(t);
+    phone(t);
     final storage = MemoryStorage();
     final store = ProgressStore(storage);
     await store.saveProfiles(
-        const [ChildProfile(id: 'a', nickname: 'Can', grade: 1, avatar: '🐶')]);
+        const [ChildProfile(id: 'a', nickname: 'Can', grade: 1, avatar: '0')]);
     final state = makeState(storage, at: DateTime(2026, 11, 2, 22, 30));
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
-    await t.tap(find.text('Can'));
+    await tapKey(t, 'kid-a');
+    state.selectSubject(Subject.matematik);
     await settle(t);
-    state.selectSubject(Subject
-        .matematik); // varsayılan ders Türkçe; testler Matematik yolunu kullanır
-    await settle(t);
-    await t.tap(find.byKey(const Key('node-MAT.1.1.1')));
-    await t.pumpAndSettle();
-    expect(find.textContaining('dinlenme zamanı'), findsOneWidget);
-    expect(find.byKey(const Key('lesson-next')), findsNothing);
+    await tapKey(t, 'node-MAT.1.1.1');
+    await tapKey(t, 'node-start');
+    expect(find.text('Fındık uyuyor. Sabah görüşürüz!'), findsOneWidget);
+    expect(has('lesson-next'), isFalse);
+    await tapKey(t, 'system-ok');
+    expect(has('today-card'), isTrue);
   });
 
   test('sessiz saat hesabı', () {
