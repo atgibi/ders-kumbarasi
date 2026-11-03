@@ -102,14 +102,24 @@ class LessonPage {
 }
 
 class Lesson {
-  const Lesson({required this.id, required this.title, required this.pages});
+  const Lesson({
+    required this.id,
+    required this.title,
+    required this.pages,
+    this.alt = false,
+  });
   final String id;
   final String title;
   final List<LessonPage> pages;
 
+  /// "Farklı yoldan" ikinci anlatım: oturumda kendiliğinden gösterilmez,
+  /// çocuk zorlanınca ya da "Başka türlü anlat" denince açılır.
+  final bool alt;
+
   factory Lesson.fromJson(Map<String, Object?> j) => Lesson(
         id: j['id']! as String,
         title: j['title']! as String,
+        alt: j['alt'] as bool? ?? false,
         pages: (j['pages']! as List<Object?>)
             .map((p) => LessonPage.fromJson(p! as Map<String, Object?>))
             .toList(growable: false),
@@ -127,7 +137,22 @@ class Question {
     this.explanation,
     this.hint,
     this.activity = false,
+    this.optionNotes,
   }) : assert(answerIndex >= 0);
+
+  /// Yanlış seçeneklere özel açıklama (seçenek sırasıyla; doğru seçenekte
+  /// ve notu olmayanlarda null). Örn. "Son dişliyi iki kez saymış olabilir
+  /// misin?"
+  final List<String?>? optionNotes;
+
+  /// Seçilen yanlış seçeneğe özel açıklama, yoksa genel açıklama.
+  String? explainFor(int chosen) {
+    final n = optionNotes;
+    if (n != null && chosen >= 0 && chosen < n.length && n[chosen] != null) {
+      return n[chosen];
+    }
+    return explanation;
+  }
 
   /// Veliyle birlikte yapılan etkinlik (puanlanmaz; "Yaptık" ile tamamlanır).
   final bool activity;
@@ -212,10 +237,22 @@ class CardDef {
         answerIndex: answer,
         explanation: j['explain'] as String?,
         hint: j['hint'] as String?,
+        optionNotes: _notes(j['why'], options.length),
       ),
       fastSeconds: (j['fast'] as num?)?.toInt() ?? 15,
     );
   }
+}
+
+/// 'why': seçenek sırasıyla açıklama listesi ya da {"2": "..."} haritası.
+List<String?>? _notes(Object? raw, int n) {
+  if (raw is List) {
+    return [for (var i = 0; i < n; i++) i < raw.length ? raw[i] as String? : null];
+  }
+  if (raw is Map) {
+    return [for (var i = 0; i < n; i++) raw['$i'] as String?];
+  }
+  return null;
 }
 
 /// Bir öğrenme çıktısına ait içerik paketi.

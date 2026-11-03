@@ -9,6 +9,8 @@ import '../core/srs/leitner.dart';
 import '../data/content_repository.dart';
 import '../data/models.dart';
 import '../data/progress_store.dart';
+import '../game/game_state.dart';
+import '../game/world.dart';
 import 'speaker.dart';
 
 class AppSettings {
@@ -20,6 +22,7 @@ class AppSettings {
     this.onboarded = false,
     this.reduceMotion = false,
     this.textSize = 0,
+    this.premium = false,
   });
 
   final int dailyLimitMinutes;
@@ -34,6 +37,10 @@ class AppSettings {
   /// 0 normal, 1 büyük, 2 en büyük (çocuk alanındaki yazılar).
   final int textSize;
 
+  /// Abonelik etkin mi (tüm krallık bölgeleri açık). Mağaza bağlantısı
+  /// kurulana kadar yalnızca geliştirme sürümünde açılabilir.
+  final bool premium;
+
   bool get quietEnabled => quietStartHour != quietEndHour;
 
   /// Çocuk alanında yazı büyütme katsayısı.
@@ -47,6 +54,7 @@ class AppSettings {
     bool? onboarded,
     bool? reduceMotion,
     int? textSize,
+    bool? premium,
   }) =>
       AppSettings(
         dailyLimitMinutes: dailyLimitMinutes ?? this.dailyLimitMinutes,
@@ -56,6 +64,7 @@ class AppSettings {
         onboarded: onboarded ?? this.onboarded,
         reduceMotion: reduceMotion ?? this.reduceMotion,
         textSize: textSize ?? this.textSize,
+        premium: premium ?? this.premium,
       );
 
   AppSettings withQuiet(bool on) => on
@@ -70,6 +79,7 @@ class AppSettings {
         'onboarded': onboarded,
         'reduce': reduceMotion,
         'text': textSize,
+        'premium': premium,
       };
 
   factory AppSettings.fromJson(Map<String, Object?> j) => AppSettings(
@@ -80,6 +90,7 @@ class AppSettings {
         onboarded: j['onboarded'] as bool? ?? false,
         reduceMotion: j['reduce'] as bool? ?? false,
         textSize: (j['text'] as num?)?.toInt() ?? 0,
+        premium: j['premium'] as bool? ?? false,
       );
 
   /// Sessiz saatlerde mi? (ör. 21:00–07:00)
@@ -181,6 +192,21 @@ class AppState extends ChangeNotifier {
   Future<ChildProfile> addChild(
       String nickname, int grade, String avatar) async {
     final id = '${clock().microsecondsSinceEpoch}${Random().nextInt(1 << 16)}';
+    final p = ChildProfile(
+        id: id, nickname: nickname.trim(), grade: grade, avatar: avatar);
+    profiles = [...profiles, p];
+    await _guard(() => store.saveProfiles(profiles));
+    notifyListeners();
+    return p;
+  }
+
+  /// İlk açılış: profil ve kahraman birlikte kaydedilir (kahramansız bir
+  /// an olmasın diye ilerleme dosyası profil listesinden önce yazılır).
+  Future<ChildProfile> addChildWithHero(
+      String nickname, int grade, String avatar, HeroLook hero) async {
+    final id = '${clock().microsecondsSinceEpoch}${Random().nextInt(1 << 16)}';
+    await _guard(() =>
+        store.saveProgress(id, ChildProgress(game: GameState(hero: hero))));
     final p = ChildProfile(
         id: id, nickname: nickname.trim(), grade: grade, avatar: avatar);
     profiles = [...profiles, p];
@@ -368,5 +394,81 @@ class AppState extends ChangeNotifier {
     final pack = await content.contentFor(o.subject, o.grade);
     final lessons = pack[o.code]?.lessons ?? const <Lesson>[];
     return lessons.isNotEmpty ? lessons.first.title : o.title;
+  }
+
+  // ---------------------------------------------------------------- Oyun
+
+  GameState get game => progress!.game;
+
+  /// Işık: ana kaynak.
+  int get light => progress?.nuts ?? 0;
+
+  Future<void> saveHero(HeroLook hero) async {
+    progress!.game.hero = hero;
+    await saveProgress();
+  }
+
+  /// Ders/sınıf için krallık bölgeleri.
+  Future<List<RegionDef>> regions(Subject s, [int? grade]) async {
+    final g = grade ?? active!.grade;
+    return regionsOf(s, g, await content.outcomesFor(s, g));
+  }
+
+  /// Bölge abonelik kilidinde mi?
+  bool regionLocked(RegionDef r) => r.premium && !settings.premium;
+
+  /// Abonelik olmadan yeni konusu açılmayan çıktılar.
+  Future<Set<String>> lockedOutcomes(Subject s) async {
+    if (settings.premium) return const {};
+    return {
+      for (final r in await regions(s))
+        if (regionLocked(r)) ...r.outcomes.map((o) => o.code),
+    };
+  }
+
+  /// "Yeterli" düzeydeki çıktı sayısı (tüm dersler).
+  Future<int> masteredCount() async {
+    final a = active, p = progress;
+    if (a == null || p == null) return 0;
+    var n = 0;
+    for (final s in Subject.forGrade(a.grade)) {
+      final m = await masteryMap(a, p, s);
+      n += m.entries
+          .where((e) =>
+              p.startedOutcomes.contains(e.key.code) &&
+              e.value == MasteryLevel.sufficient)
+          .length;
+    }
+    return n;
+  }
+
+  Future<HeroStage> heroStage() async => stageFor(
+        started: progress?.startedOutcomes.length ?? 0,
+        banners: progress?.game.banners.length ?? 0,
+        mastered: await masteredCount(),
+      );
+
+  /// Yapı kurulabilir/yükseltilebilir mi?
+  bool canBuild(BuildingDef b) {
+    final p = progress;
+    if (p == null) return false;
+    final next = p.game.levelOf(b) + 1;
+    if (next > BuildingDef.maxLevel) return false;
+    if (p.nuts < b.lightCost(next)) return false;
+    return b.materialCost(next).entries.every((e) => p.game.supply(e.key) >= e.value);
+  }
+
+  /// Yapıyı kurar ya da bir seviye yükseltir. Bekleme süresi yok.
+  Future<bool> build(BuildingDef b) async {
+    if (!canBuild(b)) return false;
+    final p = progress!;
+    final next = p.game.levelOf(b) + 1;
+    p.nuts -= b.lightCost(next);
+    for (final e in b.materialCost(next).entries) {
+      p.game.addSupply(e.key, -e.value);
+    }
+    p.game.built[b.id] = next;
+    await saveProgress();
+    return true;
   }
 }

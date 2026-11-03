@@ -61,7 +61,7 @@ class K {
   static const hintShadow = Color(0xFFE9D488);
   static const hintInk = Color(0xFF6B4E00);
 
-  // Fındık
+  // Işık (eski adıyla nut)
   static const nut = Color(0xFF8A5326);
   static const nutInk = Color(0xFF6E3F17);
 

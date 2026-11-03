@@ -17,6 +17,7 @@ import 'data_screen.dart';
 import 'onboarding_screen.dart';
 import 'profile_form.dart';
 import 'profile_picker_screen.dart';
+import 'subscription_screen.dart';
 
 const levelText = {
   MasteryLevel.notStarted: 'Başlanmadı',
@@ -193,6 +194,17 @@ class _ParentScreenState extends State<ParentScreen> {
                     onTap: () => Navigator.of(context).push(
                         MaterialPageRoute<void>(
                             builder: (_) => ReportScreen(profile: profile))),
+                  ),
+                  NavRow(
+                    key: const Key('nav-subscription'),
+                    icon: DkIcons.star,
+                    title: 'Abonelik',
+                    subtitle: app.settings.premium
+                        ? 'Tüm bölgeler açık'
+                        : 'Her krallığın ilk 3 bölümü ücretsiz',
+                    onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                            builder: (_) => const SubscriptionScreen())),
                   ),
                   NavRow(
                     key: const Key('nav-settings'),

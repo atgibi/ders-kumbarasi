@@ -9,12 +9,15 @@ import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
+import '../game/hero_create_screen.dart';
+import '../game/kingdom_map.dart';
+import '../game/town_tab.dart';
 import 'parent_gate.dart';
 import 'parent_screen.dart';
-import 'path_screen.dart';
 import 'system_screens.dart';
 
-/// Çocuğun ana kabuğu: Yol, Tekrar, Profil sekmeleri.
+/// Çocuğun ana kabuğu: Harita, Kasaba, Tekrar, Profil sekmeleri.
+/// Kahramanı olmayan çocuk önce kahramanını oluşturur.
 class ShellScreen extends StatefulWidget {
   const ShellScreen({super.key});
 
@@ -36,6 +39,9 @@ class _ShellScreenState extends State<ShellScreen> {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final p = app.progress!;
+    if (p.game.hero == null) {
+      return HeroCreateScreen(onDone: (_) => setState(() => _tab = 0));
+    }
     final key = '${app.active?.id}|${p.cards.length}|${p.lastSessionDay}|'
         '${p.nuts}|${app.clock().hour}';
     if (_dueFuture == null || key != _dueKey) {
@@ -43,7 +49,7 @@ class _ShellScreenState extends State<ShellScreen> {
       _dueFuture = _totalDue();
     }
     return PopScope(
-      // Android geri tuşu: önce Yol sekmesine döner
+      // Android geri tuşu: önce Harita sekmesine döner
       canPop: _tab == 0,
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop && _tab != 0) setState(() => _tab = 0);
@@ -60,8 +66,9 @@ class _ShellScreenState extends State<ShellScreen> {
                 child: IndexedStack(
                   index: _tab,
                   children: [
-                    const PathScreen(),
-                    _ReviewTab(active: _tab == 1),
+                    const KingdomMapTab(),
+                    const TownTab(),
+                    _ReviewTab(active: _tab == 2),
                     const _ProfileTab(),
                   ],
                 ),
@@ -116,72 +123,19 @@ class _TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final p = app.progress!;
-    final subject = app.subject!;
-    final (icon, tint, ink) = subjectStyle(subject);
     return Container(
       height: 68,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: const BoxDecoration(
           border: Border(bottom: BorderSide(color: K.line, width: 2))),
       child: Row(children: [
-        if (tab == 0)
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Pressable(
-                key: const Key('subject-picker'),
-                onTap: () => showSubjectSheet(context),
-                label: 'Ders seç: ${subject.label}',
-                excludeChildSemantics: true,
-                focusRadius: K.rMd,
-                builder: (context, down) => Container(
-                  constraints: const BoxConstraints(minHeight: 52),
-                  padding: const EdgeInsets.only(left: 6, right: 10),
-                  decoration: BoxDecoration(
-                    color: K.card,
-                    borderRadius: BorderRadius.circular(K.rMd),
-                    border: Border.all(color: K.line, width: 2),
-                    boxShadow: down
-                        ? null
-                        : const [
-                            BoxShadow(color: K.line, offset: Offset(0, 3))
-                          ],
-                  ),
-                  child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Container(
-                      width: 38,
-                      height: 38,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: tint, borderRadius: BorderRadius.circular(12)),
-                      child: DkIcon(icon, size: 22, color: ink),
-                    ),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(subject.label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w900,
-                              color: K.ink)),
-                    ),
-                    const SizedBox(width: 4),
-                    const DkIcon(DkIcons.down, size: 20, color: K.inkSoft),
-                  ]),
-                ),
-              ),
-            ),
-          )
-        else ...[
-          Text(tab == 1 ? 'Tekrar' : 'Profil',
-              style: const TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.w900, color: K.ink)),
-          const Spacer(),
-        ],
+        Text(const ['Bilgelik Diyarı', 'Kasaba', 'Tekrar', 'Profil'][tab],
+            style: const TextStyle(
+                fontSize: 24, fontWeight: FontWeight.w900, color: K.ink)),
+        const Spacer(),
         _Counter(
           key: const Key('streak'),
-          icon: DkIcons.leaf,
+          icon: DkIcons.flame,
           color: K.leafInk,
           value: p.streakDays,
           spoken: '${p.streakDays} gündür birlikteyiz',
@@ -191,7 +145,7 @@ class _TopBar extends StatelessWidget {
           icon: DkIcons.nut,
           color: K.nutInk,
           value: p.nuts,
-          spoken: '${p.nuts} fındık',
+          spoken: '${p.nuts} ışık',
         ),
       ]),
     );
@@ -241,7 +195,8 @@ class _TabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const tabs = [
-      ('tab-path', 'Yol', DkIcons.map),
+      ('tab-map', 'Harita', DkIcons.map),
+      ('tab-town', 'Kasaba', DkIcons.house),
       ('tab-review', 'Tekrar', DkIcons.again),
       ('tab-profile', 'Profil', DkIcons.user),
     ];
@@ -260,7 +215,7 @@ class _TabBar extends StatelessWidget {
                 key: Key(tabs[i].$1),
                 onTap: () => onTap(i),
                 selected: index == i,
-                label: i == 1 && badge > 0
+                label: i == 2 && badge > 0
                     ? '${tabs[i].$2}, $badge tekrar bekliyor'
                     : tabs[i].$2,
                 excludeChildSemantics: true,
@@ -296,7 +251,7 @@ class _TabBar extends StatelessWidget {
                                     color: fg)),
                           ],
                         ),
-                        if (i == 1 && badge > 0)
+                        if (i == 2 && badge > 0)
                           Positioned(
                             top: 0,
                             left: 0,
@@ -619,7 +574,7 @@ class _ProfileTabState extends State<_ProfileTab> {
                 stat(DkIcons.leaf, K.leafInk, '${p.streakDays}',
                     'gündür birlikte'),
                 const SizedBox(width: 10),
-                stat(DkIcons.nut, K.nut, '${p.nuts}', 'fındık'),
+                stat(DkIcons.nut, K.nut, '${p.nuts}', 'ışık'),
                 const SizedBox(width: 10),
                 stat(DkIcons.star, K.rewardShade, '${snap.data ?? 0}',
                     'yıldızlı konu'),

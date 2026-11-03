@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app_state.dart';
 import '../../core/srs/leitner.dart';
 import '../../data/models.dart';
+import '../../game/world.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
@@ -67,6 +68,7 @@ Future<List<PathSection>> buildPath(AppState app, Subject subject) async {
   final pack = await app.content.contentFor(subject, child.grade);
   final now = app.clock();
 
+  final locked = await app.lockedOutcomes(subject);
   var currentFound = false;
   final nodes = <PathNode>[];
   for (final o in outcomes) {
@@ -81,6 +83,8 @@ Future<List<PathSection>> buildPath(AppState app, Subject subject) async {
       st = outcomeMastery(states) == MasteryLevel.sufficient
           ? NodeState.gold
           : NodeState.started;
+    } else if (locked.contains(o.code)) {
+      st = NodeState.locked;
     } else if (!currentFound) {
       st = NodeState.current;
       currentFound = true;
@@ -102,36 +106,36 @@ Future<List<PathSection>> buildPath(AppState app, Subject subject) async {
     ));
   }
 
-  // Gruplama: Türkçe beceri alanına, diğer dersler üniteye göre
+  // Gruplama: oyun bölgeleriyle aynı (ünite/beceri alanı, en fazla 3 çıktı)
+  final byCode = {for (final n in nodes) n.outcome.code: n};
   final sections = <PathSection>[];
-  String keyOf(Outcome o) => o.unit?.toString() ?? o.area ?? '';
-  var i = 0, n = 0;
-  while (i < nodes.length) {
-    final k = keyOf(nodes[i].outcome);
-    final group = <PathNode>[];
-    while (i < nodes.length && keyOf(nodes[i].outcome) == k) {
-      group.add(nodes[i++]);
-    }
-    final o = group.first.outcome;
-    final String title, subtitle;
+  final k = Kingdom.of(subject);
+  for (final r in await app.regions(subject)) {
+    final o = r.outcomes.first;
+    final String subtitle;
     if (o.unit != null) {
-      title =
-          subject == Subject.matematik ? 'TEMA ${o.unit}' : 'ÜNİTE ${o.unit}';
       subtitle =
           await app.content.unitName(subject, child.grade, o.unit!) ?? '';
     } else {
-      title = 'BÖLÜM ${n + 1}';
       subtitle = o.area ?? '';
     }
-    sections.add(PathSection(title, subtitle, group, n));
-    n++;
+    sections.add(PathSection(regionTitle(k, r.index).toUpperCase(), subtitle,
+        [for (final x in r.outcomes) byCode[x.code]!], r.index));
   }
   return sections;
 }
 
 /// B2 Yol (ana sayfa): bugün kartı + ünite ünite zikzak düğümler.
 class PathScreen extends StatefulWidget {
-  const PathScreen({super.key});
+  const PathScreen({super.key, this.subject, this.region, this.header, this.footer});
+
+  /// Verilirse bu ders (yoksa seçili ders).
+  final Subject? subject;
+
+  /// Verilirse yalnızca bu bölge (bölüm) gösterilir; bugün kartı gizlenir.
+  final int? region;
+  final Widget? header;
+  final Widget? footer;
 
   @override
   State<PathScreen> createState() => _PathScreenState();
@@ -142,19 +146,21 @@ class _PathScreenState extends State<PathScreen> {
   Future<(List<PathSection>, int)>? _future;
   String _forKey = '';
 
+  Subject _subject(AppState app) => widget.subject ?? app.subject!;
+
   Future<(List<PathSection>, int)> _build(AppState app) async {
-    final sections = await buildPath(app, app.subject!);
-    final due = await app.dueCount(app.subject!);
+    final sections = await buildPath(app, _subject(app));
+    final due = await app.dueCount(_subject(app));
     return (sections, due);
   }
 
   void _refreshIfNeeded(AppState app) {
     final p = app.progress;
-    final key = '${app.active?.id}|${app.subject}|${p?.startedOutcomes.length}|'
+    final key = '${app.active?.id}|${_subject(app)}|${p?.startedOutcomes.length}|'
         '${p?.cards.length}|${p?.lastSessionDay}|${p?.nuts}';
     if (_future == null || key != _forKey) {
       final first = _future == null ||
-          !_forKey.startsWith('${app.active?.id}|${app.subject}|');
+          !_forKey.startsWith('${app.active?.id}|${_subject(app)}|');
       _forKey = key;
       _future = _build(app);
       if (first) {
@@ -203,7 +209,7 @@ class _PathScreenState extends State<PathScreen> {
     );
     if (start == true && mounted) {
       await openSession(context,
-          subject: app.subject!,
+          subject: _subject(app),
           focusOutcome: node.outcome.code,
           checkDoneToday: node.state == NodeState.current);
     }
@@ -221,7 +227,11 @@ class _PathScreenState extends State<PathScreen> {
         }
         final data = snap.data;
         if (data == null) return const SizedBox.shrink();
-        final (sections, due) = data;
+        final (all, due) = data;
+        final region = widget.region;
+        final sections = region == null
+            ? all
+            : [if (region < all.length) all[region]];
         var idx = 0;
         final hasCurrent = sections
             .any((s) => s.nodes.any((n) => n.state == NodeState.current));
@@ -229,11 +239,13 @@ class _PathScreenState extends State<PathScreen> {
           key: const Key('path-list'),
           padding: const EdgeInsets.only(bottom: 24),
           children: [
-            _TodayCard(
-              due: due,
-              newTopic: hasCurrent,
-              done: app.studiedToday && due == 0,
-            ),
+            if (widget.header != null) widget.header!,
+            if (region == null)
+              _TodayCard(
+                due: due,
+                newTopic: hasCurrent,
+                done: app.studiedToday && due == 0,
+              ),
             for (final s in sections) ...[
               _UnitBanner(section: s),
               Padding(
@@ -259,6 +271,7 @@ class _PathScreenState extends State<PathScreen> {
                 ]),
               ),
             ],
+            if (widget.footer != null) widget.footer!,
           ],
         );
       },

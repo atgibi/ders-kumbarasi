@@ -62,7 +62,7 @@ class _DersKumbarasiAppState extends State<DersKumbarasiApp> {
       state: widget.state,
       child: MaterialApp(
         navigatorKey: _nav,
-        title: 'Ders Kumbarası',
+        title: 'Bilgelik Diyarı',
         debugShowCheckedModeBanner: false,
         theme: K.theme(),
         locale: const Locale('tr', 'TR'),

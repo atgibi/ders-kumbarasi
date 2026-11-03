@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_state.dart';
 import '../../data/models.dart';
+import '../../game/game_state.dart';
+import '../game/hero_create_screen.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/kit.dart';
@@ -18,7 +20,7 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  int _step = 0; // 0 A1, 1 A2, 2 A3, 3 A4, 4 A5, 5 A6
+  int _step = 0; // 0 A1, 1 A2, 2 A3, 3 A4, 4 A5, 5 A6, 6 kahraman
   int _how = 0;
   ProfileFormResult? _profile;
   late AppSettings _settings = AppScope.read(context).settings;
@@ -26,14 +28,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _go(int s) => setState(() => _step = s);
 
-  Future<void> _finish() async {
+  Future<void> _finish(HeroLook hero) async {
     if (_busy) return;
-    setState(() => _busy = true);
+    _busy = true;
     final app = AppScope.read(context);
     final nav = Navigator.of(context);
     final r = _profile!;
     await app.updateSettings(_settings.copyWith(onboarded: true));
-    final child = await app.addChild(r.nickname, r.grade, r.avatar);
+    final child =
+        await app.addChildWithHero(r.nickname, r.grade, r.avatar, hero);
     await app.selectChild(child);
     // İlk ders: sıradaki ilk konu (anlatım + kısa alıştırma)
     final subject = app.subject ?? Subject.forGrade(r.grade).first;
@@ -64,7 +67,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
       3 => _settingsStep(),
       4 => _privacy(),
-      _ => _ready(),
+      5 => _ready(),
+      _ => HeroCreateScreen(onSave: _finish, onDone: (_) {}),
     };
     return PopScope(
       canPop: _step == 0,
@@ -105,7 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Mascot(size: 190, label: 'Fındık'),
+                    Mascot(size: 190, label: 'Anka'),
                     SizedBox(height: 18),
                     Text('DERS KUMBARASI', style: T.kicker),
                     SizedBox(height: 18),
@@ -130,7 +134,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     (
       DkIcons.book,
       'Kısa konu anlatımı',
-      'Her konu 2–4 sayfalık resimli bir anlatımla başlar. Fındık her sayfayı sesli okur.',
+      'Her konu 2–4 sayfalık resimli bir anlatımla başlar. Bilge kuş Anka her sayfayı sesli okur.',
       K.peach,
       K.label
     ),
@@ -387,7 +391,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const Mascot(
                       mood: MascotMood.celebrate,
                       size: 220,
-                      label: 'Fındık sevinçle bekliyor'),
+                      label: 'Anka sevinçle bekliyor'),
                 ],
               ),
             ),
@@ -396,8 +400,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ],
       bottom: ChunkyButton(
           key: const Key('first-lesson'),
-          label: 'İlk dersim',
-          onPressed: _busy ? null : _finish),
+          label: 'Kahramanımı seçeyim',
+          onPressed: () => _go(6)),
     );
   }
 }

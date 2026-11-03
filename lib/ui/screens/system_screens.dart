@@ -94,35 +94,35 @@ class SystemScreen extends StatelessWidget {
     ) = switch (kind) {
       SystemKind.quiet => (
           MascotMood.sleepy,
-          'Fındık uyuyor',
+          'Anka uyuyor',
           'SESSİZ SAAT',
-          'Fındık uyuyor. Sabah görüşürüz!',
+          'Anka uyuyor. Sabah görüşürüz!',
           'Uyku vakti. Yarın yeni bir yaprak seni bekliyor.',
         ),
       SystemKind.timeUp => (
           MascotMood.celebrate,
-          'Fındık mutlu',
+          'Anka mutlu',
           'BUGÜNLÜK SÜRE BİTTİ',
           'Bugünlük süremiz bitti. Yarın devam!',
           'Bugün ${app.settings.dailyLimitMinutes} dakika çalıştın. Şimdi gözlerini dinlendirme zamanı.',
         ),
       SystemKind.doneToday => (
           MascotMood.celebrate,
-          'Fındık kutluyor',
+          'Anka kutluyor',
           'TÜM TEKRARLAR TAMAM',
           'Bugünlük bu kadar!',
           'Bugünkü tekrarları bitirdin. İstersen birkaç eski konuyu daha tazeleyebilirsin.',
         ),
       SystemKind.nothing => (
           MascotMood.normal,
-          'Fındık',
+          'Anka',
           'ŞİMDİLİK BOŞ',
           'Şu an yapılacak bir şey yok',
           message ?? 'Yeni konular öğrendikçe tekrarlar burada birikir.',
         ),
       SystemKind.error => (
           MascotMood.think,
-          'Fındık düşünüyor',
+          'Anka düşünüyor',
           'BİR AKSİLİK OLDU',
           'Bu ders şu an açılamadı',
           message ??

@@ -2,9 +2,14 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../app/app_state.dart';
 import '../../app/session_controller.dart';
 import '../../app/speaker.dart';
 import '../../data/models.dart';
+import '../../data/progress_store.dart';
+import '../../game/turkish.dart';
+import '../../game/world.dart';
+import '../game/duel_widgets.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
@@ -20,7 +25,7 @@ const _okBodies = [
   'Güzel çalıştın.'
 ];
 
-enum _Phase { loading, empty, error, run, summary, streak }
+enum _Phase { loading, empty, error, run, summary, streak, duelWin }
 
 /// Çalışma oturumu (C1–C12): konu anlatımı, sorular, etkinlik, özet, seri.
 class SessionScreen extends StatefulWidget {
@@ -30,7 +35,11 @@ class SessionScreen extends StatefulWidget {
     this.focusOutcome,
     this.reviewOnly = false,
     this.extraPractice = false,
+    this.duel,
   });
+
+  /// Verilirse bekçi düellosu: bu bölgenin çıktılarından karma sorular.
+  final RegionDef? duel;
 
   final Subject subject;
   final String? focusOutcome;
@@ -48,6 +57,12 @@ class _SessionScreenState extends State<SessionScreen> {
   int _praise = 0;
   final Map<String, String> _lessonTitles = {};
   Speaker? _speaker;
+
+  /// Düelloda düşen zırh parçası (her doğru cevap bir parça).
+  int _duelHits = 0;
+  int _duelPieces = 0;
+  bool _duelGift = false;
+  String? _notebookLine;
 
   @override
   void initState() {
@@ -71,16 +86,28 @@ class _SessionScreenState extends State<SessionScreen> {
   Future<void> _load() async {
     final app = AppScope.read(context);
     try {
-      final c = await SessionController.build(
-        repo: app.content,
-        subject: widget.subject,
-        grade: app.active!.grade,
-        progress: app.progress!,
-        clock: app.clock,
-        focusOutcome: widget.focusOutcome,
-        reviewOnly: widget.reviewOnly,
-        extraPractice: widget.extraPractice,
-      );
+      final duel = widget.duel;
+      final c = duel != null
+          ? await SessionController.duel(
+              repo: app.content,
+              subject: widget.subject,
+              grade: app.active!.grade,
+              progress: app.progress!,
+              outcomeCodes: [for (final o in duel.outcomes) o.code],
+              clock: app.clock,
+            )
+          : await SessionController.build(
+              repo: app.content,
+              subject: widget.subject,
+              grade: app.active!.grade,
+              progress: app.progress!,
+              clock: app.clock,
+              focusOutcome: widget.focusOutcome,
+              reviewOnly: widget.reviewOnly,
+              extraPractice: widget.extraPractice,
+              locked: await app.lockedOutcomes(widget.subject),
+            );
+      _duelPieces = c.steps.length;
       final pack =
           await app.content.contentFor(widget.subject, app.active!.grade);
       for (final e in pack.entries) {
@@ -123,6 +150,15 @@ class _SessionScreenState extends State<SessionScreen> {
     final app = AppScope.read(context);
     if (c.isDone) {
       c.finish();
+      if (widget.duel != null) {
+        _winDuel(app, c);
+        await app.saveProgress();
+        if (!mounted) return;
+        setState(() => _phase = _Phase.duelWin);
+        _say('${widget.duel!.guardian.name} kurtuldu! ${widget.duel!.guardian.thanks}');
+        return;
+      }
+      _writeNotebook(app, c);
       await app.saveProgress();
       if (!mounted) return;
       setState(() => _phase = _Phase.summary);
@@ -137,6 +173,50 @@ class _SessionScreenState extends State<SessionScreen> {
       showDkToast(
           context, DkIcons.again, 'Bunu birazdan bir kez daha soracağız.');
     }
+  }
+
+  /// Düello bitti: zafer her zaman gelir; %80 ve üstü ilk denemede doğruysa
+  /// bekçi ek bir hediye bırakır.
+  void _winDuel(AppState app, SessionController c) {
+    final r = widget.duel!;
+    final g = app.progress!.game;
+    final pct = c.summary.answered == 0
+        ? 0
+        : (100 * c.summary.correct / c.summary.answered).round();
+    final first = !g.banners.contains(r.key);
+    g.banners.add(r.key);
+    if (first) g.rescued.add(r.key);
+    g.duelBest[r.key] = math.max(g.duelBest[r.key] ?? 0, pct);
+    if (first) g.addSupply(Kingdom.of(r.subject).material, 5);
+    _duelGift = pct >= 80;
+    if (_duelGift) app.progress!.nuts += 10;
+    final k = Kingdom.of(r.subject);
+    g.addPage(
+        dayKey(app.clock()),
+        '${_heroName(app)}, ${locative(k.name)} ${regionTitle(k, r.index)} '
+        'bölgesine sancağını dikti. ${r.guardian.name} sisten kurtuldu.');
+  }
+
+  String _heroName(AppState app) =>
+      app.progress?.game.hero?.name ?? app.active?.nickname ?? 'Kahraman';
+
+  void _writeNotebook(AppState app, SessionController c) {
+    final k = Kingdom.of(widget.subject);
+    final titles = [
+      for (final code in c.summary.newOutcomes) _lessonTitles[code] ?? code
+    ];
+    final String line;
+    if (titles.isNotEmpty) {
+      line = '${_heroName(app)} bugün ${locative(k.name)} '
+          '"${titles.join('", "')}" konusunu öğrendi.';
+    } else if (c.summary.answered > 0) {
+      line = '${_heroName(app)} bugün ${locative(k.name)} '
+          '${c.summary.correct} soruyu doğru çözdü, sisi biraz daha dağıttı.';
+    } else {
+      return;
+    }
+    _notebookLine = line;
+    app.progress!.game.addPage(dayKey(app.clock()), line);
   }
 
   void _summaryDone() {
@@ -177,7 +257,7 @@ class _SessionScreenState extends State<SessionScreen> {
       _summaryDone();
       return;
     }
-    if (_phase == _Phase.streak) {
+    if (_phase == _Phase.streak || _phase == _Phase.duelWin) {
       _end();
       return;
     }
@@ -243,7 +323,15 @@ class _SessionScreenState extends State<SessionScreen> {
         body = _SummaryView(
           controller: c!,
           lessonTitles: _lessonTitles,
+          notebookLine: _notebookLine,
           onDone: _summaryDone,
+          onSay: _say,
+        );
+      case _Phase.duelWin:
+        body = DuelWinView(
+          region: widget.duel!,
+          gift: _duelGift,
+          onDone: _end,
           onSay: _say,
         );
       case _Phase.streak:
@@ -256,6 +344,12 @@ class _SessionScreenState extends State<SessionScreen> {
               progress: c.progressRatio,
               onClose: _confirmExit,
             ),
+            if (widget.duel != null)
+              DuelHeader(
+                guardian: widget.duel!.guardian,
+                pieces: _duelPieces,
+                fallen: math.min(_duelHits, _duelPieces),
+              ),
             Expanded(
               child: step.kind == StepKind.lesson
                   ? _LessonView(
@@ -295,6 +389,9 @@ class _SessionScreenState extends State<SessionScreen> {
                             final r =
                                 c.answer(i, elapsed: elapsed, usedHint: hint);
                             _praise = (_praise + 1) % 3;
+                            if (r.correct && widget.duel != null) {
+                              setState(() => _duelHits++);
+                            }
                             AppScope.read(context).saveProgress();
                             return r;
                           },
@@ -319,7 +416,7 @@ class _SessionScreenState extends State<SessionScreen> {
   }
 }
 
-/// C1 Oturum üstü: kapat, ilerleme, fındık. Başka hiçbir şey.
+/// C1 Oturum üstü: kapat, ilerleme, ışık. Başka hiçbir şey.
 class _TopBar extends StatelessWidget {
   const _TopBar({required this.progress, required this.onClose});
   final double progress;
@@ -351,7 +448,7 @@ class _TopBar extends StatelessWidget {
           Expanded(child: DkProgressBar(value: progress)),
           const SizedBox(width: 6),
           Semantics(
-            label: '$nuts fındık',
+            label: '$nuts ışık',
             child: ExcludeSemantics(
               child: Row(children: [
                 const DkIcon(DkIcons.nut, size: 28),
@@ -569,7 +666,7 @@ class _QuestionViewState extends State<_QuestionView> {
     setState(() => _result = r);
     widget.onSay(r.correct
         ? _okTitles[widget.praise]
-        : 'Doğrusu: ${q.answer}. ${q.explanation ?? ''}');
+        : 'Doğrusu: ${q.answer}. ${q.explainFor(i) ?? ''}');
   }
 
   @override
@@ -661,7 +758,9 @@ class _QuestionViewState extends State<_QuestionView> {
             correct: r.correct,
             title:
                 r.correct ? _okTitles[widget.praise] : 'Doğrusu: ${q.answer}',
-            body: r.correct ? _okBodies[widget.praise] : q.explanation,
+            body: r.correct
+                ? _okBodies[widget.praise]
+                : q.explainFor(_selected ?? -1),
             onNext: () => widget.onNext(!r.correct),
           ),
       ],
@@ -899,8 +998,8 @@ class _StripePainter extends CustomPainter {
   bool shouldRepaint(_StripePainter old) => false;
 }
 
-/// C7 Geri bildirim bandı: alttan kayar. Doğru: yeşil, kutlayan Fındık.
-/// Tekrar: mavi, düşünen Fındık, "Doğrusu: …" ve ANLADIM.
+/// C7 Geri bildirim bandı: alttan kayar. Doğru: yeşil, kutlayan Anka.
+/// Tekrar: mavi, düşünen Anka, "Doğrusu: …" ve ANLADIM.
 class FeedbackBand extends StatelessWidget {
   const FeedbackBand({
     super.key,
@@ -1161,9 +1260,11 @@ class _SummaryView extends StatelessWidget {
     required this.lessonTitles,
     required this.onDone,
     required this.onSay,
+    this.notebookLine,
   });
   final SessionController controller;
   final Map<String, String> lessonTitles;
+  final String? notebookLine;
   final VoidCallback onDone;
   final void Function(String, {bool slow}) onSay;
 
@@ -1171,11 +1272,13 @@ class _SummaryView extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = controller.summary;
     final streak = AppScope.of(context).progress?.streakDays ?? 0;
+    final supply = Kingdom.of(controller.subject).material;
     final tiles = [
-      (DkIcons.check, '${s.correct}', 'doğru cevap', K.goodBg, K.goodInk),
-      (DkIcons.clock, '${s.minutes} dk', 'çalıştın', K.againBg, K.againInk),
-      (DkIcons.nut, '+${s.nutsEarned}', 'fındık', K.peach, K.peachInk),
-      (DkIcons.leaf, '$streak gün', 'birlikteyiz', K.goodBg, K.goodInk),
+      (DkIcons.check, '${s.correct}', 'doğru cevap', K.goodBg, K.goodInk, null),
+      (DkIcons.nut, '+${s.nutsEarned}', 'ışık', K.peach, K.peachInk, null),
+      (DkIcons.blocks, '+${s.suppliesEarned}', supply.label.toLowerCase(),
+          K.rewardBg, K.rewardInk, supply.emoji),
+      (DkIcons.leaf, '$streak gün', 'meşalen yanıyor', K.goodBg, K.goodInk, '🔥'),
     ];
     final newTitles = [
       for (final code in s.newOutcomes) lessonTitles[code] ?? code,
@@ -1203,7 +1306,7 @@ class _SummaryView extends StatelessWidget {
                         child: Mascot(
                             mood: MascotMood.celebrate,
                             size: 150,
-                            label: 'Fındık kutluyor')),
+                            label: 'Anka kutluyor')),
                     const SizedBox(height: 16),
                     const Text('Bugün çok çalıştın!', style: T.big),
                     const SizedBox(height: 16),
@@ -1229,8 +1332,10 @@ class _SummaryView extends StatelessWidget {
                                           color: t.$4,
                                           borderRadius:
                                               BorderRadius.circular(K.rSm)),
-                                      child:
-                                          DkIcon(t.$1, size: 22, color: t.$5),
+                                      child: t.$6 != null
+                                          ? EmojiImage(t.$6!, size: 24)
+                                          : DkIcon(t.$1,
+                                              size: 22, color: t.$5),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(t.$2,
@@ -1251,7 +1356,7 @@ class _SummaryView extends StatelessWidget {
                         ],
                       );
                     }),
-                    if (newTitles.isNotEmpty) ...[
+                    if (newTitles.isNotEmpty || notebookLine != null) ...[
                       const SizedBox(height: 16),
                       DkCard(
                         padding: const EdgeInsets.symmetric(
@@ -1265,13 +1370,13 @@ class _SummaryView extends StatelessWidget {
                             alignment: Alignment.center,
                             decoration: const BoxDecoration(
                                 color: K.reward, shape: BoxShape.circle),
-                            child: const DkIcon(DkIcons.star,
-                                size: 22, color: K.ink),
+                            child: const EmojiImage('📜', size: 24),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: EmojiText(
-                                'Yeni konu kumbarada: ${newTitles.join(', ')}',
+                                notebookLine ??
+                                    'Yeni konu: ${newTitles.join(', ')}',
                                 style: const TextStyle(
                                     fontSize: 17,
                                     height: 23 / 17,
