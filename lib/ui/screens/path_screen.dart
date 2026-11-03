@@ -244,7 +244,16 @@ class _PathScreenState extends State<PathScreen> {
                       key: node.state == NodeState.current ? _currentKey : null,
                       node: node,
                       section: s,
-                      dx: const <double>[0, 56, 84, 56, 0, -56, -84, -56][idx++ % 8],
+                      dx: const <double>[
+                        0,
+                        56,
+                        84,
+                        56,
+                        0,
+                        -56,
+                        -84,
+                        -56
+                      ][idx++ % 8],
                       onTap: () => _open(s, node),
                     ),
                 ]),
