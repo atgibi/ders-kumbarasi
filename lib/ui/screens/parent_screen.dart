@@ -121,7 +121,7 @@ class _ParentScreenState extends State<ParentScreen> {
       _key = key;
       _f = _loadKid(app, profile);
     }
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -505,7 +505,7 @@ class _ReportScreenState extends State<ReportScreen> {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     _f ??= _loadKid(app, widget.profile);
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -722,7 +722,7 @@ class _OutcomeScreenState extends State<OutcomeScreen> {
   @override
   Widget build(BuildContext context) {
     _f ??= _load();
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -851,7 +851,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final s = app.settings;
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -987,7 +987,7 @@ class ProfilesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [

@@ -34,7 +34,7 @@ class SubscriptionScreen extends StatelessWidget {
             Expanded(child: Text(t, style: T.pBody)),
           ]),
         );
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [

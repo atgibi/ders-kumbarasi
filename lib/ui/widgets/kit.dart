@@ -2,6 +2,7 @@
 library;
 
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -98,6 +99,31 @@ class _PressableState extends State<Pressable> {
 
 enum BtnKind { primary, good, again, secondary, kok }
 
+/// Veli alanı: tasarımdaki sakin ürün dili (düz lacivert düğmeler, ince
+/// çizgiler). Bu alanın altındaki düğmeler çocuk ekranlarındaki ahşap tabela
+/// yerine sade çizilir.
+class Calm extends InheritedWidget {
+  const Calm({super.key, required super.child});
+
+  static bool of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<Calm>() != null;
+
+  @override
+  bool updateShouldNotify(Calm oldWidget) => false;
+}
+
+/// Veli alanı iskelesi.
+class CalmScaffold extends StatelessWidget {
+  const CalmScaffold({super.key, this.backgroundColor, required this.body});
+  final Color? backgroundColor;
+  final Widget body;
+
+  @override
+  Widget build(BuildContext context) => Calm(
+        child: Scaffold(backgroundColor: K.bgParent, body: body),
+      );
+}
+
 /// Tıknaz düğme: 56 yükseklik, 22 yuvarlama, 5 px blok gölge.
 class ChunkyButton extends StatelessWidget {
   const ChunkyButton({
@@ -122,6 +148,7 @@ class ChunkyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onPressed != null;
+    if (Calm.of(context)) return _calm(context, enabled);
     // Tasarım: birincil ahşap tabela, ikincil parşömen; zafer zümrüt,
     // tekrar lacivert. Devre dışı: soluk taş.
     final HandStyle style;
@@ -211,6 +238,57 @@ class ChunkyButton extends StatelessWidget {
                   right: -17, top: 0, bottom: 0, child: Center(child: _Nail())),
             ],
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _calm(BuildContext context, bool enabled) {
+    final secondary = kind == BtnKind.secondary;
+    final bg = !enabled
+        ? K.locked
+        : secondary
+            ? Colors.transparent
+            : kind == BtnKind.good
+                ? K.zumrutKoyu
+                : K.lacivert;
+    final fg = !enabled
+        ? K.inkMuted
+        : secondary
+            ? K.lacivert
+            : K.kagit3;
+    return Pressable(
+      onTap: onPressed,
+      label: semanticsLabel ?? label,
+      excludeChildSemantics: true,
+      builder: (context, down) => Opacity(
+        opacity: down ? .85 : 1,
+        child: Container(
+          constraints: BoxConstraints(minHeight: math.max(52, height - 4)),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: bg,
+            borderRadius: BorderRadius.circular(6),
+            border: secondary && enabled
+                ? Border.all(color: K.lacivert, width: 1.5)
+                : null,
+          ),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            if (icon != null)
+              DkIcon(icon!, size: 22, color: iconColor ?? fg, stroke: 2.4),
+            if (icon != null && label.isNotEmpty) const SizedBox(width: 8),
+            if (label.isNotEmpty)
+              Flexible(
+                child: Text(label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: K.font,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: fg)),
+              ),
+          ]),
         ),
       ),
     );
@@ -720,7 +798,7 @@ class DkSwitch extends StatelessWidget {
         width: 52,
         height: 32,
         decoration: BoxDecoration(
-            color: on ? K.good : K.toggleOff,
+            color: on ? K.zumrutKoyu : K.toggleOff,
             borderRadius: BorderRadius.circular(16)),
         child: AnimatedAlign(
           duration: const Duration(milliseconds: 120),
@@ -1028,7 +1106,7 @@ class ParentHeader extends StatelessWidget {
         height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: K.line, width: 2))),
+            border: Border(bottom: BorderSide(color: K.line, width: 1))),
         child: Row(children: [
           if (onBack != null) ...[
             CircleBtn(

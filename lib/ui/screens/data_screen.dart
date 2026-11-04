@@ -129,7 +129,7 @@ class _DataScreenState extends State<DataScreen> {
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -330,7 +330,7 @@ class PrivacyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
