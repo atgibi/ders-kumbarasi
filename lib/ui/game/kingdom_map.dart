@@ -193,11 +193,12 @@ class _KingdomMapTabState extends State<KingdomMapTab> {
         builder: (context, snap) {
           final regions = snap.data;
           if (regions != null) _scrollToCurrent('${app.active?.id}|$subject');
-          return ListView(
+          // tek sütun: başlık ve tuval hep kurulu (bugünkü bölgeye kaydırılır)
+          return SingleChildScrollView(
             key: const Key('map-list'),
-            // başlık ve tuval birlikte kurulu kalsın
-            cacheExtent: 3000,
             padding: const EdgeInsets.only(bottom: 24),
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const _KingdomPicker(),
               const SupplyStrip(),
@@ -207,6 +208,7 @@ class _KingdomMapTabState extends State<KingdomMapTab> {
                     regions: regions, kingdom: k, currentKey: _currentKey),
               ],
             ],
+            ),
           );
         },
       ),
