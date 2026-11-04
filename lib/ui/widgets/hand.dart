@@ -77,7 +77,7 @@ Path handPath(Rect r, HandRadii radii,
 }
 
 /// Yüzey dokusu.
-enum HandFill { duz, ahsap, tas, sisli }
+enum HandFill { duz, ahsap, tas, sisli, pano }
 
 /// Bir el çizimi yüzeyin görünümü.
 class HandStyle {
@@ -153,6 +153,13 @@ class HandStyle {
       borderWidth: 3,
       shadows: [(4, K.tas2), (6, K.murekkep)]);
   static const muhur = HandStyle(blob: true, fill: K.lacivert, seed: 9);
+  static const pano = HandStyle(
+      radii: HandRadii([6, 9, 5, 10], [9, 5, 10, 6]),
+      fill: Color(0xFF9A6838),
+      texture: HandFill.pano,
+      borderWidth: 3,
+      shadows: [(5, K.ahsap2)],
+      seed: 13);
 }
 
 class HandPainter extends CustomPainter {
@@ -251,6 +258,22 @@ class HandPainter extends CustomPainter {
           canvas.drawRect(Rect.fromLTWH(x + 7, -span, 2, span * 2), b);
         }
         canvas.restore();
+      case HandFill.pano:
+        // dikey tahta panolar
+        const planks = [
+          (3.0, Color(0xFF9A6838)),
+          (2.0, Color(0xFF8E5E31)),
+          (6.0, Color(0xFFA0703F)),
+          (1.0, Color(0xFF87582E)),
+        ];
+        var x = r.left;
+        var i = 0;
+        while (x < r.right) {
+          final (bw, c) = planks[i % planks.length];
+          canvas.drawRect(Rect.fromLTWH(x, r.top, bw, r.height), Paint()..color = c);
+          x += bw;
+          i++;
+        }
       case HandFill.duz:
         break;
     }

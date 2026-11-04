@@ -194,6 +194,8 @@ void main() {
     expect(find.text('Anka'), findsWidgets);
     await tapKey(t, 'letter-0');
     expect(g.unreadLetters, 0);
+    expect(find.textContaining("Bilgelik Diyarı'na hoş geldin"), findsOneWidget);
+    await tapKey(t, 'letter-back');
     await tapKey(t, 'mail-back');
     await tapTown(t, 'notebook-open');
     expect(find.text('Kahraman Defteri'), findsOneWidget);

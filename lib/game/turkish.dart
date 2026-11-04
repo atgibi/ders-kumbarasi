@@ -7,7 +7,8 @@ const _hard = 'fstkçşhp';
 
 String? _lastVowel(String w) {
   for (var i = w.length - 1; i >= 0; i--) {
-    final c = w[i].toLowerCase();
+    final c = const {'â': 'a', 'î': 'i', 'û': 'u'}[w[i].toLowerCase()] ??
+        w[i].toLowerCase();
     if (_back.contains(c) || _front.contains(c)) return c;
   }
   return null;
