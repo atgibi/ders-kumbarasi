@@ -158,6 +158,21 @@ class _KingdomMapTabState extends State<KingdomMapTab> {
   Future<List<RegionView>>? _future;
   String _key = '';
 
+  /// Bugünkü bölge: harita açılınca ona kaydırılır (yol aşağıdan tırmanır).
+  final _currentKey = GlobalKey();
+  String _scrolledFor = '';
+
+  void _scrollToCurrent(String subjectKey) {
+    if (_scrolledFor == subjectKey) return;
+    _scrolledFor = subjectKey;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final c = _currentKey.currentContext;
+      if (c != null && c.mounted) {
+        Scrollable.ensureVisible(c, alignment: .6);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
@@ -177,15 +192,19 @@ class _KingdomMapTabState extends State<KingdomMapTab> {
         future: _future,
         builder: (context, snap) {
           final regions = snap.data;
+          if (regions != null) _scrollToCurrent('${app.active?.id}|$subject');
           return ListView(
             key: const Key('map-list'),
+            // başlık ve tuval birlikte kurulu kalsın
+            cacheExtent: 3000,
             padding: const EdgeInsets.only(bottom: 24),
             children: [
               const _KingdomPicker(),
               const SupplyStrip(),
               if (regions != null) ...[
                 _KingdomHeader(kingdom: k, line: ankaLine(k, regions)),
-                _MapCanvas(regions: regions, kingdom: k),
+                _MapCanvas(
+                    regions: regions, kingdom: k, currentKey: _currentKey),
               ],
             ],
           );
@@ -363,9 +382,11 @@ class _KingdomHeader extends StatelessWidget {
 /// Krallık haritası (Claude Design 10): aşağıdan yukarı tırmanan yol,
 /// zikzak bölge düğümleri, sis ve kahraman.
 class _MapCanvas extends StatelessWidget {
-  const _MapCanvas({required this.regions, required this.kingdom});
+  const _MapCanvas(
+      {required this.regions, required this.kingdom, required this.currentKey});
   final List<RegionView> regions;
   final Kingdom kingdom;
+  final GlobalKey currentKey;
 
   static const step = 92.0;
 
@@ -400,6 +421,12 @@ class _MapCanvas extends StatelessWidget {
                 ),
               ),
             ),
+            if (n > 0)
+              Positioned(
+                left: 0,
+                top: at(current >= 0 ? current : 0).dy - 60,
+                child: SizedBox(key: currentKey, width: 1, height: 120),
+              ),
             for (var i = 0; i < n; i++) ...[
               Positioned(
                 left: at(i).dx - 46,
