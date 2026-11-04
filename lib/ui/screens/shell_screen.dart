@@ -70,11 +70,11 @@ class _ShellScreenState extends State<ShellScreen> {
               Expanded(
                 child: IndexedStack(
                   index: _tab,
-                  children: [
-                    const KingdomMapTab(header: _SkyEntry()),
-                    const TownTab(),
-                    const _ProfileTab(),
-                    const NotebookScreen(asTab: true),
+                  children: const [
+                    KingdomMapTab(header: _SkyEntry()),
+                    TownTab(),
+                    _ProfileTab(),
+                    NotebookScreen(asTab: true),
                   ],
                 ),
               ),

@@ -91,9 +91,9 @@ class _TownTabState extends State<TownTab> {
           const SizedBox(height: 8),
           const WeeklyTripCard(),
           const SizedBox(height: 20),
-          Row(children: [
-            const Expanded(child: Text('KASABAN', style: G.kicker)),
-            const MailboxButton(),
+          const Row(children: [
+            Expanded(child: Text('KASABAN', style: G.kicker)),
+            MailboxButton(),
           ]),
           const SizedBox(height: 8),
           if (rescued.isNotEmpty) ...[
