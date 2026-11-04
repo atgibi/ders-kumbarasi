@@ -970,7 +970,7 @@ class _OptionCard extends StatelessWidget {
           constraints: const BoxConstraints(minHeight: 84),
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
           child: Center(
-            widthFactor: 1,
+            heightFactor: 1,
             child: EmojiText(
               label,
               textAlign: TextAlign.center,
@@ -985,6 +985,7 @@ class _OptionCard extends StatelessWidget {
           ),
         );
     Widget card(bool down) => Stack(
+          fit: StackFit.passthrough,
           clipBehavior: Clip.none,
           children: [
             face(down),

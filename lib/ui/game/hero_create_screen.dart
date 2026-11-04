@@ -9,6 +9,7 @@ import '../../game/world.dart';
 import '../theme.dart';
 import '../widgets/emoji_text.dart';
 import '../widgets/hand.dart';
+import '../widgets/ikon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
 import 'game_theme.dart';
@@ -428,15 +429,13 @@ class _PathCard extends StatelessWidget {
         label: '${path.name}. ${path.trait}. Yol arkadaşı: ${path.companion}',
         selected: selected,
         onTap: onTap,
-        builder: (context, down) => Container(
+        builder: (context, down) => HandBox(
+          style: HandStyle.kart.copyWith(
+              fill: selected ? K.kagit3 : (down ? K.kagit2 : K.kagit),
+              border: selected ? path.color : K.murekkep,
+              borderWidth: selected ? 4 : 2.5,
+              shadows: selected ? [(4, path.color)] : const []),
           padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: selected ? Colors.white : G.paper,
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(
-                color: selected ? path.color : G.paper2,
-                width: selected ? 4 : 2),
-          ),
           child: Row(children: [
             HeroFigure(look: look, size: 70),
             const SizedBox(width: 14),
@@ -455,7 +454,16 @@ class _PathCard extends StatelessWidget {
               ),
             ),
             if (selected)
-              const Icon(Icons.check_circle, color: K.good, size: 30),
+              SizedBox(
+                width: 40,
+                height: 40,
+                child: CustomPaint(
+                  painter: HandPainter(
+                      HandStyle.muhur.copyWith(fill: K.zumrutKoyu)),
+                  child: const Center(
+                      child: IkonView(Ikon.tik, size: 22, light: true)),
+                ),
+              ),
           ]),
         ),
       );
