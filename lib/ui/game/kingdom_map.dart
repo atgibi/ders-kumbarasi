@@ -198,14 +198,14 @@ class _KingdomMapTabState extends State<KingdomMapTab> {
           final regions = snap.data;
           if (regions != null) _scrollToCurrent('${app.active?.id}|$subject');
           // tek sütun: başlık ve tuval hep kurulu (bugünkü bölgeye kaydırılır)
-          return SingleChildScrollView(
+          // Gök Adaları girişi kaymaz: harita bugünkü bölgeye kaysa da görünür
+          final scroll = SingleChildScrollView(
             key: const Key('map-list'),
             padding: const EdgeInsets.only(bottom: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const _KingdomPicker(),
-                if (widget.header != null) widget.header!,
                 const SupplyStrip(),
                 if (regions != null) ...[
                   _KingdomHeader(kingdom: k, line: ankaLine(k, regions)),
@@ -215,6 +215,11 @@ class _KingdomMapTabState extends State<KingdomMapTab> {
               ],
             ),
           );
+          if (widget.header == null) return scroll;
+          return Column(children: [
+            widget.header!,
+            Expanded(child: scroll),
+          ]);
         },
       ),
     );
