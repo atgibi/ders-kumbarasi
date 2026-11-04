@@ -446,14 +446,6 @@ class LettersScreen extends StatelessWidget {
   }
 }
 
-String _initials(String name) {
-  final parts = name.split(' ').where((p) => p.isNotEmpty).toList();
-  if (parts.isEmpty) return '';
-  return parts.length == 1
-      ? parts.first.characters.first
-      : '${parts.first.characters.first}${parts.last.characters.first}';
-}
-
 /// Zarf: üstte kapak, ortada kök boya mühür.
 class _Envelope extends StatelessWidget {
   const _Envelope({required this.letter, required this.pressed});
