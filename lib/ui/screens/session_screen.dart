@@ -364,6 +364,7 @@ class _SessionScreenState extends State<SessionScreen> {
                 guardian: widget.duel!.guardian,
                 pieces: _duelPieces,
                 fallen: math.min(_duelHits, _duelPieces),
+                kingdom: Kingdom.of(widget.subject),
               ),
             Expanded(
               child: step.kind == StepKind.lesson
@@ -388,6 +389,7 @@ class _SessionScreenState extends State<SessionScreen> {
                       : _QuestionView(
                           key: ValueKey('Q${c.index}'),
                           step: step,
+                          scene: widget.duel == null,
                           phaseLabel: widget.extraPractice
                               ? 'EKSTRA TEKRAR'
                               : switch (step.phase) {
@@ -627,10 +629,14 @@ class _QuestionView extends StatefulWidget {
     required this.onSay,
     required this.onAnswer,
     required this.onNext,
+    this.scene = true,
   });
 
   final SessionStep step;
   final String phaseLabel;
+
+  /// Kahraman ve Anka sahnesi (düelloda sahne üstte, burada gösterilmez).
+  final bool scene;
   final int praise;
   final void Function(String, {bool slow}) onSay;
   final AnswerResult Function(int index, Duration elapsed, bool usedHint)
@@ -718,7 +724,7 @@ class _QuestionViewState extends State<_QuestionView> {
                   VisualView(q.visual!),
                 ],
                 const SizedBox(height: 16),
-                if (q.visual != null || passage == null) ...[
+                if (widget.scene && (q.visual != null || passage == null)) ...[
                   const SizedBox(height: 4),
                   _Scene(result: r),
                 ],

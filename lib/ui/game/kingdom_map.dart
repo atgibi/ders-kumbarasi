@@ -18,6 +18,7 @@ import '../widgets/hand.dart';
 import '../widgets/ikon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
+import 'duel_widgets.dart';
 import 'game_theme.dart';
 import 'hero_figure.dart';
 import 'region_screen.dart';
@@ -763,7 +764,8 @@ class _RegionNode extends StatelessWidget {
               Positioned(
                   left: 0,
                   top: 6,
-                  child: EmojiImage(view.def.guardian.emoji, size: 30)),
+                  child: GuardianFigure(
+                      guardian: view.def.guardian, size: 38, armored: true)),
             if (view.due && st != RegionState.fog && st != RegionState.locked)
               const Positioned(
                   right: 0, bottom: 4, child: IkonView(Ikon.mesale, size: 26)),

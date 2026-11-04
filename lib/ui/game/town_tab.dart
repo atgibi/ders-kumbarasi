@@ -10,6 +10,7 @@ import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
 import '../widgets/kit.dart';
 import 'board_widgets.dart';
+import 'duel_widgets.dart';
 import 'game_theme.dart';
 import 'hero_figure.dart';
 import 'kingdom_map.dart';
@@ -126,7 +127,7 @@ class _TownTabState extends State<TownTab> {
             const SizedBox(height: 6),
             Wrap(spacing: 8, runSpacing: 8, children: [
               for (final r in rescued)
-                Tooltip(message: r.name, child: EmojiImage(r.emoji, size: 40)),
+                Tooltip(message: r.name, child: GuardianFigure(guardian: r, size: 64)),
             ]),
             const SizedBox(height: 14),
           ],

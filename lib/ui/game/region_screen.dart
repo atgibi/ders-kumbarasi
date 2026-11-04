@@ -10,8 +10,8 @@ import '../screens/session_screen.dart';
 import '../screens/system_screens.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
-import '../widgets/emoji_text.dart';
 import '../widgets/kit.dart';
+import 'duel_widgets.dart';
 import 'game_theme.dart';
 
 class RegionScreen extends StatelessWidget {
@@ -135,8 +135,9 @@ class _DuelCard extends StatelessWidget {
           children: [
             Row(children: [
               Opacity(
-                  opacity: ready || freed ? 1 : 0.4,
-                  child: EmojiImage(g.emoji, size: 52)),
+                  opacity: ready || freed ? 1 : 0.5,
+                  child: GuardianFigure(
+                      guardian: g, size: 72, armored: !freed)),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

@@ -96,7 +96,7 @@ class _PressableState extends State<Pressable> {
   }
 }
 
-enum BtnKind { primary, good, again, secondary }
+enum BtnKind { primary, good, again, secondary, kok }
 
 /// Tıknaz düğme: 56 yükseklik, 22 yuvarlama, 5 px blok gölge.
 class ChunkyButton extends StatelessWidget {
@@ -151,6 +151,13 @@ class ChunkyButton extends StatelessWidget {
             K.kagit3
           ),
         BtnKind.secondary => (HandStyle.parsomen, K.ink),
+        BtnKind.kok => (
+            HandStyle.tabela.copyWith(
+                fill: K.kokKoyu,
+                texture: HandFill.duz,
+                shadows: const [(5, Color(0xFF6E2417))]),
+            K.kagit3
+          ),
       };
       style = r.$1;
       fg = r.$2;
