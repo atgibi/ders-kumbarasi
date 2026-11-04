@@ -428,6 +428,13 @@ class _MapCanvas extends StatelessWidget {
                 ),
               ),
             ),
+            // krallık önderi tepede bekliyor
+            Positioned(
+              right: 6,
+              top: 4,
+              child: IgnorePointer(
+                  child: LeaderFigure(kingdom: kingdom, size: 72, wave: true)),
+            ),
             if (n > 0)
               Positioned(
                 left: 0,

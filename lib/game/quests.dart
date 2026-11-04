@@ -24,13 +24,16 @@ enum QuestKind {
 
 /// Kasaba halkı: istekleri getirenler.
 class Townsfolk {
-  const Townsfolk(this.name, this.emoji);
+  const Townsfolk(this.name, this.emoji, [this.art]);
   final String name;
   final String emoji;
+
+  /// Tasarımda çizimi varsa varlık yolu.
+  final String? art;
 }
 
 const townsfolk = [
-  Townsfolk('Fırıncı Hasan', '🧑‍🍳'),
+  Townsfolk('Fırıncı Hasan', '🧑‍🍳', 'assets/onder/hasan.svg'),
   Townsfolk('Postacı Lale', '📮'),
   Townsfolk('Bahçıvan Ömer', '🧑‍🌾'),
   Townsfolk('Kütüphaneci Nur', '📚'),

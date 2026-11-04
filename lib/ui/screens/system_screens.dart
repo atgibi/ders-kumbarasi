@@ -8,6 +8,7 @@ import '../../app/app_state.dart';
 import '../../data/models.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
+import '../widgets/hand.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
 import 'parent_gate.dart';
@@ -129,7 +130,6 @@ class SystemScreen extends StatelessWidget {
               'Başka bir dersle devam edebilirsin. Sorun sürerse bir büyüğüne haber ver.',
         ),
     };
-    final ink = night ? Colors.white : K.ink;
     return Scaffold(
       backgroundColor: night ? K.night : K.bg,
       body: SafeArea(
@@ -153,13 +153,32 @@ class SystemScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Mascot(mood: mood, size: 200, label: alt),
+                          // Claude Design G31–G33: kemerli sahne, kilim
+                          SizedBox(
+                            height: 230,
+                            width: double.infinity,
+                            child: HandBox(
+                              style: HandStyle(
+                                  radii: const HandRadii(
+                                      [120, 120, 14, 14], [96, 96, 14, 14]),
+                                  fill: night ? const Color(0xFF2A3B55) : K.kagit3,
+                                  border: night ? K.kagit3 : K.murekkep),
+                              padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                              child: Column(children: [
+                                const Spacer(),
+                                Mascot(mood: mood, size: 170, label: alt),
+                                night ? const Kilim.lacivert() : const Kilim(),
+                              ]),
+                            ),
+                          ),
                           const SizedBox(height: 18),
                           Text(kicker,
                               style: T.kicker.copyWith(
                                   color: night ? K.nightKick : K.label)),
                           const SizedBox(height: 18),
-                          Text(title, style: T.big.copyWith(color: ink)),
+                          Text(title,
+                              style: T.big.copyWith(
+                                  color: night ? K.kagit3 : K.lacivert)),
                           const SizedBox(height: 18),
                           Text(text,
                               style: T.body.copyWith(

@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../game/quests.dart';
 import '../theme.dart';
@@ -154,7 +155,12 @@ class _QuestRow extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(color: K.murekkep, width: 2),
                   ),
-                  child: EmojiImage(q.who.emoji, size: 30),
+                  child: q.who.art != null
+                      ? ClipOval(
+                          child: SvgPicture.asset(q.who.art!,
+                              width: 46, height: 46, fit: BoxFit.cover,
+                              alignment: Alignment.topCenter))
+                      : EmojiImage(q.who.emoji, size: 30),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -288,7 +294,7 @@ class WeeklyTripCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(children: [
-            EmojiImage(k.emoji, size: 36),
+            LeaderFigure(kingdom: k, size: 56),
             const SizedBox(width: 10),
             Expanded(
               child: Column(

@@ -58,3 +58,30 @@ class IkonView extends StatelessWidget {
 
 /// Krallık malzemesinin simgesi.
 Ikon ikonOf(Supply s) => Ikon.values.byName(s.id);
+
+/// Krallık önderinin çizimi (Claude Design › Krallık önderleri).
+String leaderAsset(Kingdom k, {bool wave = false}) => switch (k.name) {
+      'Demirdağ' => wave ? 'assets/onder/cark_selam.svg' : 'assets/onder/cark.svg',
+      'Sözorman' => 'assets/onder/yaprak.svg',
+      'Ocakvadi' => 'assets/onder/pelin.svg',
+      'Işıkkaya' => 'assets/onder/dokum.svg',
+      _ => 'assets/onder/elif.svg',
+    };
+
+class LeaderFigure extends StatelessWidget {
+  const LeaderFigure(
+      {super.key, required this.kingdom, this.size = 80, this.wave = false});
+  final Kingdom kingdom;
+  final double size;
+  final bool wave;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+        image: true,
+        label: kingdom.leader,
+        child: ExcludeSemantics(
+          child: SvgPicture.asset(leaderAsset(kingdom, wave: wave),
+              width: size, height: size * 208 / 168),
+        ),
+      );
+}
