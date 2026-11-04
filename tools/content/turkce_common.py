@@ -11,16 +11,16 @@ from common import outcome, lesson, page, mc, act, gen, V
 T = lambda t: V("text", text=t)
 
 
-def listen(story, question, options, answer, explain=None):
+def listen(story, question, options, answer, explain=None, why=None):
     """Dinleme kartı: hikâye sesli okunur; ses kapalıysa ipucunda yazılıdır."""
     return mc(f"🔊 Dinle ve cevapla: {question}", options, answer,
               say=f"{story} Soru: {question}", hint=story, explain=explain,
-              visual=T("🔊 Hikâyeyi dinle"))
+              visual=T("🔊 Hikâyeyi dinle"), why=why)
 
 
-def read(text, question, options, answer, explain=None):
+def read(text, question, options, answer, explain=None, why=None):
     """Okuma kartı: kısa metin ekranda; soru altında."""
-    return mc(f"{text}\n\n{question}", options, answer, explain=explain)
+    return mc(f"{text}\n\n{question}", options, answer, explain=explain, why=why)
 
 
 def build(grade, P):
