@@ -462,45 +462,130 @@ class _ListenSplitState extends State<ListenSplit> {
 
 /// Oturum ilerleme çubuğu (16 yükseklik, yeşil, üstte parlaklık şeridi).
 class DkProgressBar extends StatelessWidget {
-  const DkProgressBar({super.key, required this.value});
+  const DkProgressBar({super.key, required this.value, this.color = K.ahsap});
   final double value;
 
+  /// Dağların rengi (krallık rengi).
+  final Color color;
+
+  /// Claude Design › Sis çubuğu: dağların üstündeki sis, ilerledikçe güneş
+  /// sağa yürür ve sis çekilir.
   @override
   Widget build(BuildContext context) {
     final pct = (value.clamp(0, 1) * 100).round();
     return Semantics(
-      label: 'İlerleme',
+      label: 'Sis çubuğu: dağılan sis',
       value: '%$pct',
       child: TweenAnimationBuilder<double>(
         tween: Tween(end: value.clamp(0.0, 1.0)),
         duration: Duration(milliseconds: reduceMotion(context) ? 0 : 350),
         curve: Curves.easeOut,
-        builder: (context, v, _) => Container(
-          height: 16,
-          decoration: BoxDecoration(
-              color: K.line, borderRadius: BorderRadius.circular(999)),
-          alignment: Alignment.centerLeft,
-          child: FractionallySizedBox(
-            widthFactor: v,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: K.good, borderRadius: BorderRadius.circular(999)),
-              padding: const EdgeInsets.fromLTRB(8, 3, 8, 0),
-              alignment: Alignment.topCenter,
-              child: v > .06
-                  ? Container(
-                      height: 4,
-                      decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: .5),
-                          borderRadius: BorderRadius.circular(2)),
-                    )
-                  : null,
-            ),
-          ),
+        builder: (context, v, _) => SizedBox(
+          height: 48,
+          child: CustomPaint(painter: _FogBarPainter(v, color)),
         ),
       ),
     );
   }
+}
+
+class _FogBarPainter extends CustomPainter {
+  _FogBarPainter(this.v, this.color);
+  final double v;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width, h = size.height;
+    final frame = Path()
+      ..moveTo(10, 3)
+      ..cubicTo(w * .4, 1, w * .7, 4, w - 10, 2)
+      ..cubicTo(w - 1, 3, w - 1, h - 4, w - 10, h - 2)
+      ..cubicTo(w * .6, h - 1, w * .3, h - 4, 10, h - 2)
+      ..cubicTo(1, h - 3, 1, 4, 10, 3)
+      ..close();
+    final ink = Paint()
+      ..style = PaintingStyle.stroke
+      ..color = K.murekkep
+      ..strokeJoin = StrokeJoin.round;
+    canvas.save();
+    canvas.clipPath(frame);
+    canvas.drawRect(Offset.zero & size, Paint()..color = K.kagit3);
+    // dağlar
+    final dag = Path()..moveTo(0, h - 8);
+    var x = 0.0;
+    var i = 0;
+    while (x < w) {
+      final mh = const [30.0, 20.0, 25.0][i % 3];
+      dag
+        ..lineTo(x + 17, h - 8 - mh)
+        ..lineTo(x + 34, h - 8);
+      x += 34;
+      i++;
+    }
+    dag
+      ..lineTo(w, h)
+      ..lineTo(0, h)
+      ..close();
+    canvas.drawPath(dag, Paint()..color = color);
+    canvas.drawPath(dag, ink..strokeWidth = 1.6);
+    canvas.drawRect(Rect.fromLTWH(0, h - 12, w, 12),
+        Paint()..color = const Color(0xFF5E7A3A));
+    // evler
+    for (var k = 22.0; k < w - 10; k += 58) {
+      final ev = Path()
+        ..moveTo(k, h - 8)
+        ..lineTo(k, h - 14)
+        ..lineTo(k + 4, h - 18)
+        ..lineTo(k + 8, h - 14)
+        ..lineTo(k + 8, h - 8)
+        ..close();
+      canvas.drawPath(ev, Paint()..color = K.safran);
+      canvas.drawPath(ev, ink..strokeWidth = 1.3);
+    }
+    // sis: güneşin sağı
+    final fx = 10 + (w - 20) * v;
+    final sis = Path()
+      ..moveTo(fx, 0)
+      ..cubicTo(fx - 9, 8, fx + 7, 16, fx - 4, 24)
+      ..cubicTo(fx - 12, 32, fx + 5, 40, fx, h)
+      ..lineTo(w + 20, h)
+      ..lineTo(w + 20, 0)
+      ..close();
+    canvas.drawPath(sis, Paint()..color = const Color(0xF2C9D1D9));
+    canvas.save();
+    canvas.clipPath(sis);
+    final tul = Paint()
+      ..color = const Color(0x999AA6B2)
+      ..strokeWidth = .8;
+    for (var t = -h; t < w + h; t += 9) {
+      canvas.drawLine(Offset(t, h), Offset(t + h * .53, 0), tul);
+    }
+    canvas.restore();
+    canvas.restore();
+    canvas.drawPath(frame, ink..strokeWidth = 2.6);
+    // güneş
+    final c = Offset(fx, h / 2);
+    final ray = Paint()
+      ..color = K.safran
+      ..strokeWidth = 2.4
+      ..strokeCap = StrokeCap.round;
+    for (final (a, b) in const [
+      (Offset(0, -17), Offset(0, -22)),
+      (Offset(0, 17), Offset(0, 22)),
+      (Offset(-13, -10), Offset(-16, -13)),
+      (Offset(13, -10), Offset(16, -13)),
+      (Offset(-13, 10), Offset(-16, 13)),
+      (Offset(13, 10), Offset(16, 13)),
+    ]) {
+      canvas.drawLine(c + a, c + b, ray);
+    }
+    canvas.drawCircle(c, 9, Paint()..color = K.safran);
+    canvas.drawCircle(c, 9, ink..strokeWidth = 2.2);
+  }
+
+  @override
+  bool shouldRepaint(_FogBarPainter old) => old.v != v || old.color != color;
 }
 
 /// Beyaz kart, 2 px çizgi.

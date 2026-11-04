@@ -11,6 +11,7 @@ import '../../game/quests.dart';
 import '../../game/turkish.dart';
 import '../../game/world.dart';
 import '../game/duel_widgets.dart';
+import '../game/hero_figure.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
@@ -429,55 +430,41 @@ class _SessionScreenState extends State<SessionScreen> {
   }
 }
 
-/// C1 Oturum üstü: kapat, ilerleme, ışık. Başka hiçbir şey.
+/// C1 Oturum üstü (Claude Design 12): haritaya dönüş mührü ve sis çubuğu.
 class _TopBar extends StatelessWidget {
-  const _TopBar({required this.progress, required this.onClose});
+  const _TopBar(
+      {required this.progress, required this.onClose, this.color = K.ahsap});
   final double progress;
   final VoidCallback onClose;
+  final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    final nuts = AppScope.of(context).progress?.nuts ?? 0;
-    return SizedBox(
-      height: 64,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 4, right: 16),
-        child: Row(children: [
-          Pressable(
-            key: const Key('session-close'),
-            onTap: onClose,
-            label: 'Oturumdan çık',
-            excludeChildSemantics: true,
-            focusRadius: 32,
-            builder: (context, down) => const SizedBox(
-              width: 64,
-              height: 64,
-              child: Center(
-                  child:
-                      DkIcon(DkIcons.x, size: 30, color: K.inkSoft, stroke: 3)),
+  Widget build(BuildContext context) => SizedBox(
+        height: 68,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+          child: Row(children: [
+            Pressable(
+              key: const Key('session-close'),
+              onTap: onClose,
+              label: 'Ara ver, haritaya dön',
+              excludeChildSemantics: true,
+              focusRadius: 28,
+              builder: (context, down) => SizedBox(
+                width: 56,
+                height: 56,
+                child: CustomPaint(
+                  painter: HandPainter(HandStyle.muhur
+                      .copyWith(fill: down ? K.kagit2 : K.kagit3)),
+                  child: const Center(child: IkonView(Ikon.harita, size: 28)),
+                ),
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(child: DkProgressBar(value: progress)),
-          const SizedBox(width: 6),
-          Semantics(
-            label: '$nuts ışık',
-            child: ExcludeSemantics(
-              child: Row(children: [
-                const DkIcon(DkIcons.nut, size: 28),
-                const SizedBox(width: 4),
-                Text('$nuts',
-                    style: const TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.w900,
-                        color: K.nutInk)),
-              ]),
-            ),
-          ),
-        ]),
-      ),
-    );
-  }
+            const SizedBox(width: 10),
+            Expanded(child: DkProgressBar(value: progress, color: color)),
+          ]),
+        ),
+      );
 }
 
 /// Üst satır: kısa etiket + (ipucu) + dinle.
@@ -502,10 +489,8 @@ class _Footer extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-        decoration: const BoxDecoration(
-            border: Border(top: BorderSide(color: K.line, width: 2))),
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 14),
         child: child,
       );
 }
@@ -716,7 +701,11 @@ class _QuestionViewState extends State<_QuestionView> {
                 const SizedBox(height: 16),
               ],
               EmojiText(prompt,
-                  style: T.question.copyWith(fontSize: hasPassage ? 21 : 24)),
+                  style: T.question.copyWith(
+                      fontFamily: K.font,
+                      fontWeight: FontWeight.w700,
+                      height: 1.28,
+                      fontSize: hasPassage ? 22 : 27)),
               if (_hint && r == null) ...[
                 const SizedBox(height: 16),
                 _HintBox(text: q.hint!),
@@ -726,33 +715,54 @@ class _QuestionViewState extends State<_QuestionView> {
                 VisualView(q.visual!),
               ],
               const SizedBox(height: 16),
+              if (q.visual != null || passage == null) ...[
+                const SizedBox(height: 4),
+                _Scene(result: r),
+              ],
+              const SizedBox(height: 14),
               Semantics(
                 container: true,
                 label: 'Seçenekler',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    for (var i = 0; i < q.options.length; i++) ...[
-                      if (i > 0) const SizedBox(height: 12),
-                      _OptionCard(
+                child: LayoutBuilder(builder: (context, box) {
+                  _Opt stateOf(int i) => r == null
+                      ? (i == _selected ? _Opt.selected : _Opt.idle)
+                      : i == q.answerIndex
+                          ? _Opt.right
+                          : i == _selected
+                              ? _Opt.chosenWrong
+                              : _Opt.dim;
+                  Widget opt(int i) => _OptionCard(
                         key: Key('option-$i'),
                         label: q.options[i],
-                        state: r == null
-                            ? (i == _selected ? _Opt.selected : _Opt.idle)
-                            : i == q.answerIndex
-                                ? _Opt.right
-                                : i == _selected
-                                    ? _Opt.chosenWrong
-                                    : _Opt.dim,
+                        state: stateOf(i),
                         onTap: r == null
-                            ? () {
-                                setState(() => _selected = i);
-                              }
+                            ? () => setState(() => _selected = i)
                             : null,
-                      ),
+                      );
+                  // Kısa seçenekler (sayı, hece) iki sütunda taş levha
+                  final grid = q.options.length >= 2 &&
+                      q.options.every((o) => o.characters.length <= 4);
+                  if (grid) {
+                    final w = (box.maxWidth - 14) / 2;
+                    return Wrap(
+                      spacing: 14,
+                      runSpacing: 18,
+                      children: [
+                        for (var i = 0; i < q.options.length; i++)
+                          SizedBox(width: w, child: opt(i)),
+                      ],
+                    );
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      for (var i = 0; i < q.options.length; i++) ...[
+                        if (i > 0) const SizedBox(height: 16),
+                        opt(i),
+                      ],
                     ],
-                  ],
-                ),
+                  );
+                }),
               ),
             ],
           ),
@@ -777,6 +787,41 @@ class _QuestionViewState extends State<_QuestionView> {
             onNext: () => widget.onNext(!r.correct),
           ),
       ],
+    );
+  }
+}
+
+/// Sorunun sahnesi: solda kahraman, sağda Anka (Claude Design 12).
+class _Scene extends StatelessWidget {
+  const _Scene({required this.result});
+  final AnswerResult? result;
+
+  @override
+  Widget build(BuildContext context) {
+    final hero = AppScope.of(context).progress?.game.hero;
+    final r = result;
+    return SizedBox(
+      height: 96,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (hero != null)
+            HeroFigure(
+                look: hero,
+                size: 80,
+                showCompanion: false,
+                cheer: r?.correct == true),
+          const Spacer(),
+          Mascot(
+            size: 92,
+            mood: r == null
+                ? MascotMood.normal
+                : r.correct
+                    ? MascotMood.celebrate
+                    : MascotMood.teach,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1021,67 +1066,69 @@ class FeedbackBand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = correct ? K.goodInk : K.againInk;
-    final band = Container(
+    final fg = correct ? K.zumrutKoyu : K.lacivert;
+    // Claude Design 13/14: yırtık kenarlı kâğıt; doğruda kutlayan, yanlışta
+    // anlatan Anka. Kırmızı yok.
+    final band = Stack(
       key: Key(correct ? 'band-ok' : 'band-again'),
-      color: correct ? K.goodBg : K.againBg,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Semantics(
-            liveRegion: true,
-            child: Row(children: [
-              Mascot(
-                  mood: correct ? MascotMood.celebrate : MascotMood.think,
-                  size: 64),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: correct ? K.goodShadow : K.againStrong,
-                            shape: BoxShape.circle),
-                        child: DkIcon(correct ? DkIcons.check : DkIcons.again,
-                            size: 16, color: Colors.white, stroke: 3.5),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: EmojiText(title,
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          left: 0,
+          right: 0,
+          top: -12,
+          height: 24,
+          child: CustomPaint(painter: _TornEdgePainter()),
+        ),
+        Container(
+          color: K.kagit3,
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Semantics(
+                liveRegion: true,
+                child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Mascot(
+                      mood: correct ? MascotMood.celebrate : MascotMood.teach,
+                      size: 68),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        EmojiText(title,
                             style: TextStyle(
-                                fontSize: 24,
-                                height: 30 / 24,
-                                fontWeight: FontWeight.w900,
+                                fontFamily: K.display,
+                                fontSize: 25,
+                                height: 30 / 25,
+                                fontWeight: FontWeight.w800,
                                 color: fg)),
-                      ),
-                    ]),
-                    if (body != null && body!.isNotEmpty) ...[
-                      const SizedBox(height: 2),
-                      EmojiText(body!,
-                          style: TextStyle(
-                              fontSize: 17, height: 24 / 17, color: fg)),
-                    ],
-                  ],
-                ),
+                        if (body != null && body!.isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          EmojiText(body!,
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  height: 1.38,
+                                  color: K.murekkep)),
+                        ],
+                      ],
+                    ),
+                  ),
+                ]),
               ),
-            ]),
+              const SizedBox(height: 14),
+              ChunkyButton(
+                key: const Key('next'),
+                label: correct ? 'Devam' : 'Anladım',
+                kind: correct ? BtnKind.good : BtnKind.primary,
+                onPressed: onNext,
+              ),
+            ],
           ),
-          const SizedBox(height: 14),
-          ChunkyButton(
-            key: const Key('next'),
-            label: correct ? 'Devam' : 'Anladım',
-            kind: correct ? BtnKind.good : BtnKind.again,
-            onPressed: onNext,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
     if (reduceMotion(context)) return band;
     return TweenAnimationBuilder<double>(
@@ -1093,6 +1140,41 @@ class FeedbackBand extends StatelessWidget {
       child: band,
     );
   }
+}
+
+/// Kâğıdın yırtık üst kenarı.
+class _TornEdgePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    const pts = [
+      12, 8, 14, 7, 12, 6, 11, 7, 12, 6, 12, 6, 11, 7, 13, 8, 12, 6, 11, 7,
+      13, 8, 12, 6, 11, 7, 13, 8, 12, 6, 11, 7, 13, 9
+    ];
+    final w = size.width;
+    final step = w / (pts.length - 1);
+    final p = Path()..moveTo(0, size.height);
+    for (var i = 0; i < pts.length; i++) {
+      p.lineTo(i * step, pts[i].toDouble());
+    }
+    p
+      ..lineTo(w, size.height)
+      ..close();
+    canvas.drawPath(p, Paint()..color = K.kagit3);
+    final edge = Path()..moveTo(0, pts.first.toDouble());
+    for (var i = 1; i < pts.length; i++) {
+      edge.lineTo(i * step, pts[i].toDouble());
+    }
+    canvas.drawPath(
+        edge,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.4
+          ..strokeJoin = StrokeJoin.round
+          ..color = K.murekkep);
+  }
+
+  @override
+  bool shouldRepaint(_TornEdgePainter old) => false;
 }
 
 // --------------------------------------------------------- C8 Etkinlik
