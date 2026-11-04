@@ -611,9 +611,7 @@ class _LessonViewState extends State<_LessonView> {
                       ],
                       EmojiText(page.text,
                           style: const TextStyle(
-                              fontSize: 21,
-                              height: 1.4,
-                              color: K.murekkep)),
+                              fontSize: 21, height: 1.4, color: K.murekkep)),
                       if (last) ...[
                         const SizedBox(height: 14),
                         Row(children: [
@@ -621,8 +619,8 @@ class _LessonViewState extends State<_LessonView> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text('Şimdi sen dene!',
-                                style: G.hand.copyWith(
-                                    fontSize: 19, color: K.lacivert)),
+                                style: G.hand
+                                    .copyWith(fontSize: 19, color: K.lacivert)),
                           ),
                         ]),
                       ],
@@ -1513,7 +1511,8 @@ class _SummaryView extends StatelessWidget {
                       height: 220,
                       child: HandBox(
                         style: const HandStyle(
-                            radii: HandRadii([120, 120, 14, 14], [96, 96, 14, 14]),
+                            radii:
+                                HandRadii([120, 120, 14, 14], [96, 96, 14, 14]),
                             fill: K.kagit3),
                         padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
                         child: ClipRRect(
@@ -1523,7 +1522,10 @@ class _SummaryView extends StatelessWidget {
                             color: const Color(0xFFE3E6D3),
                             child: Stack(children: [
                               const Positioned(
-                                  left: 0, right: 0, bottom: 0, child: Kilim.zumrut()),
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Kilim.zumrut()),
                               if (hero != null)
                                 Positioned(
                                   left: 24,
@@ -1570,7 +1572,8 @@ class _SummaryView extends StatelessWidget {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(t.$2,
                                           style: const TextStyle(

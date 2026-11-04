@@ -61,7 +61,8 @@ Ikon ikonOf(Supply s) => Ikon.values.byName(s.id);
 
 /// Krallık önderinin çizimi (Claude Design › Krallık önderleri).
 String leaderAsset(Kingdom k, {bool wave = false}) => switch (k.name) {
-      'Demirdağ' => wave ? 'assets/onder/cark_selam.svg' : 'assets/onder/cark.svg',
+      'Demirdağ' =>
+        wave ? 'assets/onder/cark_selam.svg' : 'assets/onder/cark.svg',
       'Sözorman' => 'assets/onder/yaprak.svg',
       'Ocakvadi' => 'assets/onder/pelin.svg',
       'Işıkkaya' => 'assets/onder/dokum.svg',

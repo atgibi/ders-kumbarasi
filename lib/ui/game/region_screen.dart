@@ -66,8 +66,8 @@ class RegionScreen extends StatelessWidget {
                 builder: (context, snap) {
                   final ready = snap.data ?? false;
                   final freed = p.game.banners.contains(region.key);
-                  final card = _DuelCard(
-                      region: region, ready: ready, freed: freed);
+                  final card =
+                      _DuelCard(region: region, ready: ready, freed: freed);
                   // Bekçi beklerken düello en üstte: gözden kaçmasın
                   final top = ready && !freed;
                   return PathScreen(
@@ -136,8 +136,8 @@ class _DuelCard extends StatelessWidget {
             Row(children: [
               Opacity(
                   opacity: ready || freed ? 1 : 0.5,
-                  child: GuardianFigure(
-                      guardian: g, size: 72, armored: !freed)),
+                  child:
+                      GuardianFigure(guardian: g, size: 72, armored: !freed)),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

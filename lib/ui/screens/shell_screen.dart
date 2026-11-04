@@ -134,7 +134,12 @@ class _TopBar extends StatelessWidget {
       child: Row(children: [
         Expanded(
           child: Text(
-              const ['Bilgelik Diyarı', 'Kasaba', 'Kahraman', 'Kahraman Defteri'][tab],
+              const [
+                'Bilgelik Diyarı',
+                'Kasaba',
+                'Kahraman',
+                'Kahraman Defteri'
+              ][tab],
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -401,12 +406,11 @@ class _SkyEntryState extends State<_SkyEntry> {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final p = app.progress!;
-    final key = '${app.active?.id}|${p.cards.length}|${p.lastSessionDay}|${p.nuts}';
+    final key =
+        '${app.active?.id}|${p.cards.length}|${p.lastSessionDay}|${p.nuts}';
     if (_f == null || key != _key) {
       _key = key;
-      _f = app
-          .dueBySubject()
-          .then((l) => l.fold<int>(0, (s, e) => s + e.$2));
+      _f = app.dueBySubject().then((l) => l.fold<int>(0, (s, e) => s + e.$2));
     }
     return FutureBuilder<int>(
       future: _f,
@@ -416,14 +420,14 @@ class _SkyEntryState extends State<_SkyEntry> {
           padding: const EdgeInsets.fromLTRB(12, 4, 12, 2),
           child: Pressable(
             key: const Key('sky-open'),
-            label: due > 0
-                ? 'Gök Adaları: $due tekrar bekliyor'
-                : 'Gök Adaları',
+            label:
+                due > 0 ? 'Gök Adaları: $due tekrar bekliyor' : 'Gök Adaları',
             onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
                 builder: (_) => const SkyIslandsScreen())),
             builder: (context, down) => HandBox(
               style: HandStyle.kart.copyWith(
-                  fill: down ? const Color(0xFFD5DEE6) : const Color(0xFFE3EAF0)),
+                  fill:
+                      down ? const Color(0xFFD5DEE6) : const Color(0xFFE3EAF0)),
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
               child: Row(children: [
                 const IkonView(Ikon.mesale, size: 30),

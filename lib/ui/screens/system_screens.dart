@@ -161,7 +161,9 @@ class SystemScreen extends StatelessWidget {
                               style: HandStyle(
                                   radii: const HandRadii(
                                       [120, 120, 14, 14], [96, 96, 14, 14]),
-                                  fill: night ? const Color(0xFF2A3B55) : K.kagit3,
+                                  fill: night
+                                      ? const Color(0xFF2A3B55)
+                                      : K.kagit3,
                                   border: night ? K.kagit3 : K.murekkep),
                               padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
                               child: Column(children: [

@@ -102,7 +102,9 @@ class _TownTabState extends State<TownTab> {
             const SizedBox(height: 6),
             Wrap(spacing: 8, runSpacing: 8, children: [
               for (final r in rescued)
-                Tooltip(message: r.name, child: GuardianFigure(guardian: r, size: 64)),
+                Tooltip(
+                    message: r.name,
+                    child: GuardianFigure(guardian: r, size: 64)),
             ]),
             const SizedBox(height: 14),
           ],
@@ -211,8 +213,7 @@ class NotebookScreen extends StatelessWidget {
     // Claude Design 23: defter; kırmızı cilt kenarı, çizgili sayfa, el yazısı
     final list = pages.isEmpty
         ? ListView(padding: const EdgeInsets.all(24), children: [
-            if (hero != null)
-              Center(child: HeroFigure(look: hero, size: 140)),
+            if (hero != null) Center(child: HeroFigure(look: hero, size: 140)),
             const SizedBox(height: 12),
             Text('Defterin henüz boş. İlk maceran bittiğinde buraya yazılacak.',
                 textAlign: TextAlign.center,

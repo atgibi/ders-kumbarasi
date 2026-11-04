@@ -113,7 +113,8 @@ class _DuelBackdrop extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final w = size.width, h = size.height;
     final gok = victory ? const Color(0xFFCFE0E6) : const Color(0xFFD8DCDF);
-    final kaya = victory ? kingdom.color.withValues(alpha: .8) : const Color(0xFFA39A8A);
+    final kaya =
+        victory ? kingdom.color.withValues(alpha: .8) : const Color(0xFFA39A8A);
     final zemin = victory ? const Color(0xFF5E7A3A) : const Color(0xFFB9B2A2);
     final ink = Paint()
       ..style = PaintingStyle.stroke
@@ -211,8 +212,8 @@ class DuelHeader extends StatelessWidget {
           SizedBox(
             height: 170,
             child: CustomPaint(
-              painter: _DuelBackdrop(
-                  victory: false, kingdom: kingdom ?? demirdag),
+              painter:
+                  _DuelBackdrop(victory: false, kingdom: kingdom ?? demirdag),
               child: Stack(children: [
                 Positioned(
                   right: 24,
@@ -227,8 +228,8 @@ class DuelHeader extends StatelessWidget {
                   Positioned(
                     left: 12,
                     bottom: 2,
-                    child: HeroFigure(
-                        look: hero, size: 92, showCompanion: false),
+                    child:
+                        HeroFigure(look: hero, size: 92, showCompanion: false),
                   ),
               ]),
             ),
@@ -302,8 +303,8 @@ class DuelWinView extends StatelessWidget {
                           Positioned(
                             left: 4,
                             bottom: 0,
-                            child: HeroFigure(
-                                look: hero, size: 130, cheer: true),
+                            child:
+                                HeroFigure(look: hero, size: 130, cheer: true),
                           ),
                         const Positioned(
                           left: 140,
@@ -323,8 +324,7 @@ class DuelWinView extends StatelessWidget {
                             const IkonView(Ikon.sancak, size: 30),
                             const SizedBox(width: 8),
                             Expanded(
-                              child: Text(
-                                  '$title açıldı. Bölge renkleniyor.',
+                              child: Text('$title açıldı. Bölge renkleniyor.',
                                   style: const TextStyle(
                                       fontSize: 17, height: 1.3)),
                             ),

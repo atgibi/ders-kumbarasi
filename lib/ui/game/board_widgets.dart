@@ -158,7 +158,9 @@ class _QuestRow extends StatelessWidget {
                   child: q.who.art != null
                       ? ClipOval(
                           child: SvgPicture.asset(q.who.art!,
-                              width: 46, height: 46, fit: BoxFit.cover,
+                              width: 46,
+                              height: 46,
+                              fit: BoxFit.cover,
                               alignment: Alignment.topCenter))
                       : EmojiImage(q.who.emoji, size: 30),
                 ),
