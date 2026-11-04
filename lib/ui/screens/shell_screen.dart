@@ -8,6 +8,7 @@ import '../theme.dart';
 import '../widgets/avatar.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
+import '../widgets/ikon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
 import '../game/hero_create_screen.dart';
@@ -127,8 +128,6 @@ class _TopBar extends StatelessWidget {
     return Container(
       height: 68,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: K.line, width: 2))),
       child: Row(children: [
         Expanded(
           child: Text(
@@ -136,18 +135,21 @@ class _TopBar extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.w900, color: K.ink)),
+                  fontFamily: K.display,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: K.lacivert)),
         ),
         _Counter(
           key: const Key('streak'),
-          icon: DkIcons.flame,
+          icon: Ikon.mesale,
           color: K.leafInk,
           value: p.streakDays,
           spoken: '${p.streakDays} gündür birlikteyiz',
         ),
         _Counter(
           key: const Key('nuts'),
-          icon: DkIcons.nut,
+          icon: Ikon.isik,
           color: K.nutInk,
           value: p.nuts,
           spoken: '${p.nuts} ışık',
@@ -165,7 +167,7 @@ class _Counter extends StatelessWidget {
     required this.value,
     required this.spoken,
   });
-  final DkIcons icon;
+  final Ikon icon;
   final Color color;
   final int value;
   final String spoken;
@@ -180,11 +182,14 @@ class _Counter extends StatelessWidget {
           constraints: const BoxConstraints(minHeight: 52),
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
-            DkIcon(icon, size: icon == DkIcons.nut ? 28 : 26, color: color),
-            const SizedBox(width: 4),
+            IkonView(icon, size: 26),
+            const SizedBox(width: 3),
             Text('$value',
-                style: TextStyle(
-                    fontSize: 19, fontWeight: FontWeight.w900, color: color)),
+                style: const TextStyle(
+                    fontFamily: K.display,
+                    fontSize: 19,
+                    fontWeight: FontWeight.w800,
+                    color: K.murekkep)),
           ]),
         ),
       );
@@ -200,102 +205,178 @@ class _TabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const tabs = [
-      ('tab-map', 'Harita', DkIcons.map),
-      ('tab-town', 'Kasaba', DkIcons.house),
-      ('tab-review', 'Tekrar', DkIcons.again),
-      ('tab-profile', 'Profil', DkIcons.user),
+      ('tab-map', 'Harita', Ikon.harita),
+      ('tab-town', 'Kasaba', Ikon.kasaba),
+      ('tab-review', 'Tekrar', Ikon.saat),
+      ('tab-profile', 'Profil', Ikon.kalkan),
     ];
-    return Container(
-      decoration: const BoxDecoration(
-        color: K.card,
-        border: Border(top: BorderSide(color: K.line, width: 2)),
-      ),
-      padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
-      child: SafeArea(
-        top: false,
-        child: Row(children: [
-          for (var i = 0; i < tabs.length; i++)
-            Expanded(
-              child: Pressable(
-                key: Key(tabs[i].$1),
-                onTap: () => onTap(i),
-                selected: index == i,
-                label: i == 2 && badge > 0
-                    ? '${tabs[i].$2}, $badge tekrar bekliyor'
-                    : tabs[i].$2,
-                excludeChildSemantics: true,
-                focusRadius: 17,
-                builder: (context, down) {
-                  final sel = index == i;
-                  final fg = sel ? K.peachInk : K.inkSoft;
-                  return SizedBox(
-                    height: 64,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.center,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 34,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: sel ? K.peach : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(17)),
-                              child: DkIcon(tabs[i].$3, size: 26, color: fg),
-                            ),
-                            const SizedBox(height: 3),
-                            Text(tabs[i].$2,
-                                textScaler: TextScaler.noScaling,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight:
-                                        sel ? FontWeight.w900 : FontWeight.w700,
-                                    color: fg)),
-                          ],
-                        ),
-                        if (i == 2 && badge > 0)
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            child: Center(
-                              child: Transform.translate(
-                                offset: const Offset(26, 0),
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                      minWidth: 24, minHeight: 24),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: K.primary,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                        color: Colors.white, width: 2),
+    // Claude Design › Sekme çubuğu: kâğıt şerit, üstte el çizimi çizgi ve
+    // bayrak dizisi, seçili sekmede safran daire ve kök boya alt çizgi.
+    return CustomPaint(
+      foregroundPainter: const _BuntingPainter(),
+      child: Container(
+        color: K.kagit2,
+        padding: const EdgeInsets.fromLTRB(8, 10, 8, 4),
+        child: SafeArea(
+          top: false,
+          child: Row(children: [
+            for (var i = 0; i < tabs.length; i++)
+              Expanded(
+                child: Pressable(
+                  key: Key(tabs[i].$1),
+                  onTap: () => onTap(i),
+                  selected: index == i,
+                  label: i == 2 && badge > 0
+                      ? '${tabs[i].$2}, $badge tekrar bekliyor'
+                      : tabs[i].$2,
+                  excludeChildSemantics: true,
+                  focusRadius: 17,
+                  builder: (context, down) {
+                    final sel = index == i;
+                    return SizedBox(
+                      height: 66,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 44,
+                                height: 40,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: sel
+                                      ? K.safran
+                                      : down
+                                          ? K.kagit
+                                          : Colors.transparent,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: IkonView(tabs[i].$3, size: 30),
+                              ),
+                              const SizedBox(height: 1),
+                              Text(tabs[i].$2,
+                                  textScaler: TextScaler.noScaling,
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: sel
+                                          ? FontWeight.w700
+                                          : FontWeight.w400,
+                                      color: K.murekkep)),
+                              SizedBox(
+                                width: 54,
+                                height: 6,
+                                child: sel
+                                    ? const CustomPaint(
+                                        painter: _UnderlinePainter())
+                                    : null,
+                              ),
+                            ],
+                          ),
+                          if (i == 2 && badge > 0)
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              child: Center(
+                                child: Transform.translate(
+                                  offset: const Offset(24, -2),
+                                  child: Container(
+                                    constraints: const BoxConstraints(
+                                        minWidth: 24, minHeight: 24),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: K.kok,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                          color: K.murekkep, width: 2),
+                                    ),
+                                    child: Text(
+                                        badge > 99 ? '99+' : '$badge',
+                                        textAlign: TextAlign.center,
+                                        textScaler: TextScaler.noScaling,
+                                        style: const TextStyle(
+                                            fontFamily: K.display,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w800,
+                                            color: K.kagit3)),
                                   ),
-                                  child: Text(badge > 99 ? '99+' : '$badge',
-                                      textAlign: TextAlign.center,
-                                      textScaler: TextScaler.noScaling,
-                                      style: const TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w900,
-                                          color: K.ink)),
                                 ),
                               ),
                             ),
-                          ),
-                      ],
-                    ),
-                  );
-                },
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-        ]),
+          ]),
+        ),
       ),
     );
   }
+}
+
+/// Sekme çubuğunun üstündeki el çizimi çizgi ve kök boya bayrakçıklar.
+class _BuntingPainter extends CustomPainter {
+  const _BuntingPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width;
+    final line = Path()
+      ..moveTo(0, 0)
+      ..cubicTo(w * .2, -3, w * .41, 2, w * .62, -1)
+      ..cubicTo(w * .8, -3, w * .9, 1, w, -1);
+    final ink = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.6
+      ..color = K.murekkep;
+    final red = Paint()..color = K.kok;
+    final thin = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2
+      ..color = K.murekkep;
+    for (var x = 10.0; x < w; x += 26) {
+      final t = Path()
+        ..moveTo(x, 1)
+        ..lineTo(x + 5, 6)
+        ..lineTo(x + 10, 1)
+        ..close();
+      canvas.drawPath(t, red);
+      canvas.drawPath(t, thin);
+    }
+    canvas.drawPath(line, ink);
+  }
+
+  @override
+  bool shouldRepaint(_BuntingPainter old) => false;
+}
+
+/// Seçili sekmenin altındaki fırça çizgisi.
+class _UnderlinePainter extends CustomPainter {
+  const _UnderlinePainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Path()
+      ..moveTo(3, size.height * .6)
+      ..cubicTo(size.width * .3, 0, size.width * .6, size.height,
+          size.width - 3, size.height * .3);
+    canvas.drawPath(
+        p,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3
+          ..strokeCap = StrokeCap.round
+          ..color = K.kok);
+  }
+
+  @override
+  bool shouldRepaint(_UnderlinePainter old) => false;
 }
 
 /// B5 Tekrar sekmesi.

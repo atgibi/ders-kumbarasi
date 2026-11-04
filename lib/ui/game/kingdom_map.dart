@@ -10,6 +10,8 @@ import '../../game/world.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
+import '../widgets/hand.dart';
+import '../widgets/ikon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
 import 'game_theme.dart';
@@ -266,40 +268,45 @@ class SupplyStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final g = app.progress!.game;
-    final items = [
-      ('ışık', null, app.light),
+    final items = <(String, Ikon, int)>[
+      ('ışık', Ikon.isik, app.light),
       for (final m in Supply.values)
         if (g.supply(m) > 0 || m == Kingdom.of(app.subject!).material)
-          (m.label.toLowerCase(), m.emoji, g.supply(m)),
-      ('sancak', bannerEmoji, g.banners.length),
+          (m.label.toLowerCase(), ikonOf(m), g.supply(m)),
+      ('sancak', Ikon.sancak, g.banners.length),
     ];
+    // Claude Design › Kaynak şeridi: kâğıt üstünde el çizimi simgeler.
     return Semantics(
       container: true,
       label: [for (final i in items) '${i.$3} ${i.$1}'].join(', '),
       child: ExcludeSemantics(
-        child: Container(
+        child: Padding(
           key: const Key('supply-strip'),
-          margin: const EdgeInsets.fromLTRB(12, 2, 12, 6),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-            color: G.paper2,
-            borderRadius: BorderRadius.circular(6),
+          padding: const EdgeInsets.fromLTRB(10, 4, 10, 6),
+          child: HandBox(
+            style: HandStyle.el.copyWith(fill: K.kagit3),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              spacing: 10,
+              runSpacing: 4,
+              children: [
+                for (final i in items)
+                  Row(mainAxisSize: MainAxisSize.min, children: [
+                    IkonView(i.$2, size: i.$2 == Ikon.isik ? 24 : 22),
+                    const SizedBox(width: 3),
+                    Text('${i.$3}',
+                        style: TextStyle(
+                            fontFamily: K.display,
+                            fontSize: i.$2 == Ikon.isik ? 18 : 17,
+                            fontWeight: i.$2 == Ikon.isik
+                                ? FontWeight.w800
+                                : FontWeight.w700,
+                            color: G.ink)),
+                  ]),
+              ],
+            ),
           ),
-          child: Wrap(spacing: 14, runSpacing: 4, children: [
-            for (final i in items)
-              Row(mainAxisSize: MainAxisSize.min, children: [
-                if (i.$2 == null)
-                  const DkIcon(DkIcons.nut, size: 20)
-                else
-                  EmojiImage(i.$2!, size: 20),
-                const SizedBox(width: 4),
-                Text('${i.$3}',
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        color: G.ink)),
-              ]),
-          ]),
         ),
       ),
     );

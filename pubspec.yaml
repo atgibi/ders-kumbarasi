@@ -32,17 +32,26 @@ flutter:
     - assets/mascot/
     - assets/audio/
     - assets/emoji/
-    - assets/fonts/OFL.txt
+    - assets/fonts/licenses/
+    - assets/ikon/
   fonts:
-    - family: Nunito
+    - family: Andika
       fonts:
-        - asset: assets/fonts/Nunito-400.ttf
+        - asset: assets/fonts/Andika-400.ttf
           weight: 400
-        - asset: assets/fonts/Nunito-600.ttf
-          weight: 600
-        - asset: assets/fonts/Nunito-700.ttf
+        - asset: assets/fonts/Andika-700.ttf
           weight: 700
-        - asset: assets/fonts/Nunito-800.ttf
+    - family: Fraunces
+      fonts:
+        - asset: assets/fonts/Fraunces-600.ttf
+          weight: 600
+        - asset: assets/fonts/Fraunces-700.ttf
+          weight: 700
+        - asset: assets/fonts/Fraunces-800.ttf
           weight: 800
-        - asset: assets/fonts/Nunito-900.ttf
-          weight: 900
+    - family: Shantell
+      fonts:
+        - asset: assets/fonts/ShantellSans-500.ttf
+          weight: 500
+        - asset: assets/fonts/ShantellSans-700.ttf
+          weight: 700

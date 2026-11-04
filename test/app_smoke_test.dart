@@ -152,6 +152,7 @@ void main() {
     await tapKey(t, 'hero-girl');
     await tapKey(t, 'hero-path-2');
     await tapKey(t, 'hero-next');
+    await tapKey(t, 'look-tab-ten');
     await tapKey(t, 'skin-3');
     await tapKey(t, 'hero-done');
 

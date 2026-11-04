@@ -301,36 +301,47 @@ class HeroPath {
 
 const heroPaths = [
   HeroPath('sovalye', 'Şövalye', 'Kalkan ve sancak', '🛡️', 'Küçük at', '🐴',
-      'Cesur ve korumacı', Color(0xFFB8432F)),
+      'Cesur ve korumacı', Color(0xFF1F4E79)),
   HeroPath('okcu', 'Okçu', 'Işık okları', '🏹', 'Tilki', '🦊',
       'Dikkatli ve isabetli', Color(0xFF2F7A5B)),
   HeroPath('bilge', 'Bilge', 'Asa ve kitap', '📖', 'Baykuş', '🦉',
-      'Meraklı ve sakin', Color(0xFF1F4E79)),
+      'Meraklı ve sakin', Color(0xFF6E5A9C)),
   HeroPath('kasif', 'Kaşif', 'Pusula ve harita', '🧭', 'Dağ keçisi', '🐐',
       'Maceraperest', Color(0xFFA8552B)),
   HeroPath('usta', 'Usta', 'Çekiç ve cetvel', '🔨', 'Kunduz', '🦫',
-      'Yaratıcı ve inşacı', Color(0xFF6E5A9C)),
+      'Yaratıcı ve inşacı', Color(0xFF9A7124)),
   HeroPath('ozan', 'Ozan', 'Saz', '🪕', 'Serçe', '🐦', 'Neşeli ve anlatıcı',
-      Color(0xFFB9862A)),
+      Color(0xFFB8432F)),
 ];
 
+/// Ten renkleri (açık, buğday, esmer, kumral, koyu, çok koyu).
 const skinTones = [
-  Color(0xFFF6D7BF),
-  Color(0xFFEBC09E),
-  Color(0xFFD49E78),
-  Color(0xFFB57E57),
-  Color(0xFF8C5A3C),
-  Color(0xFF5E3B27),
+  Color(0xFFF1C9A5),
+  Color(0xFFE3AC82),
+  Color(0xFFC68B59),
+  Color(0xFFA86B3C),
+  Color(0xFF7E4A2A),
+  Color(0xFF5A3420),
 ];
 
+/// Saç renkleri (siyah, koyu kahve, kahve, kestane, kızıl, açık kahve,
+/// sarı, kül).
 const hairColors = [
-  Color(0xFF2B2320),
-  Color(0xFF5A3A22),
-  Color(0xFF8C5A2B),
-  Color(0xFFC99A4B),
-  Color(0xFFB8432F),
-  Color(0xFF7E7A74),
+  Color(0xFF2A1B14),
+  Color(0xFF3B2418),
+  Color(0xFF6B4226),
+  Color(0xFF8A4B2A),
+  Color(0xFFB5562E),
+  Color(0xFFA47148),
+  Color(0xFFD9A441),
+  Color(0xFF9AA6B2),
 ];
+
+const skinNames = ['Açık ten', 'Buğday ten', 'Esmer ten', 'Kumral ten', 'Koyu ten', 'Çok koyu ten'];
+const hairColorNames = ['Siyah', 'Koyu kahve', 'Kahve', 'Kestane', 'Kızıl', 'Açık kahve', 'Sarı', 'Kül'];
+
+/// Aksesuar: 0 yok, 1 gözlük, 2 şapka, 3 başörtüsü.
+const accessoryNames = ['Hiçbiri', 'Gözlük', 'Şapka', 'Başörtüsü'];
 
 /// Kahramanın gelişim aşaması.
 enum HeroStage {

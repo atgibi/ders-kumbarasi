@@ -224,6 +224,7 @@ class _DataScreenState extends State<DataScreen> {
                   )
                 else
                   DkCard(
+        hand: false,
                     borderColor: K.ink,
                     borderWidth: 3,
                     child: Column(
@@ -279,7 +280,7 @@ class _DataScreenState extends State<DataScreen> {
                               fontSize: 15, height: 21 / 15, color: K.ink)),
                       SizedBox(height: 8),
                       Text(
-                          'Yazı tipi: Nunito (SIL Open Font License). Emoji görselleri: Twemoji, CC-BY 4.0. Simgeler: Lucide (ISC).',
+                          'Yazı tipleri: Fraunces, Andika, Shantell Sans (SIL Open Font License). Emoji görselleri: Twemoji, CC-BY 4.0. Simgeler: Lucide (ISC) ve Bilgelik Diyarı el çizimi simgeleri.',
                           style: T.pSmall),
                     ],
                   ),

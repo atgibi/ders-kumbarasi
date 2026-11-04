@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-enum MascotMood { normal, celebrate, think, sleepy }
+enum MascotMood { normal, celebrate, think, sleepy, teach }
 
 /// Anka: Bilgelik Diyarı'nın rehberi, bilge ve biraz komik yaşlı kuş
 /// (Zümrüdüanka'dan esinli). Hiçbir ifadede üzgün değil.
@@ -10,7 +10,7 @@ class Mascot extends StatelessWidget {
       {super.key, this.mood = MascotMood.normal, this.size = 120, this.label});
   final MascotMood mood;
 
-  /// Genişlik (yükseklik 240:260 oranında).
+  /// Genişlik (çizim kare).
   final double size;
 
   /// Ekran okuyucu açıklaması; verilmezse süs sayılır ve okunmaz.
@@ -21,6 +21,7 @@ class Mascot extends StatelessWidget {
         MascotMood.celebrate => 'assets/mascot/anka_kutlama.svg',
         MascotMood.think => 'assets/mascot/anka_dusunen.svg',
         MascotMood.sleepy => 'assets/mascot/anka_uykulu.svg',
+        MascotMood.teach => 'assets/mascot/anka_ogreten.svg',
       };
 
   @override
@@ -28,7 +29,7 @@ class Mascot extends StatelessWidget {
     final img = SvgPicture.asset(
       asset(mood),
       width: size,
-      height: size * 260 / 240,
+      height: size,
       excludeFromSemantics: label == null,
       semanticsLabel: label,
     );

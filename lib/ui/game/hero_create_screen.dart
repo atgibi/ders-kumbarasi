@@ -2,15 +2,18 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../game/game_state.dart';
 import '../../game/world.dart';
 import '../theme.dart';
 import '../widgets/emoji_text.dart';
+import '../widgets/hand.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
 import 'game_theme.dart';
 import 'hero_figure.dart';
+import 'hero_svg.dart';
 
 class HeroCreateScreen extends StatefulWidget {
   const HeroCreateScreen(
@@ -29,7 +32,7 @@ class HeroCreateScreen extends StatefulWidget {
 
 class _HeroCreateScreenState extends State<HeroCreateScreen> {
   late HeroLook _look =
-      widget.initial ?? const HeroLook(girl: true, path: 0, hair: 1);
+      widget.initial ?? const HeroLook(girl: true, path: 0, hair: 4);
   int _step = 0; // 0 kız/erkek, 1 yol, 2 görünüm
   bool _busy = false;
 
@@ -114,7 +117,7 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
 
   Widget _gender() {
     Widget card(bool girl) {
-      final look = _look.copyWith(girl: girl, hair: girl ? 1 : 0);
+      final look = _look.copyWith(girl: girl, hair: girl ? 4 : 0);
       return Expanded(
         child: Pressable(
           key: Key(girl ? 'hero-girl' : 'hero-boy'),
@@ -182,95 +185,225 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
         ],
       );
 
+  int _tab = 1; // 0 ten, 1 saç biçimi, 2 saç rengi, 3 aksesuar, 4 sandalye
+
+  /// Claude Design › 5 · Görünüm: solda kahraman, ortada seçenekler,
+  /// sağda mühür sekmeler.
   Widget _appearance() {
-    Widget row(String title, int count, int selected, Widget Function(int) item,
-            void Function(int) pick, String key) =>
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: G.sub),
-            const SizedBox(height: 8),
-            Wrap(spacing: 10, runSpacing: 10, children: [
-              for (var i = 0; i < count; i++)
-                Pressable(
-                  key: Key('$key-$i'),
-                  label: '$title ${i + 1}',
-                  selected: i == selected,
-                  onTap: () => setState(() => pick(i)),
-                  builder: (context, down) => Container(
-                    width: 56,
-                    height: 56,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: i == selected ? G.madder : G.paper2,
-                          width: i == selected ? 4 : 2),
-                    ),
-                    child: item(i),
-                  ),
-                ),
-            ]),
-            const SizedBox(height: 18),
-          ],
+    const tabs = [
+      ('ten', 'Ten rengi', 'M16 5A11 11 0 1 1 15.9 5Z', '#E3AC82',
+          'M12 15v1M20 15v1M12 21q4 3 8 0'),
+      ('sac', 'Saç biçimi', 'M5 18C4 4 28 4 27 18C24 11 8 11 5 18Z', '#3B2418',
+          'M16 9A9 9 0 1 1 15.9 9Z'),
+      ('renk', 'Saç rengi',
+          'M16 4C21 11 24 15 24 19A8 8 0 0 1 8 19C8 15 11 11 16 4Z', '#8A4B2A',
+          'M13 18q0 3 3 4'),
+      ('aks', 'Gözlük, şapka, başörtüsü', 'M4 12Q16 4 28 12Z', '#1F4E79',
+          'M11 21A4.5 4.5 0 1 1 10.9 21M25 21A4.5 4.5 0 1 1 24.9 21M15 21q2 -2 4 0M4 12Q16 4 28 12'),
+      ('sandalye', 'Tekerlekli sandalye', 'M10 6A3 3 0 1 1 9.9 6Z', '#E3AC82',
+          'M10 10V19H19L23 26M13 19A7 7 0 1 0 19 25M10 14H17'),
+    ];
+
+    Widget ring(bool on, Widget child,
+            {BorderRadius? radius, BoxShape shape = BoxShape.rectangle}) =>
+        Container(
+          decoration: BoxDecoration(
+            shape: shape,
+            borderRadius: shape == BoxShape.circle ? null : radius,
+            border: Border.all(color: K.murekkep, width: 2.5),
+            boxShadow: on
+                ? const [BoxShadow(color: K.zumrutKoyu, spreadRadius: 5)]
+                : null,
+          ),
+          child: child,
         );
 
-    const hairNames = [
-      'Kısa',
-      'Uzun',
-      'Örgü',
-      'Kıvırcık',
-      'Başörtüsü',
-      'Şapka'
-    ];
+    Widget swatch(String key, String label, bool on, Color color,
+            VoidCallback pick,
+            {bool round = true}) =>
+        Pressable(
+          key: Key(key),
+          label: label,
+          selected: on,
+          onTap: () => setState(pick),
+          builder: (context, down) => ring(
+            on,
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                color: color,
+                shape: round ? BoxShape.circle : BoxShape.rectangle,
+                borderRadius: round ? null : BorderRadius.circular(12),
+              ),
+            ),
+            shape: round ? BoxShape.circle : BoxShape.rectangle,
+            radius: BorderRadius.circular(14),
+          ),
+        );
+
+    Widget choice(String key, String label, bool on, VoidCallback pick) =>
+        Pressable(
+          key: Key(key),
+          label: label,
+          selected: on,
+          onTap: () => setState(pick),
+          builder: (context, down) => ring(
+            on,
+            Container(
+              constraints: const BoxConstraints(minHeight: 60),
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              color: down ? K.kagit2 : K.kagit3,
+              child: Text(label, style: G.body.copyWith(fontSize: 16)),
+            ),
+            radius: BorderRadius.circular(12),
+          ),
+        );
+
+    Widget grid(List<Widget> items) => Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: items,
+        );
+
+    final panel = switch (_tab) {
+      0 => grid([
+          for (var i = 0; i < skinTones.length; i++)
+            swatch('skin-$i', skinNames[i], _look.skin == i, skinTones[i],
+                () => _look = _look.copyWith(skin: i)),
+        ]),
+      1 => grid([
+          for (var i = 0; i < hairStyles.length; i++)
+            Pressable(
+              key: Key('hair-$i'),
+              label: 'Saç: ${hairStyles[i].$1}',
+              selected: _look.hair == i,
+              onTap: () => setState(() => _look = _look.copyWith(hair: i)),
+              builder: (context, down) => ring(
+                _look.hair == i,
+                Container(
+                  width: 52,
+                  height: 52,
+                  color: _look.hair == i ? const Color(0xFFF2D492) : K.kagit3,
+                  child: SvgPicture.string(
+                      hairChipSvg(i, _look.skin, _look.hairColor)),
+                ),
+                radius: BorderRadius.circular(12),
+              ),
+            ),
+        ]),
+      2 => grid([
+          for (var i = 0; i < hairColors.length; i++)
+            swatch('haircolor-$i', 'Saç rengi: ${hairColorNames[i]}',
+                _look.hairColor == i, hairColors[i],
+                () => _look = _look.copyWith(hairColor: i)),
+        ]),
+      3 => Column(children: [
+          for (var i = 0; i < accessoryNames.length; i++) ...[
+            choice('acc-$i', accessoryNames[i], _look.accessory == i,
+                () => _look = _look.copyWith(accessory: i)),
+            const SizedBox(height: 12),
+          ],
+        ]),
+      _ => Column(children: [
+          choice('chair-0', 'Ayakta', !_look.chair,
+              () => _look = _look.copyWith(chair: false)),
+          const SizedBox(height: 12),
+          choice('chair-1', 'Tekerlekli sandalye', _look.chair,
+              () => _look = _look.copyWith(chair: true)),
+        ]),
+    };
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        const Padding(
+          padding: EdgeInsets.fromLTRB(20, 4, 20, 8),
+          child: Text('Nasıl görünsün?', style: G.title),
+        ),
         Expanded(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-            children: [
-              Center(child: HeroFigure(look: _look, size: 150)),
-              const SizedBox(height: 12),
-              row(
-                  'Ten rengi',
-                  skinTones.length,
-                  _look.skin,
-                  (i) =>
-                      CircleAvatar(radius: 20, backgroundColor: skinTones[i]),
-                  (i) => _look = _look.copyWith(skin: i),
-                  'skin'),
-              row(
-                  'Saç',
-                  hairNames.length,
-                  _look.hair,
-                  (i) => Text(hairNames[i],
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w800,
-                          color: G.ink)),
-                  (i) => _look = _look.copyWith(hair: i),
-                  'hair'),
-              row(
-                  'Saç rengi',
-                  hairColors.length,
-                  _look.hairColor,
-                  (i) =>
-                      CircleAvatar(radius: 20, backgroundColor: hairColors[i]),
-                  (i) => _look = _look.copyWith(hairColor: i),
-                  'haircolor'),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: HandBox(
+                    style: HandStyle.el.copyWith(fill: K.kagit3),
+                    padding: const EdgeInsets.fromLTRB(4, 12, 4, 0),
+                    child: Column(children: [
+                      const Spacer(),
+                      HeroFigure(
+                          look: _look, size: 150, showCompanion: false),
+                      const Kilim(),
+                    ]),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                SizedBox(
+                  width: 128,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(6),
+                    child: Semantics(
+                      container: true,
+                      label: tabs[_tab].$2,
+                      child: panel,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Column(children: [
+                  for (var i = 0; i < tabs.length; i++) ...[
+                    Pressable(
+                      key: Key('look-tab-${tabs[i].$1}'),
+                      label: tabs[i].$2,
+                      selected: _tab == i,
+                      onTap: () => setState(() => _tab = i),
+                      builder: (context, down) => SizedBox(
+                        width: 58,
+                        height: 58,
+                        child: CustomPaint(
+                          painter: HandPainter(HandStyle.muhur.copyWith(
+                              fill: _tab == i ? K.safran : K.kagit3)),
+                          child: Center(
+                            child: SvgPicture.string(
+                              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="#2B2320" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+                              '<path d="${tabs[i].$3}" fill="${tabs[i].$4}"/><path d="${tabs[i].$5}"/></svg>',
+                              width: 30,
+                              height: 30,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ]),
+              ],
+            ),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-          child: ChunkyButton(
-            key: const Key('hero-done'),
-            label: 'Maceraya başla',
-            onPressed: _busy ? null : _finish,
-          ),
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+          child: Row(children: [
+            Expanded(
+              child: Transform.rotate(
+                angle: -.035,
+                child: const Text('İstediğin zaman değiştirebilirsin.',
+                    style: G.hand),
+              ),
+            ),
+            const SizedBox(width: 10),
+            SizedBox(
+              width: 164,
+              child: ChunkyButton(
+                key: const Key('hero-done'),
+                label: 'Tamam',
+                onPressed: _busy ? null : _finish,
+              ),
+            ),
+          ]),
         ),
       ],
     );

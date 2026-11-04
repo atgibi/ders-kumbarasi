@@ -62,6 +62,23 @@ void main() {
     expect(back.nuts, 40);
   });
 
+  test('ilk sürüm kahraman görünümü tasarımdaki karşılığına taşınır', () {
+    // eski: saç 4 = başörtüsü, saç rengi 3 = sarı
+    final old = HeroLook.fromJson({'g': 'k', 'p': 1, 's': 2, 'h': 4, 'hc': 3})!;
+    expect(old.accessory, 3);
+    expect(old.hairColor, 6);
+    final hat = HeroLook.fromJson({'g': 'e', 'p': 0, 'h': 5})!;
+    expect(hat.accessory, 2);
+    // yeni biçim olduğu gibi döner
+    const now = HeroLook(
+        girl: true, path: 2, hair: 11, hairColor: 7, accessory: 1, chair: true);
+    final back = HeroLook.fromJson(now.toJson())!;
+    expect(back.hair, 11);
+    expect(back.hairColor, 7);
+    expect(back.accessory, 1);
+    expect(back.chair, isTrue);
+  });
+
   test('eski kayıt (oyunsuz) sorunsuz açılır', () {
     final back = ChildProgress.fromJson({'v': 1, 'nuts': 3});
     expect(back.game.hero, isNull);

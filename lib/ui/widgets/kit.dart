@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 
 import '../theme.dart';
 import 'dk_icon.dart';
+import 'hand.dart';
 
 /// Basılınca çöken, klavyeyle de çalışan dokunma yüzeyi.
 class Pressable extends StatefulWidget {
@@ -121,60 +122,105 @@ class ChunkyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onPressed != null;
-    final (Color bg, Color sh, Color fg) = switch (kind) {
-      BtnKind.primary => (K.primary, K.primaryShadow, K.ink),
-      BtnKind.good => (K.good, K.goodShadow, K.ink),
-      BtnKind.again => (K.againStrong, K.againShadow, Colors.white),
-      BtnKind.secondary => (K.card, K.line, K.ink),
-    };
-    const depth = 5.0;
+    // Tasarım: birincil ahşap tabela, ikincil parşömen; zafer zümrüt,
+    // tekrar lacivert. Devre dışı: soluk taş.
+    final HandStyle style;
+    final Color fg;
+    if (!enabled) {
+      style = HandStyle.tabela.copyWith(
+          fill: K.locked,
+          texture: HandFill.duz,
+          border: K.lockedShade,
+          shadows: const [(4, Color(0xFFCFC7B8))]);
+      fg = K.inkMuted;
+    } else {
+      final (HandStyle, Color) r = switch (kind) {
+        BtnKind.primary => (HandStyle.tabela, K.kagit3),
+        BtnKind.good => (
+            HandStyle.tabela.copyWith(
+                fill: K.zumrutKoyu,
+                texture: HandFill.duz,
+                shadows: const [(5, K.goodShadow)]),
+            K.kagit3
+          ),
+        BtnKind.again => (
+            HandStyle.tabela.copyWith(
+                fill: K.lacivert,
+                texture: HandFill.duz,
+                shadows: const [(5, K.againShadow)]),
+            K.kagit3
+          ),
+        BtnKind.secondary => (HandStyle.parsomen, K.ink),
+      };
+      style = r.$1;
+      fg = r.$2;
+    }
+    final sign = kind != BtnKind.secondary;
+    final text = sign
+        ? T.button.copyWith(color: fg)
+        : const TextStyle(
+            fontFamily: K.font,
+            fontSize: 20,
+            height: 1.15,
+            fontWeight: FontWeight.w700,
+            color: K.ink);
     return Pressable(
       onTap: onPressed,
       label: semanticsLabel ?? label,
       excludeChildSemantics: true,
-      builder: (context, down) {
-        final face = Container(
-          constraints: BoxConstraints(minHeight: height),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      builder: (context, down) => HandBox(
+        style: style,
+        pressed: down && enabled,
+        constraints: BoxConstraints(minHeight: height),
+        padding: EdgeInsets.symmetric(horizontal: sign ? 26 : 18, vertical: 8),
+        child: Stack(
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: enabled ? bg : K.locked,
-            borderRadius: BorderRadius.circular(K.rLg),
-            border: kind == BtnKind.secondary && enabled
-                ? Border.all(color: K.line, width: 2)
-                : null,
-            boxShadow: enabled && !down
-                ? [BoxShadow(color: sh, offset: const Offset(0, depth))]
-                : null,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (icon != null)
-                DkIcon(icon!,
-                    size: label.isEmpty ? 26 : 24,
-                    color: iconColor ?? (enabled ? fg : K.inkSoft),
-                    stroke: label.isEmpty ? 3 : 2.5),
-              if (icon != null && label.isNotEmpty) const SizedBox(width: 10),
-              if (label.isNotEmpty)
-                Flexible(
-                  child: Text(
-                    trUpper(label),
-                    textAlign: TextAlign.center,
-                    style: T.button.copyWith(color: enabled ? fg : K.inkSoft),
-                  ),
-                ),
+          clipBehavior: Clip.none,
+          children: [
+            Align(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (icon != null)
+                    DkIcon(icon!,
+                        size: label.isEmpty ? 26 : 24,
+                        color: iconColor ?? fg,
+                        stroke: label.isEmpty ? 3 : 2.5),
+                  if (icon != null && label.isNotEmpty)
+                    const SizedBox(width: 10),
+                  if (label.isNotEmpty)
+                    Flexible(
+                      child: Text(label,
+                          textAlign: TextAlign.center, style: text),
+                    ),
+                ],
+              ),
+            ),
+            if (sign && enabled) ...const [
+              Positioned(
+                  left: -17, top: 0, bottom: 0, child: Center(child: _Nail())),
+              Positioned(
+                  right: -17, top: 0, bottom: 0, child: Center(child: _Nail())),
             ],
-          ),
-        );
-        return Padding(
-          padding:
-              EdgeInsets.only(top: down ? depth : 0, bottom: down ? 0 : depth),
-          child: face,
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
+}
+
+/// Tabelanın çivisi.
+class _Nail extends StatelessWidget {
+  const _Nail();
+
+  @override
+  Widget build(BuildContext context) => Container(
+        width: 6,
+        height: 6,
+        decoration: const BoxDecoration(
+            color: Color(0xB32B2320), shape: BoxShape.circle),
+      );
 }
 
 /// Düz metin düğmesi (ŞİMDİ DEĞİL, ÇIK, ATLA).
@@ -272,16 +318,17 @@ class CircleBtn extends StatelessWidget {
         label: label,
         excludeChildSemantics: true,
         focusRadius: size / 2,
-        builder: (context, down) => Container(
+        builder: (context, down) => SizedBox(
           width: size,
           height: size,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: down ? K.closeBg : bg,
-            shape: BoxShape.circle,
-            border: border ? Border.all(color: K.line, width: 2) : null,
+          child: CustomPaint(
+            painter: HandPainter(HandStyle.muhur.copyWith(
+                fill: down ? K.kagit2 : bg,
+                borderWidth: border ? 2.5 : 2,
+                border: border ? K.murekkep : K.murekkep2)),
+            child: Center(
+                child: DkIcon(icon, size: iconSize, color: fg, stroke: stroke)),
           ),
-          child: DkIcon(icon, size: iconSize, color: fg, stroke: stroke),
         ),
       );
 }
@@ -464,9 +511,10 @@ class DkCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(16),
     this.radius = K.rMd,
     this.color = K.card,
-    this.borderColor = K.line,
-    this.borderWidth = 2,
+    this.borderColor = K.murekkep,
+    this.borderWidth = 2.5,
     this.margin,
+    this.hand = true,
   });
 
   final Widget child;
@@ -477,17 +525,29 @@ class DkCard extends StatelessWidget {
   final double borderWidth;
   final EdgeInsetsGeometry? margin;
 
+  /// El çizimi kart (çocuk ekranları). Veli alanında sade çerçeve.
+  final bool hand;
+
   @override
-  Widget build(BuildContext context) => Container(
-        margin: margin,
-        padding: padding,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(radius),
-          border: Border.all(color: borderColor, width: borderWidth),
-        ),
-        child: child,
-      );
+  Widget build(BuildContext context) {
+    final Widget box = hand
+        ? HandBox(
+            style: HandStyle.kart.copyWith(
+                fill: color, border: borderColor, borderWidth: borderWidth),
+            padding: padding,
+            child: child,
+          )
+        : Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: K.line, width: 1.5),
+            ),
+            child: child,
+          );
+    return margin == null ? box : Padding(padding: margin!, child: box);
+  }
 }
 
 /// Hap biçimli etiket.
@@ -646,43 +706,58 @@ class ToggleRow extends StatelessWidget {
 
 /// Konuşma balonu (sol altta kuyruk).
 class SpeechBubble extends StatelessWidget {
-  const SpeechBubble({super.key, required this.child, this.tailLeft = 40});
+  const SpeechBubble(
+      {super.key, required this.child, this.tailLeft = 40, this.fill = K.kagit3});
   final Widget child;
   final double tailLeft;
+
+  /// Anka kâğıt, önder parşömen (K.kagit2), bekçi sis tonu (0xFFE3EAF0).
+  final Color fill;
 
   @override
   Widget build(BuildContext context) => Stack(
         clipBehavior: Clip.none,
         children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-            decoration: BoxDecoration(
-              color: K.card,
-              borderRadius: BorderRadius.circular(K.rLg),
-              border: Border.all(color: K.line, width: 2),
-            ),
+          HandBox(
+            style: HandStyle.balon.copyWith(fill: fill),
+            padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
             child: child,
           ),
           Positioned(
             left: tailLeft,
-            bottom: -10,
-            child: Transform.rotate(
-              angle: 0.785398,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: const BoxDecoration(
-                  color: K.card,
-                  border: Border(
-                    right: BorderSide(color: K.line, width: 2),
-                    bottom: BorderSide(color: K.line, width: 2),
-                  ),
-                ),
-              ),
-            ),
+            bottom: -16,
+            child: CustomPaint(
+                size: const Size(26, 20), painter: _TailPainter(fill)),
           ),
         ],
       );
+}
+
+class _TailPainter extends CustomPainter {
+  _TailPainter(this.fill);
+  final Color fill;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Path()
+      ..moveTo(2, 0)
+      ..quadraticBezierTo(8, 12, 4, size.height)
+      ..quadraticBezierTo(16, 12, size.width, 0);
+    canvas.drawPath(p, Paint()..color = fill);
+    canvas.drawPath(
+        p,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.5
+          ..strokeJoin = StrokeJoin.round
+          ..color = K.murekkep);
+    // balonun kenarıyla birleştiği yeri ört
+    canvas.drawRect(Rect.fromLTWH(4, -3, size.width - 6, 3.6),
+        Paint()..color = fill);
+  }
+
+  @override
+  bool shouldRepaint(_TailPainter old) => old.fill != fill;
 }
 
 /// Kesikli çerçeve (soru görsellerindeki gruplar).

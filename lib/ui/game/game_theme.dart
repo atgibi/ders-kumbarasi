@@ -8,7 +8,7 @@ class G {
   static const paper = Color(0xFFF4EAD5);
   static const paper2 = Color(0xFFEADBC0);
   static const ink = Color(0xFF2B2320);
-  static const inkSoft = Color(0xFF5C4E44);
+  static const inkSoft = Color(0xFF5A4B42);
   static const madder = Color(0xFFB8432F);
   static const indigo = Color(0xFF1F4E79);
   static const emerald = Color(0xFF2F7A5B);
@@ -18,9 +18,23 @@ class G {
   static const gold = Color(0xFFE8B84A);
 
   static const title = TextStyle(
-      fontSize: 26, height: 32 / 26, fontWeight: FontWeight.w900, color: ink);
+      fontFamily: 'Fraunces',
+      fontSize: 27,
+      height: 32 / 27,
+      fontWeight: FontWeight.w800,
+      color: indigo);
   static const sub = TextStyle(
-      fontSize: 19, height: 25 / 19, fontWeight: FontWeight.w800, color: ink);
+      fontFamily: 'Fraunces',
+      fontSize: 19,
+      height: 25 / 19,
+      fontWeight: FontWeight.w700,
+      color: ink);
+  static const hand = TextStyle(
+      fontFamily: 'Shantell',
+      fontSize: 16,
+      height: 1.3,
+      fontWeight: FontWeight.w500,
+      color: inkSoft);
   static const body = TextStyle(fontSize: 17, height: 24 / 17, color: ink);
   static const soft = TextStyle(fontSize: 15, height: 21 / 15, color: inkSoft);
   static const kicker = TextStyle(

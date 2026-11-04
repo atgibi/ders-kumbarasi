@@ -256,6 +256,7 @@ class _StorageNotice extends StatelessWidget {
             : 'Bir kayıt dosyası okunamadı. Dosya silinmedi, kenara alındı; '
                 'yedeğiniz varsa Veri bölümünden geri yükleyebilirsiniz.';
     return DkCard(
+        hand: false,
       color: K.againBg,
       borderColor: K.againLine,
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -325,6 +326,7 @@ class _Overview extends StatelessWidget {
 
     if (minutes == 0 && started.isEmpty) {
       return DkCard(
+        hand: false,
         key: const Key('parent-empty'),
         padding: const EdgeInsets.fromLTRB(18, 24, 18, 24),
         child: Column(
@@ -354,7 +356,8 @@ class _Overview extends StatelessWidget {
             Text(title, style: T.pSection),
             const SizedBox(height: 8),
             if (rows.isEmpty)
-              DkCard(child: Text(empty, style: T.pBodySoft))
+              DkCard(
+        hand: false,child: Text(empty, style: T.pBodySoft))
             else
               ListBox(children: [
                 for (var i = 0; i < rows.length && i < 3; i++)
@@ -391,6 +394,7 @@ class _Overview extends StatelessWidget {
             if (l != 'çalıştı') const SizedBox(width: 8),
             Expanded(
               child: DkCard(
+        hand: false,
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -549,6 +553,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   padding: const EdgeInsets.all(16),
                   children: [
                     DkCard(
+        hand: false,
                       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -801,6 +806,7 @@ class _OutcomeScreenState extends State<OutcomeScreen> {
                     ]),
                     const SizedBox(height: 16),
                     DkCard(
+        hand: false,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -905,6 +911,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ]),
                 const SizedBox(height: 12),
                 DkCard(
+        hand: false,
                   padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

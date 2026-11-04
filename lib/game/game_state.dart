@@ -13,7 +13,9 @@ class HeroLook {
     required this.path,
     this.skin = 1,
     this.hair = 0,
-    this.hairColor = 0,
+    this.hairColor = 1,
+    this.accessory = 0,
+    this.chair = false,
     this.name,
   });
 
@@ -23,9 +25,15 @@ class HeroLook {
   final int path;
   final int skin;
 
-  /// Saç biçimi (0 kısa, 1 uzun, 2 örgü, 3 kıvırcık, 4 başörtüsü, 5 şapka).
+  /// Saç biçimi (tasarımdaki 12 biçim; bkz. hero_svg.dart hairStyles).
   final int hair;
   final int hairColor;
+
+  /// 0 yok, 1 gözlük, 2 şapka, 3 başörtüsü.
+  final int accessory;
+
+  /// Tekerlekli sandalye.
+  final bool chair;
 
   /// Kahramana çocuğun verdiği ayrı ad (yoksa takma ad kullanılır).
   final String? name;
@@ -38,6 +46,8 @@ class HeroLook {
     int? skin,
     int? hair,
     int? hairColor,
+    int? accessory,
+    bool? chair,
   }) =>
       HeroLook(
         girl: girl ?? this.girl,
@@ -45,27 +55,44 @@ class HeroLook {
         skin: skin ?? this.skin,
         hair: hair ?? this.hair,
         hairColor: hairColor ?? this.hairColor,
+        accessory: accessory ?? this.accessory,
+        chair: chair ?? this.chair,
         name: name,
       );
 
   Map<String, Object?> toJson() => {
+        'v': 2,
         'g': girl ? 'k' : 'e',
         'p': path,
         's': skin,
         'h': hair,
         'hc': hairColor,
+        if (accessory != 0) 'a': accessory,
+        if (chair) 'ts': 1,
         if (name != null) 'n': name,
       };
 
   static HeroLook? fromJson(Object? j) {
     if (j is! Map) return null;
     int n(String k, int d) => (j[k] as num?)?.toInt() ?? d;
+    var hair = n('h', 0), hc = n('hc', 1), acc = n('a', 0);
+    if (j['v'] != 2) {
+      // İlk sürüm: 6 saç (kısa, uzun, örgü, kıvırcık, başörtüsü, şapka) ve
+      // 6 saç rengi. Tasarımdaki karşılıklarına taşınır.
+      final old = hair;
+      hair = const [0, 7, 4, 2, 0, 0][old.clamp(0, 5)];
+      if (old == 4) acc = 3;
+      if (old == 5) acc = 2;
+      hc = const [0, 1, 3, 6, 4, 7][hc.clamp(0, 5)];
+    }
     return HeroLook(
       girl: j['g'] == 'k',
       path: n('p', 0).clamp(0, heroPaths.length - 1),
       skin: n('s', 1).clamp(0, skinTones.length - 1),
-      hair: n('h', 0).clamp(0, 5),
-      hairColor: n('hc', 0).clamp(0, hairColors.length - 1),
+      hair: hair.clamp(0, 11),
+      hairColor: hc.clamp(0, hairColors.length - 1),
+      accessory: acc.clamp(0, 3),
+      chair: j['ts'] == 1,
       name: j['n'] as String?,
     );
   }

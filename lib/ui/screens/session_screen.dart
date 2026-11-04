@@ -14,6 +14,8 @@ import '../game/duel_widgets.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
+import '../widgets/hand.dart';
+import '../widgets/ikon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
 import '../widgets/visual_view.dart';
@@ -893,86 +895,75 @@ class _OptionCard extends StatelessWidget {
   final _Opt state;
   final VoidCallback? onTap;
 
+  /// Taş levha (Claude Design › Cevap levhası): doğruda zümrüt kenar ve
+  /// mühür, yanlışta sis grisi ve çizgili doku, kırmızı yok.
+  static HandStyle styleFor(_Opt s) => switch (s) {
+        _Opt.idle || _Opt.dim => HandStyle.levha,
+        _Opt.selected => HandStyle.levha
+            .copyWith(border: K.lacivert, borderWidth: 4.5),
+        _Opt.right => HandStyle.levha.copyWith(
+            fill: K.goodBg,
+            texture: HandFill.duz,
+            border: K.zumrutKoyu,
+            borderWidth: 5,
+            shadows: const [(4, Color(0xFF9FBFA8)), (7, K.zumrutKoyu)]),
+        _Opt.chosenWrong => HandStyle.levha.copyWith(
+            fill: K.sis2,
+            texture: HandFill.sisli,
+            border: K.murekkep2,
+            shadows: const [(4, K.sis), (7, K.murekkep2)]),
+      };
+
   @override
   Widget build(BuildContext context) {
-    final (Color bg, Color border) = switch (state) {
-      _Opt.idle || _Opt.dim => (K.card, K.line),
-      _Opt.selected => (K.againBg, K.again),
-      _Opt.right => (K.goodBg, K.good),
-      _Opt.chosenWrong => (K.againBg, K.again),
-    };
     final short = label.characters.length <= 3;
-    Widget card = AnimatedContainer(
-      duration: const Duration(milliseconds: 120),
-      curve: Curves.easeOut,
-      constraints: const BoxConstraints(minHeight: 72),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(K.rMd),
-        border: Border(
-          top: BorderSide(color: border, width: 2),
-          left: BorderSide(color: border, width: 2),
-          right: BorderSide(color: border, width: 2),
-          bottom: BorderSide(color: border, width: 5),
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(K.rMd - 2),
-        child: CustomPaint(
-          painter: state == _Opt.chosenWrong ? _StripePainter() : null,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 44, vertical: 12),
-                child: Center(
-                  widthFactor: 1,
-                  child: EmojiText(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: short ? 30 : 21,
-                      height: 1.2,
-                      fontWeight: FontWeight.w800,
-                      color: K.ink,
+    final wrong = state == _Opt.chosenWrong;
+    Widget face(bool down) => HandBox(
+          style: styleFor(state),
+          pressed: down || state == _Opt.selected,
+          constraints: const BoxConstraints(minHeight: 84),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+          child: Center(
+            widthFactor: 1,
+            child: EmojiText(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: K.display,
+                fontSize: short ? 40 : 22,
+                height: 1.15,
+                fontWeight: FontWeight.w700,
+                color: wrong ? K.murekkep2 : K.ink,
+              ),
+            ),
+          ),
+        );
+    Widget card(bool down) => Stack(
+          clipBehavior: Clip.none,
+          children: [
+            face(down),
+            if (state == _Opt.right || wrong)
+              Positioned(
+                right: -6,
+                top: -10,
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: CustomPaint(
+                    painter: HandPainter(HandStyle.muhur.copyWith(
+                        fill: state == _Opt.right ? K.zumrutKoyu : K.sis)),
+                    child: Center(
+                      child: state == _Opt.right
+                          ? const IkonView(Ikon.tik, size: 22, light: true)
+                          : const DkIcon(DkIcons.again,
+                              size: 18, color: K.murekkep, stroke: 3),
                     ),
                   ),
                 ),
               ),
-              if (state == _Opt.right || state == _Opt.chosenWrong)
-                Positioned(
-                  right: 10,
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: state == _Opt.right ? K.goodShadow : K.againStrong,
-                      shape: BoxShape.circle,
-                    ),
-                    child: DkIcon(
-                        state == _Opt.right ? DkIcons.check : DkIcons.again,
-                        size: state == _Opt.right ? 17 : 16,
-                        color: Colors.white,
-                        stroke: state == _Opt.right ? 3.5 : 3),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-    if (state == _Opt.dim) card = Opacity(opacity: .5, child: card);
-    if (state == _Opt.right && !reduceMotion(context)) {
-      card = TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0, end: 1),
-        duration: const Duration(milliseconds: 600),
-        builder: (context, v, child) => Transform.scale(
-            scale: 1 + .06 * math.sin(v * math.pi), child: child),
-        child: card,
-      );
-    }
+          ],
+        );
+    final motion = !reduceMotion(context);
     return Pressable(
       onTap: onTap,
       selected: state == _Opt.selected,
@@ -983,30 +974,33 @@ class _OptionCard extends StatelessWidget {
       },
       excludeChildSemantics: true,
       focusRadius: K.rMd,
-      builder: (context, down) => card,
+      builder: (context, down) {
+        var c = card(down);
+        if (state == _Opt.dim) c = Opacity(opacity: .5, child: c);
+        if (state == _Opt.right && motion) {
+          c = TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 600),
+            builder: (context, v, child) => Transform.scale(
+                scale: 1 + .06 * math.sin(v * math.pi), child: child),
+            child: c,
+          );
+        }
+        if (wrong && motion) {
+          // salla: .45 sn, sönerek
+          c = TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 450),
+            builder: (context, v, child) => Transform.translate(
+                offset: Offset(7 * (1 - v) * math.sin(v * math.pi * 4), 0),
+                child: child),
+            child: c,
+          );
+        }
+        return c;
+      },
     );
   }
-}
-
-/// Yanlış seçilen seçeneğin 135° çizgili zemini (renk tek başına bilgi taşımaz).
-class _StripePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final p = Paint()..color = K.againStripe;
-    final d = size.width + size.height;
-    for (var x = -size.height; x < d; x += 20) {
-      final path = Path()
-        ..moveTo(x, 0)
-        ..lineTo(x + 10, 0)
-        ..lineTo(x + 10 - size.height, size.height)
-        ..lineTo(x - size.height, size.height)
-        ..close();
-      canvas.drawPath(path, p);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_StripePainter old) => false;
 }
 
 /// C7 Geri bildirim bandı: alttan kayar. Doğru: yeşil, kutlayan Anka.

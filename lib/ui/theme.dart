@@ -7,63 +7,63 @@ import '../app/app_state.dart';
 /// 2,6:1 ve 2,9:1 kontrastta kalıyor. Mavi düğme #2E62A6 üzerinde beyaz.
 class K {
   // Birincil
-  static const primary = Color(0xFFE8892F);
-  static const primaryShadow = Color(0xFFB8692B);
-  static const label = Color(0xFF95521A); // kremde küçük etiket, 5,6:1
-  static const tint = Color(0xFFFFF1E1);
-  static const peach = Color(0xFFFBE3CB);
-  static const peachInk = Color(0xFF7A3F0E);
+  static const primary = Color(0xFF8A5A2E);
+  static const primaryShadow = Color(0xFF5E3A1B);
+  static const label = Color(0xFFB8432F); // kremde küçük etiket, 5,6:1
+  static const tint = Color(0xFFFBF5E8);
+  static const peach = Color(0xFFEADBC0);
+  static const peachInk = Color(0xFF5A4B42);
 
   // Doğru
-  static const good = Color(0xFF3BAA5C);
-  static const goodShadow = Color(0xFF2B8446);
-  static const goodBg = Color(0xFFDDF4E2);
-  static const goodInk = Color(0xFF1F6B37);
-  static const leafInk = Color(0xFF23743C);
+  static const good = Color(0xFF2F7A5B);
+  static const goodShadow = Color(0xFF1B4A36);
+  static const goodBg = Color(0xFFE1EBDA);
+  static const goodInk = Color(0xFF26664B);
+  static const leafInk = Color(0xFF2F7A5B);
 
   // Tekrar (yanlışta kırmızı yok)
-  static const again = Color(0xFF3F7FD0);
-  static const againStrong = Color(0xFF2E62A6);
-  static const againShadow = Color(0xFF1F4A80);
-  static const againBg = Color(0xFFDDE9FA);
-  static const againInk = Color(0xFF234C82);
-  static const againLine = Color(0xFFB9CFEE);
-  static const againStripe = Color(0xFFCBDDF5);
+  static const again = Color(0xFF1F4E79);
+  static const againStrong = Color(0xFF1F4E79);
+  static const againShadow = Color(0xFF12304D);
+  static const againBg = Color(0xFFE3EAF0);
+  static const againInk = Color(0xFF1F4E79);
+  static const againLine = Color(0xFFC9D1D9);
+  static const againStripe = Color(0xFFDDE3EA);
 
   // Zemin ve çizgi
-  static const bg = Color(0xFFFFF9F1);
-  static const bgParent = Color(0xFFF6F3EE);
-  static const card = Color(0xFFFFFFFF);
-  static const line = Color(0xFFE6DED3);
-  static const lineSoft = Color(0xFFF1EBE3);
-  static const dashed = Color(0xFFD8CDBE);
-  static const locked = Color(0xFFD9D4CC);
-  static const lockedShade = Color(0xFFBDB7AE);
-  static const stone = Color(0xFFEFEBE5);
-  static const closeBg = Color(0xFFF3EEE7);
-  static const toggleOff = Color(0xFFCFC6B9);
-  static const keyShadow = Color(0xFFE0D8CC);
+  static const bg = Color(0xFFF4EAD5);
+  static const bgParent = Color(0xFFF7F1E6);
+  static const card = Color(0xFFFBF5E8);
+  static const line = Color(0xFFDCCFB8);
+  static const lineSoft = Color(0xFFEFE4CE);
+  static const dashed = Color(0xFFB9AC94);
+  static const locked = Color(0xFFE7E2D7);
+  static const lockedShade = Color(0xFF8C8178);
+  static const stone = Color(0xFFDDD5C4);
+  static const closeBg = Color(0xFFEADBC0);
+  static const toggleOff = Color(0xFFCFC4B0);
+  static const keyShadow = Color(0xFFB3A892);
 
   // Metin
-  static const ink = Color(0xFF2B2A33);
-  static const ink2 = Color(0xFF4A4952);
-  static const inkSoft = Color(0xFF6B6A75);
-  static const inkMuted = Color(0xFF5E5D66);
+  static const ink = Color(0xFF2B2320);
+  static const ink2 = Color(0xFF5A4B42);
+  static const inkSoft = Color(0xFF5A4B42);
+  static const inkMuted = Color(0xFF5F554D);
 
   // Ödül
-  static const reward = Color(0xFFF2C94C);
-  static const rewardShade = Color(0xFFC9A227);
-  static const rewardBg = Color(0xFFFFF6D9);
-  static const rewardLine = Color(0xFFEBD58A);
+  static const reward = Color(0xFFE3A535);
+  static const rewardShade = Color(0xFFB07F1E);
+  static const rewardBg = Color(0xFFF6E7C1);
+  static const rewardLine = Color(0xFFE3C77A);
   static const rewardInk = Color(0xFF4A3A00);
-  static const rewardChip = Color(0xFFFBEFC6);
+  static const rewardChip = Color(0xFFF2D492);
   static const rewardChipInk = Color(0xFF5E4500);
   static const hintShadow = Color(0xFFE9D488);
   static const hintInk = Color(0xFF6B4E00);
 
   // Işık (eski adıyla nut)
-  static const nut = Color(0xFF8A5326);
-  static const nutInk = Color(0xFF6E3F17);
+  static const nut = Color(0xFF8A5A2E);
+  static const nutInk = Color(0xFF5E3A1B);
 
   // Aile etkinliği
   static const family = Color(0xFFEEDDF4);
@@ -73,35 +73,35 @@ class K {
   static const homeTip = Color(0xFF6E3A87);
 
   // Gece (sessiz saat)
-  static const night = Color(0xFF22304A);
+  static const night = Color(0xFF1F2A3A);
   static const nightKick = Color(0xFFC9D3E6);
   static const nightSoft = Color(0xFFDCE3F0);
 
   // Dal (seri)
-  static const branch = Color(0xFFA9794A);
+  static const branch = Color(0xFF8A5A2E);
 
   /// Ünite renkleri, yolda sırayla.
   static const units = [
-    Color(0xFFE8892F),
-    Color(0xFF3F7FD0),
-    Color(0xFF3BAA5C),
-    Color(0xFF9B59B6),
-    Color(0xFFE5A50A),
-    Color(0xFF16A2B8),
-    Color(0xFFD9534F),
-    Color(0xFF6D8B3A),
-    Color(0xFF8E6C4A),
+    Color(0xFFA8552B),
+    Color(0xFF5E7A3A),
+    Color(0xFFD9A441),
+    Color(0xFF6E5A9C),
+    Color(0xFF2E7D8A),
+    Color(0xFF1F4E79),
+    Color(0xFFB8432F),
+    Color(0xFF2F7A5B),
+    Color(0xFF8A5A2E),
   ];
   static const unitShades = [
-    Color(0xFFB8692B),
-    Color(0xFF2E62A6),
-    Color(0xFF2B8446),
-    Color(0xFF7A4291),
-    Color(0xFFB07F06),
-    Color(0xFF117C8D),
-    Color(0xFFA83F3C),
-    Color(0xFF526A2B),
-    Color(0xFF6B5237),
+    Color(0xFF6B3216),
+    Color(0xFF3E5226),
+    Color(0xFF9A7124),
+    Color(0xFF4A3C6B),
+    Color(0xFF1C545D),
+    Color(0xFF12304D),
+    Color(0xFF7E2B1D),
+    Color(0xFF1B4A36),
+    Color(0xFF5E3A1B),
   ];
 
   // Köşe yuvarlama
@@ -109,7 +109,33 @@ class K {
   static const rMd = 16.0;
   static const rLg = 22.0;
 
-  static const font = 'Nunito';
+  /// Gövde: Andika (çocukların okuması için tasarlanmış harfler).
+  static const font = 'Andika';
+
+  /// Başlık ve sayılar: Fraunces (yumuşak, hafif oynak serif).
+  static const display = 'Fraunces';
+
+  /// El yazısı notlar ve mektuplar: Shantell Sans.
+  static const hand = 'Shantell';
+
+  // Tasarım belirteçleri (Claude Design: kâğıt, mürekkep, kök boya)
+  static const kagit = Color(0xFFF4EAD5);
+  static const kagit2 = Color(0xFFEADBC0);
+  static const kagit3 = Color(0xFFFBF5E8);
+  static const murekkep = Color(0xFF2B2320);
+  static const murekkep2 = Color(0xFF5A4B42);
+  static const kok = Color(0xFFB8432F);
+  static const kokKoyu = Color(0xFF9E3624);
+  static const lacivert = Color(0xFF1F4E79);
+  static const zumrut = Color(0xFF2F7A5B);
+  static const zumrutKoyu = Color(0xFF26664B);
+  static const safran = Color(0xFFE3A535);
+  static const sis = Color(0xFF9AA6B2);
+  static const sis2 = Color(0xFFC9D1D9);
+  static const ahsap = Color(0xFF8A5A2E);
+  static const ahsap2 = Color(0xFF5E3A1B);
+  static const tas = Color(0xFFDDD5C4);
+  static const tas2 = Color(0xFFB3A892);
 
   static ThemeData theme() {
     final scheme = ColorScheme.fromSeed(
@@ -127,7 +153,7 @@ class K {
       highlightColor: Colors.transparent,
       textSelectionTheme: const TextSelectionThemeData(
         cursorColor: ink,
-        selectionColor: Color(0x55E8892F),
+        selectionColor: Color(0x55E3A535),
         selectionHandleColor: primary,
       ),
       textTheme: const TextTheme(
@@ -142,7 +168,7 @@ class K {
         activeTrackColor: primary,
         inactiveTrackColor: line,
         thumbColor: primary,
-        overlayColor: Color(0x22E8892F),
+        overlayColor: Color(0x22E3A535),
         trackHeight: 6,
       ),
     );
@@ -153,31 +179,31 @@ class K {
 class T {
   static const _f = K.font;
   static const title = TextStyle(
-      fontFamily: _f,
+      fontFamily: K.display,
       fontSize: 28,
       height: 34 / 28,
-      fontWeight: FontWeight.w900,
+      fontWeight: FontWeight.w800,
       color: K.ink);
   static const hero = TextStyle(
-      fontFamily: _f,
+      fontFamily: K.display,
       fontSize: 34,
       height: 40 / 34,
-      fontWeight: FontWeight.w900,
+      fontWeight: FontWeight.w800,
       color: K.ink);
   static const big = TextStyle(
-      fontFamily: _f,
+      fontFamily: K.display,
       fontSize: 30,
       height: 36 / 30,
-      fontWeight: FontWeight.w900,
+      fontWeight: FontWeight.w800,
       color: K.ink);
   static const question = TextStyle(
-      fontFamily: _f,
+      fontFamily: K.display,
       fontSize: 24,
       height: 1.25,
       fontWeight: FontWeight.w800,
       color: K.ink);
   static const sub = TextStyle(
-      fontFamily: _f,
+      fontFamily: K.display,
       fontSize: 21,
       height: 28 / 21,
       fontWeight: FontWeight.w800,
@@ -204,15 +230,15 @@ class T {
       letterSpacing: .6,
       color: K.label);
   static const button = TextStyle(
-      fontFamily: _f,
-      fontSize: 18,
-      fontWeight: FontWeight.w900,
-      letterSpacing: .8,
+      fontFamily: K.display,
+      fontSize: 21,
+      fontWeight: FontWeight.w700,
+      letterSpacing: 0,
       color: K.ink);
 
   // Veli alanı
   static const pTitle = TextStyle(
-      fontFamily: _f, fontSize: 21, fontWeight: FontWeight.w800, color: K.ink);
+      fontFamily: K.display, fontSize: 21, fontWeight: FontWeight.w800, color: K.ink);
   static const pBody =
       TextStyle(fontFamily: _f, fontSize: 16, height: 22 / 16, color: K.ink);
   static const pBodySoft =
