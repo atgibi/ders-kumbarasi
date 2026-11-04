@@ -10,55 +10,192 @@ E = lambda e: V("emoji", emoji=e)
 T = lambda t: V("text", text=t)
 
 OUTCOMES = [
-    outcome("HB.1.1.1", lessons=[lesson("Merhaba okul!", [
-        page("Okulda yeni arkadaşlarla tanışırız. Gülümser, adımızı söyler, onun adını sorarız.", T("👋 Merhaba, ben Elif!")),
-        page("Öğretmenimiz bize yol gösterir. Bir şey sormak istersek parmak kaldırırız.", E("🙋")),
-    ])], cards=[
-        mc("Yeni bir arkadaşla tanışırken ne deriz?", ["Merhaba, benim adım …", "Çekil önümden!", "Hiçbir şey demeyiz"], 0),
-        mc("Derste bir şey sormak istersen ne yaparsın?", ["Parmak kaldırırım", "Bağırırım", "Sırama vururum"], 0),
+    outcome("HB.1.1.1", lessons=[
+        lesson("Merhaba okul!", [
+            page("Ocakvadi'de Nine Pelin'in fırınından mis gibi ekmek kokusu geliyor. Bostancık çocukları "
+                 "yeni bir arkadaş bekliyor: sen!", T("🏡 🍞 👋")),
+            page("Yeni biriyle tanışırken gülümser, “Merhaba, benim adım …” deriz.", T("😊 Merhaba, ben Elif!")),
+            page("Sonra onun adını sorarız: “Senin adın ne?” Böylece birbirimizi tanırız.", T("❓ Senin adın ne?")),
+            page("Öğretmenimiz bize yol gösterir, bize yardım eder. Bir şey sormak istersek parmak kaldırırız.",
+                 E("🙋")),
+            page("Anka tanışıyor: “Merhaba, ben Anka! Kaf Dağı'ndan geldim. Senin adın ne? "
+                 "Ne oynamayı seversin?”", T("🦉 👋 🧒")),
+            page("Dikkat! Utanmak çok doğal. Önce gülümsemek bile iyi bir başlangıçtır.", T("😊 ✓")),
+            page("Özet: Gülümse, adını söyle, onun adını sor. Öğretmenine sormak için parmak kaldır.",
+                 T("😊 · 👋 · ❓ · 🙋")),
+        ]),
+        lesson("Tanışma oyunu", [
+            page("Arkadaşınla bir top at-tut oyunu oyna: topu atan adını söylesin.", T("⚽ “Ben Can!”")),
+            page("Topu tutan da kendi adını ve sevdiği bir şeyi söylesin. İşte tanıştınız!", T("⚽ “Ben Ela, kedileri severim!”")),
+        ], alt=True),
+    ], cards=[
+        mc("Yeni bir arkadaşla tanışırken ne deriz?", ["Merhaba, benim adım …", "Çekil önümden!", "Hiçbir şey demeyiz"], 0,
+           why={1: "Bu söz kaba ve arkadaşımızı üzer. “Merhaba, benim adım …” deriz.",
+                2: "Hiçbir şey demezsek tanışamayız. Gülümseyip adımızı söyleriz."}),
+        mc("Derste bir şey sormak istersen ne yaparsın?", ["Parmak kaldırırım", "Bağırırım", "Sırama vururum"], 0,
+           why={1: "Bağırınca dersi böleriz. Parmak kaldırıp sıramızı bekleriz.",
+                2: "Sıraya vurmak gürültü yapar. Parmak kaldırırız."}),
+        mc("Arkadaşının adını öğrenmek için ne sorarsın?", ["Senin adın ne?", "Kaç yaşındasın?", "Nerede oturuyorsun?"], 0,
+           why={1: "Bu soru yaşını öğrenir, adını değil.",
+                2: "Bu soru adres sorar. Adını öğrenmek için “Senin adın ne?” deriz."}),
         act("Ailene sınıfındaki iki arkadaşının adını ve sevdikleri bir şeyi anlat."),
     ]),
-    outcome("HB.1.1.2", lessons=[lesson("Okulumuzu tanıyalım", [
-        page("Okulda sınıflar, kütüphane, bahçe, kantin, tuvalet ve öğretmenler odası vardır.", T("🏫 📚 🌳 🚻")),
-        page("Kitap okumak için kütüphaneye, oyun oynamak için bahçeye gideriz.", T("📚  ⚽")),
-    ])], cards=[
-        mc("Okulda kitapların bulunduğu yer neresidir?", ["Kütüphane", "Bahçe", "Kantin"], 0),
-        mc("Teneffüste koşup oynamak için en uygun yer neresidir?", ["Okul bahçesi", "Kütüphane", "Merdiven"], 0),
-        mc("Okul müdürünün çalıştığı yer neresidir?", ["Müdür odası", "Spor salonu", "Kantin"], 0),
+    outcome("HB.1.1.2", lessons=[
+        lesson("Okulumuzu tanıyalım", [
+            page("Ocakvadi'nin okulu büyük bir bostanın yanında. Nine Pelin seni okulu gezdirecek.", T("🏫 🌻")),
+            page("Sınıfımızda ders yaparız. Her sınıfın bir kapısı ve bir öğretmeni vardır.", T("🏫 👩‍🏫")),
+            page("Kütüphanede kitaplar vardır; orada sessizce okuruz.", T("📚 🤫")),
+            page("Okul bahçesinde teneffüste oynarız. Kantinden yiyecek alırız. Tuvalette ellerimizi yıkarız.",
+                 T("🌳 ⚽ · 🥪 · 🚻 🧼")),
+            page("Anka soruyor: “Kitap okumak istiyorum, nereye gideyim?” Kitaplar kütüphanede! "
+                 "“Peki top oynamak için?” Bahçeye!", T("📚 · ⚽")),
+            page("Dikkat! Kaybolursan olduğun yerde kal ve bir öğretmene ya da okul görevlisine söyle.",
+                 T("🙋 öğretmenim!")),
+            page("Özet: Her yerin bir işi var: sınıf ders, kütüphane kitap, bahçe oyun, kantin yiyecek.",
+                 T("🏫 · 📚 · 🌳 · 🥪")),
+        ]),
+        lesson("Okul haritası", [
+            page("Okulunu bir harita gibi düşün: kapıdan girince sağda ne var, solda ne var?", T("🚪 ⬅️ ➡️")),
+            page("Ailenle evde okulunun basit bir resmini çiz. Sınıfını, bahçeni, kütüphaneni işaretle.", T("✏️ 🗺️")),
+        ], alt=True),
+    ], cards=[
+        mc("Okulda kitapların bulunduğu yer neresidir?", ["Kütüphane", "Bahçe", "Kantin"], 0,
+           why={1: "Bahçede oyun oynarız. Kitaplar kütüphanededir.",
+                2: "Kantinde yiyecek satılır. Kitaplar kütüphanededir."}),
+        mc("Teneffüste koşup oynamak için en uygun yer neresidir?", ["Okul bahçesi", "Kütüphane", "Merdiven"], 0,
+           why={1: "Kütüphanede sessiz oluruz, koşmayız.",
+                2: "Merdivende koşmak tehlikelidir; düşebiliriz."}),
+        mc("Okul müdürünün çalıştığı yer neresidir?", ["Müdür odası", "Spor salonu", "Kantin"], 0,
+           why={1: "Spor salonunda beden eğitimi yapılır.",
+                2: "Kantinde yiyecek satılır. Müdür, müdür odasında çalışır."}),
+        mc("Okulda kaybolursan ne yaparsın?", ["Bir öğretmene söylerim", "Okuldan çıkarım", "Saklanırım"], 0,
+           why={1: "Okuldan tek başına çıkmak tehlikelidir.",
+                2: "Saklanırsak bizi bulamazlar. Bir öğretmene söyleriz."}),
     ]),
-    outcome("HB.1.1.3", lessons=[lesson("Okul kuralları", [
-        page("Kurallar hepimizin güvende ve mutlu olması içindir.", E("📋")),
-        page("Sırayla konuşuruz, koridorda koşmayız, eşyalarımızı düzenli tutarız.", T("🤫 🚶 🎒")),
-    ])], cards=[
-        mc("Koridorda nasıl yürümeliyiz?", ["Yavaşça ve sağdan", "Koşarak", "İterek"], 0),
-        mc("Arkadaşın konuşurken ne yapmalısın?", ["Sözünü kesmeden dinlemeliyim", "Araya girmeliyim", "Başka yere bakmalıyım"], 0),
-        mc("Çöpümüzü nereye atarız?", ["Çöp kutusuna", "Sıranın altına", "Yere"], 0),
-        mc("Kantinde sıra varsa ne yaparız?", ["Sıraya gireriz", "Öne geçeriz"], 0),
+    outcome("HB.1.1.3", lessons=[
+        lesson("Okul kuralları", [
+            page("Ocakvadi'nin pazar yerinde herkes sıraya girer, kimse kimseyi itmez. Böylece herkes ekmeğini alır.",
+                 T("🧺 🧍🧍🧍")),
+            page("Kurallar hepimizin güvende ve mutlu olması içindir. Okulda da kurallar var.", E("📋")),
+            page("Koridorda koşmayız, yavaşça yürürüz. Böylece kimse düşüp yaralanmaz.", T("🚶 ✓  ·  🏃 ✗")),
+            page("Sırayla konuşuruz, eşyalarımızı düzenli tutarız, çöplerimizi çöp kutusuna atarız.",
+                 T("🙋 · 🎒 · 🗑️")),
+            page("Anka düşünüyor: “Kantinde sıra var ama çok acıktım. Öne geçersem önümdekiler üzülür. "
+                 "Sıramı bekleyeceğim.”", T("🦉 ⏳")),
+            page("Dikkat! Kural bozan bir arkadaşa bağırmayız; nazikçe uyarırız ya da öğretmene söyleriz.",
+                 T("🙂 “Burada koşmayalım”")),
+            page("Özet: Kurallara uyarsak hepimiz güvende ve mutlu oluruz.", T("📋 ➜ 😊")),
+        ]),
+        lesson("Kural olmasaydı?", [
+            page("Bir oyun düşün: herkes istediği zaman topa elle dokunsun. Oyun bozulur, değil mi?", T("⚽ 🤷")),
+            page("Okul da böyle: kurallar herkesin oynayabilmesi, öğrenebilmesi içindir.", T("📋 🤝")),
+        ], alt=True),
+    ], cards=[
+        mc("Koridorda nasıl yürümeliyiz?", ["Yavaşça ve sağdan", "Koşarak", "İterek"], 0,
+           why={1: "Koşarken birine çarpıp düşebiliriz.", 2: "İtmek arkadaşımızı yaralayabilir."}),
+        mc("Arkadaşın konuşurken ne yapmalısın?", ["Sözünü kesmeden dinlemeliyim", "Araya girmeliyim", "Başka yere bakmalıyım"], 0,
+           why={1: "Araya girmek arkadaşımızı üzer. Bitirmesini bekleriz.",
+                2: "Başka yere bakarsak onu dinlemediğimizi düşünür."}),
+        mc("Çöpümüzü nereye atarız?", ["Çöp kutusuna", "Sıranın altına", "Yere"], 0,
+           why={1: "Sıranın altı kirlenir; temizleyen kişiyi düşünelim.", 2: "Yere atılan çöp sınıfı kirletir."}),
+        mc("Kantinde sıra varsa ne yaparız?", ["Sıraya gireriz", "Öne geçeriz"], 0,
+           why={1: "Öne geçersek bekleyenler üzülür. Sıramızı bekleriz."}),
+        mc("Arkadaşın koridorda koşuyor. Ne dersin?", ["“Burada koşmayalım, düşebilirsin”", "“Sen kötüsün!”"], 0,
+           why={1: "Kırıcı sözler yerine nazikçe uyarırız."}),
     ]),
-    outcome("HB.1.1.4", lessons=[lesson("Ben kimim?", [
-        page("Her birimiz farklıyız: boyumuz, saçımız, gözlerimiz, sevdiklerimiz…", T("🧒 👧 👦")),
-        page("Farklılıklarımız bizi özel yapar. Herkes saygıyı hak eder.", E("🤝")),
-    ])], cards=[
-        mc("Arkadaşının saç rengi seninkinden farklıysa ne düşünürsün?", ["Herkes farklıdır, bu çok doğal", "O yanlış", "Onunla oynamam"], 0),
-        mc("Hangisi bir fiziksel özelliktir?", ["Göz rengi", "En sevdiğim oyun", "Arkadaşımın adı"], 0),
+    outcome("HB.1.1.4", lessons=[
+        lesson("Ben kimim?", [
+            page("Bostancık çocukları bir ayna buldu. Herkes aynaya bakıp kendini anlatıyor. Sıra sende!",
+                 T("🪞 🧒 👧")),
+            page("Her birimiz farklıyız: boyumuz, saçımız, gözlerimiz farklı. Bunlara fiziksel özellik deriz.",
+                 T("📏 · 💇 · 👁️")),
+            page("Sevdiklerimiz de farklı: kimi resim yapmayı, kimi top oynamayı, kimi şarkı söylemeyi sever.",
+                 T("🎨 · ⚽ · 🎵")),
+            page("Farklılıklarımız bizi özel yapar. Herkes saygıyı hak eder.", E("🤝")),
+            page("Anka anlatıyor: “Benim tüylerim yeşil, gözlüklüyüm, masal okumayı severim. "
+                 "Ozan Yaprak uzun boylu, şarkı söylemeyi sever. İkimiz de farklıyız ve arkadaşız!”",
+                 T("🦉 🤝 🌳")),
+            page("Dikkat! Birinin görünüşüyle alay etmek onu çok üzer. Farklılıklara saygı duyarız.", T("🙅 alay")),
+            page("Özet: Herkesin görünüşü ve sevdikleri farklıdır. Farklılıklar bizi zenginleştirir.",
+                 T("🧒 👧 👦 = 🤝")),
+        ]),
+        lesson("Benim kartım", [
+            page("Bir kâğıda kendini çiz. Yanına saç rengini, göz rengini ve en sevdiğin şeyi yaz.", T("✏️ 🧒")),
+            page("Arkadaşının kartıyla karşılaştır: neler aynı, neler farklı?", T("🧒 ↔ 👧")),
+        ], alt=True),
+    ], cards=[
+        mc("Arkadaşının saç rengi seninkinden farklıysa ne düşünürsün?", ["Herkes farklıdır, bu çok doğal", "O yanlış", "Onunla oynamam"], 0,
+           why={1: "Saç rengi doğru ya da yanlış olmaz; herkes farklıdır.",
+                2: "Farklı olduğu için birini dışlamak onu üzer."}),
+        mc("Hangisi bir fiziksel özelliktir?", ["Göz rengi", "En sevdiğim oyun", "Arkadaşımın adı"], 0,
+           why={1: "Sevdiğimiz oyun bir ilgi alanıdır, görünüşümüz değil.",
+                2: "Arkadaşımızın adı bizim özelliğimiz değildir."}),
+        mc("Hangisi bir ilgi alanıdır?", ["Resim yapmayı sevmek", "Boyunun uzun olması", "Gözlerinin kahverengi olması"], 0,
+           why={1: "Boy bir fiziksel özelliktir.", 2: "Göz rengi bir fiziksel özelliktir."}),
         act("Aynaya bakarak kendini ailene anlat: saç rengin, göz rengin ve en sevdiğin şey."),
     ]),
-    outcome("HB.1.2.1", lessons=[lesson("Sağlıklı büyüyorum", [
-        page("Sağlıklı büyümek için dengeli beslenir, su içer, uyur ve hareket ederiz.", T("🥕 💧 😴 🤸")),
-        page("Ellerimizi yemekten önce ve tuvaletten sonra sabunla yıkarız. Dişlerimizi günde iki kez fırçalarız.", T("🧼 🪥")),
-    ])], cards=[
-        mc("Hangisi sağlıklı bir ara öğündür?", ["Elma", "Cips", "Gazlı içecek"], 0),
-        mc("Ellerimizi ne zaman yıkarız?", ["Yemekten önce", "Sadece bayramda", "Hiçbir zaman"], 0),
-        mc("Dişlerimizi günde en az kaç kez fırçalamalıyız?", ["1", "2", "5"], 1),
-        mc("Erken ve yeterince uyumak neden önemlidir?", ["Büyümemize yardım eder", "Hiç önemi yok"], 0),
+    outcome("HB.1.2.1", lessons=[
+        lesson("Sağlıklı büyüyorum", [
+            page("Nine Pelin'in bostanında sebzeler kocaman büyüyor. “Onlara su, güneş ve iyi toprak veriyorum,” diyor. "
+                 "Biz de büyümek için bakım isteriz.", T("🥕 💧 ☀️")),
+            page("Dengeli besleniriz: sebze, meyve, süt, ekmek, et ya da baklagil. Her birinden biraz.",
+                 T("🥕 🍎 🥛 🍞 🫘")),
+            page("Bol su içeriz. Şekerli içecekler yerine su ya da süt seçeriz.", T("💧 ✓  ·  🥤 ✗")),
+            page("Erken yatar, yeterince uyuruz. Her gün koşar, oynar, hareket ederiz.", T("😴 · 🤸")),
+            page("Temizlik de sağlıktır: ellerimizi yemekten önce ve tuvaletten sonra sabunla yıkarız; "
+                 "dişlerimizi sabah ve akşam fırçalarız.", T("🧼 · 🪥🪥")),
+            page("Dikkat! Abur cubur hemen doyurur ama vücudumuza az fayda verir. Ara öğünde meyve seçeriz.",
+                 T("🍎 ✓  ·  🍟 ✗")),
+            page("Özet: Dengeli beslen, su iç, uyu, hareket et, temiz ol.", T("🥕 · 💧 · 😴 · 🤸 · 🧼")),
+        ]),
+        lesson("Sağlıklı tabak", [
+            page("Tabağını düşün: yarısı sebze ve meyve, bir parçası ekmek, bir parçası et, yumurta ya da fasulye.",
+                 T("🍽️ 🥗🍞🥚")),
+            page("Yanına bir bardak su ya da süt. İşte sağlıklı bir öğün!", T("🍽️ + 💧")),
+        ], alt=True),
+    ], cards=[
+        mc("Hangisi sağlıklı bir ara öğündür?", ["Elma", "Cips", "Gazlı içecek"], 0,
+           why={1: "Cips çok tuzlu ve yağlıdır; arada bir yenir.", 2: "Gazlı içeceklerde çok şeker vardır."}),
+        mc("Ellerimizi ne zaman yıkarız?", ["Yemekten önce", "Sadece bayramda", "Hiçbir zaman"], 0,
+           why={1: "Ellerimizi her gün, yemekten önce ve tuvaletten sonra yıkarız.",
+                2: "Yıkanmayan ellerdeki mikroplar bizi hasta edebilir."}),
+        mc("Dişlerimizi günde en az kaç kez fırçalamalıyız?", ["1", "2", "5"], 1,
+           why={0: "Bir kez yetmez: sabah ve akşam, günde 2 kez fırçalarız.",
+                2: "5 kez gerekmez. Sabah ve akşam, günde 2 kez yeterlidir."}),
+        mc("Erken ve yeterince uyumak neden önemlidir?", ["Büyümemize yardım eder", "Hiç önemi yok"], 0,
+           why={1: "Uyurken vücudumuz dinlenir ve büyür. Uyku çok önemlidir."}),
+        mc("Susadığında hangisini içmek en sağlıklıdır?", ["Su", "Gazlı içecek", "Şekerli meyve suyu"], 0,
+           why={1: "Gazlı içeceklerde çok şeker vardır.", 2: "Şekerli içecekler dişlere zarar verir. Su en iyisi."}),
     ]),
-    outcome("HB.1.2.2", lessons=[lesson("Bedenim bana ait", [
-        page("Bedenimiz bize aittir. Rahatsız olduğumuz bir dokunuşa “Hayır!” deme hakkımız vardır.", E("✋")),
-        page("Böyle bir durumda hemen güvendiğimiz bir büyüğe anlatırız: annemize, babamıza, öğretmenimize.", T("🗣️ 👩‍🏫")),
-    ])], cards=[
-        mc("Biri seni rahatsız eden bir şekilde dokunursa ne yaparsın?", ["“Hayır!” der ve güvendiğim bir büyüğe anlatırım", "Kimseye söylemem"], 0),
-        mc("Tanımadığın biri seni bir yere götürmek isterse?", ["Gitmem ve hemen bir büyüğe haber veririm", "Giderim"], 0),
-        mc("Kişisel alan ne demektir?", ["Bedenimizin çevresindeki bize ait alan", "Okulun bahçesi"], 0),
+    outcome("HB.1.2.2", lessons=[
+        lesson("Bedenim bana ait", [
+            page("Nine Pelin bostancık çocuklarına önemli bir şey öğretiyor: “Bedeniniz size aittir.”", T("🧒 💛")),
+            page("Her birimizin çevresinde görünmez bir baloncuk var. Buna kişisel alan deriz.", T("🫧 🧒 🫧")),
+            page("Rahatsız olduğumuz bir dokunuşa “Hayır!” deme hakkımız vardır. Bu, kaba olmak değildir.",
+                 E("✋")),
+            page("Böyle bir durumda hemen güvendiğimiz bir büyüğe anlatırız: annemize, babamıza, öğretmenimize.",
+                 T("🗣️ 👩‍🏫")),
+            page("Tanımadığımız biri bizi bir yere götürmek isterse gitmeyiz ve hemen bir büyüğe haber veririz.",
+                 T("🙅 ➜ 🗣️")),
+            page("Dikkat! “Bu bizim sırrımız” denen ve seni rahatsız eden bir şeyi saklamazsın. "
+                 "Güvendiğin bir büyüğe söylersin.", T("🤫 ✗  ·  🗣️ ✓")),
+            page("Özet: Bedenin sana ait. Rahatsız olursan “Hayır!” de, uzaklaş ve güvendiğin bir büyüğe anlat.",
+                 T("✋ Hayır! · 🏃 · 🗣️")),
+        ]),
+        lesson("Güvendiğim büyükler", [
+            page("Güvendiğin büyükleri düşün: annen, baban, öğretmenin, büyükannen…", T("👩 👨 👩‍🏫 👵")),
+            page("Bir sorun olduğunda bu kişilerden birine her zaman anlatabilirsin.", T("🗣️ 💛")),
+        ], alt=True),
+    ], cards=[
+        mc("Biri seni rahatsız eden bir şekilde dokunursa ne yaparsın?", ["“Hayır!” der ve güvendiğim bir büyüğe anlatırım", "Kimseye söylemem"], 0,
+           why={1: "Saklamamız gerekmez. Güvendiğimiz bir büyüğe anlatırız; o bize yardım eder."}),
+        mc("Tanımadığın biri seni bir yere götürmek isterse?", ["Gitmem ve hemen bir büyüğe haber veririm", "Giderim"], 0,
+           why={1: "Tanımadığımız biriyle hiçbir yere gitmeyiz."}),
+        mc("Kişisel alan ne demektir?", ["Bedenimizin çevresindeki bize ait alan", "Okulun bahçesi"], 0,
+           why={1: "Okul bahçesi herkesin alanıdır. Kişisel alan, bedenimizin çevresindeki görünmez baloncuktur."}),
+        mc("Biri “Bu bizim sırrımız” dedi ve bu seni rahatsız etti. Ne yaparsın?",
+           ["Güvendiğim bir büyüğe anlatırım", "Kimseye söylemem"], 0,
+           why={1: "Seni rahatsız eden sırları saklamazsın. Güvendiğin bir büyüğe anlat."}),
     ]),
     outcome("HB.1.2.3", lessons=[lesson("Trafikte güvenlik", [
         page("Karşıya yaya geçidinden geçeriz. Önce sola, sonra sağa, sonra tekrar sola bakarız.", T("🚸 👀")),
