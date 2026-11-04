@@ -681,8 +681,10 @@ class _QuestionViewState extends State<_QuestionView> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          child: ListView(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _StepHeader(
                 label: Text(widget.phaseLabel, style: T.kicker),
@@ -766,6 +768,7 @@ class _QuestionViewState extends State<_QuestionView> {
                 }),
               ),
             ],
+            ),
           ),
         ),
         if (r == null)
