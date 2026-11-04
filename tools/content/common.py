@@ -85,3 +85,19 @@ def outcome(code, lessons, cards):
 
 def pack(subject, grade, outcomes):
     return {"ders": subject, "sinif": grade, "outcomes": outcomes}
+
+
+def _pg(x):
+    if isinstance(x, tuple):
+        return page(x[0], x[1]) if len(x) == 2 else page(x[0], x[1], say=x[2])
+    return page(x)
+
+
+def seven(title, hook, concrete, picture, rule, example, caution, summary, alt=None, alt_title=None):
+    """Yedi adımlı konu anlatımı: hikâye kancası, somut, görsel, kural,
+    örnek çözüm, dikkat, özet. Her öğe metin ya da (metin, görsel).
+    alt: "farklı yoldan" ikinci anlatımın sayfaları (isteğe bağlı)."""
+    ls = [lesson(title, [_pg(p) for p in (hook, concrete, picture, rule, example, caution, summary)])]
+    if alt:
+        ls.append(lesson(alt_title or f"{title}: başka bir yoldan", [_pg(p) for p in alt], alt=True))
+    return ls
