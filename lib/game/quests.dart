@@ -61,9 +61,8 @@ class Quest {
   int get qty => kind == QuestKind.session ? 1 : 2;
 
   String get task => switch (kind) {
-        QuestKind.session => target == 1
-            ? 'Bugün bir bölgede çalış.'
-            : 'Bugün $target kez çalış.',
+        QuestKind.session =>
+          target == 1 ? 'Bugün bir bölgede çalış.' : 'Bugün $target kez çalış.',
         QuestKind.correct => '$target soruyu doğru çöz.',
         QuestKind.newTopic => 'Yeni bir konu öğren.',
         QuestKind.review => 'Gök Adaları\'nda $target kart tekrar et.',
@@ -85,8 +84,8 @@ class Quest {
       QuestKind.fromId('${j[0]}'),
       (j[1] as num).toInt(),
       (j[2] as num).toInt(),
-      Supply.values.firstWhere((s) => s.id == '${j[3]}',
-          orElse: () => Supply.demir),
+      Supply.values
+          .firstWhere((s) => s.id == '${j[3]}', orElse: () => Supply.demir),
     );
   }
 }
@@ -122,7 +121,8 @@ List<Quest> makeDailyQuests(String day, String seed,
 
 /// Günün pano durumu.
 class DailyBoard {
-  DailyBoard(this.day, this.quests, {Map<String, int>? counts, Set<int>? claimed})
+  DailyBoard(this.day, this.quests,
+      {Map<String, int>? counts, Set<int>? claimed})
       : counts = counts ?? {},
         claimed = claimed ?? {};
 
@@ -158,8 +158,8 @@ class DailyBoard {
     return DailyBoard(
       '${j['d']}',
       qs,
-      counts: (j['c'] as Map?)
-          ?.map((k, v) => MapEntry('$k', (v as num).toInt())),
+      counts:
+          (j['c'] as Map?)?.map((k, v) => MapEntry('$k', (v as num).toInt())),
       claimed: {...?(j['k'] as List?)?.map((e) => (e as num).toInt())},
     );
   }
@@ -191,8 +191,7 @@ class WeeklyTrip {
   }
 
   /// Seferin önderi: hafta anahtarından sırayla krallıklar.
-  Kingdom get leaderKingdom =>
-      allKingdoms[_seed(week) % allKingdoms.length];
+  Kingdom get leaderKingdom => allKingdoms[_seed(week) % allKingdoms.length];
 }
 
 /// Kasabaya gelen mektup.
@@ -230,7 +229,8 @@ Letter guardianLetter(Guardian g, String regionKey, String hero, String day) =>
     );
 
 /// Haftalık sefer tamamlanınca krallık önderinin mektubu.
-Letter leaderLetter(Kingdom k, String week, String hero, int days, String day) =>
+Letter leaderLetter(
+        Kingdom k, String week, String hero, int days, String day) =>
     Letter(
       'w:$week',
       k.leader,

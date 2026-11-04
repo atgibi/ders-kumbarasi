@@ -206,13 +206,12 @@ class AppState extends ChangeNotifier {
   Future<ChildProfile> addChildWithHero(
       String nickname, int grade, String avatar, HeroLook hero) async {
     final id = '${clock().microsecondsSinceEpoch}${Random().nextInt(1 << 16)}';
-    await _guard(() =>
-        store.saveProgress(
-            id,
-            ChildProgress(
-                game: GameState(hero: hero)
-                  ..addLetter(welcomeLetter(
-                      hero.name ?? nickname.trim(), dayKey(clock()))))));
+    await _guard(() => store.saveProgress(
+        id,
+        ChildProgress(
+            game: GameState(hero: hero)
+              ..addLetter(welcomeLetter(
+                  hero.name ?? nickname.trim(), dayKey(clock()))))));
     final p = ChildProfile(
         id: id, nickname: nickname.trim(), grade: grade, avatar: avatar);
     profiles = [...profiles, p];

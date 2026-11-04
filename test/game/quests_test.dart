@@ -19,8 +19,8 @@ void main() {
 
   test('tekrar ve yeni konu yoksa üçüncü istek yapılabilir kalır', () {
     for (var d = 1; d <= 28; d++) {
-      final qs = makeDailyQuests('2026-11-${d.toString().padLeft(2, '0')}',
-          'c1',
+      final qs = makeDailyQuests(
+          '2026-11-${d.toString().padLeft(2, '0')}', 'c1',
           reviewReady: false, newTopicReady: false);
       expect(qs[2].kind, QuestKind.session);
       expect(qs[2].target, 2);
@@ -70,14 +70,15 @@ void main() {
     final g = GameState(hero: const HeroLook(girl: true, path: 0));
     expect(g.addLetter(welcomeLetter('Elif', '2026-11-04')), isTrue);
     expect(g.addLetter(welcomeLetter('Elif', '2026-11-05')), isFalse);
-    g.addLetter(guardianLetter(guardians.first, 'matematik-1-0', 'Elif',
-        '2026-11-04'));
+    g.addLetter(
+        guardianLetter(guardians.first, 'matematik-1-0', 'Elif', '2026-11-04'));
     g.addLetter(leaderLetter(demirdag, '2026-11-02', 'Elif', 4, '2026-11-06'));
     expect(g.unreadLetters, 3);
     g.letters.first.read = true;
     g.board = DailyBoard('2026-11-04', [
       const Quest(QuestKind.newTopic, 1, 3, Supply.kumas),
-    ])..add(QuestKind.newTopic, 1);
+    ])
+      ..add(QuestKind.newTopic, 1);
     g.trip = WeeklyTrip('2026-11-02', days: {'2026-11-04'});
 
     final back = GameState.fromJson(g.toJson());

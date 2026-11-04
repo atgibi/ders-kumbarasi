@@ -64,9 +64,8 @@ class _QuestBoardState extends State<QuestBoard> {
                 quest: board.quests[i],
                 progress: board.progressOf(board.quests[i]),
                 claimed: board.claimed.contains(i),
-                onClaim: board.canClaim(i)
-                    ? () => _claim(i, board.quests[i])
-                    : null,
+                onClaim:
+                    board.canClaim(i) ? () => _claim(i, board.quests[i]) : null,
                 index: i,
               ),
               const SizedBox(height: 8),
@@ -266,8 +265,8 @@ class MailboxButton extends StatelessWidget {
     return Pressable(
       key: const Key('mail-open'),
       label: unread > 0 ? 'Mektuplar, $unread yeni' : 'Mektuplar',
-      onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => const LettersScreen())),
+      onTap: () => Navigator.of(context)
+          .push(MaterialPageRoute<void>(builder: (_) => const LettersScreen())),
       builder: (context, down) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
@@ -345,8 +344,7 @@ class LettersScreen extends StatelessWidget {
                                 Row(children: [
                                   EmojiImage(l.emoji, size: 30),
                                   const SizedBox(width: 8),
-                                  Expanded(
-                                      child: Text(l.from, style: G.sub)),
+                                  Expanded(child: Text(l.from, style: G.sub)),
                                   if (!l.read)
                                     const Text('YENİ', style: G.kicker),
                                 ]),

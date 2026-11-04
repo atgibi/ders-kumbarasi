@@ -492,8 +492,8 @@ class _Island extends StatelessWidget {
                   ? const Color(0xFFDDE3EA)
                   : Colors.white,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-              color: foggy ? kingdom.color : K.closeBg, width: 2),
+          border:
+              Border.all(color: foggy ? kingdom.color : K.closeBg, width: 2),
         ),
         child: Column(children: [
           Opacity(
