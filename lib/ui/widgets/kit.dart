@@ -191,8 +191,8 @@ class ChunkyButton extends StatelessWidget {
                     const SizedBox(width: 10),
                   if (label.isNotEmpty)
                     Flexible(
-                      child: Text(label,
-                          textAlign: TextAlign.center, style: text),
+                      child:
+                          Text(label, textAlign: TextAlign.center, style: text),
                     ),
                 ],
               ),
@@ -792,7 +792,10 @@ class ToggleRow extends StatelessWidget {
 /// Konuşma balonu (sol altta kuyruk).
 class SpeechBubble extends StatelessWidget {
   const SpeechBubble(
-      {super.key, required this.child, this.tailLeft = 40, this.fill = K.kagit3});
+      {super.key,
+      required this.child,
+      this.tailLeft = 40,
+      this.fill = K.kagit3});
   final Widget child;
   final double tailLeft;
 
@@ -837,8 +840,8 @@ class _TailPainter extends CustomPainter {
           ..strokeJoin = StrokeJoin.round
           ..color = K.murekkep);
     // balonun kenarıyla birleştiği yeri ört
-    canvas.drawRect(Rect.fromLTWH(4, -3, size.width - 6, 3.6),
-        Paint()..color = fill);
+    canvas.drawRect(
+        Rect.fromLTWH(4, -3, size.width - 6, 3.6), Paint()..color = fill);
   }
 
   @override

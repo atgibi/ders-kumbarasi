@@ -384,8 +384,8 @@ class _MapCanvas extends StatelessWidget {
     return LayoutBuilder(builder: (context, box) {
       final w = box.maxWidth;
       // düğüm merkezleri: alttan üste, sol-sağ
-      Offset at(int i) => Offset(
-          i.isEven ? w * .36 : w * .64, h - 52 - i * step);
+      Offset at(int i) =>
+          Offset(i.isEven ? w * .36 : w * .64, h - 52 - i * step);
       return SizedBox(
         height: h,
         child: Stack(
@@ -417,9 +417,7 @@ class _MapCanvas extends StatelessWidget {
                 child: IgnorePointer(
                   child: ExcludeSemantics(
                     child: _NodeLabel(
-                        view: regions[i],
-                        kingdom: kingdom,
-                        right: i.isEven),
+                        view: regions[i], kingdom: kingdom, right: i.isEven),
                   ),
                 ),
               ),
@@ -429,8 +427,7 @@ class _MapCanvas extends StatelessWidget {
                 left: at(current).dx + (current.isEven ? 40 : -92),
                 top: at(current).dy - 74,
                 child: IgnorePointer(
-                  child: HeroFigure(
-                      look: hero, size: 52, showCompanion: false),
+                  child: HeroFigure(look: hero, size: 52, showCompanion: false),
                 ),
               ),
           ],
@@ -507,8 +504,8 @@ class _MapPainter extends CustomPainter {
     if (f != null) {
       final edge = Path()..moveTo(-10, f);
       for (var x = -10.0; x < w + 30; x += 40) {
-        edge.quadraticBezierTo(x + 20, f + 14,
-            x + 40, f + ((x ~/ 40).isEven ? -6 : 8));
+        edge.quadraticBezierTo(
+            x + 20, f + 14, x + 40, f + ((x ~/ 40).isEven ? -6 : 8));
       }
       edge
         ..lineTo(w + 10, -10)
@@ -521,7 +518,8 @@ class _MapPainter extends CustomPainter {
         ..color = const Color(0x999AA6B2)
         ..strokeWidth = .9;
       for (var t = -h; t < w + h; t += 9) {
-        canvas.drawLine(Offset(t, f + 20), Offset(t + (f + 30) * .53, -10), tul);
+        canvas.drawLine(
+            Offset(t, f + 20), Offset(t + (f + 30) * .53, -10), tul);
       }
       canvas.restore();
     }
@@ -604,38 +602,46 @@ String regionNodeSvg(RegionState st, Color kingdomColor) {
     for (var i = 0; i < 18; i++) {
       final a = i / 18 * math.pi * 2;
       final r2 = i.isOdd ? 41 : 50;
-      b.write('M${(60 + math.cos(a) * 33).toStringAsFixed(1)} ${(66 + math.sin(a) * 33).toStringAsFixed(1)}'
+      b.write(
+          'M${(60 + math.cos(a) * 33).toStringAsFixed(1)} ${(66 + math.sin(a) * 33).toStringAsFixed(1)}'
           'L${(60 + math.cos(a) * r2).toStringAsFixed(1)} ${(66 + math.sin(a) * r2).toStringAsFixed(1)}');
     }
     b.write('" stroke="#E3A535" stroke-width="3" stroke-linecap="round"/>');
   }
   if (hal == 'sisli') {
-    b.write('<path d="M18 74C8 60 20 42 34 46C38 30 60 26 70 38C84 30 102 40 98 56C112 62 108 84 94 86C86 98 64 98 56 92C42 98 22 90 18 74Z" fill="#C9D1D9" fill-opacity="0.85"/>');
+    b.write(
+        '<path d="M18 74C8 60 20 42 34 46C38 30 60 26 70 38C84 30 102 40 98 56C112 62 108 84 94 86C86 98 64 98 56 92C42 98 22 90 18 74Z" fill="#C9D1D9" fill-opacity="0.85"/>');
   }
-  b.write('<g stroke="#2B2320" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">'
+  b.write(
+      '<g stroke="#2B2320" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">'
       '<circle cx="60" cy="66" r="27" fill="$zemin"/>');
   if (hal == 'canlaniyor') {
     b.write('<path d="M60 39A27 27 0 0 1 60 93Z" fill="#C9D1D9" stroke="none"/>'
         '<path d="M60 39V93" stroke-width="1.4" stroke-dasharray="3 3"/>');
   }
   if (hal == 'kesfedildi') {
-    b.write('<path d="M70 42C86 46 92 60 86 76C96 70 100 52 90 42C84 36 76 38 70 42Z" fill="#C9D1D9" stroke="#9AA6B2" stroke-width="1.6"/>');
+    b.write(
+        '<path d="M70 42C86 46 92 60 86 76C96 70 100 52 90 42C84 36 76 38 70 42Z" fill="#C9D1D9" stroke="#9AA6B2" stroke-width="1.6"/>');
   }
-  b.write('<circle cx="60" cy="66" r="21" fill="none" stroke="$halka" stroke-width="3"/>'
+  b.write(
+      '<circle cx="60" cy="66" r="21" fill="none" stroke="$halka" stroke-width="3"/>'
       '<circle cx="60" cy="66" r="27" fill="none"/>');
   if (hal == 'kurtarildi') {
     b.write('<path d="M80 50V12" stroke="#5E3A1B" stroke-width="3.4"/>'
         '<path d="M82 13H104L98 21L104 29H82Z" fill="#B8432F"/><circle cx="80" cy="10" r="2.6" fill="#E3A535"/>');
   }
   if (hal == 'parliyor') {
-    b.write('<path d="M46 38V30H52V34H57V30H63V34H68V30H74V38Z" fill="#EADBC0"/><path d="M54 38v-3h4v3" fill="none" stroke-width="1.4"/>');
+    b.write(
+        '<path d="M46 38V30H52V34H57V30H63V34H68V30H74V38Z" fill="#EADBC0"/><path d="M54 38v-3h4v3" fill="none" stroke-width="1.4"/>');
   }
   if (hal == 'canlaniyor') {
-    b.write('<circle cx="26" cy="54" r="5" fill="#E3A535"/><circle cx="30" cy="84" r="5" fill="#E3A535"/>'
+    b.write(
+        '<circle cx="26" cy="54" r="5" fill="#E3A535"/><circle cx="30" cy="84" r="5" fill="#E3A535"/>'
         '<circle cx="94" cy="52" r="5" fill="#C9D1D9"/><circle cx="92" cy="84" r="5" fill="#C9D1D9"/>');
   }
   if (st == RegionState.locked) {
-    b.write('<g transform="translate(78 74)"><path d="M2 24V10A9 9 0 0 1 20 10V24Z" fill="#8A5A2E"/>'
+    b.write(
+        '<g transform="translate(78 74)"><path d="M2 24V10A9 9 0 0 1 20 10V24Z" fill="#8A5A2E"/>'
         '<path d="M8 4V24M14 4V24M2 13H20" fill="none" stroke-width="1.4"/><circle cx="16" cy="17" r="1.4" fill="#2B2320"/>'
         '<path d="M-1 24H23" stroke-width="2.4"/></g>');
   }
@@ -718,9 +724,7 @@ class _RegionNode extends StatelessWidget {
                   left: 0,
                   top: 6,
                   child: EmojiImage(view.def.guardian.emoji, size: 30)),
-            if (view.due &&
-                st != RegionState.fog &&
-                st != RegionState.locked)
+            if (view.due && st != RegionState.fog && st != RegionState.locked)
               const Positioned(
                   right: 0, bottom: 4, child: IkonView(Ikon.mesale, size: 26)),
           ]),

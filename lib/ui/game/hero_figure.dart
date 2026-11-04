@@ -40,8 +40,7 @@ class HeroFigure extends StatelessWidget {
               '${stage.label}${look.chair ? ', tekerlekli sandalyede' : ''}',
       child: ExcludeSemantics(
         child: SvgPicture.string(
-          heroSvg(look,
-              stage: stage, cheer: cheer, companion: showCompanion),
+          heroSvg(look, stage: stage, cheer: cheer, companion: showCompanion),
           width: size,
           height: size * 228 / 208,
         ),

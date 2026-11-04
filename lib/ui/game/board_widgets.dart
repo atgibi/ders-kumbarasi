@@ -162,8 +162,8 @@ class _QuestRow extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('${q.who.name}: “${q.plea}”',
-                          style: G.hand.copyWith(
-                              fontSize: 17, color: K.murekkep)),
+                          style:
+                              G.hand.copyWith(fontSize: 17, color: K.murekkep)),
                       const SizedBox(height: 4),
                       Text(q.task,
                           style: const TextStyle(
@@ -179,8 +179,10 @@ class _QuestRow extends StatelessWidget {
                           const Text('Ödül:',
                               style: TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.w700)),
-                          chip(const IkonView(Ikon.isik, size: 18), '${q.light}'),
-                          chip(IkonView(ikonOf(q.supply), size: 18), '${q.qty}'),
+                          chip(const IkonView(Ikon.isik, size: 18),
+                              '${q.light}'),
+                          chip(
+                              IkonView(ikonOf(q.supply), size: 18), '${q.qty}'),
                         ],
                       ),
                     ],
@@ -433,8 +435,8 @@ class LettersScreen extends StatelessWidget {
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute<void>(
                                   builder: (_) => LetterScreen(letter: l))),
-                          builder: (context, down) => _Envelope(
-                              letter: l, pressed: down),
+                          builder: (context, down) =>
+                              _Envelope(letter: l, pressed: down),
                         );
                       },
                     ),
@@ -603,10 +605,10 @@ class _LetterScreenState extends State<LetterScreen> {
                           children: [
                             for (var i = 0; i < lines.length; i++)
                               Text(lines[i],
-                                  textAlign: i >= lines.length - 2 &&
-                                          lines.length > 2
-                                      ? TextAlign.right
-                                      : TextAlign.left,
+                                  textAlign:
+                                      i >= lines.length - 2 && lines.length > 2
+                                          ? TextAlign.right
+                                          : TextAlign.left,
                                   style: G.hand.copyWith(
                                       fontSize: i == lines.length - 1 ? 24 : 19,
                                       height: lh /

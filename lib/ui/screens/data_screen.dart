@@ -224,7 +224,7 @@ class _DataScreenState extends State<DataScreen> {
                   )
                 else
                   DkCard(
-        hand: false,
+                    hand: false,
                     borderColor: K.ink,
                     borderWidth: 3,
                     child: Column(

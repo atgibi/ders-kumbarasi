@@ -238,7 +238,10 @@ class T {
 
   // Veli alanı
   static const pTitle = TextStyle(
-      fontFamily: K.display, fontSize: 21, fontWeight: FontWeight.w800, color: K.ink);
+      fontFamily: K.display,
+      fontSize: 21,
+      fontWeight: FontWeight.w800,
+      color: K.ink);
   static const pBody =
       TextStyle(fontFamily: _f, fontSize: 16, height: 22 / 16, color: K.ink);
   static const pBodySoft =

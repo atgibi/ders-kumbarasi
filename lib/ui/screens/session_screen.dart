@@ -684,90 +684,90 @@ class _QuestionViewState extends State<_QuestionView> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
             child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _StepHeader(
-                label: Text(widget.phaseLabel, style: T.kicker),
-                trailing: [
-                  if (q.hint != null && r == null && !_hint)
-                    _HintButton(onTap: () {
-                      setState(() => _hint = true);
-                      widget.onSay(q.hint!);
-                    }),
-                  ListenSplit(
-                      onListen: (slow) => widget.onSay(q.spoken, slow: slow)),
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _StepHeader(
+                  label: Text(widget.phaseLabel, style: T.kicker),
+                  trailing: [
+                    if (q.hint != null && r == null && !_hint)
+                      _HintButton(onTap: () {
+                        setState(() => _hint = true);
+                        widget.onSay(q.hint!);
+                      }),
+                    ListenSplit(
+                        onListen: (slow) => widget.onSay(q.spoken, slow: slow)),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                if (passage != null) ...[
+                  _Passage(text: passage),
+                  const SizedBox(height: 16),
                 ],
-              ),
-              const SizedBox(height: 16),
-              if (passage != null) ...[
-                _Passage(text: passage),
+                EmojiText(prompt,
+                    style: T.question.copyWith(
+                        fontFamily: K.font,
+                        fontWeight: FontWeight.w700,
+                        height: 1.28,
+                        fontSize: hasPassage ? 22 : 27)),
+                if (_hint && r == null) ...[
+                  const SizedBox(height: 16),
+                  _HintBox(text: q.hint!),
+                ],
+                if (q.visual != null) ...[
+                  const SizedBox(height: 16),
+                  VisualView(q.visual!),
+                ],
                 const SizedBox(height: 16),
-              ],
-              EmojiText(prompt,
-                  style: T.question.copyWith(
-                      fontFamily: K.font,
-                      fontWeight: FontWeight.w700,
-                      height: 1.28,
-                      fontSize: hasPassage ? 22 : 27)),
-              if (_hint && r == null) ...[
-                const SizedBox(height: 16),
-                _HintBox(text: q.hint!),
-              ],
-              if (q.visual != null) ...[
-                const SizedBox(height: 16),
-                VisualView(q.visual!),
-              ],
-              const SizedBox(height: 16),
-              if (q.visual != null || passage == null) ...[
-                const SizedBox(height: 4),
-                _Scene(result: r),
-              ],
-              const SizedBox(height: 14),
-              Semantics(
-                container: true,
-                label: 'Seçenekler',
-                child: LayoutBuilder(builder: (context, box) {
-                  _Opt stateOf(int i) => r == null
-                      ? (i == _selected ? _Opt.selected : _Opt.idle)
-                      : i == q.answerIndex
-                          ? _Opt.right
-                          : i == _selected
-                              ? _Opt.chosenWrong
-                              : _Opt.dim;
-                  Widget opt(int i) => _OptionCard(
-                        key: Key('option-$i'),
-                        label: q.options[i],
-                        state: stateOf(i),
-                        onTap: r == null
-                            ? () => setState(() => _selected = i)
-                            : null,
+                if (q.visual != null || passage == null) ...[
+                  const SizedBox(height: 4),
+                  _Scene(result: r),
+                ],
+                const SizedBox(height: 14),
+                Semantics(
+                  container: true,
+                  label: 'Seçenekler',
+                  child: LayoutBuilder(builder: (context, box) {
+                    _Opt stateOf(int i) => r == null
+                        ? (i == _selected ? _Opt.selected : _Opt.idle)
+                        : i == q.answerIndex
+                            ? _Opt.right
+                            : i == _selected
+                                ? _Opt.chosenWrong
+                                : _Opt.dim;
+                    Widget opt(int i) => _OptionCard(
+                          key: Key('option-$i'),
+                          label: q.options[i],
+                          state: stateOf(i),
+                          onTap: r == null
+                              ? () => setState(() => _selected = i)
+                              : null,
+                        );
+                    // Kısa seçenekler (sayı, hece) iki sütunda taş levha
+                    final grid = q.options.length >= 2 &&
+                        q.options.every((o) => o.characters.length <= 4);
+                    if (grid) {
+                      final w = (box.maxWidth - 14) / 2;
+                      return Wrap(
+                        spacing: 14,
+                        runSpacing: 18,
+                        children: [
+                          for (var i = 0; i < q.options.length; i++)
+                            SizedBox(width: w, child: opt(i)),
+                        ],
                       );
-                  // Kısa seçenekler (sayı, hece) iki sütunda taş levha
-                  final grid = q.options.length >= 2 &&
-                      q.options.every((o) => o.characters.length <= 4);
-                  if (grid) {
-                    final w = (box.maxWidth - 14) / 2;
-                    return Wrap(
-                      spacing: 14,
-                      runSpacing: 18,
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        for (var i = 0; i < q.options.length; i++)
-                          SizedBox(width: w, child: opt(i)),
+                        for (var i = 0; i < q.options.length; i++) ...[
+                          if (i > 0) const SizedBox(height: 16),
+                          opt(i),
+                        ],
                       ],
                     );
-                  }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      for (var i = 0; i < q.options.length; i++) ...[
-                        if (i > 0) const SizedBox(height: 16),
-                        opt(i),
-                      ],
-                    ],
-                  );
-                }),
-              ),
-            ],
+                  }),
+                ),
+              ],
             ),
           ),
         ),
@@ -948,8 +948,8 @@ class _OptionCard extends StatelessWidget {
   /// mühür, yanlışta sis grisi ve çizgili doku, kırmızı yok.
   static HandStyle styleFor(_Opt s) => switch (s) {
         _Opt.idle || _Opt.dim => HandStyle.levha,
-        _Opt.selected => HandStyle.levha
-            .copyWith(border: K.lacivert, borderWidth: 4.5),
+        _Opt.selected =>
+          HandStyle.levha.copyWith(border: K.lacivert, borderWidth: 4.5),
         _Opt.right => HandStyle.levha.copyWith(
             fill: K.goodBg,
             texture: HandFill.duz,
@@ -1094,34 +1094,37 @@ class FeedbackBand extends StatelessWidget {
             children: [
               Semantics(
                 liveRegion: true,
-                child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Mascot(
-                      mood: correct ? MascotMood.celebrate : MascotMood.teach,
-                      size: 68),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        EmojiText(title,
-                            style: TextStyle(
-                                fontFamily: K.display,
-                                fontSize: 25,
-                                height: 30 / 25,
-                                fontWeight: FontWeight.w800,
-                                color: fg)),
-                        if (body != null && body!.isNotEmpty) ...[
-                          const SizedBox(height: 4),
-                          EmojiText(body!,
-                              style: const TextStyle(
-                                  fontSize: 18,
-                                  height: 1.38,
-                                  color: K.murekkep)),
-                        ],
-                      ],
-                    ),
-                  ),
-                ]),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Mascot(
+                          mood:
+                              correct ? MascotMood.celebrate : MascotMood.teach,
+                          size: 68),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            EmojiText(title,
+                                style: TextStyle(
+                                    fontFamily: K.display,
+                                    fontSize: 25,
+                                    height: 30 / 25,
+                                    fontWeight: FontWeight.w800,
+                                    color: fg)),
+                            if (body != null && body!.isNotEmpty) ...[
+                              const SizedBox(height: 4),
+                              EmojiText(body!,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      height: 1.38,
+                                      color: K.murekkep)),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ]),
               ),
               const SizedBox(height: 14),
               ChunkyButton(
@@ -1152,8 +1155,40 @@ class _TornEdgePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     const pts = [
-      12, 8, 14, 7, 12, 6, 11, 7, 12, 6, 12, 6, 11, 7, 13, 8, 12, 6, 11, 7,
-      13, 8, 12, 6, 11, 7, 13, 8, 12, 6, 11, 7, 13, 9
+      12,
+      8,
+      14,
+      7,
+      12,
+      6,
+      11,
+      7,
+      12,
+      6,
+      12,
+      6,
+      11,
+      7,
+      13,
+      8,
+      12,
+      6,
+      11,
+      7,
+      13,
+      8,
+      12,
+      6,
+      11,
+      7,
+      13,
+      8,
+      12,
+      6,
+      11,
+      7,
+      13,
+      9
     ];
     final w = size.width;
     final step = w / (pts.length - 1);

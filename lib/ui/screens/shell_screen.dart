@@ -294,8 +294,7 @@ class _TabBar extends StatelessWidget {
                                       border: Border.all(
                                           color: K.murekkep, width: 2),
                                     ),
-                                    child: Text(
-                                        badge > 99 ? '99+' : '$badge',
+                                    child: Text(badge > 99 ? '99+' : '$badge',
                                         textAlign: TextAlign.center,
                                         textScaler: TextScaler.noScaling,
                                         style: const TextStyle(

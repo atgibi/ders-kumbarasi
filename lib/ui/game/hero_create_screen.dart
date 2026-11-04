@@ -192,17 +192,41 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
   /// sağda mühür sekmeler.
   Widget _appearance() {
     const tabs = [
-      ('ten', 'Ten rengi', 'M16 5A11 11 0 1 1 15.9 5Z', '#E3AC82',
-          'M12 15v1M20 15v1M12 21q4 3 8 0'),
-      ('sac', 'Saç biçimi', 'M5 18C4 4 28 4 27 18C24 11 8 11 5 18Z', '#3B2418',
-          'M16 9A9 9 0 1 1 15.9 9Z'),
-      ('renk', 'Saç rengi',
-          'M16 4C21 11 24 15 24 19A8 8 0 0 1 8 19C8 15 11 11 16 4Z', '#8A4B2A',
-          'M13 18q0 3 3 4'),
-      ('aks', 'Gözlük, şapka, başörtüsü', 'M4 12Q16 4 28 12Z', '#1F4E79',
-          'M11 21A4.5 4.5 0 1 1 10.9 21M25 21A4.5 4.5 0 1 1 24.9 21M15 21q2 -2 4 0M4 12Q16 4 28 12'),
-      ('sandalye', 'Tekerlekli sandalye', 'M10 6A3 3 0 1 1 9.9 6Z', '#E3AC82',
-          'M10 10V19H19L23 26M13 19A7 7 0 1 0 19 25M10 14H17'),
+      (
+        'ten',
+        'Ten rengi',
+        'M16 5A11 11 0 1 1 15.9 5Z',
+        '#E3AC82',
+        'M12 15v1M20 15v1M12 21q4 3 8 0'
+      ),
+      (
+        'sac',
+        'Saç biçimi',
+        'M5 18C4 4 28 4 27 18C24 11 8 11 5 18Z',
+        '#3B2418',
+        'M16 9A9 9 0 1 1 15.9 9Z'
+      ),
+      (
+        'renk',
+        'Saç rengi',
+        'M16 4C21 11 24 15 24 19A8 8 0 0 1 8 19C8 15 11 11 16 4Z',
+        '#8A4B2A',
+        'M13 18q0 3 3 4'
+      ),
+      (
+        'aks',
+        'Gözlük, şapka, başörtüsü',
+        'M4 12Q16 4 28 12Z',
+        '#1F4E79',
+        'M11 21A4.5 4.5 0 1 1 10.9 21M25 21A4.5 4.5 0 1 1 24.9 21M15 21q2 -2 4 0M4 12Q16 4 28 12'
+      ),
+      (
+        'sandalye',
+        'Tekerlekli sandalye',
+        'M10 6A3 3 0 1 1 9.9 6Z',
+        '#E3AC82',
+        'M10 10V19H19L23 26M13 19A7 7 0 1 0 19 25M10 14H17'
+      ),
     ];
 
     Widget ring(bool on, Widget child,
@@ -219,8 +243,8 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
           child: child,
         );
 
-    Widget swatch(String key, String label, bool on, Color color,
-            VoidCallback pick,
+    Widget swatch(
+            String key, String label, bool on, Color color, VoidCallback pick,
             {bool round = true}) =>
         Pressable(
           key: Key(key),
@@ -296,8 +320,11 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
         ]),
       2 => grid([
           for (var i = 0; i < hairColors.length; i++)
-            swatch('haircolor-$i', 'Saç rengi: ${hairColorNames[i]}',
-                _look.hairColor == i, hairColors[i],
+            swatch(
+                'haircolor-$i',
+                'Saç rengi: ${hairColorNames[i]}',
+                _look.hairColor == i,
+                hairColors[i],
                 () => _look = _look.copyWith(hairColor: i)),
         ]),
       3 => Column(children: [
@@ -335,8 +362,7 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
                     padding: const EdgeInsets.fromLTRB(4, 12, 4, 0),
                     child: Column(children: [
                       const Spacer(),
-                      HeroFigure(
-                          look: _look, size: 150, showCompanion: false),
+                      HeroFigure(look: _look, size: 150, showCompanion: false),
                       const Kilim(),
                     ]),
                   ),
@@ -365,8 +391,8 @@ class _HeroCreateScreenState extends State<HeroCreateScreen> {
                         width: 58,
                         height: 58,
                         child: CustomPaint(
-                          painter: HandPainter(HandStyle.muhur.copyWith(
-                              fill: _tab == i ? K.safran : K.kagit3)),
+                          painter: HandPainter(HandStyle.muhur
+                              .copyWith(fill: _tab == i ? K.safran : K.kagit3)),
                           child: Center(
                             child: SvgPicture.string(
                               '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="#2B2320" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
@@ -458,8 +484,8 @@ class _PathCard extends StatelessWidget {
                 width: 40,
                 height: 40,
                 child: CustomPaint(
-                  painter: HandPainter(
-                      HandStyle.muhur.copyWith(fill: K.zumrutKoyu)),
+                  painter:
+                      HandPainter(HandStyle.muhur.copyWith(fill: K.zumrutKoyu)),
                   child: const Center(
                       child: IkonView(Ikon.tik, size: 22, light: true)),
                 ),

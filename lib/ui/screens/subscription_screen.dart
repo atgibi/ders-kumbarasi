@@ -45,7 +45,7 @@ class SubscriptionScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               children: [
                 DkCard(
-        hand: false,
+                  hand: false,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -72,7 +72,7 @@ class SubscriptionScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 const DkCard(
-        hand: false,
+                  hand: false,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [

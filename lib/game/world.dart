@@ -337,8 +337,24 @@ const hairColors = [
   Color(0xFF9AA6B2),
 ];
 
-const skinNames = ['Açık ten', 'Buğday ten', 'Esmer ten', 'Kumral ten', 'Koyu ten', 'Çok koyu ten'];
-const hairColorNames = ['Siyah', 'Koyu kahve', 'Kahve', 'Kestane', 'Kızıl', 'Açık kahve', 'Sarı', 'Kül'];
+const skinNames = [
+  'Açık ten',
+  'Buğday ten',
+  'Esmer ten',
+  'Kumral ten',
+  'Koyu ten',
+  'Çok koyu ten'
+];
+const hairColorNames = [
+  'Siyah',
+  'Koyu kahve',
+  'Kahve',
+  'Kestane',
+  'Kızıl',
+  'Açık kahve',
+  'Sarı',
+  'Kül'
+];
 
 /// Aksesuar: 0 yok, 1 gözlük, 2 şapka, 3 başörtüsü.
 const accessoryNames = ['Hiçbiri', 'Gözlük', 'Şapka', 'Başörtüsü'];

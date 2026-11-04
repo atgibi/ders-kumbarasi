@@ -192,7 +192,8 @@ class HandPainter extends CustomPainter {
       // mühür: içte ince açık halka
       final ring = rect.deflate(5.5);
       canvas.drawPath(
-          handPath(ring, HandRadii.blob(ring.size), seed: s.seed + 1, wobble: 1),
+          handPath(ring, HandRadii.blob(ring.size),
+              seed: s.seed + 1, wobble: 1),
           Paint()
             ..style = PaintingStyle.stroke
             ..strokeWidth = 1.4
@@ -227,8 +228,7 @@ class HandPainter extends CustomPainter {
         var i = 0;
         while (y < h / 2) {
           final (bh, c) = bands[i % bands.length];
-          canvas.drawRect(
-              Rect.fromLTWH(-w / 2, y, w, bh), Paint()..color = c);
+          canvas.drawRect(Rect.fromLTWH(-w / 2, y, w, bh), Paint()..color = c);
           y += bh;
           i++;
         }
@@ -270,7 +270,8 @@ class HandPainter extends CustomPainter {
         var i = 0;
         while (x < r.right) {
           final (bw, c) = planks[i % planks.length];
-          canvas.drawRect(Rect.fromLTWH(x, r.top, bw, r.height), Paint()..color = c);
+          canvas.drawRect(
+              Rect.fromLTWH(x, r.top, bw, r.height), Paint()..color = c);
           x += bw;
           i++;
         }
@@ -362,8 +363,7 @@ class _KilimPainter extends CustomPainter {
         ..lineTo(x + h / 2, h)
         ..close();
       canvas.drawPath(path, p);
-      canvas.drawCircle(
-          Offset(x + h / 2, h / 2), h * .12, Paint()..color = k2);
+      canvas.drawCircle(Offset(x + h / 2, h / 2), h * .12, Paint()..color = k2);
     }
     final line = Paint()
       ..color = K.murekkep
@@ -397,8 +397,8 @@ class _GrainPainter extends CustomPainter {
     final pts = <Offset>[];
     final n = (size.width * size.height / 90).round().clamp(0, 20000);
     for (var i = 0; i < n; i++) {
-      pts.add(Offset(rnd.nextDouble() * size.width,
-          rnd.nextDouble() * size.height));
+      pts.add(Offset(
+          rnd.nextDouble() * size.width, rnd.nextDouble() * size.height));
     }
     canvas.drawPoints(
         ui.PointMode.points,

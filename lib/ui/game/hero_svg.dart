@@ -37,9 +37,19 @@ String _kivir() {
 /// Saç biçimleri: (ad, ön, arka, çizgi) 40×40 yüz kutusunda.
 final List<(String, String, String, String)> hairStyles = [
   ('Kısa', _sapka0, '', ''),
-  ('Kâkül', 'M8.5 23C7 9 33 9 31.5 23C30 19 29 18 28 17L12 17C11 18 10 19 8.5 23Z', '', ''),
+  (
+    'Kâkül',
+    'M8.5 23C7 9 33 9 31.5 23C30 19 29 18 28 17L12 17C11 18 10 19 8.5 23Z',
+    '',
+    ''
+  ),
   ('Kıvırcık', _kivir(), '', ''),
-  ('Kabarık', 'M10 18C12 12 28 12 30 18C26 15 14 15 10 18Z', _daire(20, 19, 16), ''),
+  (
+    'Kabarık',
+    'M10 18C12 12 28 12 30 18C26 15 14 15 10 18Z',
+    _daire(20, 19, 16),
+    ''
+  ),
   (
     'İki örgü',
     _sapka0,
@@ -48,16 +58,31 @@ final List<(String, String, String, String)> hairStyles = [
   ),
   ('At kuyruğu', _sapka0, 'M29 14C38 14 39 26 34 34C33 28 32 22 28 18Z', ''),
   ('Topuz', _sapka0, _daire(20, 8, 5), ''),
-  ('Uzun düz', _sapka0, 'M8 20C7 9 33 9 32 20L33 37L26 37L27 24L13 24L14 37L7 37Z', ''),
+  (
+    'Uzun düz',
+    _sapka0,
+    'M8 20C7 9 33 9 32 20L33 37L26 37L27 24L13 24L14 37L7 37Z',
+    ''
+  ),
   (
     'Dalgalı',
     _sapka0,
     'M8 20C7 9 33 9 32 20C35 24 31 27 34 31C31 33 28 31 27 29L27 22L13 22L13 29C12 31 9 33 6 31C9 27 5 24 8 20Z',
     ''
   ),
-  ('Yandan ayrık', 'M9 22C8 10 32 9 31 20C28 14 20 13 15 16C13 18 11 19 9 22Z', '', ''),
+  (
+    'Yandan ayrık',
+    'M9 22C8 10 32 9 31 20C28 14 20 13 15 16C13 18 11 19 9 22Z',
+    '',
+    ''
+  ),
   ('Çok kısa', 'M10 18C12 11 28 11 30 18C27 15 13 15 10 18Z', '', ''),
-  ('Taç örgü', _sapka0, '', 'M10 17Q12 14 14 16Q16 13 18 15Q20 12 22 15Q24 13 26 16Q28 14 30 17'),
+  (
+    'Taç örgü',
+    _sapka0,
+    '',
+    'M10 17Q12 14 14 16Q16 13 18 15Q20 12 22 15Q24 13 26 16Q28 14 30 17'
+  ),
 ];
 
 /// Yüz kutusundaki (40×40) yolu 200×220 çizim alanına taşır.
@@ -74,7 +99,8 @@ String _t(String s) {
 /// Saç seçim düğmesinin küçük yüz önizlemesi (40×40).
 String hairChipSvg(int style, int skin, int hairColor) {
   final h = hairStyles[style.clamp(0, hairStyles.length - 1)];
-  final sac = _hex(hairColors[hairColor.clamp(0, hairColors.length - 1)].toARGB32());
+  final sac =
+      _hex(hairColors[hairColor.clamp(0, hairColors.length - 1)].toARGB32());
   final ten = _hex(skinTones[skin.clamp(0, skinTones.length - 1)].toARGB32());
   return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">'
       '${h.$3.isEmpty ? '' : '<path d="${h.$3}" fill="$sac" stroke="#2B2320" stroke-width="1.2"/>'}'
@@ -102,8 +128,10 @@ String heroSvg(HeroLook look,
   final h = ortu == 'basortusu'
       ? ('', '', '', '')
       : hairStyles[look.hair.clamp(0, hairStyles.length - 1)];
-  final sac = _hex(hairColors[look.hairColor.clamp(0, hairColors.length - 1)].toARGB32());
-  final ten = _hex(skinTones[look.skin.clamp(0, skinTones.length - 1)].toARGB32());
+  final sac = _hex(
+      hairColors[look.hairColor.clamp(0, hairColors.length - 1)].toARGB32());
+  final ten =
+      _hex(skinTones[look.skin.clamp(0, skinTones.length - 1)].toARGB32());
   const renkler = {
     'sovalye': '#1F4E79',
     'okcu': '#2F7A5B',
@@ -127,8 +155,10 @@ String heroSvg(HeroLook look,
 
   final b = StringBuffer()
     ..write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 208 228">')
-    ..write('<ellipse cx="104" cy="211" rx="84" ry="6" fill="#2B2320" opacity="0.12"/>')
-    ..write('<g stroke="#2B2320" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">');
+    ..write(
+        '<ellipse cx="104" cy="211" rx="84" ry="6" fill="#2B2320" opacity="0.12"/>')
+    ..write(
+        '<g stroke="#2B2320" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">');
   void w(bool on, String s) {
     if (on) b.write(s);
   }
@@ -148,8 +178,10 @@ String heroSvg(HeroLook look,
   w(sandalye,
       '<path d="M70 168L102 170L104 196M86 168L112 172L114 196" fill="none" stroke="#4A3A32" stroke-width="11"/><ellipse cx="108" cy="199" rx="8" ry="4.5" fill="#2B2320"/><ellipse cx="118" cy="199" rx="8" ry="4.5" fill="#2B2320"/>');
   b
-    ..write('<path d="M58 100Q80 92 102 100L112 172Q80 180 48 172Z" fill="$renk"/>')
-    ..write('<path d="M64 112C70 120 90 120 96 112" fill="none" stroke-width="1.4"/>');
+    ..write(
+        '<path d="M58 100Q80 92 102 100L112 172Q80 180 48 172Z" fill="$renk"/>')
+    ..write(
+        '<path d="M64 112C70 120 90 120 96 112" fill="none" stroke-width="1.4"/>');
   w(yol == 'usta', '<path d="M64 114H96V170Q80 174 64 170Z" fill="#8A5A2E"/>');
   w(seviye >= 1,
       '<path d="M52 140Q80 147 108 140" fill="none" stroke="#5E3A1B" stroke-width="6"/><path d="M75 139h10v10h-10z" fill="#E3A535" stroke-width="2"/><path d="M62 99Q80 110 98 99L96 108Q80 117 64 108Z" fill="#E3A535"/><path d="M92 107L101 124L92 122Z" fill="#E3A535"/>');
@@ -160,9 +192,11 @@ String heroSvg(HeroLook look,
   w(cheer,
       '<path d="M62 106C52 96 46 80 44 62L54 60C56 76 62 90 68 100Z" fill="$renk"/><circle cx="49" cy="57" r="6.5" fill="$ten"/>');
   b
-    ..write('<path d="M100 104C110 112 116 130 114 150L104 150C104 134 100 120 94 112Z" fill="$renk"/><circle cx="109" cy="153" r="6.5" fill="$ten"/>')
+    ..write(
+        '<path d="M100 104C110 112 116 130 114 150L104 150C104 134 100 120 94 112Z" fill="$renk"/><circle cx="109" cy="153" r="6.5" fill="$ten"/>')
     ..write('<path d="M74 88h12v12h-12z" fill="$ten" stroke="none"/>')
-    ..write('<circle cx="48" cy="66" r="6" fill="$ten"/><circle cx="112" cy="66" r="6" fill="$ten"/>');
+    ..write(
+        '<circle cx="48" cy="66" r="6" fill="$ten"/><circle cx="112" cy="66" r="6" fill="$ten"/>');
   w(h.$3.isNotEmpty, '<path d="${_t(h.$3)}" fill="$sac"/>');
   b.write('<circle cx="80" cy="62" r="32" fill="$ten"/>');
   w(h.$2.isNotEmpty, '<path d="${_t(h.$2)}" fill="$sac"/>');
@@ -173,10 +207,12 @@ String heroSvg(HeroLook look,
       '<path d="M54 42C56 18 104 18 106 42Z" fill="#1F4E79"/><path d="M40 44Q80 34 120 44Q80 52 40 44Z" fill="#1F4E79"/><path d="M56 36Q80 30 104 36" fill="none" stroke="#E3A535" stroke-width="3"/>');
   w(seviye >= 4 && ortu != 'sapka',
       '<path d="M50 46Q80 38 110 46" fill="none" stroke="#E3A535" stroke-width="4"/><path d="M104 44C104 30 110 20 120 14C120 26 114 36 108 44Z" fill="#2F7A5B"/><circle cx="80" cy="41" r="3.5" fill="#B8432F"/>');
-  b.write('<g stroke-width="2"><path d="M64 57q5 -3 9 0M87 57q5 -3 9 0" fill="none"/>'
+  b.write(
+      '<g stroke-width="2"><path d="M64 57q5 -3 9 0M87 57q5 -3 9 0" fill="none"/>'
       '<circle cx="63" cy="76" r="5.5" fill="#B8432F" fill-opacity="0.32" stroke="none"/><circle cx="97" cy="76" r="5.5" fill="#B8432F" fill-opacity="0.32" stroke="none"/>');
   if (cheer) {
-    b.write('<path d="M73 79q7 10 14 0Z" fill="#B8432F"/><path d="M63 68q5 -6 10 0M85 68q5 -6 10 0" fill="none" stroke-width="2.6"/>');
+    b.write(
+        '<path d="M73 79q7 10 14 0Z" fill="#B8432F"/><path d="M63 68q5 -6 10 0M85 68q5 -6 10 0" fill="none" stroke-width="2.6"/>');
   } else {
     b.write('<path d="M74 80q6 5 12 0" fill="none"/>');
   }
@@ -185,19 +221,22 @@ String heroSvg(HeroLook look,
       '<g fill="#FBF5E8" fill-opacity="0.3" stroke-width="2"><circle cx="69" cy="66" r="7.5"/><circle cx="91" cy="66" r="7.5"/><path d="M76.5 65q3.5 -2 7 0" fill="none"/></g>');
 
   // yol eşyaları
-  w(yol == 'sovalye',
+  w(
+      yol == 'sovalye',
       '<g transform="$tSol"><path d="M28 116H58V138C58 152 48 162 43 165C38 162 28 152 28 138Z" fill="#1F4E79"/><circle cx="43" cy="134" r="6" fill="#E3A535" stroke-width="1.8"/><path d="M43 121v4M43 143v4M32 134h4M50 134h4" fill="none" stroke="#E3A535" stroke-width="2"/></g>'
-          '<path d="M111 40V196" fill="none" stroke="#8A5A2E" stroke-width="4"/><path d="M113 42H138L131 51L138 60H113Z" fill="#B8432F"/><circle cx="111" cy="37" r="3" fill="#E3A535"/>');
+      '<path d="M111 40V196" fill="none" stroke="#8A5A2E" stroke-width="4"/><path d="M113 42H138L131 51L138 60H113Z" fill="#B8432F"/><circle cx="111" cy="37" r="3" fill="#E3A535"/>');
   w(yol == 'okcu',
       '<g transform="$tSol"><path d="M40 106C24 128 24 160 42 182" fill="none" stroke="#8A5A2E" stroke-width="4.5"/><path d="M40 106L42 182" fill="none" stroke="#E3A535" stroke-width="1.6"/></g>');
-  w(yol == 'bilge',
+  w(
+      yol == 'bilge',
       '<g transform="$tSol"><path d="M36 126L58 121L61 146L39 151Z" fill="#B8432F"/><path d="M40 129L57 125M41 133L58 129" fill="none" stroke="#FBF5E8" stroke-width="1.4"/></g>'
-          '<path d="M112 44V198" fill="none" stroke="#8A5A2E" stroke-width="4"/><path d="M112 26L119 36L112 46L105 36Z" fill="#E3A535"/><path d="M100 26l-4 -3M124 26l4 -3M112 18v-4" fill="none" stroke="#E3A535" stroke-width="2"/>');
+      '<path d="M112 44V198" fill="none" stroke="#8A5A2E" stroke-width="4"/><path d="M112 26L119 36L112 46L105 36Z" fill="#E3A535"/><path d="M100 26l-4 -3M124 26l4 -3M112 18v-4" fill="none" stroke="#E3A535" stroke-width="2"/>');
   w(yol == 'kasif',
       '<path d="M104 146L130 132" fill="none" stroke="#EADBC0" stroke-width="9"/><path d="M104 146L130 132" fill="none" stroke-width="1.2" stroke-dasharray="2 3"/><circle cx="130" cy="132" r="4.6" fill="#EADBC0"/>');
-  w(yol == 'usta',
+  w(
+      yol == 'usta',
       '<path d="M110 156L126 116" fill="none" stroke="#8A5A2E" stroke-width="5"/><path d="M115 109L136 117L132 127L111 119Z" fill="#8C96A0"/>'
-          '<g transform="$tSol"><path d="M40 124L52 122L60 168L48 170Z" fill="#D9A441"/><path d="M43 132h4M44 140h5M45 148h4M46 156h5" fill="none" stroke-width="1.4"/></g>');
+      '<g transform="$tSol"><path d="M40 124L52 122L60 168L48 170Z" fill="#D9A441"/><path d="M43 132h4M44 140h5M45 148h4M46 156h5" fill="none" stroke-width="1.4"/></g>');
   w(yol == 'ozan',
       '<path d="M64 142L124 78" fill="none" stroke="#5E3A1B" stroke-width="5"/><ellipse cx="60" cy="150" rx="15" ry="19" transform="rotate(-42 60 150)" fill="#A8723F"/><circle cx="62" cy="148" r="4" fill="#2B2320" stroke="none"/><path d="M118 80l6 4M114 84l6 4M122 76l6 4" fill="none" stroke-width="2"/><path d="M124 78l6 16" fill="none" stroke="#B8432F" stroke-width="3"/>');
   w(sandalye,
