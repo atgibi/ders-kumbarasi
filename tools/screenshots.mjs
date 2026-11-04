@@ -92,12 +92,13 @@ await step('B', async () => {
   await shot(p, 'G1-harita-asagi');
   await tap(p, 'Kasaba');
   await shot(p, 'G3-kasaba');
-  await tap(p, 'Kahraman Defteri');
+  await tap(p, 'Defter');
   await shot(p, 'G4-defter');
-  await tap(p, 'Geri');
-  await tap(p, 'Tekrar');
+  await tap(p, 'Harita');
+  await tap(p, 'Gök Adaları');
   await shot(p, 'B5-tekrar');
-  await tap(p, 'Profil');
+  await tap(p, 'Haritaya dön');
+  await tap(p, 'Kahraman');
   await shot(p, 'B6-profil');
   await tap(p, 'Veli alanı');
   await shot(p, 'D1-veli-kapisi');

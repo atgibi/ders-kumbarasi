@@ -149,7 +149,10 @@ String ankaLine(Kingdom k, List<RegionView> regions) {
 }
 
 class KingdomMapTab extends StatefulWidget {
-  const KingdomMapTab({super.key});
+  const KingdomMapTab({super.key, this.header});
+
+  /// Krallık seçicinin altına gelen ek (Gök Adaları girişi).
+  final Widget? header;
 
   @override
   State<KingdomMapTab> createState() => _KingdomMapTabState();

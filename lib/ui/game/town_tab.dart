@@ -94,31 +94,6 @@ class _TownTabState extends State<TownTab> {
           Row(children: [
             const Expanded(child: Text('KASABAN', style: G.kicker)),
             const MailboxButton(),
-            const SizedBox(width: 8),
-            Pressable(
-              key: const Key('notebook-open'),
-              label: 'Kahraman Defteri',
-              onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
-                  builder: (_) => const NotebookScreen())),
-              builder: (context, down) => Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: down ? G.paper2 : Colors.white,
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: G.ink, width: 2),
-                ),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  const EmojiImage('📜', size: 22),
-                  const SizedBox(width: 6),
-                  Text('Defter (${g.notebook.length})',
-                      style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w900,
-                          color: G.ink)),
-                ]),
-              ),
-            ),
           ]),
           const SizedBox(height: 8),
           if (rescued.isNotEmpty) ...[
@@ -223,12 +198,79 @@ class _BuildingRow extends StatelessWidget {
 
 /// Kahraman Defteri: her oturumun bir sayfası; yıl sonunda çocuğun masalı.
 class NotebookScreen extends StatelessWidget {
-  const NotebookScreen({super.key});
+  const NotebookScreen({super.key, this.asTab = false});
+
+  /// Alt sekmede: geri düğmesi ve iskele yok.
+  final bool asTab;
 
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final pages = app.game.notebook.reversed.toList();
+    final hero = app.game.hero;
+    // Claude Design 23: defter; kırmızı cilt kenarı, çizgili sayfa, el yazısı
+    final list = pages.isEmpty
+        ? ListView(padding: const EdgeInsets.all(24), children: [
+            if (hero != null)
+              Center(child: HeroFigure(look: hero, size: 140)),
+            const SizedBox(height: 12),
+            Text('Defterin henüz boş. İlk maceran bittiğinde buraya yazılacak.',
+                textAlign: TextAlign.center,
+                style: G.hand.copyWith(fontSize: 18)),
+          ])
+        : ListView.separated(
+            key: const Key('notebook-list'),
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
+            itemCount: pages.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            itemBuilder: (context, i) {
+              final pg = pages[i];
+              return Pressable(
+                label: pg.text,
+                onTap: () => app.say(pg.text),
+                builder: (context, down) => Container(
+                  decoration: BoxDecoration(
+                    color: down ? K.kagit2 : K.kagit3,
+                    border: Border.all(color: K.murekkep, width: 2),
+                    boxShadow: const [
+                      BoxShadow(color: Color(0x402B2320), offset: Offset(3, 4))
+                    ],
+                  ),
+                  child: IntrinsicHeight(
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(width: 10, color: K.kok),
+                          Container(width: 2, color: K.murekkep),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(_date(pg.day),
+                                      style: const TextStyle(
+                                          fontFamily: K.display,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w800,
+                                          color: K.kokKoyu)),
+                                  const SizedBox(height: 2),
+                                  Text(pg.text,
+                                      style: G.hand.copyWith(
+                                          fontSize: 18,
+                                          height: 1.45,
+                                          color: K.murekkep)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
+              );
+            },
+          );
+    if (asTab) return ColoredBox(color: G.paper, child: list);
     return Scaffold(
       backgroundColor: G.paper,
       body: SafeArea(
@@ -247,38 +289,7 @@ class NotebookScreen extends StatelessWidget {
                 const Expanded(child: Text('Kahraman Defteri', style: G.title)),
               ]),
             ),
-            Expanded(
-              child: pages.isEmpty
-                  ? const Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Text(
-                          'Defterin henüz boş. İlk maceran bittiğinde buraya yazılacak.',
-                          style: G.body),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                      itemCount: pages.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 10),
-                      itemBuilder: (context, i) {
-                        final pg = pages[i];
-                        return Pressable(
-                          label: pg.text,
-                          onTap: () => app.say(pg.text),
-                          builder: (context, down) => Parchment(
-                            color: Colors.white,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(_date(pg.day), style: G.kicker),
-                                const SizedBox(height: 4),
-                                Text(pg.text, style: G.body),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-            ),
+            Expanded(child: list),
           ]),
         ),
       ),

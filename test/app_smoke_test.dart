@@ -198,10 +198,10 @@ void main() {
         find.textContaining("Bilgelik Diyarı'na hoş geldin"), findsOneWidget);
     await tapKey(t, 'letter-back');
     await tapKey(t, 'mail-back');
-    await tapTown(t, 'notebook-open');
+    await tapKey(t, 'tab-notebook');
     expect(find.text('Kahraman Defteri'), findsOneWidget);
     expect(find.textContaining('Elif bugün'), findsWidgets);
-    await tapKey(t, 'notebook-back');
+    await tapKey(t, 'tab-town');
     // İlk yapı: ışık ve demirle hemen kurulur
     final before = state.progress!.nuts;
     if (state.canBuild(buildings.first)) {
@@ -210,9 +210,11 @@ void main() {
       expect(state.progress!.nuts, lessThan(before));
     }
 
-    await tapKey(t, 'tab-review');
+    await tapKey(t, 'tab-map');
+    await tapKey(t, 'sky-open');
     expect(has('review-card'), isTrue);
-    await tapKey(t, 'tab-profile');
+    await tapKey(t, 'sky-back');
+    await tapKey(t, 'tab-hero');
     expect(find.text('Elif'), findsWidgets);
     expect(find.text('1. sınıf'), findsOneWidget);
     await tapKey(t, 'tab-map');
@@ -334,7 +336,7 @@ void main() {
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
     await tapKey(t, 'kid-a');
-    await tapKey(t, 'tab-profile');
+    await tapKey(t, 'tab-hero');
     await tapKey(t, 'parent-entry');
 
     await tapKey(t, 'gate-key-1');
@@ -359,7 +361,7 @@ void main() {
     expect(state.settings.textSize, 1);
     await tapKey(t, 'back');
     await tapKey(t, 'to-child');
-    expect(has('tab-profile'), isTrue);
+    expect(has('tab-hero'), isTrue);
   });
 
   testWidgets('sessiz saatlerde oturum açılmaz', (t) async {

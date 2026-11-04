@@ -13,12 +13,15 @@ import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
 import '../game/hero_create_screen.dart';
 import '../game/kingdom_map.dart';
+import '../game/hero_figure.dart';
 import '../game/town_tab.dart';
+import '../widgets/hand.dart';
 import 'parent_gate.dart';
 import 'parent_screen.dart';
 import 'system_screens.dart';
 
-/// Çocuğun ana kabuğu: Harita, Kasaba, Tekrar, Profil sekmeleri.
+/// Çocuğun ana kabuğu: Harita, Kasaba, Kahraman, Defter sekmeleri
+/// (Claude Design › Sekme çubuğu). Gök Adaları haritadan açılır.
 /// Kahramanı olmayan çocuk önce kahramanını oluşturur.
 class ShellScreen extends StatefulWidget {
   const ShellScreen({super.key});
@@ -68,10 +71,10 @@ class _ShellScreenState extends State<ShellScreen> {
                 child: IndexedStack(
                   index: _tab,
                   children: [
-                    const KingdomMapTab(),
+                    const KingdomMapTab(header: _SkyEntry()),
                     const TownTab(),
-                    _ReviewTab(active: _tab == 2),
                     const _ProfileTab(),
+                    const NotebookScreen(asTab: true),
                   ],
                 ),
               ),
@@ -131,7 +134,7 @@ class _TopBar extends StatelessWidget {
       child: Row(children: [
         Expanded(
           child: Text(
-              const ['Bilgelik Diyarı', 'Kasaba', 'Tekrar', 'Profil'][tab],
+              const ['Bilgelik Diyarı', 'Kasaba', 'Kahraman', 'Kahraman Defteri'][tab],
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -207,8 +210,8 @@ class _TabBar extends StatelessWidget {
     const tabs = [
       ('tab-map', 'Harita', Ikon.harita),
       ('tab-town', 'Kasaba', Ikon.kasaba),
-      ('tab-review', 'Tekrar', Ikon.saat),
-      ('tab-profile', 'Profil', Ikon.kalkan),
+      ('tab-hero', 'Kahraman', Ikon.kalkan),
+      ('tab-notebook', 'Defter', Ikon.defter),
     ];
     // Claude Design › Sekme çubuğu: kâğıt şerit, üstte el çizimi çizgi ve
     // bayrak dizisi, seçili sekmede safran daire ve kök boya alt çizgi.
@@ -226,7 +229,7 @@ class _TabBar extends StatelessWidget {
                   key: Key(tabs[i].$1),
                   onTap: () => onTap(i),
                   selected: index == i,
-                  label: i == 2 && badge > 0
+                  label: i == 0 && badge > 0
                       ? '${tabs[i].$2}, $badge tekrar bekliyor'
                       : tabs[i].$2,
                   excludeChildSemantics: true,
@@ -275,7 +278,7 @@ class _TabBar extends StatelessWidget {
                               ),
                             ],
                           ),
-                          if (i == 2 && badge > 0)
+                          if (i == 0 && badge > 0)
                             Positioned(
                               top: 0,
                               left: 0,
@@ -378,7 +381,108 @@ class _UnderlinePainter extends CustomPainter {
   bool shouldRepaint(_UnderlinePainter old) => false;
 }
 
-/// B5 Tekrar sekmesi.
+/// Haritanın üstündeki Gök Adaları girişi: bekleyen tekrar sayısıyla.
+class _SkyEntry extends StatefulWidget {
+  const _SkyEntry();
+
+  @override
+  State<_SkyEntry> createState() => _SkyEntryState();
+}
+
+class _SkyEntryState extends State<_SkyEntry> {
+  Future<int>? _f;
+  String _key = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final app = AppScope.of(context);
+    final p = app.progress!;
+    final key = '${app.active?.id}|${p.cards.length}|${p.lastSessionDay}|${p.nuts}';
+    if (_f == null || key != _key) {
+      _key = key;
+      _f = app
+          .dueBySubject()
+          .then((l) => l.fold<int>(0, (s, e) => s + e.$2));
+    }
+    return FutureBuilder<int>(
+      future: _f,
+      builder: (context, snap) {
+        final due = snap.data ?? 0;
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(12, 4, 12, 2),
+          child: Pressable(
+            key: const Key('sky-open'),
+            label: due > 0
+                ? 'Gök Adaları: $due tekrar bekliyor'
+                : 'Gök Adaları',
+            onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
+                builder: (_) => const SkyIslandsScreen())),
+            builder: (context, down) => HandBox(
+              style: HandStyle.kart.copyWith(
+                  fill: down ? const Color(0xFFD5DEE6) : const Color(0xFFE3EAF0)),
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+              child: Row(children: [
+                const IkonView(Ikon.mesale, size: 30),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                      due > 0
+                          ? 'Gök Adaları · $due kart seni bekliyor'
+                          : 'Gök Adaları · bugün tekrar yok',
+                      style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: K.murekkep)),
+                ),
+                const IkonView(Ikon.ileri, size: 22),
+              ]),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Gök Adaları (Claude Design B16): karışık tekrar. Her zaman ücretsiz.
+class SkyIslandsScreen extends StatelessWidget {
+  const SkyIslandsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFDCE6EC),
+        body: SafeArea(
+          child: ChildTextScale(
+            child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: Row(children: [
+                  CircleBtn(
+                    key: const Key('sky-back'),
+                    icon: DkIcons.left,
+                    label: 'Haritaya dön',
+                    size: 56,
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text('Gök Adaları',
+                        style: TextStyle(
+                            fontFamily: K.display,
+                            fontSize: 27,
+                            fontWeight: FontWeight.w800,
+                            color: K.lacivert)),
+                  ),
+                ]),
+              ),
+              const Expanded(child: _ReviewTab(active: true)),
+            ]),
+          ),
+        ),
+      );
+}
+
+/// Gök Adaları içeriği (eski Tekrar sekmesi).
 class _ReviewTab extends StatefulWidget {
   const _ReviewTab({required this.active});
   final bool active;
@@ -710,13 +814,29 @@ class _ProfileTabState extends State<_ProfileTab> {
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
       children: [
         Row(children: [
-          Avatar(index: c.avatarIndex, size: 88),
+          if (p.game.hero != null)
+            FutureBuilder<HeroStage>(
+              future: app.heroStage(),
+              builder: (context, snap) => HeroFigure(
+                  look: p.game.hero!,
+                  stage: snap.data ?? HeroStage.cirak,
+                  size: 130),
+            )
+          else
+            Avatar(index: c.avatarIndex, size: 88),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(c.nickname, style: T.title),
+                Text(p.game.hero?.name ?? c.nickname, style: T.title),
+                if (p.game.hero != null)
+                  Text(p.game.hero!.heroPath.name,
+                      style: TextStyle(
+                          fontFamily: K.display,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: p.game.hero!.heroPath.color)),
                 Text('${c.grade}. sınıf',
                     style: const TextStyle(
                         fontSize: 17,
