@@ -61,17 +61,22 @@ class RegionScreen extends StatelessWidget {
               ]),
             ),
             Expanded(
-              child: PathScreen(
-                subject: region.subject,
-                region: region.index,
-                footer: FutureBuilder<bool>(
-                  future: _ready(app),
-                  builder: (context, snap) => _DuelCard(
-                    region: region,
-                    ready: snap.data ?? false,
-                    freed: p.game.banners.contains(region.key),
-                  ),
-                ),
+              child: FutureBuilder<bool>(
+                future: _ready(app),
+                builder: (context, snap) {
+                  final ready = snap.data ?? false;
+                  final freed = p.game.banners.contains(region.key);
+                  final card = _DuelCard(
+                      region: region, ready: ready, freed: freed);
+                  // Bekçi beklerken düello en üstte: gözden kaçmasın
+                  final top = ready && !freed;
+                  return PathScreen(
+                    subject: region.subject,
+                    region: region.index,
+                    header: top ? card : null,
+                    footer: top ? null : card,
+                  );
+                },
               ),
             ),
           ]),

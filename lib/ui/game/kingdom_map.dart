@@ -590,9 +590,20 @@ class _NodeLabel extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 12.5, height: 1.2, color: color)),
-        if (view.state == RegionState.guardian)
-          Text('Bekçi seni bekliyor',
-              style: G.hand.copyWith(fontSize: 13, color: G.madder)),
+        if (view.state == RegionState.guardian) ...[
+          const SizedBox(height: 4),
+          HandBox(
+            style: HandStyle.parsomen
+                .copyWith(fill: K.kokKoyu, shadows: const [(3, K.murekkep)]),
+            padding: const EdgeInsets.fromLTRB(8, 4, 8, 5),
+            child: const Text('Düelloya hazırsın!',
+                style: TextStyle(
+                    fontFamily: K.display,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: K.kagit3)),
+          ),
+        ],
       ],
     );
   }

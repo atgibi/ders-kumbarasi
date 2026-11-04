@@ -212,8 +212,8 @@ class _PathScreenState extends State<PathScreen> {
     if (start == true && mounted) {
       await openSession(context,
           subject: _subject(app),
-          focusOutcome: node.outcome.code,
-          checkDoneToday: node.state == NodeState.current);
+          // Günlük yeni konu sınırı yok: çocuk hazırsa sıradaki konuya geçer.
+          focusOutcome: node.outcome.code);
     }
   }
 
@@ -245,7 +245,7 @@ class _PathScreenState extends State<PathScreen> {
               _TodayCard(
                 due: due,
                 newTopic: hasCurrent,
-                done: app.studiedToday && due == 0,
+                done: app.studiedToday && due == 0 && !hasCurrent,
               ),
             for (final s in sections) ...[
               _UnitBanner(section: s),
