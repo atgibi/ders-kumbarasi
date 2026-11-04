@@ -198,16 +198,16 @@ class _KingdomMapTabState extends State<KingdomMapTab> {
             key: const Key('map-list'),
             padding: const EdgeInsets.only(bottom: 24),
             child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const _KingdomPicker(),
-              const SupplyStrip(),
-              if (regions != null) ...[
-                _KingdomHeader(kingdom: k, line: ankaLine(k, regions)),
-                _MapCanvas(
-                    regions: regions, kingdom: k, currentKey: _currentKey),
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const _KingdomPicker(),
+                const SupplyStrip(),
+                if (regions != null) ...[
+                  _KingdomHeader(kingdom: k, line: ankaLine(k, regions)),
+                  _MapCanvas(
+                      regions: regions, kingdom: k, currentKey: _currentKey),
+                ],
               ],
-            ],
             ),
           );
         },
