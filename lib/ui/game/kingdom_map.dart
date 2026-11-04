@@ -205,6 +205,7 @@ class _KingdomMapTabState extends State<KingdomMapTab> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const _KingdomPicker(),
+                if (widget.header != null) widget.header!,
                 const SupplyStrip(),
                 if (regions != null) ...[
                   _KingdomHeader(kingdom: k, line: ankaLine(k, regions)),
