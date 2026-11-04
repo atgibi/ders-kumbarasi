@@ -21,3 +21,17 @@ String locative(String word) {
   final a = _back.contains(v) ? 'a' : 'e';
   return "$word'$d$a";
 }
+
+/// İlgi eki: Usta Çark'ın, Ozan Yaprak'ın, Bilge Nine'nin.
+String genitive(String word) {
+  final v = _lastVowel(word) ?? 'a';
+  final last = word.isEmpty ? '' : word[word.length - 1].toLowerCase();
+  final vowelEnd = _back.contains(last) || _front.contains(last);
+  final suffix = switch (v) {
+    'a' || 'ı' => 'ın',
+    'e' || 'i' => 'in',
+    'o' || 'u' => 'un',
+    _ => 'ün',
+  };
+  return "$word'${vowelEnd ? 'n' : ''}$suffix";
+}

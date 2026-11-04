@@ -1,11 +1,15 @@
 /// Diyar haritası: krallık seçici, kaynak şeridi, bölge bölge sisli yol.
 library;
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../app/app_state.dart';
 import '../../core/srs/leitner.dart';
 import '../../data/models.dart';
+import '../../game/turkish.dart';
 import '../../game/world.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
@@ -15,6 +19,7 @@ import '../widgets/ikon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
 import 'game_theme.dart';
+import 'hero_figure.dart';
 import 'region_screen.dart';
 
 enum RegionState {
@@ -180,14 +185,7 @@ class _KingdomMapTabState extends State<KingdomMapTab> {
               const SupplyStrip(),
               if (regions != null) ...[
                 _KingdomHeader(kingdom: k, line: ankaLine(k, regions)),
-                for (var i = 0; i < regions.length; i++)
-                  _RegionNode(
-                    key: Key('region-$i'),
-                    view: regions[i],
-                    kingdom: k,
-                    dx: const <double>[0, 70, 0, -70][i % 4],
-                    last: i == regions.length - 1,
-                  ),
+                _MapCanvas(regions: regions, kingdom: k),
               ],
             ],
           );
@@ -221,15 +219,11 @@ class _KingdomPicker extends StatelessWidget {
                 builder: (context, down) {
                   final k = Kingdom.of(s);
                   final sel = s == app.subject;
-                  return Container(
+                  return HandBox(
+                    style: HandStyle.parsomen.copyWith(
+                        fill: sel ? k.color : (down ? K.kagit2 : K.kagit3),
+                        shadows: sel ? const [(3, K.murekkep)] : null),
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: sel ? k.color : Colors.white,
-                      borderRadius: BorderRadius.circular(6),
-                      border:
-                          Border.all(color: sel ? G.ink : G.paper2, width: 2),
-                    ),
                     child: Row(mainAxisSize: MainAxisSize.min, children: [
                       EmojiImage(k.emoji, size: 22),
                       const SizedBox(width: 6),
@@ -239,14 +233,15 @@ class _KingdomPicker extends StatelessWidget {
                         children: [
                           Text(k.name,
                               style: TextStyle(
+                                  fontFamily: K.display,
                                   fontSize: 15,
-                                  fontWeight: FontWeight.w900,
-                                  color: sel ? Colors.white : G.ink)),
+                                  fontWeight: FontWeight.w800,
+                                  color: sel ? K.kagit3 : G.ink)),
                           Text(s.label,
                               style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  color: sel ? Colors.white : G.inkSoft)),
+                                  color: sel ? K.kagit3 : G.inkSoft)),
                         ],
                       ),
                     ]),
@@ -255,59 +250,6 @@ class _KingdomPicker extends StatelessWidget {
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-/// Işık ve malzemeler.
-class SupplyStrip extends StatelessWidget {
-  const SupplyStrip({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final app = AppScope.of(context);
-    final g = app.progress!.game;
-    final items = <(String, Ikon, int)>[
-      ('ışık', Ikon.isik, app.light),
-      for (final m in Supply.values)
-        if (g.supply(m) > 0 || m == Kingdom.of(app.subject!).material)
-          (m.label.toLowerCase(), ikonOf(m), g.supply(m)),
-      ('sancak', Ikon.sancak, g.banners.length),
-    ];
-    // Claude Design › Kaynak şeridi: kâğıt üstünde el çizimi simgeler.
-    return Semantics(
-      container: true,
-      label: [for (final i in items) '${i.$3} ${i.$1}'].join(', '),
-      child: ExcludeSemantics(
-        child: Padding(
-          key: const Key('supply-strip'),
-          padding: const EdgeInsets.fromLTRB(10, 4, 10, 6),
-          child: HandBox(
-            style: HandStyle.el.copyWith(fill: K.kagit3),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            child: Wrap(
-              alignment: WrapAlignment.spaceBetween,
-              spacing: 10,
-              runSpacing: 4,
-              children: [
-                for (final i in items)
-                  Row(mainAxisSize: MainAxisSize.min, children: [
-                    IkonView(i.$2, size: i.$2 == Ikon.isik ? 24 : 22),
-                    const SizedBox(width: 3),
-                    Text('${i.$3}',
-                        style: TextStyle(
-                            fontFamily: K.display,
-                            fontSize: i.$2 == Ikon.isik ? 18 : 17,
-                            fontWeight: i.$2 == Ikon.isik
-                                ? FontWeight.w800
-                                : FontWeight.w700,
-                            color: G.ink)),
-                  ]),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -326,9 +268,23 @@ class _KingdomHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(kingdom.name.toUpperCase(),
-              style: G.kicker.copyWith(color: kingdom.ink)),
-          Text('${kingdom.people} · ${kingdom.value}', style: G.soft),
+          Text(trUpper(kingdom.name),
+              style: TextStyle(
+                  fontFamily: K.display,
+                  fontSize: 34,
+                  height: 1,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: .7,
+                  color: kingdom.ink,
+                  shadows: const [
+                    Shadow(color: K.murekkep, offset: Offset(2, 2))
+                  ])),
+          const SizedBox(height: 2),
+          Text(
+              '${kingdom.subject.label} · ${genitive(kingdom.leader)} krallığı',
+              style: const TextStyle(fontSize: 14, color: K.murekkep2)),
+          const SizedBox(height: 8),
+          const Kilim(height: 12),
           const SizedBox(height: 8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -352,18 +308,299 @@ class _KingdomHeader extends StatelessWidget {
   }
 }
 
+/// Krallık haritası (Claude Design 10): aşağıdan yukarı tırmanan yol,
+/// zikzak bölge düğümleri, sis ve kahraman.
+class _MapCanvas extends StatelessWidget {
+  const _MapCanvas({required this.regions, required this.kingdom});
+  final List<RegionView> regions;
+  final Kingdom kingdom;
+
+  static const step = 92.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final app = AppScope.of(context);
+    final hero = app.progress?.game.hero;
+    final n = regions.length;
+    final h = n * step + 70;
+    final current = regions.indexWhere((r) =>
+        r.state == RegionState.waking ||
+        r.state == RegionState.guardian ||
+        r.state == RegionState.next);
+    final firstFog = regions.indexWhere(
+        (r) => r.state == RegionState.fog || r.state == RegionState.soon);
+    return LayoutBuilder(builder: (context, box) {
+      final w = box.maxWidth;
+      // düğüm merkezleri: alttan üste, sol-sağ
+      Offset at(int i) => Offset(
+          i.isEven ? w * .36 : w * .64, h - 52 - i * step);
+      return SizedBox(
+        height: h,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _MapPainter(
+                  points: [for (var i = 0; i < n; i++) at(i)],
+                  kingdom: kingdom,
+                  fogFrom: firstFog < 0 ? null : at(firstFog).dy + 46,
+                ),
+              ),
+            ),
+            for (var i = 0; i < n; i++) ...[
+              Positioned(
+                left: at(i).dx - 46,
+                top: at(i).dy - 51,
+                child: _RegionNode(
+                    key: Key('region-$i'),
+                    view: regions[i],
+                    kingdom: kingdom,
+                    no: i + 1),
+              ),
+              Positioned(
+                left: i.isEven ? 6 : at(i).dx + 50,
+                width: i.isEven ? at(i).dx - 56 : w - at(i).dx - 56,
+                top: at(i).dy - 30,
+                child: IgnorePointer(
+                  child: ExcludeSemantics(
+                    child: _NodeLabel(
+                        view: regions[i],
+                        kingdom: kingdom,
+                        right: i.isEven),
+                  ),
+                ),
+              ),
+            ],
+            if (hero != null && current >= 0)
+              Positioned(
+                left: at(current).dx + (current.isEven ? 40 : -92),
+                top: at(current).dy - 74,
+                child: IgnorePointer(
+                  child: HeroFigure(
+                      look: hero, size: 52, showCompanion: false),
+                ),
+              ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class _MapPainter extends CustomPainter {
+  _MapPainter(
+      {required this.points, required this.kingdom, required this.fogFrom});
+  final List<Offset> points;
+  final Kingdom kingdom;
+
+  /// Bu yükseklikten yukarısı sisli.
+  final double? fogFrom;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width, h = size.height;
+    // krallık rengiyle yan dağlar
+    final dag = Paint()..color = kingdom.color.withValues(alpha: .55);
+    final ink = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2
+      ..strokeJoin = StrokeJoin.round
+      ..color = K.murekkep;
+    for (var y = 120.0; y < h; y += 220) {
+      for (final (x0, s) in [(-20.0, 1.0), (w - 70, -1.0)]) {
+        final m = Path()
+          ..moveTo(x0, y + 120)
+          ..lineTo(x0 + 50 + 10 * s, y)
+          ..lineTo(x0 + 100, y + 120)
+          ..close();
+        canvas.drawPath(m, dag);
+        canvas.drawPath(m, ink);
+      }
+    }
+    if (points.isEmpty) return;
+    // yol: aşağıdan ilk düğüme, sonra zikzak
+    final p = Path()..moveTo(w / 2, h);
+    var prev = Offset(w / 2, h);
+    for (final q in points) {
+      final my = (prev.dy + q.dy) / 2;
+      p.cubicTo(prev.dx, my, q.dx, my, q.dx, q.dy);
+      prev = q;
+    }
+    canvas.drawPath(
+        p,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 19
+          ..strokeCap = StrokeCap.round
+          ..color = K.murekkep);
+    canvas.drawPath(
+        p,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 13
+          ..strokeCap = StrokeCap.round
+          ..color = K.kagit);
+    final dash = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6
+      ..color = kingdom.ink;
+    for (final m in p.computeMetrics()) {
+      for (var d = 0.0; d < m.length; d += 15) {
+        canvas.drawPath(m.extractPath(d, math.min(d + 7, m.length)), dash);
+      }
+    }
+    // sis
+    final f = fogFrom;
+    if (f != null) {
+      final edge = Path()..moveTo(-10, f);
+      for (var x = -10.0; x < w + 30; x += 40) {
+        edge.quadraticBezierTo(x + 20, f + 14,
+            x + 40, f + ((x ~/ 40).isEven ? -6 : 8));
+      }
+      edge
+        ..lineTo(w + 10, -10)
+        ..lineTo(-10, -10)
+        ..close();
+      canvas.drawPath(edge, Paint()..color = const Color(0xD9C9D1D9));
+      canvas.save();
+      canvas.clipPath(edge);
+      final tul = Paint()
+        ..color = const Color(0x999AA6B2)
+        ..strokeWidth = .9;
+      for (var t = -h; t < w + h; t += 9) {
+        canvas.drawLine(Offset(t, f + 20), Offset(t + (f + 30) * .53, -10), tul);
+      }
+      canvas.restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(_MapPainter old) =>
+      old.points != points || old.kingdom != kingdom || old.fogFrom != fogFrom;
+}
+
+class _NodeLabel extends StatelessWidget {
+  const _NodeLabel(
+      {required this.view, required this.kingdom, required this.right});
+  final RegionView view;
+  final Kingdom kingdom;
+  final bool right;
+
+  @override
+  Widget build(BuildContext context) {
+    final fog = view.state == RegionState.fog ||
+        view.state == RegionState.soon ||
+        view.state == RegionState.locked;
+    final color = fog ? const Color(0xFF3D4650) : G.ink;
+    return Column(
+      crossAxisAlignment:
+          right ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Text(regionTitle(kingdom, view.def.index),
+            textAlign: right ? TextAlign.right : TextAlign.left,
+            style: TextStyle(
+                fontFamily: K.display,
+                fontSize: 15,
+                height: 1.1,
+                fontWeight: FontWeight.w800,
+                color: color)),
+        if (view.unitName.isNotEmpty)
+          Text(view.unitName,
+              textAlign: right ? TextAlign.right : TextAlign.left,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 12.5, height: 1.2, color: color)),
+        if (view.state == RegionState.guardian)
+          Text('Bekçi seni bekliyor',
+              style: G.hand.copyWith(fontSize: 13, color: G.madder)),
+      ],
+    );
+  }
+}
+
+/// Bölge düğümü (Claude Design › Bölge düğümü): beş hâl.
+String regionNodeSvg(RegionState st, Color kingdomColor) {
+  String hx(Color c) =>
+      '#${(c.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
+  final renk = hx(kingdomColor);
+  final hal = switch (st) {
+    RegionState.glowing => 'parliyor',
+    RegionState.freed => 'kurtarildi',
+    RegionState.waking || RegionState.guardian => 'canlaniyor',
+    RegionState.next || RegionState.locked => 'kesfedildi',
+    RegionState.fog || RegionState.soon => 'sisli',
+  };
+  final zemin = const {
+        'parliyor': '#E3A535',
+        'kesfedildi': '#EADBC0',
+        'sisli': '#9AA6B2',
+      }[hal] ??
+      renk;
+  final halka = const {
+        'kurtarildi': '#2F7A5B',
+        'parliyor': '#FBF5E8',
+        'canlaniyor': '#E3A535',
+        'sisli': '#C9D1D9',
+      }[hal] ??
+      renk;
+  final b = StringBuffer(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">'
+      '<ellipse cx="60" cy="98" rx="30" ry="5" fill="#2B2320" opacity="0.14"/>');
+  if (hal == 'parliyor') {
+    b.write('<path d="');
+    for (var i = 0; i < 18; i++) {
+      final a = i / 18 * math.pi * 2;
+      final r2 = i.isOdd ? 41 : 50;
+      b.write('M${(60 + math.cos(a) * 33).toStringAsFixed(1)} ${(66 + math.sin(a) * 33).toStringAsFixed(1)}'
+          'L${(60 + math.cos(a) * r2).toStringAsFixed(1)} ${(66 + math.sin(a) * r2).toStringAsFixed(1)}');
+    }
+    b.write('" stroke="#E3A535" stroke-width="3" stroke-linecap="round"/>');
+  }
+  if (hal == 'sisli') {
+    b.write('<path d="M18 74C8 60 20 42 34 46C38 30 60 26 70 38C84 30 102 40 98 56C112 62 108 84 94 86C86 98 64 98 56 92C42 98 22 90 18 74Z" fill="#C9D1D9" fill-opacity="0.85"/>');
+  }
+  b.write('<g stroke="#2B2320" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">'
+      '<circle cx="60" cy="66" r="27" fill="$zemin"/>');
+  if (hal == 'canlaniyor') {
+    b.write('<path d="M60 39A27 27 0 0 1 60 93Z" fill="#C9D1D9" stroke="none"/>'
+        '<path d="M60 39V93" stroke-width="1.4" stroke-dasharray="3 3"/>');
+  }
+  if (hal == 'kesfedildi') {
+    b.write('<path d="M70 42C86 46 92 60 86 76C96 70 100 52 90 42C84 36 76 38 70 42Z" fill="#C9D1D9" stroke="#9AA6B2" stroke-width="1.6"/>');
+  }
+  b.write('<circle cx="60" cy="66" r="21" fill="none" stroke="$halka" stroke-width="3"/>'
+      '<circle cx="60" cy="66" r="27" fill="none"/>');
+  if (hal == 'kurtarildi') {
+    b.write('<path d="M80 50V12" stroke="#5E3A1B" stroke-width="3.4"/>'
+        '<path d="M82 13H104L98 21L104 29H82Z" fill="#B8432F"/><circle cx="80" cy="10" r="2.6" fill="#E3A535"/>');
+  }
+  if (hal == 'parliyor') {
+    b.write('<path d="M46 38V30H52V34H57V30H63V34H68V30H74V38Z" fill="#EADBC0"/><path d="M54 38v-3h4v3" fill="none" stroke-width="1.4"/>');
+  }
+  if (hal == 'canlaniyor') {
+    b.write('<circle cx="26" cy="54" r="5" fill="#E3A535"/><circle cx="30" cy="84" r="5" fill="#E3A535"/>'
+        '<circle cx="94" cy="52" r="5" fill="#C9D1D9"/><circle cx="92" cy="84" r="5" fill="#C9D1D9"/>');
+  }
+  if (st == RegionState.locked) {
+    b.write('<g transform="translate(78 74)"><path d="M2 24V10A9 9 0 0 1 20 10V24Z" fill="#8A5A2E"/>'
+        '<path d="M8 4V24M14 4V24M2 13H20" fill="none" stroke-width="1.4"/><circle cx="16" cy="17" r="1.4" fill="#2B2320"/>'
+        '<path d="M-1 24H23" stroke-width="2.4"/></g>');
+  }
+  b.write('</g></svg>');
+  return b.toString();
+}
+
 class _RegionNode extends StatelessWidget {
   const _RegionNode({
     super.key,
     required this.view,
     required this.kingdom,
-    required this.dx,
-    required this.last,
+    required this.no,
   });
   final RegionView view;
   final Kingdom kingdom;
-  final double dx;
-  final bool last;
+  final int no;
 
   String get _status => switch (view.state) {
         RegionState.fog => 'Sisli',
@@ -371,7 +608,7 @@ class _RegionNode extends StatelessWidget {
         RegionState.waking => 'Canlanıyor · ${view.started}/${view.total}',
         RegionState.guardian => 'Bekçi seni bekliyor',
         RegionState.freed => 'Kurtarıldı',
-        RegionState.glowing => 'Işıl ışıl',
+        RegionState.glowing => 'Parlıyor',
         RegionState.locked => 'Bu yol henüz açılmadı',
         RegionState.soon => 'Hazırlanıyor',
       };
@@ -401,120 +638,42 @@ class _RegionNode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final st = view.state;
-    final colored = st == RegionState.freed ||
-        st == RegionState.glowing ||
-        st == RegionState.waking ||
-        st == RegionState.guardian;
-    final fogged = st == RegionState.fog || st == RegionState.locked;
     final title = regionTitle(kingdom, view.def.index);
-    final emoji = switch (st) {
-      RegionState.freed || RegionState.glowing => bannerEmoji,
-      RegionState.guardian => view.def.guardian.emoji,
-      RegionState.locked => '🚪',
-      _ => kingdom.emoji,
-    };
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Column(children: [
-        Transform.translate(
-          offset: Offset(dx, 0),
-          child: Pressable(
-            label: '$title, ${view.unitName}. $_status',
-            onTap: () => _open(context),
-            builder: (context, down) => Column(children: [
-              Container(
-                width: 104,
-                height: 104,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: colored
-                      ? kingdom.color
-                      : st == RegionState.next
-                          ? Colors.white
-                          : G.fogLight,
-                  border: Border.all(
-                      color: st == RegionState.glowing ? G.gold : G.ink,
-                      width: st == RegionState.glowing ? 6 : 3),
-                  boxShadow: [
-                    if (st == RegionState.next || st == RegionState.guardian)
-                      const BoxShadow(
-                          color: G.saffron, blurRadius: 18, spreadRadius: 4),
-                    if (st == RegionState.glowing)
-                      const BoxShadow(
-                          color: G.gold, blurRadius: 22, spreadRadius: 6),
-                  ],
-                ),
-                child: Stack(alignment: Alignment.center, children: [
-                  Opacity(
-                      opacity: fogged ? 0.45 : 1,
-                      child: EmojiImage(emoji, size: 52)),
-                  if (fogged)
-                    const Positioned(
-                        bottom: 10, child: EmojiImage('☁️', size: 40)),
-                  if (view.due && !fogged)
-                    const Positioned(
-                        top: 4, right: 4, child: EmojiImage('🌫️', size: 26)),
-                ]),
-              ),
-              const SizedBox(height: 6),
-              Text(title,
-                  textAlign: TextAlign.center,
+    final light = st == RegionState.freed;
+    return Pressable(
+      label: 'Bölge $no, $title, ${view.unitName}. $_status',
+      onTap: () => _open(context),
+      focusRadius: 46,
+      builder: (context, down) => Transform.scale(
+        scale: down ? .95 : 1,
+        child: SizedBox(
+          width: 92,
+          height: 92,
+          child: Stack(alignment: Alignment.center, children: [
+            SvgPicture.string(regionNodeSvg(st, kingdom.color),
+                width: 92, height: 92),
+            Positioned(
+              top: 34,
+              child: Text('$no',
                   style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w900,
-                      color: fogged ? G.inkSoft : G.ink)),
-              if (view.unitName.isNotEmpty)
-                SizedBox(
-                  width: 220,
-                  child: Text(view.unitName,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: G.soft),
-                ),
-              Text(_status,
-                  style: TextStyle(
-                      fontSize: 14,
+                      fontFamily: K.display,
+                      fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: st == RegionState.guardian ? G.madder : G.indigo)),
-            ]),
-          ),
-        ),
-        if (!last)
-          SizedBox(
-            height: 34,
-            child: CustomPaint(
-              size: const Size(200, 34),
-              painter: _TrailPainter(
-                  dx, const <double>[0, 70, 0, -70][(view.def.index + 1) % 4]),
+                      color: light ? K.kagit3 : K.murekkep)),
             ),
-          ),
-      ]),
+            if (st == RegionState.guardian)
+              Positioned(
+                  left: 0,
+                  top: 6,
+                  child: EmojiImage(view.def.guardian.emoji, size: 30)),
+            if (view.due &&
+                st != RegionState.fog &&
+                st != RegionState.locked)
+              const Positioned(
+                  right: 0, bottom: 4, child: IkonView(Ikon.mesale, size: 26)),
+          ]),
+        ),
+      ),
     );
   }
-}
-
-/// Bölgeler arası kesik çizgili yol.
-class _TrailPainter extends CustomPainter {
-  _TrailPainter(this.from, this.to);
-  final double from, to;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final p = Paint()
-      ..color = G.inkSoft
-      ..strokeWidth = 3
-      ..strokeCap = StrokeCap.round;
-    final a = Offset(size.width / 2 + from, 0);
-    final b = Offset(size.width / 2 + to, size.height);
-    const n = 6;
-    for (var i = 0; i < n; i += 2) {
-      canvas.drawLine(
-          Offset.lerp(a, b, i / n)!, Offset.lerp(a, b, (i + 1) / n)!, p);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_TrailPainter old) => old.from != from || old.to != to;
 }

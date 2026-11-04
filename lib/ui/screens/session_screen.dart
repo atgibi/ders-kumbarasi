@@ -357,6 +357,7 @@ class _SessionScreenState extends State<SessionScreen> {
             _TopBar(
               progress: c.progressRatio,
               onClose: _confirmExit,
+              color: Kingdom.of(widget.subject).color,
             ),
             if (widget.duel != null)
               DuelHeader(

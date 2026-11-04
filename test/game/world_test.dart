@@ -36,6 +36,9 @@ void main() {
     expect(locative('Ocakvadi'), "Ocakvadi'de");
     expect(locative('Işıkkaya'), "Işıkkaya'da");
     expect(locative('Sözorman'), "Sözorman'da");
+    expect(genitive('Usta Çark'), "Usta Çark'ın");
+    expect(genitive('Bilge Nine'), "Bilge Nine'nin");
+    expect(genitive('Kaptan Rüzgâr'), "Kaptan Rüzgâr'ın");
   });
 
   test('oyun durumu kaydedilip geri okunur', () {
