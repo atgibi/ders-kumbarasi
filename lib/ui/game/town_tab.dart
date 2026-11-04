@@ -9,6 +9,7 @@ import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
 import '../widgets/kit.dart';
+import 'board_widgets.dart';
 import 'game_theme.dart';
 import 'hero_figure.dart';
 import 'kingdom_map.dart';
@@ -85,8 +86,14 @@ class _TownTabState extends State<TownTab> {
               },
             ),
           const SizedBox(height: 16),
+          const QuestBoard(),
+          const SizedBox(height: 8),
+          const WeeklyTripCard(),
+          const SizedBox(height: 20),
           Row(children: [
             const Expanded(child: Text('KASABAN', style: G.kicker)),
+            const MailboxButton(),
+            const SizedBox(width: 8),
             Pressable(
               key: const Key('notebook-open'),
               label: 'Kahraman Defteri',

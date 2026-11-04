@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app_state.dart';
 import '../../core/srs/leitner.dart';
 import '../../data/models.dart';
+import '../../game/world.dart';
 import '../theme.dart';
 import '../widgets/avatar.dart';
 import '../widgets/dk_icon.dart';
@@ -307,7 +308,9 @@ class _ReviewTab extends StatefulWidget {
 }
 
 class _ReviewData {
-  const _ReviewData(this.due, this.subject, this.tomorrow, this.strengths);
+  const _ReviewData(
+      this.due, this.subject, this.tomorrow, this.strengths, this.islands);
+  final List<(Subject, int)> islands;
   final int due;
   final Subject? subject;
   final int tomorrow;
@@ -341,7 +344,7 @@ class _ReviewTabState extends State<_ReviewTab> {
       strengths.add((await app.outcomeLabel(e.key), lv));
     }
     return _ReviewData(due, due > 0 ? bySubject.first.$1 : null, tomorrow,
-        strengths.reversed.toList());
+        strengths.reversed.toList(), bySubject);
   }
 
   @override
@@ -363,6 +366,13 @@ class _ReviewTabState extends State<_ReviewTab> {
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            const Text('GÖK ADALARI', style: T.kickerSm),
+            const SizedBox(height: 2),
+            const Text(
+                'Öğrendiklerin bulutların üstündeki adalarda saklanır. '
+                'Tekrar etmezsen adalar sise gömülür; tekrar ettikçe yükselir.',
+                style: T.help),
+            const SizedBox(height: 12),
             DkCard(
               key: const Key('review-card'),
               radius: K.rLg,
@@ -415,6 +425,28 @@ class _ReviewTabState extends State<_ReviewTab> {
                 ],
               ),
             ),
+            if (d.islands.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  for (final isl in d.islands)
+                    _Island(
+                      key: Key('island-${isl.$1.id}'),
+                      kingdom: Kingdom.of(isl.$1),
+                      due: isl.$2,
+                      onTap: isl.$2 == 0
+                          ? null
+                          : () {
+                              app.selectSubject(isl.$1);
+                              openSession(context,
+                                  subject: isl.$1, reviewOnly: true);
+                            },
+                    ),
+                ],
+              ),
+            ],
             const SizedBox(height: 20),
             const Text('Güçlenen konular', style: T.sub),
             const SizedBox(height: 12),
@@ -429,6 +461,52 @@ class _ReviewTabState extends State<_ReviewTab> {
           ],
         );
       },
+    );
+  }
+}
+
+/// Bir krallığın gök adası: bekleyen tekrar sayısıyla. Bekleyen varsa ada
+/// sisli görünür; dokununca o dersin tekrarı başlar.
+class _Island extends StatelessWidget {
+  const _Island(
+      {super.key, required this.kingdom, required this.due, this.onTap});
+  final Kingdom kingdom;
+  final int due;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final foggy = due > 0;
+    return Pressable(
+      label: foggy
+          ? '${kingdom.name} adası: $due kart bekliyor'
+          : '${kingdom.name} adası: tekrar yok',
+      onTap: onTap,
+      builder: (context, down) => Container(
+        width: 100,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+        decoration: BoxDecoration(
+          color: down
+              ? K.closeBg
+              : foggy
+                  ? const Color(0xFFDDE3EA)
+                  : Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+              color: foggy ? kingdom.color : K.closeBg, width: 2),
+        ),
+        child: Column(children: [
+          Opacity(
+              opacity: foggy ? 0.6 : 1,
+              child: EmojiImage(kingdom.emoji, size: 34)),
+          const SizedBox(height: 4),
+          Text(foggy ? '$due' : '✓',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: foggy ? kingdom.ink : K.ink2)),
+        ]),
+      ),
     );
   }
 }

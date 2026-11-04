@@ -7,6 +7,7 @@ import '../../app/session_controller.dart';
 import '../../app/speaker.dart';
 import '../../data/models.dart';
 import '../../data/progress_store.dart';
+import '../../game/quests.dart';
 import '../../game/turkish.dart';
 import '../../game/world.dart';
 import '../game/duel_widgets.dart';
@@ -150,6 +151,11 @@ class _SessionScreenState extends State<SessionScreen> {
     final app = AppScope.read(context);
     if (c.isDone) {
       c.finish();
+      await app.recordSession(
+          correct: c.summary.correct,
+          newTopics: c.summary.newOutcomes.length,
+          reviewed: widget.reviewOnly ? c.summary.answered : 0);
+      if (!mounted) return;
       if (widget.duel != null) {
         _winDuel(app, c);
         await app.saveProgress();
@@ -188,7 +194,11 @@ class _SessionScreenState extends State<SessionScreen> {
     g.banners.add(r.key);
     if (first) g.rescued.add(r.key);
     g.duelBest[r.key] = math.max(g.duelBest[r.key] ?? 0, pct);
-    if (first) g.addSupply(Kingdom.of(r.subject).material, 5);
+    if (first) {
+      g.addSupply(Kingdom.of(r.subject).material, 5);
+      g.addLetter(guardianLetter(
+          r.guardian, r.key, _heroName(app), dayKey(app.clock())));
+    }
     _duelGift = pct >= 80;
     if (_duelGift) app.progress!.nuts += 10;
     final k = Kingdom.of(r.subject);

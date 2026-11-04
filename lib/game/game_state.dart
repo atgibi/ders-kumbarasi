@@ -4,6 +4,7 @@
 /// da kapsar. Işık, eski sürümlerin "fındık" sayacıdır ([ChildProgress.nuts]).
 library;
 
+import 'quests.dart';
 import 'world.dart';
 
 class HeroLook {
@@ -88,7 +89,11 @@ class GameState {
     Map<String, int>? duelBest,
     List<String>? rescued,
     List<NotebookPage>? notebook,
+    this.board,
+    this.trip,
+    List<Letter>? letters,
   })  : supplies = supplies ?? {},
+        letters = letters ?? [],
         built = built ?? {},
         banners = banners ?? {},
         duelBest = duelBest ?? {},
@@ -113,6 +118,25 @@ class GameState {
   final List<String> rescued;
   final List<NotebookPage> notebook;
 
+  /// Günün istek panosu (gün değişince yenilenir).
+  DailyBoard? board;
+
+  /// Bu haftanın seferi.
+  WeeklyTrip? trip;
+
+  /// Gelen mektuplar (en yenisi sonda).
+  final List<Letter> letters;
+
+  int get unreadLetters => letters.where((l) => !l.read).length;
+
+  /// Aynı kimlikli mektup bir kez gelir.
+  bool addLetter(Letter l) {
+    if (letters.any((x) => x.id == l.id)) return false;
+    letters.add(l);
+    if (letters.length > 200) letters.removeRange(0, letters.length - 200);
+    return true;
+  }
+
   int supply(Supply s) => supplies[s.id] ?? 0;
   void addSupply(Supply s, int n) => supplies[s.id] = (supplies[s.id] ?? 0) + n;
 
@@ -131,6 +155,9 @@ class GameState {
         'duel': duelBest,
         'res': rescued,
         'book': [for (final p in notebook) p.toJson()],
+        if (board != null) 'board': board!.toJson(),
+        if (trip != null) 'trip': trip!.toJson(),
+        'mail': [for (final l in letters) l.toJson()],
       };
 
   factory GameState.fromJson(Object? raw) {
@@ -149,6 +176,11 @@ class GameState {
         for (final p in (raw['book'] as List? ?? const []))
           if (p is List && p.length >= 2) NotebookPage('${p[0]}', '${p[1]}'),
       ],
+      board: DailyBoard.fromJson(raw['board']),
+      trip: WeeklyTrip.fromJson(raw['trip']),
+      letters: [
+        for (final l in (raw['mail'] as List? ?? const [])) Letter.fromJson(l),
+      ].whereType<Letter>().toList(),
     );
   }
 }

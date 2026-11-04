@@ -60,6 +60,20 @@ Future<void> tapKey(WidgetTester t, String key) async {
   await t.pumpAndSettle();
 }
 
+/// Kasaba listesinde aşağı kaydırıp dokunur (liste tembel kurulur).
+Future<void> tapTown(WidgetTester t, String key) async {
+  final f = find.byKey(Key(key));
+  await t.scrollUntilVisible(f, 150,
+      scrollable: find
+          .descendant(
+              of: find.byKey(const Key('town-list')),
+              matching: find.byType(Scrollable))
+          .first);
+  await t.pumpAndSettle();
+  await t.tap(f);
+  await t.pumpAndSettle();
+}
+
 /// Kahramanı hazır bir çocuk (kahraman oluşturma ekranı atlanır).
 Future<void> seedHero(ProgressStore store, String id) => store.saveProgress(id,
     ChildProgress(game: GameState(hero: const HeroLook(girl: false, path: 1))));
@@ -164,14 +178,30 @@ void main() {
 
     await tapKey(t, 'tab-town');
     expect(has('town-list'), isTrue);
-    await tapKey(t, 'notebook-open');
+    // İstek panosu ve sefer: biten oturum sayıldı, ödül elle alınır
+    expect(has('quest-board'), isTrue);
+    final g = state.progress!.game;
+    expect(g.board!.counts['s'], 1);
+    expect(g.trip!.days, hasLength(1));
+    final light0 = state.progress!.nuts;
+    await tapTown(t, 'quest-claim-0');
+    expect(state.progress!.nuts, light0 + g.board!.quests[0].light);
+    expect(g.board!.claimed, {0});
+    // Anka'nın hoş geldin mektubu
+    expect(g.unreadLetters, 1);
+    await tapTown(t, 'mail-open');
+    expect(find.text('Anka'), findsWidgets);
+    await tapKey(t, 'letter-0');
+    expect(g.unreadLetters, 0);
+    await tapKey(t, 'mail-back');
+    await tapTown(t, 'notebook-open');
     expect(find.text('Kahraman Defteri'), findsOneWidget);
     expect(find.textContaining('Elif bugün'), findsWidgets);
     await tapKey(t, 'notebook-back');
     // İlk yapı: ışık ve demirle hemen kurulur
     final before = state.progress!.nuts;
     if (state.canBuild(buildings.first)) {
-      await tapKey(t, 'build-ev');
+      await tapTown(t, 'build-ev');
       expect(state.progress!.game.built['ev'], 1);
       expect(state.progress!.nuts, lessThan(before));
     }

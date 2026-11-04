@@ -10,6 +10,7 @@ import '../data/content_repository.dart';
 import '../data/models.dart';
 import '../data/progress_store.dart';
 import '../game/game_state.dart';
+import '../game/quests.dart';
 import '../game/world.dart';
 import 'speaker.dart';
 
@@ -206,7 +207,12 @@ class AppState extends ChangeNotifier {
       String nickname, int grade, String avatar, HeroLook hero) async {
     final id = '${clock().microsecondsSinceEpoch}${Random().nextInt(1 << 16)}';
     await _guard(() =>
-        store.saveProgress(id, ChildProgress(game: GameState(hero: hero))));
+        store.saveProgress(
+            id,
+            ChildProgress(
+                game: GameState(hero: hero)
+                  ..addLetter(welcomeLetter(
+                      hero.name ?? nickname.trim(), dayKey(clock()))))));
     final p = ChildProfile(
         id: id, nickname: nickname.trim(), grade: grade, avatar: avatar);
     profiles = [...profiles, p];
@@ -405,6 +411,117 @@ class AppState extends ChangeNotifier {
 
   Future<void> saveHero(HeroLook hero) async {
     progress!.game.hero = hero;
+    progress!.game.addLetter(welcomeLetter(
+        hero.name ?? active?.nickname ?? 'Kahraman', dayKey(clock())));
+    await saveProgress();
+  }
+
+  // ------------------------------------------------- Süreklilik (pano, sefer)
+
+  String get heroName =>
+      progress?.game.hero?.name ?? active?.nickname ?? 'Kahraman';
+
+  /// Haftanın pazartesisinin gün anahtarı.
+  String weekKey(DateTime t) {
+    final d = dayStart(t);
+    return dayKey(DateTime(d.year, d.month, d.day - (d.weekday - 1), 12));
+  }
+
+  /// Şu an bekleyen (daha önce görülmüş) tekrar kartı sayısı.
+  int get dueNowRough {
+    final now = clock();
+    return progress?.cards.values
+            .where((c) => !c.isNew && !c.due.isAfter(now))
+            .length ??
+        0;
+  }
+
+  /// Açılabilecek yeni konu var mı (abonelik kilidi dahil)?
+  Future<bool> _hasNewTopic() async {
+    final a = active, p = progress;
+    if (a == null || p == null) return false;
+    for (final s in Subject.forGrade(a.grade)) {
+      final locked = await lockedOutcomes(s);
+      final all = await content.outcomesFor(s, a.grade);
+      if (all.any((o) =>
+          !p.startedOutcomes.contains(o.code) && !locked.contains(o.code))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// Bugünün istek panosu; gün değiştiyse yenisini kurar.
+  Future<DailyBoard> todayBoard({bool save = true}) async {
+    final g = game;
+    final today = dayKey(clock());
+    final b = g.board;
+    if (b != null && b.day == today) return b;
+    g.board = DailyBoard(
+        today,
+        makeDailyQuests(today, active!.id,
+            reviewReady: dueNowRough >= 5,
+            newTopicReady: await _hasNewTopic()));
+    if (save) await saveProgress();
+    return g.board!;
+  }
+
+  /// Bu haftanın seferi; hafta değiştiyse yenisini başlatır.
+  WeeklyTrip thisTrip() {
+    final g = game;
+    final wk = weekKey(clock());
+    if (g.trip?.week != wk) g.trip = WeeklyTrip(wk);
+    return g.trip!;
+  }
+
+  /// Oturum bitince pano ve sefer ilerler. Kaydetmez; çağıran kaydeder.
+  Future<void> recordSession(
+      {required int correct,
+      required int newTopics,
+      required int reviewed}) async {
+    if (progress == null || active == null) return;
+    final b = await todayBoard(save: false);
+    b.add(QuestKind.session, 1);
+    b.add(QuestKind.correct, correct);
+    b.add(QuestKind.newTopic, newTopics);
+    b.add(QuestKind.review, reviewed);
+    thisTrip().days.add(dayKey(clock()));
+  }
+
+  /// Tamamlanan isteğin ödülünü alır.
+  Future<bool> claimQuest(int i) async {
+    final b = await todayBoard();
+    if (i < 0 || i >= b.quests.length || !b.canClaim(i)) return false;
+    final q = b.quests[i];
+    b.claimed.add(i);
+    progress!.nuts += q.light;
+    game.addSupply(q.supply, q.qty);
+    game.addPage(dayKey(clock()),
+        '$heroName, ${q.who.name} için bir iş gördü: ${q.task}');
+    await saveProgress();
+    return true;
+  }
+
+  /// Haftalık seferin ödülü: ışık, her krallıktan malzeme ve önderin mektubu.
+  Future<bool> claimTrip() async {
+    final t = thisTrip();
+    if (!t.canClaim) return false;
+    t.claimed = true;
+    progress!.nuts += 15;
+    for (final s in Supply.values) {
+      game.addSupply(s, 2);
+    }
+    final today = dayKey(clock());
+    game.addLetter(
+        leaderLetter(t.leaderKingdom, t.week, heroName, t.days.length, today));
+    game.addPage(today, '$heroName haftalık seferini tamamladı.');
+    await saveProgress();
+    return true;
+  }
+
+  Future<void> readLetter(Letter l) async {
+    if (l.read) return;
+    l.read = true;
     await saveProgress();
   }
 

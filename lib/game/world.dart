@@ -64,6 +64,9 @@ class Kingdom {
       };
 }
 
+/// Beş krallık, ders sırasıyla.
+const allKingdoms = [demirdag, sozorman, ocakvadi, isikkaya, kervanova];
+
 const demirdag = Kingdom(
   subject: Subject.matematik,
   name: 'Demirdağ',
