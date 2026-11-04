@@ -260,14 +260,18 @@ class _TabBar extends StatelessWidget {
                                 child: IkonView(tabs[i].$3, size: 30),
                               ),
                               const SizedBox(height: 1),
-                              Text(tabs[i].$2,
-                                  textScaler: TextScaler.noScaling,
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: sel
-                                          ? FontWeight.w700
-                                          : FontWeight.w400,
-                                      color: K.murekkep)),
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(tabs[i].$2,
+                                    maxLines: 1,
+                                    textScaler: TextScaler.noScaling,
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: sel
+                                            ? FontWeight.w700
+                                            : FontWeight.w400,
+                                        color: K.murekkep)),
+                              ),
                               SizedBox(
                                 width: 54,
                                 height: 6,
