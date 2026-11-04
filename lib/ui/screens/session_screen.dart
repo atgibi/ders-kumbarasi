@@ -11,6 +11,7 @@ import '../../game/quests.dart';
 import '../../game/turkish.dart';
 import '../../game/world.dart';
 import '../game/duel_widgets.dart';
+import '../game/game_theme.dart';
 import '../game/hero_figure.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
@@ -534,70 +535,120 @@ class _LessonViewState extends State<_LessonView> {
     final pages = widget.lesson.pages;
     final page = pages[_page];
     final last = _page == pages.length - 1;
+    // Claude Design 17: konu kitapçığı. Sayfa noktaları, cetvel çerçeveli
+    // kâğıt, altta geri/ileri.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-            children: [
-              _StepHeader(
-                label: Text('YENİ KONU · ${_page + 1}/${pages.length}',
-                    style: T.kicker),
-                trailing: [
-                  ListenSplit(
-                      onListen: (slow) =>
-                          widget.onSay(page.spoken, slow: slow)),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 2, 20, 6),
+          child: Row(children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('KONU ANLATIMI',
+                      style: TextStyle(
+                          fontFamily: K.display,
+                          fontSize: 13,
+                          letterSpacing: .8,
+                          fontWeight: FontWeight.w700,
+                          color: K.kokKoyu)),
+                  EmojiText(widget.lesson.title,
+                      style: const TextStyle(
+                          fontFamily: K.display,
+                          fontSize: 20,
+                          height: 1.15,
+                          fontWeight: FontWeight.w700,
+                          color: K.murekkep)),
                 ],
               ),
-              const SizedBox(height: 14),
-              EmojiText(widget.lesson.title, style: T.title),
-              const SizedBox(height: 14),
-              DkCard(
-                radius: K.rLg,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (page.visual != null) ...[
-                      Container(
-                        constraints: const BoxConstraints(minHeight: 150),
-                        padding: const EdgeInsets.all(16),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: K.tint,
-                            borderRadius: BorderRadius.circular(K.rMd)),
-                        child: VisualView(page.visual!),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-                    EmojiText(page.text,
-                        style: const TextStyle(
-                            fontSize: 21,
-                            height: 28 / 21,
-                            fontWeight: FontWeight.w700,
-                            color: K.ink)),
-                  ],
-                ),
-              ),
-            ],
+            ),
+            ListenSplit(
+                onListen: (slow) => widget.onSay(page.spoken, slow: slow)),
+          ]),
+        ),
+        Semantics(
+          label: 'Sayfa ${_page + 1} / ${pages.length}',
+          child: ExcludeSemantics(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var i = 0; i < pages.length; i++)
+                  Container(
+                    width: i == _page ? 30 : 12,
+                    height: 12,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: i <= _page ? K.safran : K.kagit3,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: K.murekkep, width: 2),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 6, bottom: 10),
-          child: Center(child: Dots(count: pages.length, index: _page)),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: HandBox(
+              style: HandStyle.kart,
+              child: CustomPaint(
+                foregroundPainter: _RulerFrame(),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(22, 22, 22, 18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (page.visual != null) ...[
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(minHeight: 150),
+                          child: Center(child: VisualView(page.visual!)),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                      EmojiText(page.text,
+                          style: const TextStyle(
+                              fontSize: 21,
+                              height: 1.4,
+                              color: K.murekkep)),
+                      if (last) ...[
+                        const SizedBox(height: 14),
+                        Row(children: [
+                          const Mascot(mood: MascotMood.teach, size: 64),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text('Şimdi sen dene!',
+                                style: G.hand.copyWith(
+                                    fontSize: 19, color: K.lacivert)),
+                          ),
+                        ]),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
         _Footer(
           child: Row(children: [
             if (_page > 0) ...[
-              SizedBox(
-                width: 72,
-                child: ChunkyButton(
-                  key: const Key('lesson-back'),
-                  label: '',
-                  semanticsLabel: 'Geri',
-                  icon: DkIcons.left,
-                  kind: BtnKind.secondary,
-                  onPressed: () => _go(_page - 1),
+              Pressable(
+                key: const Key('lesson-back'),
+                label: 'Geri',
+                excludeChildSemantics: true,
+                onTap: () => _go(_page - 1),
+                builder: (context, down) => SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CustomPaint(
+                    painter: HandPainter(HandStyle.muhur
+                        .copyWith(fill: down ? K.kagit2 : K.kagit3)),
+                    child: const Center(child: IkonView(Ikon.geri, size: 28)),
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -606,6 +657,7 @@ class _LessonViewState extends State<_LessonView> {
               child: ChunkyButton(
                 key: const Key('lesson-next'),
                 label: last ? 'Hadi deneyelim!' : 'İleri',
+                kind: last ? BtnKind.good : BtnKind.primary,
                 onPressed: last ? widget.onDone : () => _go(_page + 1),
               ),
             ),
@@ -614,6 +666,27 @@ class _LessonViewState extends State<_LessonView> {
       ],
     );
   }
+}
+
+/// Kitapçık sayfasının cetvel çerçevesi: mürekkep, safran, mürekkep ve
+/// lacivert iç çizgiler.
+class _RulerFrame extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    void line(double inset, double w, Color c) => canvas.drawRect(
+        (Offset.zero & size).deflate(inset),
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = w
+          ..color = c);
+    line(7, 2, K.murekkep);
+    line(9.5, 3, K.safran);
+    line(11.8, 1.5, K.murekkep);
+    line(16, 1.5, K.lacivert);
+  }
+
+  @override
+  bool shouldRepaint(_RulerFrame old) => false;
 }
 
 // ----------------------------------------------------------- C3–C7 Soru
@@ -1404,147 +1477,163 @@ class _SummaryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = controller.summary;
-    final streak = AppScope.of(context).progress?.streakDays ?? 0;
+    final app = AppScope.of(context);
+    final streak = app.progress?.streakDays ?? 0;
+    final hero = app.progress?.game.hero;
     final supply = Kingdom.of(controller.subject).material;
     final tiles = [
-      (DkIcons.check, '${s.correct}', 'doğru cevap', K.goodBg, K.goodInk, null),
-      (DkIcons.nut, '+${s.nutsEarned}', 'ışık', K.peach, K.peachInk, null),
-      (
-        DkIcons.blocks,
-        '+${s.suppliesEarned}',
-        supply.label.toLowerCase(),
-        K.rewardBg,
-        K.rewardInk,
-        supply.emoji
-      ),
-      (
-        DkIcons.leaf,
-        '$streak gün',
-        'meşalen yanıyor',
-        K.goodBg,
-        K.goodInk,
-        '🔥'
-      ),
+      (Ikon.tik, '${s.correct}', 'doğru cevap'),
+      (Ikon.isik, '+${s.nutsEarned}', 'ışık'),
+      (ikonOf(supply), '+${s.suppliesEarned}', supply.label.toLowerCase()),
+      (Ikon.mesale, '$streak gün', 'meşalen yanıyor'),
     ];
     final newTitles = [
       for (final code in s.newOutcomes) lessonTitles[code] ?? code,
     ];
+    // Claude Design 22: kemerli zafer sahnesi, el çizimi ödüller, defter notu
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: 72,
+            height: 64,
             child: Align(
               alignment: Alignment.centerRight,
               child: ListenButton(onListen: () => onSay('Bugün çok çalıştın!')),
             ),
           ),
           Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const _Pop(
-                        child: Mascot(
-                            mood: MascotMood.celebrate,
-                            size: 150,
-                            label: 'Anka kutluyor')),
-                    const SizedBox(height: 16),
-                    const Text('Bugün çok çalıştın!', style: T.big),
-                    const SizedBox(height: 16),
-                    LayoutBuilder(builder: (context, box) {
-                      final w = (box.maxWidth - 10) / 2;
-                      return Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: [
-                          for (final t in tiles)
-                            SizedBox(
-                              width: w,
-                              child: DkCard(
-                                padding: const EdgeInsets.all(14),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 36,
-                                      height: 36,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: t.$4,
-                                          borderRadius:
-                                              BorderRadius.circular(K.rSm)),
-                                      child: t.$6 != null
-                                          ? EmojiImage(t.$6!, size: 24)
-                                          : DkIcon(t.$1, size: 22, color: t.$5),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(t.$2,
-                                        style: const TextStyle(
-                                            fontSize: 26,
-                                            height: 32 / 26,
-                                            fontWeight: FontWeight.w900,
-                                            color: K.ink)),
-                                    Text(t.$3,
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                            color: K.inkSoft)),
-                                  ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _Pop(
+                    child: SizedBox(
+                      height: 220,
+                      child: HandBox(
+                        style: const HandStyle(
+                            radii: HandRadii([120, 120, 14, 14], [96, 96, 14, 14]),
+                            fill: K.kagit3),
+                        padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.elliptical(108, 86)),
+                          child: ColoredBox(
+                            color: const Color(0xFFE3E6D3),
+                            child: Stack(children: [
+                              const Positioned(
+                                  left: 0, right: 0, bottom: 0, child: Kilim.zumrut()),
+                              if (hero != null)
+                                Positioned(
+                                  left: 24,
+                                  bottom: 10,
+                                  child: HeroFigure(
+                                      look: hero, size: 150, cheer: true),
                                 ),
+                              const Positioned(
+                                right: 12,
+                                bottom: 14,
+                                child: Mascot(
+                                    mood: MascotMood.celebrate,
+                                    size: 110,
+                                    label: 'Anka kutluyor'),
                               ),
-                            ),
-                        ],
-                      );
-                    }),
-                    if (newTitles.isNotEmpty || notebookLine != null) ...[
-                      const SizedBox(height: 16),
-                      DkCard(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 12),
-                        color: K.rewardBg,
-                        borderColor: K.rewardLine,
-                        child: Row(children: [
-                          Container(
-                            width: 40,
-                            height: 40,
-                            alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                                color: K.reward, shape: BoxShape.circle),
-                            child: const EmojiImage('📜', size: 24),
+                            ]),
                           ),
-                          const SizedBox(width: 12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  const Text('Bugün çok çalıştın!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: K.display,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          color: K.lacivert)),
+                  const SizedBox(height: 14),
+                  LayoutBuilder(builder: (context, box) {
+                    final w = (box.maxWidth - 10) / 2;
+                    return Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        for (final t in tiles)
+                          SizedBox(
+                            width: w,
+                            child: DkCard(
+                              padding: const EdgeInsets.all(12),
+                              child: Row(children: [
+                                IkonView(t.$1, size: 34),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(t.$2,
+                                          style: const TextStyle(
+                                              fontFamily: K.display,
+                                              fontSize: 24,
+                                              height: 1.1,
+                                              fontWeight: FontWeight.w800,
+                                              color: K.murekkep)),
+                                      Text(t.$3,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: K.murekkep2)),
+                                    ],
+                                  ),
+                                ),
+                              ]),
+                            ),
+                          ),
+                      ],
+                    );
+                  }),
+                  if (newTitles.isNotEmpty || notebookLine != null) ...[
+                    const SizedBox(height: 14),
+                    Transform.rotate(
+                      angle: -.015,
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                        decoration: BoxDecoration(
+                          color: K.kagit3,
+                          border: Border.all(color: K.murekkep, width: 2),
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color(0x592B2320), offset: Offset(3, 4))
+                          ],
+                        ),
+                        child: Row(children: [
+                          const IkonView(Ikon.defter, size: 34),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: EmojiText(
                                 notebookLine ??
                                     'Yeni konu: ${newTitles.join(', ')}',
-                                style: const TextStyle(
-                                    fontSize: 17,
-                                    height: 23 / 17,
-                                    fontWeight: FontWeight.w800,
-                                    color: K.rewardInk)),
+                                style: G.hand
+                                    .copyWith(fontSize: 17, color: K.murekkep)),
                           ),
                         ]),
                       ),
-                    ],
-                    if (s.retried > 0) ...[
-                      const SizedBox(height: 12),
-                      const Text('Zorlandığın soruları yakında yine soracağım.',
-                          style: T.help),
-                    ],
+                    ),
                   ],
-                ),
+                  if (s.retried > 0) ...[
+                    const SizedBox(height: 12),
+                    const Text('Zorlandığın soruları yakında yine soracağım.',
+                        style: T.help),
+                  ],
+                ],
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           ChunkyButton(
               key: const Key('summary-done'),
               label: 'Tamam',
+              kind: BtnKind.kok,
               onPressed: onDone),
         ],
       ),
