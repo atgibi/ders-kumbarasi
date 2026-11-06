@@ -222,7 +222,11 @@ class CardDef {
     this.generator,
     this.generatorParams = const {},
     this.fastSeconds = 15,
+    this.level = 2,
   }) : assert(fixed != null || generator != null);
+
+  /// Zorluk: 1 kolay, 2 orta, 3 zor. Yeni konuda önce kolaylar gelir.
+  final int level;
 
   final String id;
   final String outcomeCode;
@@ -283,6 +287,7 @@ class CardDef {
         optionNotes: _notes(j['why'], options.length),
       ),
       fastSeconds: (j['fast'] as num?)?.toInt() ?? 15,
+      level: (j['level'] as num?)?.toInt() ?? 2,
     );
   }
 }

@@ -176,7 +176,9 @@ class SessionController {
         ..sort((a, b) {
           final sa = progress.cards[a.id], sb = progress.cards[b.id];
           final c = (sa?.box ?? -1).compareTo(sb?.box ?? -1);
-          return c != 0 ? c : a.id.compareTo(b.id);
+          if (c != 0) return c;
+          final l = a.level.compareTo(b.level);
+          return l != 0 ? l : a.id.compareTo(b.id);
         });
       final ids = cards.take(8).map((c) => c.id).toList()..shuffle(rnd);
       final plan = SessionPlan(
@@ -207,7 +209,12 @@ class SessionController {
       if (locked.contains(o.code)) continue; // abonelikle açılan bölge
       nextNew = NewOutcomeCandidate(
         outcomeId: o.code,
-        cardIds: [for (final c in oc.cards) c.id],
+        // Kolaydan zora: ilk alıştırmada önce kolay sorular gelir
+        cardIds: [
+          for (final c in ([...oc.cards]
+            ..sort((a, b) => a.level.compareTo(b.level))))
+            c.id
+        ],
       );
       break;
     }

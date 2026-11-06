@@ -101,3 +101,30 @@ def seven(title, hook, concrete, picture, rule, example, caution, summary, alt=N
     if alt:
         ls.append(lesson(alt_title or f"{title}: başka bir yoldan", [_pg(p) for p in alt], alt=True))
     return ls
+
+
+# --------------------------------------------------------------------------
+# Soru bankası (kalite kuralları: tools/content/build.py › STRICT)
+#
+# Her kazanıma 15–20 soru; üç zorluk düzeyi (1 kolay, 2 orta, 3 zor);
+# 1. sınıfta 3, 2–4. sınıflarda 4 seçenek; her yanlış seçeneğin "neden
+# yanlış" notu. Doğru cevap hep ilk yazılır, uygulama her gösterimde
+# seçenekleri karıştırır.
+
+def q(level, prompt, right, *wrongs, visual=None, say=None, hint=None, explain=None):
+    """wrongs: (seçenek, neden yanlış) çiftleri."""
+    if level not in (1, 2, 3):
+        raise ValueError(f"Zorluk 1–3 olmalı: {prompt}")
+    for w in wrongs:
+        if not (isinstance(w, tuple) and len(w) == 2):
+            raise ValueError(f"Yanlış seçenek (metin, neden) olmalı: {prompt} → {w}")
+    d = mc(prompt, [right] + [w[0] for w in wrongs], 0,
+           why={i + 1: w[1] for i, w in enumerate(wrongs)},
+           visual=visual, say=say, hint=hint, explain=explain)
+    d["level"] = level
+    return d
+
+
+def rq(level, passage, question, right, *wrongs, **kw):
+    """Okuma parçalı soru: parça üstte, soru altında."""
+    return q(level, f"{passage}\n\n{question}", right, *wrongs, **kw)
