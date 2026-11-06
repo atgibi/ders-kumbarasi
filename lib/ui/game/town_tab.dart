@@ -60,6 +60,10 @@ class _TownTabState extends State<TownTab> {
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
         children: [
           const SupplyStrip(),
+          // Kasabanın kendisi en üstte: kurulan yapılar burada görünür
+          const SizedBox(height: 8),
+          const TownView(),
+          const SizedBox(height: 12),
           if (hero != null)
             FutureBuilder<HeroStage>(
               future: _stage,
@@ -98,8 +102,6 @@ class _TownTabState extends State<TownTab> {
             MailboxButton(),
           ]),
           const SizedBox(height: 8),
-          const TownView(),
-          const SizedBox(height: 16),
           // Claude Design 29: kurtarılanlar koleksiyonu; henüz kurtarılmayan
           // bekçiler sisin içinde
           const Text('KURTARILANLAR', style: G.kicker),

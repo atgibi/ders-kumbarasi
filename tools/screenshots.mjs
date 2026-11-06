@@ -133,7 +133,6 @@ await step('G', async () => {
   await p.close();
   p = await open('town');
   await tap(p, 'Kasaba');
-  await p.mouse.wheel(0, 700);
   await shot(p, 'G9-kasaba');
   await p.close();
 });
