@@ -58,7 +58,7 @@ async function step(name, fn) {
 await step('A', async () => {
   const p = await open('onboarding');
   await shot(p, 'A1-karsilama');
-  await tap(p, 'Başla');
+  await tap(p, 'Maceraya başla');
   await shot(p, 'A2-nasil-calisir');
   for (let i = 0; i < 3; i++) await tap(p, 'İleri');
   await shot(p, 'A3-profil');

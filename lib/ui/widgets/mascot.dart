@@ -1,5 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../theme.dart';
 
 enum MascotMood { normal, celebrate, think, sleepy, teach }
 
@@ -33,6 +37,38 @@ class Mascot extends StatelessWidget {
       excludeFromSemantics: label == null,
       semanticsLabel: label,
     );
-    return label == null ? ExcludeSemantics(child: img) : img;
+    final w = label == null ? ExcludeSemantics(child: img) : img;
+    // Claude Design › Hareket: Anka yavaşça nefes alır (hareketi azaltta yok)
+    return reduceMotion(context) ? w : _Breathe(child: w);
   }
+}
+
+class _Breathe extends StatefulWidget {
+  const _Breathe({required this.child});
+  final Widget child;
+
+  @override
+  State<_Breathe> createState() => _BreatheState();
+}
+
+class _BreatheState extends State<_Breathe>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 3200))
+    ..repeat();
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: _c,
+        builder: (context, child) => Transform.translate(
+            offset: Offset(0, -3 * math.sin(_c.value * math.pi)),
+            child: child),
+        child: widget.child,
+      );
 }

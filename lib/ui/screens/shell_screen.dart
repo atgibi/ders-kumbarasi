@@ -61,7 +61,8 @@ class _ShellScreenState extends State<ShellScreen> {
       },
       child: Scaffold(
         backgroundColor: K.bg,
-        body: SafeArea(
+        body: Stack(children: [
+          SafeArea(
           bottom: false,
           child: ChildTextScale(
             child: Column(children: [
@@ -81,6 +82,8 @@ class _ShellScreenState extends State<ShellScreen> {
             ]),
           ),
         ),
+          const Positioned.fill(child: PaperGrain()),
+        ]),
         bottomNavigationBar: FutureBuilder<int>(
           future: _dueFuture,
           builder: (context, snap) => _TabBar(

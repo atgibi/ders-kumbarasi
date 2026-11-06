@@ -8,6 +8,7 @@ import '../../game/world.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
+import '../widgets/hand.dart';
 import '../widgets/kit.dart';
 import 'board_widgets.dart';
 import 'duel_widgets.dart';
@@ -96,18 +97,59 @@ class _TownTabState extends State<TownTab> {
             MailboxButton(),
           ]),
           const SizedBox(height: 8),
-          if (rescued.isNotEmpty) ...[
-            const Text('Kurtardığın bekçiler kasabanda yaşıyor:',
-                style: G.soft),
-            const SizedBox(height: 6),
-            Wrap(spacing: 8, runSpacing: 8, children: [
-              for (final r in rescued)
-                Tooltip(
-                    message: r.name,
-                    child: GuardianFigure(guardian: r, size: 64)),
-            ]),
-            const SizedBox(height: 14),
-          ],
+          // Claude Design 29: kurtarılanlar koleksiyonu; henüz kurtarılmayan
+          // bekçiler sisin içinde
+          const Text('KURTARILANLAR', style: G.kicker),
+          const SizedBox(height: 2),
+          Text(
+              rescued.isEmpty
+                  ? 'Bir bekçiyi kurtarınca kasabana taşınır.'
+                  : '${rescued.toSet().length} / ${guardians.length} bekçi kasabanda yaşıyor.',
+              style: G.soft),
+          const SizedBox(height: 8),
+          LayoutBuilder(builder: (context, box) {
+            final w = (box.maxWidth - 24) / 4;
+            final have = {for (final r in rescued) r.id};
+            return Wrap(spacing: 8, runSpacing: 10, children: [
+              for (final gd in guardians)
+                SizedBox(
+                  key: Key('guardian-${gd.id}'),
+                  width: w,
+                  child: Column(children: [
+                    HandBox(
+                      style: HandStyle.kart.copyWith(
+                          fill: have.contains(gd.id)
+                              ? K.kagit3
+                              : const Color(0xFFDDE3EA)),
+                      padding: const EdgeInsets.all(4),
+                      child: SizedBox(
+                        height: w,
+                        child: Center(
+                          child: Opacity(
+                            opacity: have.contains(gd.id) ? 1 : .45,
+                            child: GuardianFigure(
+                                guardian: gd,
+                                size: w - 12,
+                                armored: !have.contains(gd.id)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(have.contains(gd.id) ? gd.name : '?',
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: const TextStyle(
+                            fontFamily: K.display,
+                            fontSize: 12,
+                            height: 1.1,
+                            fontWeight: FontWeight.w700,
+                            color: K.murekkep)),
+                  ]),
+                ),
+            ]);
+          }),
+          const SizedBox(height: 16),
           for (final b in buildings) ...[
             _BuildingRow(
               key: Key('building-${b.id}'),

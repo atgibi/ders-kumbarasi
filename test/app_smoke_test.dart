@@ -154,7 +154,7 @@ void main() {
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
 
-    expect(find.text('Her gün 10 dakika, kalıcı öğrenme'), findsOneWidget);
+    expect(find.text('Bilgelik Diyarı'), findsOneWidget);
     await tapKey(t, 'onboarding-start');
     for (var i = 0; i < 3; i++) {
       await tapKey(t, 'onboarding-next');

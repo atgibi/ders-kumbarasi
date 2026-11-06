@@ -429,7 +429,11 @@ class _SessionScreenState extends State<SessionScreen> {
       },
       child: Scaffold(
         backgroundColor: K.bg,
-        body: SafeArea(child: ChildTextScale(child: body)),
+        // kâğıt dokusu: çok hafif lif gürültüsü (Claude Design › doku)
+        body: Stack(children: [
+          SafeArea(child: ChildTextScale(child: body)),
+          const Positioned.fill(child: PaperGrain()),
+        ]),
       ),
     );
   }
