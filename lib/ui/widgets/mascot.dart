@@ -72,3 +72,45 @@ class _BreatheState extends State<_Breathe>
         child: widget.child,
       );
 }
+
+/// Claude Design › Hareket: sancak rüzgârda dalgalanır (hareketi azaltta
+/// durur). Alt kenar (direk dibi) sabit kalır.
+class Waving extends StatelessWidget {
+  const Waving({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) =>
+      reduceMotion(context) ? child : _Wave(child: child);
+}
+
+class _Wave extends StatefulWidget {
+  const _Wave({required this.child});
+  final Widget child;
+
+  @override
+  State<_Wave> createState() => _WaveState();
+}
+
+class _WaveState extends State<_Wave> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 1800))
+    ..repeat();
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: _c,
+        builder: (context, child) => Transform(
+          alignment: Alignment.bottomLeft,
+          transform: Matrix4.skewY(0.05 * math.sin(_c.value * 2 * math.pi)),
+          child: child,
+        ),
+        child: widget.child,
+      );
+}

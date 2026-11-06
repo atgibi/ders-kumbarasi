@@ -13,6 +13,7 @@ import '../../game/world.dart';
 import '../game/duel_widgets.dart';
 import '../game/game_theme.dart';
 import '../game/hero_figure.dart';
+import '../game/year_end.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
@@ -31,7 +32,7 @@ const _okBodies = [
   'Güzel çalıştın.'
 ];
 
-enum _Phase { loading, empty, error, run, summary, streak, duelWin }
+enum _Phase { loading, empty, error, run, summary, streak, duelWin, finaleWin }
 
 /// Çalışma oturumu (C1–C12): konu anlatımı, sorular, etkinlik, özet, seri.
 class SessionScreen extends StatefulWidget {
@@ -42,7 +43,11 @@ class SessionScreen extends StatefulWidget {
     this.reviewOnly = false,
     this.extraPractice = false,
     this.duel,
+    this.finale = false,
   });
+
+  /// Yıl sonu düellosu (Karabulut): bu dersin başlanmış tüm konularından.
+  final bool finale;
 
   /// Verilirse bekçi düellosu: bu bölgenin çıktılarından karma sorular.
   final RegionDef? duel;
@@ -93,13 +98,16 @@ class _SessionScreenState extends State<SessionScreen> {
     final app = AppScope.read(context);
     try {
       final duel = widget.duel;
-      final c = duel != null
+      final c = duel != null || widget.finale
           ? await SessionController.duel(
               repo: app.content,
               subject: widget.subject,
               grade: app.active!.grade,
               progress: app.progress!,
-              outcomeCodes: [for (final o in duel.outcomes) o.code],
+              outcomeCodes: duel != null
+                  ? [for (final o in duel.outcomes) o.code]
+                  : await app.finaleOutcomes(widget.subject),
+              count: duel != null ? 8 : 12,
               clock: app.clock,
             )
           : await SessionController.build(
@@ -161,6 +169,14 @@ class _SessionScreenState extends State<SessionScreen> {
           newTopics: c.summary.newOutcomes.length,
           reviewed: widget.reviewOnly ? c.summary.answered : 0);
       if (!mounted) return;
+      if (widget.finale) {
+        _winFinale(app);
+        await app.saveProgress();
+        if (!mounted) return;
+        setState(() => _phase = _Phase.finaleWin);
+        _say('Karabulut barıştı!');
+        return;
+      }
       if (widget.duel != null) {
         _winDuel(app, c);
         await app.saveProgress();
@@ -184,6 +200,23 @@ class _SessionScreenState extends State<SessionScreen> {
     if (retryNote && !_limitWarned) {
       showDkToast(
           context, DkIcons.again, 'Bunu birazdan bir kez daha soracağız.');
+    }
+  }
+
+  /// Karabulut düellosu bitti: bu krallıkta barışıldı. Dördü bitince Efsane.
+  void _winFinale(AppState app) {
+    final g = app.progress!.game;
+    final k = Kingdom.of(widget.subject);
+    final first = g.finale.add(widget.subject.id);
+    if (!first) return;
+    app.progress!.nuts += 20;
+    g.addPage(
+        dayKey(app.clock()),
+        '${_heroName(app)}, ${locative(k.name)} Karabulut ile yüzleşti. '
+        'Küs bulut barıştı ve filizlere yağmur yağdırdı.');
+    if (app.finaleDone) {
+      g.addPage(dayKey(app.clock()),
+          '${_heroName(app)} dört krallıkta da Karabulut ile barıştı ve Efsane oldu.');
     }
   }
 
@@ -273,7 +306,9 @@ class _SessionScreenState extends State<SessionScreen> {
       _summaryDone();
       return;
     }
-    if (_phase == _Phase.streak || _phase == _Phase.duelWin) {
+    if (_phase == _Phase.streak ||
+        _phase == _Phase.duelWin ||
+        _phase == _Phase.finaleWin) {
       _end();
       return;
     }
@@ -350,6 +385,13 @@ class _SessionScreenState extends State<SessionScreen> {
           onDone: _end,
           onSay: _say,
         );
+      case _Phase.finaleWin:
+        body = FinaleWinView(
+          subject: widget.subject,
+          legend: AppScope.read(context).finaleDone,
+          onDone: _end,
+          onSay: _say,
+        );
       case _Phase.streak:
         body = _StreakView(onDone: _end, onSay: _say);
       case _Phase.run:
@@ -364,6 +406,12 @@ class _SessionScreenState extends State<SessionScreen> {
             if (widget.duel != null)
               DuelHeader(
                 guardian: widget.duel!.guardian,
+                pieces: _duelPieces,
+                fallen: math.min(_duelHits, _duelPieces),
+                kingdom: Kingdom.of(widget.subject),
+              ),
+            if (widget.finale)
+              KarabulutHeader(
                 pieces: _duelPieces,
                 fallen: math.min(_duelHits, _duelPieces),
                 kingdom: Kingdom.of(widget.subject),
@@ -391,8 +439,10 @@ class _SessionScreenState extends State<SessionScreen> {
                       : _QuestionView(
                           key: ValueKey('Q${c.index}'),
                           step: step,
-                          scene: widget.duel == null,
-                          phaseLabel: widget.extraPractice
+                          scene: widget.duel == null && !widget.finale,
+                          phaseLabel: widget.finale
+                              ? 'YIL SONU'
+                              : widget.extraPractice
                               ? 'EKSTRA TEKRAR'
                               : switch (step.phase) {
                                   StepPhase.warmup => 'ISINMA',
@@ -408,7 +458,7 @@ class _SessionScreenState extends State<SessionScreen> {
                             final r =
                                 c.answer(i, elapsed: elapsed, usedHint: hint);
                             _praise = (_praise + 1) % 3;
-                            if (r.correct && widget.duel != null) {
+                            if (r.correct && (widget.duel != null || widget.finale)) {
                               setState(() => _duelHits++);
                             }
                             AppScope.read(context).saveProgress();

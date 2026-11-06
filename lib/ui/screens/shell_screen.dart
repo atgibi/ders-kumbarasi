@@ -14,6 +14,7 @@ import '../widgets/mascot.dart';
 import '../game/hero_create_screen.dart';
 import '../game/kingdom_map.dart';
 import '../game/hero_figure.dart';
+import '../game/year_end.dart';
 import '../game/town_tab.dart';
 import '../widgets/hand.dart';
 import 'parent_gate.dart';
@@ -857,6 +858,14 @@ class _ProfileTabState extends State<_ProfileTab> {
             ),
           ),
         ]),
+        if (p.game.hero != null) ...[
+          const SizedBox(height: 18),
+          FutureBuilder<HeroStage>(
+            future: app.heroStage(),
+            builder: (context, snap) =>
+                YearEndCard(stage: snap.data ?? HeroStage.cirak),
+          ),
+        ],
         const SizedBox(height: 18),
         FutureBuilder<int>(
           future: _stars,

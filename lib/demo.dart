@@ -88,6 +88,10 @@ Future<void> applyDemo(AppState state) async {
         "Elif bugün Demirdağ'da \"Sayılar ve rakamlar\" konusunu öğrendi.");
     g.addPage(dayKey(now.subtract(const Duration(days: 1))),
         "Elif, Demirdağ'da Dişli Geçidi bölgesine sancağını dikti. Taş Golem sisten kurtuldu.");
+    // Efsane demosu: Karabulut tüm krallıklarda barışmış.
+    if (demo == 'legend') {
+      g.finale.addAll([for (final s in Subject.forGrade(1)) s.id]);
+    }
   }
   await state.saveProgress();
   // Kerem: henüz çalışmadı (veli panelinde boş durum)
@@ -128,6 +132,7 @@ void openDemoSession(NavigatorState nav) {
             grade: 1,
             index: 0,
             outcomes: _duelOutcomes)),
+    'finale' => const SessionScreen(subject: Subject.matematik, finale: true),
     'quiet' => const SystemScreen(kind: SystemKind.quiet),
     'timeup' => const SystemScreen(kind: SystemKind.timeUp),
     'done' => const SystemScreen(kind: SystemKind.doneToday),

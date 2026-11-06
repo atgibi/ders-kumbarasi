@@ -124,6 +124,13 @@ await step('G', async () => {
   p = await open('duel');
   await shot(p, 'G5-duello');
   await p.close();
+  p = await open('finale');
+  await shot(p, 'G7-karabulut');
+  await p.close();
+  p = await open('legend');
+  await tap(p, 'Kahraman');
+  await shot(p, 'G8-efsane');
+  await p.close();
 });
 
 await step('C2', async () => {

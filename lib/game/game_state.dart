@@ -119,7 +119,9 @@ class GameState {
     this.board,
     this.trip,
     List<Letter>? letters,
-  })  : supplies = supplies ?? {},
+    Set<String>? finale,
+  })  : finale = finale ?? {},
+        supplies = supplies ?? {},
         letters = letters ?? [],
         built = built ?? {},
         banners = banners ?? {},
@@ -154,6 +156,9 @@ class GameState {
   /// Gelen mektuplar (en yenisi sonda).
   final List<Letter> letters;
 
+  /// Yıl sonu: Karabulut'la barışılan krallıklar (ders kimlikleri).
+  final Set<String> finale;
+
   int get unreadLetters => letters.where((l) => !l.read).length;
 
   /// Aynı kimlikli mektup bir kez gelir.
@@ -185,6 +190,7 @@ class GameState {
         if (board != null) 'board': board!.toJson(),
         if (trip != null) 'trip': trip!.toJson(),
         'mail': [for (final l in letters) l.toJson()],
+        'fin': finale.toList()..sort(),
       };
 
   factory GameState.fromJson(Object? raw) {
@@ -208,13 +214,18 @@ class GameState {
       letters: [
         for (final l in (raw['mail'] as List? ?? const [])) Letter.fromJson(l),
       ].whereType<Letter>().toList(),
+      finale: {...?(raw['fin'] as List?)?.map((e) => '$e')},
     );
   }
 }
 
 /// Aşama: başlanan çıktı, kurtarılan bölge ve "yeterli" çıktı sayısından.
 HeroStage stageFor(
-    {required int started, required int banners, required int mastered}) {
+    {required int started,
+    required int banners,
+    required int mastered,
+    bool legend = false}) {
+  if (legend) return HeroStage.efsane;
   if (mastered >= 25) return HeroStage.kahraman;
   if (banners >= 2) return HeroStage.muhafiz;
   if (started >= 10) return HeroStage.yolcu;

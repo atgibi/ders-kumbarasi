@@ -93,6 +93,9 @@ void main() {
     expect(stageFor(started: 10, banners: 0, mastered: 0), HeroStage.yolcu);
     expect(stageFor(started: 12, banners: 2, mastered: 3), HeroStage.muhafiz);
     expect(stageFor(started: 30, banners: 4, mastered: 25), HeroStage.kahraman);
+    expect(
+        stageFor(started: 30, banners: 4, mastered: 25, legend: true),
+        HeroStage.efsane);
   });
 
   test('yapı maliyeti seviyeyle büyür', () {

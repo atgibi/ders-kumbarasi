@@ -562,7 +562,24 @@ class AppState extends ChangeNotifier {
         started: progress?.startedOutcomes.length ?? 0,
         banners: progress?.game.banners.length ?? 0,
         mastered: await masteredCount(),
+        legend: finaleDone,
       );
+
+  /// Yıl sonu düellosu: her krallıkta Karabulut'la bir kez barışılır.
+  /// Hepsi bitince kahraman Efsane olur.
+  bool get finaleDone {
+    final a = active, p = progress;
+    if (a == null || p == null) return false;
+    return Subject.forGrade(a.grade).every((s) => p.game.finale.contains(s.id));
+  }
+
+  /// Bir dersin yıl sonu düellosuna girecek çıktılar: başlanmış olanlar.
+  Future<List<String>> finaleOutcomes(Subject s) async {
+    final a = active, p = progress;
+    if (a == null || p == null) return const [];
+    final pack = await content.contentFor(s, a.grade);
+    return [for (final k in pack.keys) if (p.startedOutcomes.contains(k)) k];
+  }
 
   /// Yapı kurulabilir/yükseltilebilir mi?
   bool canBuild(BuildingDef b) {

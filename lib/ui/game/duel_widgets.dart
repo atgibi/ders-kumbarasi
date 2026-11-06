@@ -11,6 +11,7 @@ import '../widgets/emoji_text.dart';
 import '../widgets/hand.dart';
 import '../widgets/ikon.dart';
 import '../widgets/kit.dart';
+import '../widgets/mascot.dart';
 import 'game_theme.dart';
 import 'guardian_svg.dart';
 import 'hero_figure.dart';
@@ -309,7 +310,7 @@ class DuelWinView extends StatelessWidget {
                         const Positioned(
                           left: 140,
                           bottom: 14,
-                          child: IkonView(Ikon.sancak, size: 72),
+                          child: Waving(child: IkonView(Ikon.sancak, size: 72)),
                         ),
                       ]),
                     ),

@@ -90,10 +90,16 @@ void main() {
     expect(back.trip!.days, {'2026-11-04'});
   });
 
+  test('Karabulut ile barışılan krallıklar kaydedilir', () {
+    final g = GameState()..finale.addAll(['matematik', 'turkce']);
+    expect(GameState.fromJson(g.toJson()).finale, {'matematik', 'turkce'});
+  });
+
   test('eski kayıtlarda pano ve mektup yoksa boş başlar', () {
     final g = GameState.fromJson({'sup': {}, 'book': []});
     expect(g.board, isNull);
     expect(g.trip, isNull);
     expect(g.letters, isEmpty);
+    expect(g.finale, isEmpty);
   });
 }
