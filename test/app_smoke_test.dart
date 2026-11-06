@@ -211,7 +211,7 @@ void main() {
     // Giysi dolabı açılır, geri dönülür
     await tapTown(t, 'wardrobe-open');
     expect(has('wardrobe-list'), isTrue);
-    expect(has('item-atki'), isTrue);
+    expect(has('item-cicek_taci'), isTrue);
     await tapKey(t, 'wardrobe-back');
     final g = state.progress!.game;
     expect(g.board!.counts['s'], 1);
