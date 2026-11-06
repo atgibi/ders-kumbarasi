@@ -92,6 +92,20 @@ Future<void> applyDemo(AppState state) async {
     if (demo == 'legend') {
       g.finale.addAll([for (final s in Subject.forGrade(1)) s.id]);
     }
+    // Kasaba demosu: farklı seviyelerde yapılarla dolu izometrik kasaba.
+    if (demo == 'town') {
+      g.built.addAll({
+        'ev': 3,
+        'ocak': 2,
+        'firin': 2,
+        'demirhane': 1,
+        'kitaplik': 3,
+        'cesme': 3,
+        'bahce': 2,
+        'gozlemevi': 3,
+        'han': 2,
+      });
+    }
   }
   await state.saveProgress();
   // Kerem: henüz çalışmadı (veli panelinde boş durum)
