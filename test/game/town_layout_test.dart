@@ -38,7 +38,9 @@ void main() {
   test('bozuk ya da çakışan yerler düzeltilir', () {
     final l = TownLayout({'ev': '9,9', 'han': '2,0', 'firin': '1,1'});
     l.ensure(['ev', 'han', 'firin']);
-    final spots = {for (final id in ['ev', 'han', 'firin']) l.spotOf(id)};
+    final spots = {
+      for (final id in ['ev', 'han', 'firin']) l.spotOf(id)
+    };
     expect(spots, hasLength(3));
     for (final s in spots) {
       expect(s, isNotNull);

@@ -34,7 +34,8 @@ class Spot {
   }
 
   @override
-  bool operator ==(Object other) => other is Spot && other.x == x && other.y == y;
+  bool operator ==(Object other) =>
+      other is Spot && other.x == x && other.y == y;
 
   @override
   int get hashCode => x * 31 + y;

@@ -211,8 +211,9 @@ class SessionController {
         outcomeId: o.code,
         // Kolaydan zora: ilk alıştırmada önce kolay sorular gelir
         cardIds: [
-          for (final c in ([...oc.cards]
-            ..sort((a, b) => a.level.compareTo(b.level))))
+          for (final c in ([
+            ...oc.cards
+          ]..sort((a, b) => a.level.compareTo(b.level))))
             c.id
         ],
       );

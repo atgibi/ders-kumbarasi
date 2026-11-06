@@ -44,8 +44,8 @@ class TownView extends StatefulWidget {
 class _TownViewState extends State<TownView>
     with SingleTickerProviderStateMixin {
   /// Köylü yürüyüşü ve duman için tek saat (hareketi azaltta durur).
-  late final AnimationController _clock = AnimationController(
-      vsync: this, duration: const Duration(seconds: 40));
+  late final AnimationController _clock =
+      AnimationController(vsync: this, duration: const Duration(seconds: 40));
 
   String? _selected;
   bool _moving = false;
