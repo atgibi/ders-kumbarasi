@@ -632,8 +632,9 @@ Question _order3(Map<String, Object?> p, Random r) {
           : 'Sayıları büyükten küçüğe sırala.',
       options: [for (final n in seq) '$n'],
       answerIndex: 0,
-      explanation:
-          up ? 'Küçükten büyüğe: ${seq.join(' < ')}.' : 'Büyükten küçüğe: ${seq.join(' > ')}.',
+      explanation: up
+          ? 'Küçükten büyüğe: ${seq.join(' < ')}.'
+          : 'Büyükten küçüğe: ${seq.join(' > ')}.',
     );
   }
   final kind = r.nextInt(3);
@@ -719,10 +720,15 @@ Question _clockRead(Map<String, Object?> p, Random r) {
     return Question(
       kind: QKind.clock,
       prompt: 'Saati $right olarak kur.',
-      say: 'Saati $right olarak kur. Kısa kol saati, uzun kol dakikayı gösterir.',
+      say:
+          'Saati $right olarak kur. Kısa kol saati, uzun kol dakikayı gösterir.',
       options: opts,
       answerIndex: opts.indexOf(right),
-      pairs: ['$h', '$m', '${mins.every((x) => x % 30 == 0) ? 30 : mins.every((x) => x % 15 == 0) ? 15 : 5}'],
+      pairs: [
+        '$h',
+        '$m',
+        '${mins.every((x) => x % 30 == 0) ? 30 : mins.every((x) => x % 15 == 0) ? 15 : 5}'
+      ],
       explanation:
           'Kısa kol (akrep) saati, uzun kol (yelkovan) dakikayı gösterir: $right.',
     );

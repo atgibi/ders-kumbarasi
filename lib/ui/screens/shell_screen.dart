@@ -64,25 +64,25 @@ class _ShellScreenState extends State<ShellScreen> {
         backgroundColor: K.bg,
         body: Stack(children: [
           SafeArea(
-          bottom: false,
-          child: ChildTextScale(
-            child: Column(children: [
-              _TopBar(tab: _tab),
-              if (app.saveFailed) const _SaveWarning(),
-              Expanded(
-                child: IndexedStack(
-                  index: _tab,
-                  children: const [
-                    KingdomMapTab(header: _SkyEntry()),
-                    TownTab(),
-                    _ProfileTab(),
-                    NotebookScreen(asTab: true),
-                  ],
+            bottom: false,
+            child: ChildTextScale(
+              child: Column(children: [
+                _TopBar(tab: _tab),
+                if (app.saveFailed) const _SaveWarning(),
+                Expanded(
+                  child: IndexedStack(
+                    index: _tab,
+                    children: const [
+                      KingdomMapTab(header: _SkyEntry()),
+                      TownTab(),
+                      _ProfileTab(),
+                      NotebookScreen(asTab: true),
+                    ],
+                  ),
                 ),
-              ),
-            ]),
+              ]),
+            ),
           ),
-        ),
           const Positioned.fill(child: PaperGrain()),
         ]),
         bottomNavigationBar: FutureBuilder<int>(
@@ -827,102 +827,104 @@ class _ProfileTabState extends State<_ProfileTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-        Row(children: [
-          if (p.game.hero != null)
+          Row(children: [
+            if (p.game.hero != null)
+              FutureBuilder<HeroStage>(
+                future: app.heroStage(),
+                builder: (context, snap) => HeroFigure(
+                    look: p.game.hero!,
+                    stage: snap.data ?? HeroStage.cirak,
+                    size: 130),
+              )
+            else
+              Avatar(index: c.avatarIndex, size: 88),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(p.game.hero?.name ?? c.nickname, style: T.title),
+                  if (p.game.hero != null)
+                    Text(p.game.hero!.heroPath.name,
+                        style: TextStyle(
+                            fontFamily: K.display,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: p.game.hero!.heroPath.color)),
+                  Text('${c.grade}. sınıf',
+                      style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: K.inkSoft)),
+                ],
+              ),
+            ),
+          ]),
+          if (p.game.hero != null) ...[
+            const SizedBox(height: 18),
             FutureBuilder<HeroStage>(
               future: app.heroStage(),
-              builder: (context, snap) => HeroFigure(
-                  look: p.game.hero!,
-                  stage: snap.data ?? HeroStage.cirak,
-                  size: 130),
-            )
-          else
-            Avatar(index: c.avatarIndex, size: 88),
-          const SizedBox(width: 16),
-          Expanded(
+              builder: (context, snap) =>
+                  YearEndCard(stage: snap.data ?? HeroStage.cirak),
+            ),
+          ],
+          const SizedBox(height: 18),
+          FutureBuilder<int>(
+            future: _stars,
+            builder: (context, snap) => IntrinsicHeight(
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                  stat(DkIcons.leaf, K.leafInk, '${p.streakDays}',
+                      'gündür birlikte'),
+                  const SizedBox(width: 10),
+                  stat(DkIcons.nut, K.nut, '${p.nuts}', 'ışık'),
+                  const SizedBox(width: 10),
+                  stat(DkIcons.star, K.rewardShade, '${snap.data ?? 0}',
+                      'yıldızlı konu'),
+                ])),
+          ),
+          const SizedBox(height: 18),
+          DkCard(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(p.game.hero?.name ?? c.nickname, style: T.title),
-                if (p.game.hero != null)
-                  Text(p.game.hero!.heroPath.name,
-                      style: TextStyle(
-                          fontFamily: K.display,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: p.game.hero!.heroPath.color)),
-                Text('${c.grade}. sınıf',
-                    style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: K.inkSoft)),
+                const Text('Bu hafta',
+                    style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.w800,
+                        color: K.ink)),
+                const SizedBox(height: 12),
+                Row(children: [
+                  for (final d in week) Expanded(child: _DayDot(day: d)),
+                ]),
+                const SizedBox(height: 12),
+                const Text(
+                    'Ay simgeli günler dinlenme günü. Haftada 2 gün dinlenmek de öğrenmenin parçası.',
+                    style: T.help),
               ],
             ),
           ),
-        ]),
-        if (p.game.hero != null) ...[
           const SizedBox(height: 18),
-          FutureBuilder<HeroStage>(
-            future: app.heroStage(),
-            builder: (context, snap) =>
-                YearEndCard(stage: snap.data ?? HeroStage.cirak),
+          ChunkyButton(
+            key: const Key('switch-profile'),
+            label: 'Profil değiştir',
+            kind: BtnKind.secondary,
+            onPressed: app.signOutChild,
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextBtn(
+              key: const Key('parent-entry'),
+              label: 'Veli alanı',
+              icon: DkIcons.lock,
+              color: K.inkSoft,
+              fontSize: 15,
+              onPressed: () => openParentArea(context),
+            ),
           ),
         ],
-        const SizedBox(height: 18),
-        FutureBuilder<int>(
-          future: _stars,
-          builder: (context, snap) => IntrinsicHeight(
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                stat(DkIcons.leaf, K.leafInk, '${p.streakDays}',
-                    'gündür birlikte'),
-                const SizedBox(width: 10),
-                stat(DkIcons.nut, K.nut, '${p.nuts}', 'ışık'),
-                const SizedBox(width: 10),
-                stat(DkIcons.star, K.rewardShade, '${snap.data ?? 0}',
-                    'yıldızlı konu'),
-              ])),
-        ),
-        const SizedBox(height: 18),
-        DkCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text('Bu hafta',
-                  style: TextStyle(
-                      fontSize: 19, fontWeight: FontWeight.w800, color: K.ink)),
-              const SizedBox(height: 12),
-              Row(children: [
-                for (final d in week) Expanded(child: _DayDot(day: d)),
-              ]),
-              const SizedBox(height: 12),
-              const Text(
-                  'Ay simgeli günler dinlenme günü. Haftada 2 gün dinlenmek de öğrenmenin parçası.',
-                  style: T.help),
-            ],
-          ),
-        ),
-        const SizedBox(height: 18),
-        ChunkyButton(
-          key: const Key('switch-profile'),
-          label: 'Profil değiştir',
-          kind: BtnKind.secondary,
-          onPressed: app.signOutChild,
-        ),
-        const SizedBox(height: 8),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextBtn(
-            key: const Key('parent-entry'),
-            label: 'Veli alanı',
-            icon: DkIcons.lock,
-            color: K.inkSoft,
-            fontSize: 15,
-            onPressed: () => openParentArea(context),
-          ),
-        ),
-      ],
       ),
     );
   }

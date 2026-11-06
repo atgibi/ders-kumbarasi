@@ -67,8 +67,7 @@ class _BreatheState extends State<_Breathe>
   Widget build(BuildContext context) => AnimatedBuilder(
         animation: _c,
         builder: (context, child) => Transform.translate(
-            offset: Offset(0, -3 * math.sin(_c.value * math.pi)),
-            child: child),
+            offset: Offset(0, -3 * math.sin(_c.value * math.pi)), child: child),
         child: widget.child,
       );
 }

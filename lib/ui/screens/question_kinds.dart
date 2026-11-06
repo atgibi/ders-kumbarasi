@@ -33,10 +33,14 @@ class KindView extends StatelessWidget {
         QKind.keypad =>
           _Keypad(q: question, onChanged: onChanged, locked: locked),
         QKind.order => _Build(
-            q: question, onChanged: onChanged, locked: locked, syllables: false),
+            q: question,
+            onChanged: onChanged,
+            locked: locked,
+            syllables: false),
         QKind.syllables => _Build(
             q: question, onChanged: onChanged, locked: locked, syllables: true),
-        QKind.match => _Match(q: question, onChanged: onChanged, locked: locked),
+        QKind.match =>
+          _Match(q: question, onChanged: onChanged, locked: locked),
         QKind.clock =>
           _ClockSet(q: question, onChanged: onChanged, locked: locked),
         QKind.choice => const SizedBox.shrink(),
@@ -102,7 +106,8 @@ class _Tile extends StatelessWidget {
 // ------------------------------------------------------------ 16a tuş takımı
 
 class _Keypad extends StatefulWidget {
-  const _Keypad({required this.q, required this.onChanged, required this.locked});
+  const _Keypad(
+      {required this.q, required this.onChanged, required this.locked});
   final Question q;
   final ReadyChanged onChanged;
   final bool locked;
@@ -220,7 +225,10 @@ class _BuildState extends State<_Build> {
   void initState() {
     super.initState();
     final rnd = math.Random(widget.q.prompt.hashCode);
-    _pool = [...widget.q.options, ...?(widget.syllables ? widget.q.pairs : null)];
+    _pool = [
+      ...widget.q.options,
+      ...?(widget.syllables ? widget.q.pairs : null)
+    ];
     // doğru sırada başlamasın
     var guard = 0;
     do {
@@ -319,7 +327,8 @@ class _BuildState extends State<_Build> {
 // -------------------------------------------------------- 16b eşleştirme
 
 class _Match extends StatefulWidget {
-  const _Match({required this.q, required this.onChanged, required this.locked});
+  const _Match(
+      {required this.q, required this.onChanged, required this.locked});
   final Question q;
   final ReadyChanged onChanged;
   final bool locked;

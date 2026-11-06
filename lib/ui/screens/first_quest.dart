@@ -227,7 +227,8 @@ class _VillagePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.4
       ..strokeCap = StrokeCap.round;
-    canvas.drawOval(Rect.fromCenter(center: const Offset(196, 604), width: 124, height: 36),
+    canvas.drawOval(
+        Rect.fromCenter(center: const Offset(196, 604), width: 124, height: 36),
         Paint()..color = const Color(0xFF978E7E));
     for (var i = 0; i < 9; i++) {
       final a = i / 9 * math.pi * 2;

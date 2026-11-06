@@ -492,10 +492,8 @@ class _KafPainter extends CustomPainter {
     final rnd = math.Random(3);
     final star = Paint()..color = const Color(0xD9F4EAD5);
     for (var i = 0; i < 40; i++) {
-      canvas.drawCircle(
-          Offset(rnd.nextDouble() * w, rnd.nextDouble() * h * .5),
-          rnd.nextDouble() * 1.4 + .6,
-          star);
+      canvas.drawCircle(Offset(rnd.nextDouble() * w, rnd.nextDouble() * h * .5),
+          rnd.nextDouble() * 1.4 + .6, star);
     }
     final ink = Paint()
       ..style = PaintingStyle.stroke

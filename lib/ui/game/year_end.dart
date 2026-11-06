@@ -227,8 +227,7 @@ class FinaleWinView extends StatelessWidget {
               Expanded(
                   child: Text(legend ? 'Efsane oldun!' : 'Karabulut barıştı!',
                       style: G.title)),
-              ListenButton(
-                  size: 56, iconSize: 26, onListen: () => onSay(line)),
+              ListenButton(size: 56, iconSize: 26, onListen: () => onSay(line)),
             ]),
           ),
           Expanded(
@@ -263,7 +262,9 @@ class FinaleWinView extends StatelessWidget {
                               look: hero,
                               size: 120,
                               cheer: true,
-                              stage: legend ? HeroStage.efsane : HeroStage.kahraman),
+                              stage: legend
+                                  ? HeroStage.efsane
+                                  : HeroStage.kahraman),
                         ),
                     ]),
                   ),
@@ -276,7 +277,7 @@ class FinaleWinView extends StatelessWidget {
                         children: [
                           Text(
                               '${genitive(AppScope.of(context).heroName)} yılı',
-                                style: G.sub.copyWith(color: G.indigo)),
+                              style: G.sub.copyWith(color: G.indigo)),
                           const SizedBox(height: 6),
                           Row(children: [
                             const IkonView(Ikon.sancak, size: 26),
@@ -289,8 +290,7 @@ class FinaleWinView extends StatelessWidget {
                           Row(children: [
                             const IkonView(Ikon.kalkan, size: 26),
                             const SizedBox(width: 8),
-                            Text(
-                                '${game?.rescued.length ?? 0} bekçi dost oldu',
+                            Text('${game?.rescued.length ?? 0} bekçi dost oldu',
                                 style: G.body
                                     .copyWith(fontWeight: FontWeight.w700)),
                           ]),

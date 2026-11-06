@@ -153,8 +153,8 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                           label: '$g. sınıf',
                           excludeChildSemantics: true,
                           focusRadius: K.rMd,
-                          builder: (context, down) => _GradeSeal(
-                              grade: g, selected: _grade == g),
+                          builder: (context, down) =>
+                              _GradeSeal(grade: g, selected: _grade == g),
                         ),
                       ),
                     ],

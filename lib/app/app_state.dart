@@ -578,7 +578,10 @@ class AppState extends ChangeNotifier {
     final a = active, p = progress;
     if (a == null || p == null) return const [];
     final pack = await content.contentFor(s, a.grade);
-    return [for (final k in pack.keys) if (p.startedOutcomes.contains(k)) k];
+    return [
+      for (final k in pack.keys)
+        if (p.startedOutcomes.contains(k)) k
+    ];
   }
 
   /// Yapı kurulabilir/yükseltilebilir mi?

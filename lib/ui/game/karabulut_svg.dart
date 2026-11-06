@@ -50,10 +50,12 @@ String karabulutSvg(KarabulutHal hal, {double fog = 1, bool ground = true}) {
     ..write('<g stroke="$ink" stroke-width="2.4" stroke-linecap="round" '
         'stroke-linejoin="round">');
   if (kisa) {
-    b.write('<path d="$rain" fill="none" stroke="#1F4E79" stroke-width="2.4"/>');
+    b.write(
+        '<path d="$rain" fill="none" stroke="#1F4E79" stroke-width="2.4"/>');
     if (ground) {
       b
-        ..write('<path d="M18 190C60 184 100 194 140 188C170 184 200 192 224 188" '
+        ..write(
+            '<path d="M18 190C60 184 100 194 140 188C170 184 200 192 224 188" '
             'fill="none" stroke="#8A6A4A" stroke-width="3"/>')
         ..write('<path d="M76 189V172M120 189V168M164 189V173" fill="none" '
             'stroke="#2F7A5B" stroke-width="2.6"/>')
@@ -82,7 +84,8 @@ String karabulutSvg(KarabulutHal hal, {double fog = 1, bool ground = true}) {
       ..write('<circle cx="22" cy="58" r="10" fill="${c.govde}"/>');
   }
   b
-    ..write('<path d="M40 112C18 112 14 84 36 78C30 52 58 38 78 50C86 26 122 20 '
+    ..write(
+        '<path d="M40 112C18 112 14 84 36 78C30 52 58 38 78 50C86 26 122 20 '
         '136 42C152 26 186 34 184 60C210 60 222 90 202 108C200 120 186 124 176 '
         '120H64C54 124 42 122 40 112Z" fill="${c.govde}"/>')
     ..write('<path d="M42 106C74 116 168 116 204 100C200 116 188 122 176 120H64'
@@ -97,7 +100,8 @@ String karabulutSvg(KarabulutHal hal, {double fog = 1, bool ground = true}) {
   switch (hal) {
     case KarabulutHal.kus:
       b
-        ..write('<path d="M50 108C70 118 120 132 154 128C162 127 164 138 156 141'
+        ..write(
+            '<path d="M50 108C70 118 120 132 154 128C162 127 164 138 156 141'
             'C120 148 70 136 46 122Z" fill="${c.govde}"/>')
         ..write('<path d="M190 108C170 118 120 132 86 128C78 127 76 138 84 141'
             'C120 148 170 136 194 122Z" fill="${c.govde}"/>')
@@ -110,7 +114,8 @@ String karabulutSvg(KarabulutHal hal, {double fog = 1, bool ground = true}) {
         ..write('<circle cx="139" cy="85" r="2.6" fill="$ink" stroke="none"/>');
     case KarabulutHal.dost:
       b
-        ..write('<path d="M88 70Q99 61 110 69M130 69Q141 61 152 70" fill="none" '
+        ..write(
+            '<path d="M88 70Q99 61 110 69M130 69Q141 61 152 70" fill="none" '
             'stroke-width="4"/>')
         ..write('<path d="M94 85Q101 78 108 85M132 85Q139 78 146 85" '
             'fill="none" stroke-width="2.4"/>')
@@ -121,7 +126,8 @@ String karabulutSvg(KarabulutHal hal, {double fog = 1, bool ground = true}) {
         ..write('<circle cx="200" cy="114" r="9" fill="${c.govde}"/>');
     case KarabulutHal.yagmur:
       b
-        ..write('<path d="M88 70Q99 66 110 71M130 71Q141 66 152 70" fill="none" '
+        ..write(
+            '<path d="M88 70Q99 66 110 71M130 71Q141 66 152 70" fill="none" '
             'stroke-width="3.6"/>')
         ..write('<circle cx="101" cy="83" r="2.8" fill="$ink" stroke="none"/>')
         ..write('<circle cx="139" cy="83" r="2.8" fill="$ink" stroke="none"/>')

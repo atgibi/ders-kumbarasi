@@ -443,22 +443,23 @@ class _SessionScreenState extends State<SessionScreen> {
                           phaseLabel: widget.finale
                               ? 'YIL SONU'
                               : widget.extraPractice
-                              ? 'EKSTRA TEKRAR'
-                              : switch (step.phase) {
-                                  StepPhase.warmup => 'ISINMA',
-                                  StepPhase.practice ||
-                                  StepPhase.newTopic =>
-                                    'YENİ KONU',
-                                  StepPhase.review => 'TEKRAR',
-                                  StepPhase.retry => 'BİR KEZ DAHA',
-                                },
+                                  ? 'EKSTRA TEKRAR'
+                                  : switch (step.phase) {
+                                      StepPhase.warmup => 'ISINMA',
+                                      StepPhase.practice ||
+                                      StepPhase.newTopic =>
+                                        'YENİ KONU',
+                                      StepPhase.review => 'TEKRAR',
+                                      StepPhase.retry => 'BİR KEZ DAHA',
+                                    },
                           praise: _praise,
                           onSay: _say,
                           onAnswer: (i, elapsed, hint) {
                             final r =
                                 c.answer(i, elapsed: elapsed, usedHint: hint);
                             _praise = (_praise + 1) % 3;
-                            if (r.correct && (widget.duel != null || widget.finale)) {
+                            if (r.correct &&
+                                (widget.duel != null || widget.finale)) {
                               setState(() => _duelHits++);
                             }
                             AppScope.read(context).saveProgress();
@@ -871,50 +872,50 @@ class _QuestionViewState extends State<_QuestionView> {
                     onChanged: (v) => setState(() => _ready = v),
                   )
                 else
-                Semantics(
-                  container: true,
-                  label: 'Seçenekler',
-                  child: LayoutBuilder(builder: (context, box) {
-                    _Opt stateOf(int i) => r == null
-                        ? (i == _selected ? _Opt.selected : _Opt.idle)
-                        : i == q.answerIndex
-                            ? _Opt.right
-                            : i == _selected
-                                ? _Opt.chosenWrong
-                                : _Opt.dim;
-                    Widget opt(int i) => _OptionCard(
-                          key: Key('option-$i'),
-                          label: q.options[i],
-                          state: stateOf(i),
-                          onTap: r == null
-                              ? () => setState(() => _selected = i)
-                              : null,
+                  Semantics(
+                    container: true,
+                    label: 'Seçenekler',
+                    child: LayoutBuilder(builder: (context, box) {
+                      _Opt stateOf(int i) => r == null
+                          ? (i == _selected ? _Opt.selected : _Opt.idle)
+                          : i == q.answerIndex
+                              ? _Opt.right
+                              : i == _selected
+                                  ? _Opt.chosenWrong
+                                  : _Opt.dim;
+                      Widget opt(int i) => _OptionCard(
+                            key: Key('option-$i'),
+                            label: q.options[i],
+                            state: stateOf(i),
+                            onTap: r == null
+                                ? () => setState(() => _selected = i)
+                                : null,
+                          );
+                      // Kısa seçenekler (sayı, hece) iki sütunda taş levha
+                      final grid = q.options.length >= 2 &&
+                          q.options.every((o) => o.characters.length <= 4);
+                      if (grid) {
+                        final w = (box.maxWidth - 14) / 2;
+                        return Wrap(
+                          spacing: 14,
+                          runSpacing: 18,
+                          children: [
+                            for (var i = 0; i < q.options.length; i++)
+                              SizedBox(width: w, child: opt(i)),
+                          ],
                         );
-                    // Kısa seçenekler (sayı, hece) iki sütunda taş levha
-                    final grid = q.options.length >= 2 &&
-                        q.options.every((o) => o.characters.length <= 4);
-                    if (grid) {
-                      final w = (box.maxWidth - 14) / 2;
-                      return Wrap(
-                        spacing: 14,
-                        runSpacing: 18,
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          for (var i = 0; i < q.options.length; i++)
-                            SizedBox(width: w, child: opt(i)),
+                          for (var i = 0; i < q.options.length; i++) ...[
+                            if (i > 0) const SizedBox(height: 16),
+                            opt(i),
+                          ],
                         ],
                       );
-                    }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        for (var i = 0; i < q.options.length; i++) ...[
-                          if (i > 0) const SizedBox(height: 16),
-                          opt(i),
-                        ],
-                      ],
-                    );
-                  }),
-                ),
+                    }),
+                  ),
               ],
             ),
           ),
@@ -925,15 +926,17 @@ class _QuestionViewState extends State<_QuestionView> {
               key: const Key('check'),
               label: 'Kontrol et',
               kind: BtnKind.good,
-              onPressed:
-                  (_choice ? _selected != null : _ready != null) ? _check : null,
+              onPressed: (_choice ? _selected != null : _ready != null)
+                  ? _check
+                  : null,
             ),
           )
         else
           FeedbackBand(
             correct: r.correct,
-            title:
-                r.correct ? _okTitles[widget.praise] : 'Doğrusu: ${q.answerText}',
+            title: r.correct
+                ? _okTitles[widget.praise]
+                : 'Doğrusu: ${q.answerText}',
             body: r.correct
                 ? _okBodies[widget.praise]
                 : q.explainFor(_selected ?? -1),
