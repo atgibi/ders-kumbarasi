@@ -102,6 +102,31 @@ Future<void> playSession(WidgetTester t) async {
   while (guard++ < 80) {
     if (has('lesson-next')) {
       await tapKey(t, 'lesson-next');
+    } else if (has('keypad')) {
+      // Tuş takımı: bir rakam yaz, kontrol et
+      await tapKey(t, 'key-1');
+      await tapKey(t, 'check');
+      await tapKey(t, 'next');
+    } else if (has('clock-face')) {
+      await tapKey(t, 'clock-h-plus');
+      await tapKey(t, 'check');
+      await tapKey(t, 'next');
+    } else if (has('match-area')) {
+      // Eşleştirme: her sol öğeyi kendi eşine bağla
+      for (var i = 0; has('left-$i'); i++) {
+        await tapKey(t, 'left-$i');
+        await tapKey(t, 'right-$i');
+      }
+      await tapKey(t, 'check');
+      await tapKey(t, 'next');
+    } else if (has('build-area')) {
+      // Sıralama / hece: yuvalar dolana kadar ilk öğeyi seç
+      var g = 0;
+      while (has('option-0') && g++ < 10) {
+        await tapKey(t, 'option-0');
+      }
+      await tapKey(t, 'check');
+      await tapKey(t, 'next');
     } else if (has('option-0')) {
       // Seçmeden KONTROL ET pasif
       expect(find.byKey(const Key('band-ok')), findsNothing);

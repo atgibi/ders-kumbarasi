@@ -21,6 +21,7 @@ import '../widgets/ikon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
 import '../widgets/visual_view.dart';
+import 'question_kinds.dart';
 import 'system_screens.dart';
 
 const _okTitles = ['Harika!', 'Tam isabet!', 'Dikkatle düşündün!'];
@@ -725,7 +726,11 @@ class _QuestionViewState extends State<_QuestionView> {
   bool _hint = false;
   bool _busy = false;
 
+  /// Çoktan seçmeli dışı türlerde: cevap hazırsa doğru mu (hazır değilse null).
+  bool? _ready;
+
   Question get q => widget.step.question!;
+  bool get _choice => q.kind == QKind.choice;
 
   @override
   void initState() {
@@ -734,7 +739,11 @@ class _QuestionViewState extends State<_QuestionView> {
   }
 
   void _check() {
-    final i = _selected;
+    final i = _choice
+        ? _selected
+        : _ready == null
+            ? null
+            : (_ready! ? q.answerIndex : -1);
     if (i == null || _result != null || _busy) return;
     _busy = true; // çift dokunma koruması
     _watch.stop();
@@ -742,7 +751,7 @@ class _QuestionViewState extends State<_QuestionView> {
     setState(() => _result = r);
     widget.onSay(r.correct
         ? _okTitles[widget.praise]
-        : 'Doğrusu: ${q.answer}. ${q.explainFor(i) ?? ''}');
+        : 'Doğrusu: ${q.answerText}. ${q.explainFor(i) ?? ''}');
   }
 
   @override
@@ -800,6 +809,14 @@ class _QuestionViewState extends State<_QuestionView> {
                   _Scene(result: r),
                 ],
                 const SizedBox(height: 14),
+                if (!_choice)
+                  KindView(
+                    key: ValueKey('kind-${q.prompt}'),
+                    question: q,
+                    locked: r != null,
+                    onChanged: (v) => setState(() => _ready = v),
+                  )
+                else
                 Semantics(
                   container: true,
                   label: 'Seçenekler',
@@ -854,14 +871,15 @@ class _QuestionViewState extends State<_QuestionView> {
               key: const Key('check'),
               label: 'Kontrol et',
               kind: BtnKind.good,
-              onPressed: _selected != null ? _check : null,
+              onPressed:
+                  (_choice ? _selected != null : _ready != null) ? _check : null,
             ),
           )
         else
           FeedbackBand(
             correct: r.correct,
             title:
-                r.correct ? _okTitles[widget.praise] : 'Doğrusu: ${q.answer}',
+                r.correct ? _okTitles[widget.praise] : 'Doğrusu: ${q.answerText}',
             body: r.correct
                 ? _okBodies[widget.praise]
                 : q.explainFor(_selected ?? -1),

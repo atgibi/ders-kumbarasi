@@ -127,6 +127,30 @@ class Lesson {
 }
 
 /// Çocuğa gösterilen somut soru (sabit karttan ya da üreteçten).
+/// Soru türü (Claude Design 16a–16g). Hepsi tek bir doğru/yanlış sonucuna
+/// iner; tekrar motoru türden bağımsızdır.
+enum QKind {
+  /// Çoktan seçmeli (doğru/yanlış dahil).
+  choice,
+
+  /// Tuş takımıyla sayı yazma: options[answerIndex] cevap (seçenekler
+  /// gösterilmez).
+  keypad,
+
+  /// Sıralama: options = doğru sırayla öğeler (ekranda karışık).
+  order,
+
+  /// Eşleştirme: options = sol sütun, pairs = aynı sırada sağ sütun.
+  match,
+
+  /// Saat kurma: options[answerIndex] okunuşu, pairs = [saat, dakika, adım].
+  clock,
+
+  /// Hece kartlarından sözcük kurma: options = heceler sırayla,
+  /// pairs = çeldirici heceler.
+  syllables,
+}
+
 class Question {
   const Question({
     required this.prompt,
@@ -138,7 +162,26 @@ class Question {
     this.hint,
     this.activity = false,
     this.optionNotes,
+    this.kind = QKind.choice,
+    this.pairs,
   }) : assert(answerIndex >= 0);
+
+  final QKind kind;
+
+  /// Eşleştirmede sağ sütun; hece kurmada çeldirici heceler.
+  final List<String>? pairs;
+
+  /// Doğru cevabın okunur hâli (geri bildirim ve seslendirme).
+  String get answerText => switch (kind) {
+        QKind.choice || QKind.keypad => options[answerIndex],
+        QKind.order => options.join(', '),
+        QKind.match => [
+            for (var i = 0; i < options.length; i++)
+              '${options[i]} – ${pairs![i]}'
+          ].join(', '),
+        QKind.clock => options[answerIndex],
+        QKind.syllables => options.join(),
+      };
 
   /// Yanlış seçeneklere özel açıklama (seçenek sırasıyla; doğru seçenekte
   /// ve notu olmayanlarda null). Örn. "Son dişliyi iki kez saymış olabilir

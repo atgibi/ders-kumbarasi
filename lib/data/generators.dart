@@ -112,6 +112,17 @@ Question _add(Map<String, Object?> p, Random r) {
       spread: 2,
       // Sık hata: basamak birleştirme ("38 + 5 = 313") yerine yakın komşular
       preferred: [s + 1, s - 1, if (s >= 10) s + 10, if (s >= 10) s - 10]);
+  if (maxSum > 10 && r.nextInt(3) == 0) {
+    // Tuş takımıyla yazma (Claude Design 16a): seçenekler gösterilmez
+    return Question(
+      kind: QKind.keypad,
+      prompt: '$a + $b = ?',
+      say: '$a artı $b kaç eder? Cevabı tuşlarla yaz.',
+      options: o.options,
+      answerIndex: o.answerIndex,
+      explanation: '$a ile $b toplanınca $s olur.',
+    );
+  }
   return Question(
     prompt: '$a + $b = ?',
     say: '$a artı $b kaç eder?',
@@ -605,6 +616,26 @@ Question _order3(Map<String, Object?> p, Random r) {
     set.add(_between(r, 0, max));
   }
   final nums = set.toList()..sort();
+  if (r.nextInt(5) < 2) {
+    // Sıralama (Claude Design 16c)
+    while (set.length < 4) {
+      set.add(_between(r, 0, max));
+    }
+    final four = set.toList()..sort();
+    final up = r.nextBool();
+    final seq = up ? four : four.reversed.toList();
+    return Question(
+      kind: QKind.order,
+      prompt: up ? 'Küçükten büyüğe sırala.' : 'Büyükten küçüğe sırala.',
+      say: up
+          ? 'Sayıları küçükten büyüğe sırala.'
+          : 'Sayıları büyükten küçüğe sırala.',
+      options: [for (final n in seq) '$n'],
+      answerIndex: 0,
+      explanation:
+          up ? 'Küçükten büyüğe: ${seq.join(' < ')}.' : 'Büyükten küçüğe: ${seq.join(' > ')}.',
+    );
+  }
   final kind = r.nextInt(3);
   final ans = switch (kind) { 0 => nums.first, 1 => nums.last, _ => nums[1] };
   final shown = List.of(nums)..shuffle(r);
@@ -683,6 +714,19 @@ Question _clockRead(Map<String, Object?> p, Random r) {
   final opts = set.take(3).toList();
   if (!opts.contains(right)) opts[0] = right;
   opts.shuffle(r);
+  if (r.nextInt(5) < 2) {
+    // Saat kurma (Claude Design 16g): seçenekler gösterilmez
+    return Question(
+      kind: QKind.clock,
+      prompt: 'Saati $right olarak kur.',
+      say: 'Saati $right olarak kur. Kısa kol saati, uzun kol dakikayı gösterir.',
+      options: opts,
+      answerIndex: opts.indexOf(right),
+      pairs: ['$h', '$m', '${mins.every((x) => x % 30 == 0) ? 30 : mins.every((x) => x % 15 == 0) ? 15 : 5}'],
+      explanation:
+          'Kısa kol (akrep) saati, uzun kol (yelkovan) dakikayı gösterir: $right.',
+    );
+  }
   return Question(
     prompt: 'Saat kaç?',
     visual: Visual('clock', {'h': h, 'm': m}),
@@ -1111,6 +1155,20 @@ Question _syllables(Map<String, Object?> p, Random r) {
   const valid = _heceler;
   final w = valid[r.nextInt(valid.length)];
   final word = w.join();
+  if (w.length >= 2 && w.toSet().length == w.length && r.nextInt(3) == 0) {
+    // Hece kartlarından sözcük kur (Claude Design 16f)
+    final other = (List.of(valid)..remove(w))[r.nextInt(valid.length - 1)];
+    final extra = other.firstWhere((h) => !w.contains(h), orElse: () => 'ta');
+    return Question(
+      kind: QKind.syllables,
+      prompt: 'Heceleri sırayla seçip “$word” sözcüğünü kur.',
+      say: '$word. Heceleri sırayla seç.',
+      options: List.of(w),
+      answerIndex: 0,
+      pairs: [extra],
+      explanation: '${w.join(' - ')}: “$word”.',
+    );
+  }
   if (r.nextBool()) {
     final o = numericOptions(w.length, r, spread: 1, min: 1, count: 3);
     return Question(
@@ -1177,6 +1235,19 @@ const _zitAnlam = [
 Question _wordPair(Map<String, Object?> p, Random r) {
   final kind = p['kind'] as String? ?? (r.nextBool() ? 'es' : 'zit');
   final bank = kind == 'es' ? _esAnlam : _zitAnlam;
+  if (bank.length >= 3 && r.nextInt(3) == 0) {
+    // Eşleştirme (Claude Design 16b)
+    final picks = (List.of(bank)..shuffle(r)).take(3).toList();
+    final adj = kind == 'es' ? 'eş anlamlılarını' : 'zıt anlamlılarını';
+    return Question(
+      kind: QKind.match,
+      prompt: 'Sözcükleri $adj ile eşleştir.',
+      options: [for (final x in picks) x.$1],
+      pairs: [for (final x in picks) x.$2],
+      answerIndex: 0,
+      explanation: [for (final x in picks) '${x.$1} – ${x.$2}'].join(', '),
+    );
+  }
   final pair = bank[r.nextInt(bank.length)];
   final flip = r.nextBool();
   final ask = flip ? pair.$2 : pair.$1, ans = flip ? pair.$1 : pair.$2;
