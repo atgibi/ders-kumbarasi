@@ -413,3 +413,7 @@ const buildings = [
   BuildingDef('han', 'Han', '🏨', 45, {Supply.kumas: 4, Supply.kereste: 2},
       'Kervancılar konaklar.'),
 ];
+
+/// Kimlikten yapı (bilinmeyen kimlikte ilk yapı döner).
+BuildingDef buildingById(String id) =>
+    buildings.firstWhere((b) => b.id == id, orElse: () => buildings.first);

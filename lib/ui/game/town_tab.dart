@@ -15,6 +15,7 @@ import 'duel_widgets.dart';
 import 'game_theme.dart';
 import 'hero_figure.dart';
 import 'kingdom_map.dart';
+import 'town_view.dart';
 
 class TownTab extends StatefulWidget {
   const TownTab({super.key});
@@ -97,6 +98,8 @@ class _TownTabState extends State<TownTab> {
             MailboxButton(),
           ]),
           const SizedBox(height: 8),
+          const TownView(),
+          const SizedBox(height: 16),
           // Claude Design 29: kurtarılanlar koleksiyonu; henüz kurtarılmayan
           // bekçiler sisin içinde
           const Text('KURTARILANLAR', style: G.kicker),

@@ -5,6 +5,7 @@
 library;
 
 import 'quests.dart';
+import 'town_layout.dart';
 import 'world.dart';
 
 class HeroLook {
@@ -120,7 +121,9 @@ class GameState {
     this.trip,
     List<Letter>? letters,
     Set<String>? finale,
+    Map<String, String>? spots,
   })  : finale = finale ?? {},
+        spots = spots ?? {},
         supplies = supplies ?? {},
         letters = letters ?? [],
         built = built ?? {},
@@ -159,6 +162,11 @@ class GameState {
   /// Yıl sonu: Karabulut'la barışılan krallıklar (ders kimlikleri).
   final Set<String> finale;
 
+  /// Kasaba ızgarasında yapıların yeri: yapı kimliği -> "x,y".
+  final Map<String, String> spots;
+
+  TownLayout get layout => TownLayout(spots);
+
   int get unreadLetters => letters.where((l) => !l.read).length;
 
   /// Aynı kimlikli mektup bir kez gelir.
@@ -191,6 +199,7 @@ class GameState {
         if (trip != null) 'trip': trip!.toJson(),
         'mail': [for (final l in letters) l.toJson()],
         'fin': finale.toList()..sort(),
+        if (spots.isNotEmpty) 'pos': spots,
       };
 
   factory GameState.fromJson(Object? raw) {
@@ -215,6 +224,12 @@ class GameState {
         for (final l in (raw['mail'] as List? ?? const [])) Letter.fromJson(l),
       ].whereType<Letter>().toList(),
       finale: {...?(raw['fin'] as List?)?.map((e) => '$e')},
+      spots: raw['pos'] is Map
+          ? {
+              for (final e in (raw['pos'] as Map).entries)
+                '${e.key}': '${e.value}'
+            }
+          : null,
     );
   }
 }

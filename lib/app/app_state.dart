@@ -11,6 +11,7 @@ import '../data/models.dart';
 import '../data/progress_store.dart';
 import '../game/game_state.dart';
 import '../game/quests.dart';
+import '../game/town_layout.dart';
 import '../game/world.dart';
 import 'speaker.dart';
 
@@ -607,6 +608,25 @@ class AppState extends ChangeNotifier {
       p.game.addSupply(e.key, -e.value);
     }
     p.game.built[b.id] = next;
+    p.game.layout.ensure(p.game.built.keys);
+    await saveProgress();
+    return true;
+  }
+
+  /// Kasaba ızgarası. Eski kayıtlarda kurulmuş yapılara yer verir (kaydetmez;
+  /// yerler bir sonraki kayıtta yazılır).
+  TownLayout townLayout() {
+    final g = progress!.game;
+    final l = g.layout;
+    l.ensure(g.built.keys);
+    return l;
+  }
+
+  /// Yapıyı ızgarada boş bir kareye taşır.
+  Future<bool> moveBuilding(String id, Spot to) async {
+    final p = progress;
+    if (p == null || (p.game.built[id] ?? 0) == 0) return false;
+    if (!townLayout().move(id, to)) return false;
     await saveProgress();
     return true;
   }

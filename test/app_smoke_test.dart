@@ -234,6 +234,8 @@ void main() {
     if (state.canBuild(buildings.first)) {
       await tapTown(t, 'build-ev');
       expect(state.progress!.game.built['ev'], 1);
+      // İzometrik kasabada varsayılan yerine konur ve kayda yazılır
+      expect(state.progress!.game.spots['ev'], '1,1');
       expect(state.progress!.nuts, lessThan(before));
     }
 
