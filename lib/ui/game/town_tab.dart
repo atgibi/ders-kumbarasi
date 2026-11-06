@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 
 import '../../game/game_state.dart';
+import '../../game/items.dart';
 import '../../game/world.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
@@ -16,6 +17,7 @@ import 'game_theme.dart';
 import 'hero_figure.dart';
 import 'kingdom_map.dart';
 import 'town_view.dart';
+import 'wardrobe_screen.dart';
 
 class TownTab extends StatefulWidget {
   const TownTab({super.key});
@@ -85,6 +87,8 @@ class _TownTabState extends State<TownTab> {
                                   G.sub.copyWith(color: hero.heroPath.color)),
                           const SizedBox(height: 4),
                           Text(nextStageHint(st), style: G.soft),
+                          const SizedBox(height: 8),
+                          _WardrobeButton(fresh: newItemCount(g)),
                         ],
                       ),
                     ),
@@ -175,6 +179,48 @@ class _TownTabState extends State<TownTab> {
       ),
     );
   }
+}
+
+/// Giysi dolabını açar; yeni eşya varsa sayısını gösterir.
+class _WardrobeButton extends StatelessWidget {
+  const _WardrobeButton({required this.fresh});
+  final int fresh;
+
+  @override
+  Widget build(BuildContext context) => Stack(
+        clipBehavior: Clip.none,
+        children: [
+          ChunkyButton(
+            key: const Key('wardrobe-open'),
+            label: 'Giysi dolabı',
+            height: 44,
+            kind: BtnKind.secondary,
+            semanticsLabel:
+                fresh > 0 ? 'Giysi dolabı, $fresh yeni eşya' : 'Giysi dolabı',
+            onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                    builder: (_) => const WardrobeScreen())),
+          ),
+          if (fresh > 0)
+            Positioned(
+              right: -6,
+              top: -8,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                decoration: BoxDecoration(
+                  color: G.madder,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: G.ink, width: 2),
+                ),
+                child: Text('$fresh',
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13)),
+              ),
+            ),
+        ],
+      );
 }
 
 class _BuildingRow extends StatelessWidget {

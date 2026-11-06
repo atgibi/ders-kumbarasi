@@ -135,6 +135,13 @@ await step('G', async () => {
   await tap(p, 'Kasaba');
   await shot(p, 'G9-kasaba');
   await p.close();
+  p = await open('wardrobe');
+  await tap(p, 'Kasaba');
+  await tap(p, 'Giysi dolabı');
+  await shot(p, 'G10-giysi-dolabi');
+  await p.mouse.wheel(0, 600);
+  await shot(p, 'G10-giysi-dolabi-asagi');
+  await p.close();
 });
 
 await step('C2', async () => {

@@ -115,7 +115,11 @@ String hairChipSvg(int style, int skin, int hairColor) {
 String heroSvg(HeroLook look,
     {HeroStage stage = HeroStage.cirak,
     bool cheer = false,
-    bool companion = true}) {
+    bool companion = true,
+    List<String> back = const [],
+    List<String> front = const [],
+    double companionScale = 1,
+    bool companionGrown = false}) {
   final yol = look.heroPath.id;
   final seviye = stage.index;
   final ortu = switch (look.accessory) {
@@ -167,6 +171,8 @@ String heroSvg(HeroLook look,
       '<path d="M58 102C44 130 40 160 44 186C68 193 92 193 116 186C120 160 116 130 102 102Z" fill="$pelerin"/>');
   w(seviye >= 3,
       '<path d="M46 182C70 188 92 188 114 182" fill="none" stroke="$sus" stroke-width="4" stroke-dasharray="6 4"/>');
+  // sırt eşyaları (kanat, pelerin) gövdenin arkasında
+  back.forEach(b.write);
   w(ortu == 'basortusu',
       '<path d="M42 66C40 34 62 20 80 20C98 20 120 34 118 66C118 86 110 100 98 108H62C50 100 42 86 42 66Z" fill="#2F7A5B"/>');
   w(yol == 'okcu',
@@ -219,6 +225,8 @@ String heroSvg(HeroLook look,
   b.write('</g>');
   w(gozluk,
       '<g fill="#FBF5E8" fill-opacity="0.3" stroke-width="2"><circle cx="69" cy="66" r="7.5"/><circle cx="91" cy="66" r="7.5"/><path d="M76.5 65q3.5 -2 7 0" fill="none"/></g>');
+  // takılı eşyalar (baş, boyun, rozet, el, çanta)
+  front.forEach(b.write);
 
   // yol eşyaları
   w(
@@ -244,6 +252,9 @@ String heroSvg(HeroLook look,
 
   // yol arkadaşı
   if (companion) {
+    // yol arkadaşı büyür: ayak hizası (166, 206) sabit kalır
+    final k = companionScale.clamp(0.5, 1.0).toStringAsFixed(2);
+    b.write('<g transform="translate(166 206) scale($k) translate(-166 -206)">');
     w(hayvan == 'at',
         '<path d="M150 180v26M158 184v22M176 184v22M184 180v26" fill="none" stroke-width="4"/><ellipse cx="166" cy="176" rx="25" ry="14" fill="#A8723F"/><path d="M180 170C184 154 190 146 196 144C202 148 200 160 193 163L189 174Z" fill="#A8723F"/><path d="M184 154C180 160 178 166 178 170M188 150C184 156 182 160 182 166" fill="none" stroke="#5E3A1B" stroke-width="3"/><path d="M142 172C132 178 134 192 138 198" fill="none" stroke="#5E3A1B" stroke-width="4"/><circle cx="194" cy="151" r="1.6" fill="#2B2320"/>');
     w(hayvan == 'tilki',
@@ -256,6 +267,11 @@ String heroSvg(HeroLook look,
         '<path d="M146 200C134 202 128 208 132 212C140 213 146 209 150 206Z" fill="#5E3A1B"/><path d="M146 206C142 186 152 174 166 174C180 174 188 186 186 206Z" fill="#7A4D27"/><path d="M174 188h6v6h-6z" fill="#FBF5E8" stroke-width="1.4"/><circle cx="176" cy="181" r="1.8" fill="#2B2320"/><circle cx="160" cy="176" r="3.4" fill="#7A4D27"/>');
     w(hayvan == 'serce',
         '<path d="M148 186L138 176L144 190Z" fill="#7A4D27"/><ellipse cx="160" cy="192" rx="14" ry="10" fill="#A8723F"/><path d="M152 188C158 184 166 186 168 194C162 196 156 194 152 188Z" fill="#5E3A1B"/><circle cx="172" cy="182" r="7" fill="#A8723F"/><path d="M178 182L185 184L178 186Z" fill="#E3A535"/><circle cx="174" cy="180" r="1.5" fill="#2B2320"/><path d="M156 202v6M164 202v6" fill="none" stroke-width="1.8"/>');
+    b.write('</g>');
+    // yetişkin yol arkadaşının çevresinde parıltı
+    w(companionGrown,
+        '<path d="M196 136l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#E3A535" stroke-width="1.4"/>'
+        '<path d="M140 158l1.4 3.4 3.4 1.4-3.4 1.4-1.4 3.4-1.4-3.4-3.4-1.4 3.4-1.4z" fill="#E3A535" stroke-width="1.2"/>');
   }
   b.write('</g></svg>');
   return b.toString();

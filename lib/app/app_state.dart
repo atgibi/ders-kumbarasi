@@ -10,6 +10,7 @@ import '../data/content_repository.dart';
 import '../data/models.dart';
 import '../data/progress_store.dart';
 import '../game/game_state.dart';
+import '../game/items.dart';
 import '../game/quests.dart';
 import '../game/town_layout.dart';
 import '../game/world.dart';
@@ -620,6 +621,24 @@ class AppState extends ChangeNotifier {
     final l = g.layout;
     l.ensure(g.built.keys);
     return l;
+  }
+
+  /// Eşyayı takar ya da çıkarır.
+  Future<bool> wearItem(ItemDef item) async {
+    final p = progress;
+    if (p == null || !toggleItem(p.game, item)) return false;
+    await saveProgress();
+    return true;
+  }
+
+  /// Giysi dolabı açıldı: yeni eşya rozeti söner.
+  Future<void> markItemsSeen() async {
+    final p = progress;
+    if (p == null) return;
+    final n = unlockedItems(p.game).length;
+    if (p.game.itemsSeen == n) return;
+    p.game.itemsSeen = n;
+    await saveProgress();
   }
 
   /// Yapıyı ızgarada boş bir kareye taşır.

@@ -122,8 +122,11 @@ class GameState {
     List<Letter>? letters,
     Set<String>? finale,
     Map<String, String>? spots,
+    Map<String, String>? equip,
+    this.itemsSeen = 0,
   })  : finale = finale ?? {},
         spots = spots ?? {},
+        equip = equip ?? {},
         supplies = supplies ?? {},
         letters = letters ?? [],
         built = built ?? {},
@@ -167,6 +170,12 @@ class GameState {
 
   TownLayout get layout => TownLayout(spots);
 
+  /// Takılı eşyalar: yuva adı (bkz. ItemSlot) -> eşya kimliği.
+  final Map<String, String> equip;
+
+  /// Giysi dolabında görülmüş eşya sayısı (yeni eşya rozeti için).
+  int itemsSeen;
+
   int get unreadLetters => letters.where((l) => !l.read).length;
 
   /// Aynı kimlikli mektup bir kez gelir.
@@ -200,6 +209,8 @@ class GameState {
         'mail': [for (final l in letters) l.toJson()],
         'fin': finale.toList()..sort(),
         if (spots.isNotEmpty) 'pos': spots,
+        if (equip.isNotEmpty) 'eq': equip,
+        if (itemsSeen > 0) 'iseen': itemsSeen,
       };
 
   factory GameState.fromJson(Object? raw) {
@@ -230,6 +241,13 @@ class GameState {
                 '${e.key}': '${e.value}'
             }
           : null,
+      equip: raw['eq'] is Map
+          ? {
+              for (final e in (raw['eq'] as Map).entries)
+                '${e.key}': '${e.value}'
+            }
+          : null,
+      itemsSeen: (raw['iseen'] as num?)?.toInt() ?? 0,
     );
   }
 }

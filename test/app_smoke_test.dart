@@ -208,6 +208,11 @@ void main() {
     expect(has('town-list'), isTrue);
     // İstek panosu ve sefer: biten oturum sayıldı, ödül elle alınır
     expect(has('quest-board'), isTrue);
+    // Giysi dolabı açılır, geri dönülür
+    await tapTown(t, 'wardrobe-open');
+    expect(has('wardrobe-list'), isTrue);
+    expect(has('item-atki'), isTrue);
+    await tapKey(t, 'wardrobe-back');
     final g = state.progress!.game;
     expect(g.board!.counts['s'], 1);
     expect(g.trip!.days, hasLength(1));

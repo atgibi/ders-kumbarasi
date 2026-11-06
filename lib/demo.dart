@@ -92,6 +92,21 @@ Future<void> applyDemo(AppState state) async {
     if (demo == 'legend') {
       g.finale.addAll([for (final s in Subject.forGrade(1)) s.id]);
     }
+    // Giysi dolabı demosu: beş bölge kurtarılmış, birkaç eşya takılı.
+    if (demo == 'wardrobe') {
+      g.banners.addAll([
+        'matematik-1-1',
+        'turkce-1-0',
+        'turkce-1-1',
+        'hayat_bilgisi-1-0',
+      ]);
+      g.equip.addAll({
+        'bas': 'cicek_taci',
+        'sirt': 'canta',
+        'el': 'fener',
+        'rozet': 'rozet_yildiz',
+      });
+    }
     // Kasaba demosu: farklı seviyelerde yapılarla dolu izometrik kasaba.
     if (demo == 'town') {
       g.built.addAll({
