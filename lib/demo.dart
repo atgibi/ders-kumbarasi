@@ -24,6 +24,7 @@ import 'data/progress_store.dart';
 import 'game/game_state.dart';
 import 'game/world.dart';
 import 'ui/game/region_screen.dart';
+import 'ui/game/wardrobe_screen.dart';
 import 'ui/screens/parent_screen.dart';
 import 'ui/screens/session_screen.dart';
 import 'ui/screens/system_screens.dart';
@@ -162,6 +163,7 @@ void openDemoSession(NavigatorState nav) {
             index: 0,
             outcomes: _duelOutcomes)),
     'finale' => const SessionScreen(subject: Subject.matematik, finale: true),
+    'wardrobe' => const WardrobeScreen(),
     'quiet' => const SystemScreen(kind: SystemKind.quiet),
     'timeup' => const SystemScreen(kind: SystemKind.timeUp),
     'done' => const SystemScreen(kind: SystemKind.doneToday),
