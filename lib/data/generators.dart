@@ -14,16 +14,21 @@ int _p(Map<String, Object?> p, String k, int def) =>
 
 int _between(Random r, int min, int max) => min + r.nextInt(max - min + 1);
 
+/// Sayısal sorularda varsayılan seçenek sayısı: 1. sınıfta 3, 2–4. sınıfta
+/// 4 (tahminle bilme şansı %25). [generate] kartın sınıfına göre ayarlar.
+int _optionCount = 3;
+
 /// Doğru cevabın etrafında, tekrarsız ve negatif olmayan çeldiricilerle
 /// karışık seçenek listesi üretir.
 ({List<String> options, int answerIndex}) numericOptions(
   int answer,
   Random rnd, {
-  int count = 3,
+  int? count,
   int spread = 3,
   int min = 0,
   List<int> preferred = const [],
 }) {
+  count ??= _optionCount;
   final set = <int>{answer};
   for (final p in preferred) {
     if (set.length >= count) break;
@@ -1332,5 +1337,19 @@ Question generate(CardDef card, Random rnd) {
   if (g == null) {
     throw StateError('Bilinmeyen üreteç: ${card.generator} (${card.id})');
   }
-  return g(card.generatorParams, rnd);
+  _optionCount = gradeOfCode(card.outcomeCode) <= 1 ? 3 : 4;
+  try {
+    return g(card.generatorParams, rnd);
+  } finally {
+    _optionCount = 3;
+  }
+}
+
+/// Kazanım kodundan sınıf: MAT.4.1.2 → 4, T.O.2.3 → 2. Bulunamazsa 1.
+int gradeOfCode(String code) {
+  final parts = code.split('.');
+  if (parts.length < 2) return 1;
+  // Türkçe kodlarında sınıf üçüncü parçadır (T.O.2.3)
+  final i = parts[0] == 'T' ? 2 : 1;
+  return i < parts.length ? int.tryParse(parts[i]) ?? 1 : 1;
 }

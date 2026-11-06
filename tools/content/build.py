@@ -27,7 +27,7 @@ VISUAL_KINDS = {
 
 
 # Soru bankası kurallarına geçmiş paketler (sınıf sınıf genişler).
-STRICT = {"fen_bilimleri_4", "sosyal_bilgiler_4"}
+STRICT = {"fen_bilimleri_4", "sosyal_bilgiler_4", "turkce_4", "matematik_4"}
 MIN_PER_OUTCOME = 15
 
 
