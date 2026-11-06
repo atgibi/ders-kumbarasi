@@ -167,7 +167,7 @@ BANK = {
           ("1/6", "Payda büyüdükçe birim kesir küçülür."), ("1/8", "Payda büyüdükçe birim kesir küçülür."), ("1/10", "Payda büyüdükçe birim kesir küçülür.")),
         q(2, "Bir pasta 6 eş parçaya bölündü. Her parça hangi birim kesirdir?", "1/6",
           ("6/1", "Pay ve payda yer değiştirmez."), ("1/3", "Pasta 6 parçaya bölündü."), ("6/6", "Bu bütünün tamamıdır.")),
-        q(2, "Küçükten büyüğe sıralama hangisidir?", "1/8 < 1/4 < 1/2",
+        q(2, "Birim kesirlerin küçükten büyüğe sıralanışı hangisidir?", "1/8 < 1/4 < 1/2",
           ("1/2 < 1/4 < 1/8", "Bu büyükten küçüğe."), ("1/4 < 1/8 < 1/2", "1/8 < 1/4."), ("1/8 < 1/2 < 1/4", "1/2 en büyüğüdür.")),
         q(3, "Bir pastayı 3 kişi ya da 5 kişi eşit paylaşacak. Kişi başına hangi durumda daha büyük dilim düşer?", "3 kişi paylaşınca",
           ("5 kişi paylaşınca", "Daha çok kişi, daha küçük dilim."), ("İkisinde de eşit", "1/3 > 1/5."), ("Bilinemez", "Pasta aynı: 1/3 > 1/5.")),
