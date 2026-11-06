@@ -236,14 +236,14 @@ class FinaleWinView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 4, 18, 12),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(18, 4, 18, 12),
                     child: SpeechBubble(
                       tailLeft: 220,
-                      fill: const Color(0xFFE3EAF0),
-                      child: const Text(
+                      fill: Color(0xFFE3EAF0),
+                      child: Text(
                           'Beni hatırladınız. Ben de yağmuru hatırladım!',
-                          style: const TextStyle(fontSize: 18, height: 1.35)),
+                          style: TextStyle(fontSize: 18, height: 1.35)),
                     ),
                   ),
                   SizedBox(
