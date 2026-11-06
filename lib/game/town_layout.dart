@@ -47,7 +47,7 @@ class Spot {
 /// Meydanı çevreleyen varsayılan yerler: uzun yapılar arkada, alçaklar önde.
 const _defaults = <String, Spot>{
   'ev': Spot(1, 1),
-  'ocak': Spot(4, 4),
+  'ocak': Spot(0, 3),
   'firin': Spot(3, 1),
   'demirhane': Spot(4, 1),
   'kitaplik': Spot(1, 3),

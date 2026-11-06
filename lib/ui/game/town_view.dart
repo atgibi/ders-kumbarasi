@@ -19,7 +19,7 @@ import 'town_art.g.dart';
 const double _hw = 32, _hh = 16;
 
 /// Uzun yapılar için üstte bırakılan boşluk.
-const double _top = 92;
+const double _top = 60;
 
 const double _canvasW = townSize * 2 * _hw;
 const double _canvasH = _top + townSize * 2 * _hh + 12;

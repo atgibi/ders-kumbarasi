@@ -364,7 +364,7 @@ def preview(art):
             parts.append(embed(art[f"{b}_{lv}"], x, y - 8, 96, 144))
     # örnek kasaba
     ox, oy, tw = 450, 470, 64
-    layout = {(1, 1): "ev_3", (4, 4): "ocak_2", (3, 1): "firin_2", (4, 1): "demirhane_1",
+    layout = {(1, 1): "ev_3", (0, 3): "ocak_2", (3, 1): "firin_2", (4, 1): "demirhane_1",
               (1, 3): "kitaplik_3", (3, 3): "cesme_3", (0, 4): "bahce_2", (4, 0): "gozlemevi_3", (3, 4): "han_2"}
     roads = {(2, y) for y in range(6)} | {(x, 2) for x in range(6)}
     trees = {(0, 0): "tree_1", (5, 0): "tree_0", (5, 5): "tree_1", (0, 5): "tree_0", (5, 3): "tree_0"}
