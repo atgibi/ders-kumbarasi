@@ -250,7 +250,7 @@ BANK = {
           ("Güneye", "Güneş güney tarafında olduğu için gölge kuzeye düşer."),
           ("Doğuya", "Doğuya düşmesi öğleden sonradır."),
           ("Batıya", "Batıya düşmesi sabahtır.")),
-        rq(3, "Bir haritanın lejantında ⛪ cami, 🏫 okul, 🌳 park anlamına geliyor. Haritada okulun hemen batısında 🌳 işareti var.",
+        rq(3, "Bir haritanın lejantında 🕌 cami, 🏫 okul, 🌳 park anlamına geliyor. Haritada okulun hemen batısında 🌳 işareti var.",
            "Okuldan çıkıp batıya yürüyen biri nereye varır?", "Parka",
            ("Camiye", "Okulun batısında park işareti var."),
            ("Denize", "Haritada deniz işareti yok."),
