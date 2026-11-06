@@ -67,10 +67,10 @@ final Set<Spot> roadSpots = {
 /// Süs ağaçları: üzerine yapı konursa ağaç çizilmez.
 final Map<Spot, int> treeSpots = {
   Spot(0, 0): 1,
-  Spot(5, 0): 0,
-  Spot(5, 5): 1,
-  Spot(0, 5): 0,
-  Spot(5, 3): 0,
+  const Spot(5, 0): 0,
+  const Spot(5, 5): 1,
+  const Spot(0, 5): 0,
+  const Spot(5, 3): 0,
 };
 
 class TownLayout {
