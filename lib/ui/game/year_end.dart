@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../data/models.dart';
 import '../../game/game_state.dart';
+import '../../game/turkish.dart';
 import '../../game/world.dart';
 import '../screens/session_screen.dart';
 import '../theme.dart';
@@ -209,7 +210,8 @@ class FinaleWinView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final k = Kingdom.of(subject);
-    final hero = AppScope.of(context).progress?.game.hero;
+    final game = AppScope.of(context).progress?.game;
+    final hero = game?.hero;
     final line = legend
         ? 'Karabulut dört krallıkta da barıştı. Artık sen bir Efsanesin!'
         : 'Karabulut ${k.name} üstündeki sisi topladı ve filizlere yağmur '
@@ -240,8 +242,7 @@ class FinaleWinView extends StatelessWidget {
                       tailLeft: 220,
                       fill: const Color(0xFFE3EAF0),
                       child: const Text(
-                          'Kızgın değildim, sadece yalnızdım. '
-                          'Benimle uğraştığın için teşekkür ederim!',
+                          'Beni hatırladınız. Ben de yağmuru hatırladım!',
                           style: const TextStyle(fontSize: 18, height: 1.35)),
                     ),
                   ),
@@ -269,8 +270,34 @@ class FinaleWinView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(18, 14, 18, 8),
                     child: DkCard(
-                      child: Text(line,
-                          style: const TextStyle(fontSize: 17, height: 1.3)),
+                      key: const Key('year-summary'),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              '${genitive(AppScope.of(context).heroName)} yılı',
+                                style: G.sub.copyWith(color: G.indigo)),
+                          const SizedBox(height: 6),
+                          Row(children: [
+                            const IkonView(Ikon.sancak, size: 26),
+                            const SizedBox(width: 8),
+                            Text('${game?.banners.length ?? 0} sancak dikildi',
+                                style: G.body
+                                    .copyWith(fontWeight: FontWeight.w700)),
+                          ]),
+                          const SizedBox(height: 4),
+                          Row(children: [
+                            const IkonView(Ikon.kalkan, size: 26),
+                            const SizedBox(width: 8),
+                            Text(
+                                '${game?.rescued.length ?? 0} bekçi dost oldu',
+                                style: G.body
+                                    .copyWith(fontWeight: FontWeight.w700)),
+                          ]),
+                          const SizedBox(height: 8),
+                          Text(line, style: G.soft),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -281,7 +308,7 @@ class FinaleWinView extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 14),
             child: ChunkyButton(
               key: const Key('finale-done'),
-              label: 'Tamam',
+              label: 'Deftere yaz',
               kind: BtnKind.kok,
               onPressed: onDone,
             ),

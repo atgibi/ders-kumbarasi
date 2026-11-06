@@ -10,8 +10,8 @@ import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
+import 'first_quest.dart';
 import 'profile_form.dart';
-import 'session_screen.dart';
 
 /// İlk açılış (A1–A6). Veli doldurur; çocuk profili en sonda kaydedilir.
 class OnboardingScreen extends StatefulWidget {
@@ -49,7 +49,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         .map((o) => o.code)
         .firstOrNull;
     nav.push(MaterialPageRoute<void>(
-        builder: (_) => SessionScreen(subject: subject, focusOutcome: first)));
+        builder: (_) =>
+            FirstQuestScreen(subject: subject, focusOutcome: first)));
   }
 
   @override

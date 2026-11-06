@@ -180,6 +180,8 @@ void main() {
     await tapKey(t, 'look-tab-ten');
     await tapKey(t, 'skin-3');
     await tapKey(t, 'hero-done');
+    expect(find.text('Köyün ateşini yak'), findsOneWidget);
+    await tapKey(t, 'first-quest-go');
 
     await playSession(t);
     expect(find.text('Bugün çok çalıştın!'), findsOneWidget);
