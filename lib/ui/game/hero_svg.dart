@@ -254,7 +254,8 @@ String heroSvg(HeroLook look,
   if (companion) {
     // yol arkadaşı büyür: ayak hizası (166, 206) sabit kalır
     final k = companionScale.clamp(0.5, 1.0).toStringAsFixed(2);
-    b.write('<g transform="translate(166 206) scale($k) translate(-166 -206)">');
+    b.write(
+        '<g transform="translate(166 206) scale($k) translate(-166 -206)">');
     w(hayvan == 'at',
         '<path d="M150 180v26M158 184v22M176 184v22M184 180v26" fill="none" stroke-width="4"/><ellipse cx="166" cy="176" rx="25" ry="14" fill="#A8723F"/><path d="M180 170C184 154 190 146 196 144C202 148 200 160 193 163L189 174Z" fill="#A8723F"/><path d="M184 154C180 160 178 166 178 170M188 150C184 156 182 160 182 166" fill="none" stroke="#5E3A1B" stroke-width="3"/><path d="M142 172C132 178 134 192 138 198" fill="none" stroke="#5E3A1B" stroke-width="4"/><circle cx="194" cy="151" r="1.6" fill="#2B2320"/>');
     w(hayvan == 'tilki',
@@ -269,7 +270,8 @@ String heroSvg(HeroLook look,
         '<path d="M148 186L138 176L144 190Z" fill="#7A4D27"/><ellipse cx="160" cy="192" rx="14" ry="10" fill="#A8723F"/><path d="M152 188C158 184 166 186 168 194C162 196 156 194 152 188Z" fill="#5E3A1B"/><circle cx="172" cy="182" r="7" fill="#A8723F"/><path d="M178 182L185 184L178 186Z" fill="#E3A535"/><circle cx="174" cy="180" r="1.5" fill="#2B2320"/><path d="M156 202v6M164 202v6" fill="none" stroke-width="1.8"/>');
     b.write('</g>');
     // yetişkin yol arkadaşının çevresinde parıltı
-    w(companionGrown,
+    w(
+        companionGrown,
         '<path d="M196 136l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#E3A535" stroke-width="1.4"/>'
         '<path d="M140 158l1.4 3.4 3.4 1.4-3.4 1.4-1.4 3.4-1.4-3.4-3.4-1.4 3.4-1.4z" fill="#E3A535" stroke-width="1.2"/>');
   }

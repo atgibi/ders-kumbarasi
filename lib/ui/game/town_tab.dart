@@ -197,9 +197,8 @@ class _WardrobeButton extends StatelessWidget {
             kind: BtnKind.secondary,
             semanticsLabel:
                 fresh > 0 ? 'Giysi dolabı, $fresh yeni eşya' : 'Giysi dolabı',
-            onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                    builder: (_) => const WardrobeScreen())),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
+                builder: (_) => const WardrobeScreen())),
           ),
           if (fresh > 0)
             Positioned(

@@ -29,7 +29,8 @@ class ItemDef {
 /// Açılma sırası: yuvalar dönüşümlü, böylece ilk bölgelerde her yuvaya
 /// bir eşya gelir.
 const items = [
-  ItemDef('atki', 'Kırmızı Atkı', ItemSlot.boyun, 'Soğuk dağ yollarında ısıtır.'),
+  ItemDef(
+      'atki', 'Kırmızı Atkı', ItemSlot.boyun, 'Soğuk dağ yollarında ısıtır.'),
   ItemDef('rozet_yildiz', 'Yıldız Rozeti', ItemSlot.rozet,
       'İlk kurtardığın bölgeyi hatırlatır.'),
   ItemDef('cicek_taci', 'Çiçek Tacı', ItemSlot.bas,
@@ -51,8 +52,8 @@ const items = [
   ItemDef('kitap', 'Yıldızlı Kitap', ItemSlot.el, 'Bütün masalları biliyor.'),
   ItemDef('yildiz_pelerin', 'Yıldızlı Pelerin', ItemSlot.sirt,
       'Gece göğünden dikildi.'),
-  ItemDef('tac', 'Bilge Tacı', ItemSlot.bas,
-      'Krallıkların hepsinde tanınırsın.'),
+  ItemDef(
+      'tac', 'Bilge Tacı', ItemSlot.bas, 'Krallıkların hepsinde tanınırsın.'),
 ];
 
 ItemDef? itemById(String id) {

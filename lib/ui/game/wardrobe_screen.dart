@@ -94,8 +94,7 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
                         const SizedBox(height: 6),
                         if (pathDef != null)
                           Text('${pathDef.companion} · ${comp.label}',
-                              key: const Key('companion-stage'),
-                              style: G.sub),
+                              key: const Key('companion-stage'), style: G.sub),
                         Text(
                           next == null
                               ? 'Yol arkadaşın tamamen büyüdü!'
