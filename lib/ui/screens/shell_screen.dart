@@ -822,9 +822,11 @@ class _ProfileTabState extends State<_ProfileTab> {
           ),
         );
     final week = app.week();
-    return ListView(
+    return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-      children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
         Row(children: [
           if (p.game.hero != null)
             FutureBuilder<HeroStage>(
@@ -921,6 +923,7 @@ class _ProfileTabState extends State<_ProfileTab> {
           ),
         ),
       ],
+      ),
     );
   }
 }
