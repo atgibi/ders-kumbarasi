@@ -162,8 +162,10 @@ void main() {
               c.next();
             } else {
               final q = st.question!;
-              c.answer(wrong ? (q.answerIndex + 1) % q.options.length
-                  : q.answerIndex,
+              c.answer(
+                  wrong
+                      ? (q.answerIndex + 1) % q.options.length
+                      : q.answerIndex,
                   elapsed: const Duration(seconds: 5));
               wrong = false;
               c.next();

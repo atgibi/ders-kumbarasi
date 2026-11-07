@@ -103,7 +103,12 @@ bool has(String key) => find.byKey(Key(key)).evaluate().isNotEmpty;
 /// düğme bulamazsa ekranda ne olduğunu döner.
 Future<String?> walkToEnd(WidgetTester t) async {
   for (var guard = 0; guard < 160; guard++) {
-    for (final end in ['summary-done', 'streak-done', 'duel-done', 'finale-done']) {
+    for (final end in [
+      'summary-done',
+      'streak-done',
+      'duel-done',
+      'finale-done'
+    ]) {
       if (has(end)) return null;
     }
     bool enabled(String key) {
@@ -129,7 +134,8 @@ Future<String?> walkToEnd(WidgetTester t) async {
         await tapKey(t, 'right-$i');
       }
     } else if (has('build-area') && !enabled('check')) {
-      if (!has('option-0')) return 'hece/sıralama alanı doldu ama Kontrol et açılmadı';
+      if (!has('option-0'))
+        return 'hece/sıralama alanı doldu ama Kontrol et açılmadı';
       await tapKey(t, 'option-0');
     } else if (has('option-0') && !enabled('check')) {
       await tapKey(t, 'option-0');
