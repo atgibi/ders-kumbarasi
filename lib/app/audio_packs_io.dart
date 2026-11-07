@@ -12,7 +12,8 @@ import 'audio_packs.dart';
 AudioPacks createAudioPacks() => FileAudioPacks();
 
 class FileAudioPacks implements AudioPacks {
-  FileAudioPacks({Future<Directory> Function()? root, this.base = audioPackBase})
+  FileAudioPacks(
+      {Future<Directory> Function()? root, this.base = audioPackBase})
       : _rootOf = root ?? getApplicationSupportDirectory;
 
   final Future<Directory> Function() _rootOf;
@@ -35,7 +36,8 @@ class FileAudioPacks implements AudioPacks {
       final g = info['$grade'];
       if (g is! Map) return;
       final version = '${g['version']}';
-      if (await mark.exists() && (await mark.readAsString()).trim() == version) {
+      if (await mark.exists() &&
+          (await mark.readAsString()).trim() == version) {
         return;
       }
       final bytes = await _get('$base/${g['file']}');
@@ -80,7 +82,8 @@ class FileAudioPacks implements AudioPacks {
   }
 
   Future<Uint8List> _get(String url) async {
-    final client = HttpClient()..connectionTimeout = const Duration(seconds: 15);
+    final client = HttpClient()
+      ..connectionTimeout = const Duration(seconds: 15);
     try {
       final req = await client.getUrl(Uri.parse(url));
       final res = await req.close().timeout(const Duration(seconds: 30));

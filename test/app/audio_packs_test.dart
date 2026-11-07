@@ -28,7 +28,11 @@ void main() {
   test('paket açılır; bozuk paket hiçbir şey yazmaz', () async {
     final out = await Directory('${tmp.path}/a').create();
     final n = await unpackAudioForTest(
-        packOf({'0123456789abcdef': [1, 2, 3], 'fedcba9876543210': [4]}), out);
+        packOf({
+          '0123456789abcdef': [1, 2, 3],
+          'fedcba9876543210': [4]
+        }),
+        out);
     expect(n, 2);
     expect(await File('${out.path}/0123456789abcdef.mp3').readAsBytes(),
         [1, 2, 3]);
@@ -38,7 +42,9 @@ void main() {
 
   test('sınıf paketi indirilir, bir kez iner, sürüm değişince yenilenir',
       () async {
-    var bin = packOf({'0123456789abcdef': [9, 9]});
+    var bin = packOf({
+      '0123456789abcdef': [9, 9]
+    });
     var version = 'v1';
     var downloads = 0;
     final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
@@ -67,7 +73,9 @@ void main() {
     await packs.ensure(2);
     expect(downloads, 1, reason: 'aynı sürüm yeniden inmez');
 
-    bin = packOf({'fedcba9876543210': [7]});
+    bin = packOf({
+      'fedcba9876543210': [7]
+    });
     version = 'v2';
     await packs.ensure(2);
     expect(downloads, 2);
