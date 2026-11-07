@@ -26,7 +26,6 @@ void main() {
       if (seenSig.add('${v.kind}|${jsonEncode(v.params)}')) visuals[where] = v;
     }
 
-    final pending = <Future<void>>[];
     Future<void> collect() async {
       for (final s in Subject.values) {
         for (final g in s.grades) {
@@ -49,9 +48,10 @@ void main() {
       }
     }
 
-    pending.add(collect());
-    await t.runAsync(() => Future.wait(pending));
+    // Dosya okuma gerçek zamanda yapılmalı (sahte saatte takılır)
+    await t.runAsync(collect);
     expect(visuals, isNotEmpty);
+    debugPrint('Taranan farklı görsel: ${visuals.length}');
 
     final problems = <String>[];
     for (final e in visuals.entries) {
