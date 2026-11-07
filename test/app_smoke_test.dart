@@ -11,6 +11,9 @@ import 'package:ders_kumbarasi/data/progress_store.dart';
 import 'package:ders_kumbarasi/game/game_state.dart';
 import 'package:ders_kumbarasi/game/world.dart';
 import 'package:ders_kumbarasi/main.dart';
+import 'package:ders_kumbarasi/ui/screens/session_screen.dart';
+import 'package:ders_kumbarasi/ui/theme.dart';
+import 'package:ders_kumbarasi/ui/widgets/kit.dart';
 
 /// Widget testlerinde gerçek dosya G/Ç'si sahte zamanlayıcıyla çakışır;
 /// içerik dosyaları önceden belleğe okunur.
@@ -95,6 +98,57 @@ Future<void> tapRegion(WidgetTester t, int i) async {
 }
 
 bool has(String key) => find.byKey(Key(key)).evaluate().isNotEmpty;
+
+/// Oturumu sonuna kadar oynar. Bitiş ekranına varırsa null, ilerletecek
+/// düğme bulamazsa ekranda ne olduğunu döner.
+Future<String?> walkToEnd(WidgetTester t) async {
+  for (var guard = 0; guard < 160; guard++) {
+    for (final end in ['summary-done', 'streak-done', 'duel-done', 'finale-done']) {
+      if (has(end)) return null;
+    }
+    bool enabled(String key) {
+      final f = find.byKey(Key(key));
+      if (f.evaluate().isEmpty) return false;
+      final w = t.widget(f);
+      return w is! ChunkyButton || w.onPressed != null;
+    }
+
+    if (has('next')) {
+      await tapKey(t, 'next');
+    } else if (has('lesson-next')) {
+      await tapKey(t, 'lesson-next');
+    } else if (has('activity-done')) {
+      await tapKey(t, 'activity-done');
+    } else if (has('keypad')) {
+      await tapKey(t, 'key-1');
+    } else if (has('clock-face') && !enabled('check')) {
+      await tapKey(t, 'clock-h-plus');
+    } else if (has('match-area') && !enabled('check')) {
+      for (var i = 0; has('left-$i'); i++) {
+        await tapKey(t, 'left-$i');
+        await tapKey(t, 'right-$i');
+      }
+    } else if (has('build-area') && !enabled('check')) {
+      if (!has('option-0')) return 'hece/sıralama alanı doldu ama Kontrol et açılmadı';
+      await tapKey(t, 'option-0');
+    } else if (has('option-0') && !enabled('check')) {
+      await tapKey(t, 'option-0');
+    } else if (enabled('check')) {
+      await tapKey(t, 'check');
+      if (!has('next')) return 'Kontrol et sonrası Devam/Anladım çıkmadı';
+    } else {
+      final texts = find
+          .byType(Text)
+          .evaluate()
+          .map((e) => (e.widget as Text).data)
+          .whereType<String>()
+          .take(12)
+          .join(' | ');
+      return 'ilerletecek düğme yok. Ekran: $texts';
+    }
+  }
+  return '160 adımda bitmedi';
+}
 
 /// Oturumu sonuna kadar götürür (anlatım, soru, etkinlik).
 Future<void> playSession(WidgetTester t) async {
@@ -429,4 +483,54 @@ void main() {
     const off = AppSettings(quietStartHour: 0, quietEndHour: 0);
     expect(off.isQuietTime(DateTime(2026, 1, 1, 23)), isFalse);
   });
+
+  // Her sınıfın her dersinde ilk iki konu ve bir düello, gerçek ekranda
+  // baştan sona oynanır. Bir adımda ilerletecek düğme yoksa test düşer.
+  for (final g in [1, 2, 3, 4]) {
+    for (final s in Subject.forGrade(g)) {
+      testWidgets('ekran taraması: $g. sınıf ${s.label}', (t) async {
+        reduceMotion(t);
+        phone(t);
+        final storage = MemoryStorage();
+        final store = ProgressStore(storage);
+        await store.saveProfiles(
+            [ChildProfile(id: 'a', nickname: 'Can', grade: g, avatar: '0')]);
+        await seedHero(store, 'a');
+        final state = makeState(storage);
+        await state.load();
+        await state.updateSettings(state.settings.copyWith(premium: true));
+        await state.selectChild(state.profiles.single);
+        final outcomes = await state.content.outcomesFor(s, g);
+        final pack = await state.content.contentFor(s, g);
+        final codes = [
+          for (final o in outcomes)
+            if (pack[o.code]?.cards.isNotEmpty ?? false) o.code
+        ];
+        if (codes.isEmpty) return;
+        final regions = await state.regions(s, g);
+        final screens = <(String, Widget)>[
+          for (final code in codes.take(2))
+            (code, SessionScreen(subject: s, focusOutcome: code)),
+          (
+            'düello',
+            SessionScreen(subject: s, duel: regions.first),
+          ),
+        ];
+        for (final (name, screen) in screens) {
+          await t.pumpWidget(AppScope(
+              state: state,
+              child: MaterialApp(theme: K.theme(), home: screen)));
+          await t.pumpAndSettle();
+          final stuck = await walkToEnd(t);
+          expect(stuck, isNull, reason: '$g. sınıf ${s.label} $name: $stuck');
+          if (name != 'düello') {
+            expect(state.progress!.startedOutcomes, contains(name),
+                reason: '$name oturumdan sonra başlamış olmalı');
+          }
+          await t.pumpWidget(const SizedBox());
+          await t.pumpAndSettle(const Duration(seconds: 3));
+        }
+      });
+    }
+  }
 }

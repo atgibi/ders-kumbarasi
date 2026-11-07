@@ -1331,6 +1331,10 @@ Question generate(CardDef card, Random rnd) {
       answerIndex: order.indexOf(f.answerIndex),
       explanation: f.explanation,
       hint: f.hint,
+      // "Neden yanlış" notları seçeneklerle birlikte karışır
+      optionNotes: f.optionNotes == null
+          ? null
+          : [for (final i in order) f.optionNotes![i]],
     );
   }
   final g = generators[card.generator];
