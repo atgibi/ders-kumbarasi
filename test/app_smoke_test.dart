@@ -134,14 +134,17 @@ Future<String?> walkToEnd(WidgetTester t) async {
         await tapKey(t, 'right-$i');
       }
     } else if (has('build-area') && !enabled('check')) {
-      if (!has('option-0'))
+      if (!has('option-0')) {
         return 'hece/sıralama alanı doldu ama Kontrol et açılmadı';
+      }
       await tapKey(t, 'option-0');
     } else if (has('option-0') && !enabled('check')) {
       await tapKey(t, 'option-0');
     } else if (enabled('check')) {
       await tapKey(t, 'check');
-      if (!has('next')) return 'Kontrol et sonrası Devam/Anladım çıkmadı';
+      if (!has('next')) {
+        return 'Kontrol et sonrası Devam/Anladım çıkmadı';
+      }
     } else {
       final texts = find
           .byType(Text)
