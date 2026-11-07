@@ -250,5 +250,29 @@ def pack():
     print(f"ekran cümleleri: {len(ui)} (assets/audio_ui)")
 
 
+def unpack():
+    """dist/ses-*.bin paketlerindeki sesleri audio/ klasörüne geri açar
+    (depoya eklenemeden kalan sesleri kurtarmak için; yeniden ücretlendirilmez)."""
+    import struct
+    AUDIO.mkdir(exist_ok=True)
+    added = 0
+    for f in sorted(DIST.glob("ses-*.bin")):
+        b = f.read_bytes()
+        assert b[:6] == b"DKSES1", f
+        n = struct.unpack(">I", b[6:10])[0]
+        off = 10
+        for _ in range(n):
+            h = b[off:off + 16].decode("ascii")
+            ln = struct.unpack(">I", b[off + 16:off + 20])[0]
+            off += 20
+            out = AUDIO / f"{h}.mp3"
+            if not out.exists():
+                out.write_bytes(b[off:off + ln])
+                added += 1
+            off += ln
+    print(f"geri açılan ses: {added}")
+
+
 if __name__ == "__main__":
-    {"collect": collect, "synthesize": synthesize, "pack": pack}[sys.argv[1]]()
+    {"collect": collect, "synthesize": synthesize, "pack": pack,
+     "unpack": unpack}[sys.argv[1]]()
