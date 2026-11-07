@@ -201,7 +201,8 @@ class HybridSpeaker implements Speaker {
 
   Future<Source?> _source(String t) async {
     final id = speechId(t);
-    if ((await _manifest()).contains(id)) return AssetSource('audio_ui/$id.mp3');
+    if ((await _manifest()).contains(id))
+      return AssetSource('audio_ui/$id.mp3');
     final path = await _packs.pathFor(id);
     return path == null ? null : DeviceFileSource(path);
   }
@@ -227,8 +228,7 @@ class HybridSpeaker implements Speaker {
         await _player.setPlaybackRate(slow ? 0.75 : 1.0);
         for (final src in srcs) {
           if (turn != _turn) return;
-          final done =
-              srcs.length > 1 ? _player.onPlayerComplete.first : null;
+          final done = srcs.length > 1 ? _player.onPlayerComplete.first : null;
           await _player.play(src!);
           await done?.timeout(const Duration(seconds: 40), onTimeout: () {});
         }
