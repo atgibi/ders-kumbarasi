@@ -1,6 +1,7 @@
 /// Uygulama durumu: profiller, seçili çocuk, ayarlar. Sunucu yok.
 library;
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -270,6 +271,8 @@ class AppState extends ChangeNotifier {
 
   Future<void> selectChild(ChildProfile p) async {
     active = p;
+    // Sınıfın ders sesleri arka planda hazırlanır (gerekirse bir kez iner)
+    unawaited(speaker.prepare(p.grade));
     subject = await _defaultSubject(p.grade);
     progress = await store.loadProgress(p.id);
     _noteIssue();

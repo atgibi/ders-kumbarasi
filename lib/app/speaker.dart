@@ -10,6 +10,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import 'audio_packs.dart';
+
 abstract class Speaker {
   /// [slow]: kaplumbağa düğmesi, daha yavaş okuma.
   Future<void> speak(String text, {bool slow = false});
@@ -19,6 +21,9 @@ abstract class Speaker {
   /// Cihazda kullanılabilir bir Türkçe ses (ya da kayıt) var mı? Gerekirse
   /// metin okuma motorunu yoklar.
   Future<bool> checkAvailable();
+
+  /// Çocuğun sınıfının kayıtlı seslerini hazırlar (gerekirse indirir).
+  Future<void> prepare(int grade);
 }
 
 class NoopSpeaker implements Speaker {
@@ -32,6 +37,8 @@ class NoopSpeaker implements Speaker {
   bool get available => false;
   @override
   Future<bool> checkAvailable() async => false;
+  @override
+  Future<void> prepare(int grade) async {}
 }
 
 const _symbolRanges = [
@@ -103,6 +110,9 @@ class TtsSpeaker implements Speaker {
     return _available;
   }
 
+  @override
+  Future<void> prepare(int grade) async {}
+
   Future<void> _init() async {
     if (_ready) return;
     _ready = true;
@@ -146,43 +156,57 @@ class TtsSpeaker implements Speaker {
   }
 }
 
-/// Kayıtlı ses + cihaz sesi yedeği.
+/// Kayıtlı ses + cihaz sesi yedeği. Ekran cümleleri uygulamayla gelir
+/// (assets/audio_ui); ders sesleri sınıf paketinden okunur (audio_packs).
 class HybridSpeaker implements Speaker {
-  HybridSpeaker({TtsSpeaker? fallback}) : _tts = fallback ?? TtsSpeaker();
+  HybridSpeaker({TtsSpeaker? fallback, AudioPacks? packs})
+      : _tts = fallback ?? TtsSpeaker(),
+        _packs = packs ?? createAudioPacks();
 
   final TtsSpeaker _tts;
+  final AudioPacks _packs;
   final AudioPlayer _player = AudioPlayer();
-  Set<String>? _recorded;
+  Set<String>? _bundled;
 
   Future<Set<String>> _manifest() async {
-    if (_recorded != null) return _recorded!;
+    if (_bundled != null) return _bundled!;
     try {
-      final raw = await rootBundle.loadString('assets/audio/manifest.json');
-      _recorded = (jsonDecode(raw) as List<Object?>).cast<String>().toSet();
+      final raw = await rootBundle.loadString('assets/audio_ui/manifest.json');
+      _bundled = (jsonDecode(raw) as List<Object?>).cast<String>().toSet();
     } on Object {
-      _recorded = {};
+      _bundled = {};
     }
-    return _recorded!;
+    return _bundled!;
   }
 
   @override
-  bool get available => (_recorded?.isNotEmpty ?? false) || _tts.available;
+  bool get available => (_bundled?.isNotEmpty ?? false) || _tts.available;
 
   @override
   Future<bool> checkAvailable() async =>
       (await _manifest()).isNotEmpty || await _tts.checkAvailable();
 
   @override
+  Future<void> prepare(int grade) => _packs.ensure(grade);
+
+  @override
   Future<void> speak(String text, {bool slow = false}) async {
     final t = speakable(text);
     if (t.isEmpty) return;
     final id = speechId(t);
+    Source? src;
     if ((await _manifest()).contains(id)) {
+      src = AssetSource('audio_ui/$id.mp3');
+    } else {
+      final path = await _packs.pathFor(id);
+      if (path != null) src = DeviceFileSource(path);
+    }
+    if (src != null) {
       try {
         await _tts.stop();
         await _player.stop();
         await _player.setPlaybackRate(slow ? 0.75 : 1.0);
-        await _player.play(AssetSource('audio/$id.mp3'));
+        await _player.play(src);
         return;
       } on Object {
         // kayıt çalınamazsa cihaz sesine düş

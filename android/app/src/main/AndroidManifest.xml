@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- Uygulama internete çıkmaz ve depolama izni istemez (Aileler politikası).
-         Eklentilerden gelebilecek izinler yayın sürümünden çıkarılır. -->
-    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
+    <!-- İnternet yalnızca sınıf ses paketini indirmek için (veri gönderilmez).
+         Depolama izni istenmez (Aileler politikası); eklentilerden gelebilecek
+         izinler yayın sürümünden çıkarılır. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:node="remove" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="remove" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:node="remove" />

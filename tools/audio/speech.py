@@ -2,8 +2,14 @@
 """Uygulamada sesli okunan sabit metinleri toplar ve Google Cloud Text-to-Speech
 ile MP3'e çevirir.
 
-    python3 tools/audio/speech.py collect      # assets/audio/manifest.json günceller
+    python3 tools/audio/speech.py collect      # metin listesini günceller
     python3 tools/audio/speech.py synthesize   # eksik sesleri üretir (GOOGLE_TTS_API_KEY gerekir)
+    python3 tools/audio/speech.py pack         # uygulamaya gömülü ve indirilecek paketleri yazar
+
+Sesler depoda audio/ klasöründe durur (uygulamaya gömülmez). Uygulamayla
+yalnızca sabit ekran cümleleri gelir (assets/audio_ui). Ders sesleri sınıf
+sınıf paketlenir (dist/ses-<sınıf>.bin) ve GitHub Releases'tan bir kez indirilir
+(lib/app/audio_packs.dart).
 
 Dosya adı metnin FNV-1a karmasıdır; uygulama (lib/app/speaker.dart) aynı
 karmayı hesaplayıp kayıtlı sesi bulur, bulamazsa cihazın sesini kullanır.
@@ -18,7 +24,9 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-AUDIO = ROOT / "assets/audio"
+AUDIO = ROOT / "audio"
+UI_AUDIO = ROOT / "assets/audio_ui"
+DIST = ROOT / "dist"
 
 # Uygulama kodunda sabit olarak sesli okunan cümleler
 UI_PHRASES = [
@@ -94,7 +102,6 @@ def collect() -> dict:
     (ROOT / "tools/audio/texts.json").write_text(
         json.dumps(mapping, ensure_ascii=False, indent=0, sort_keys=True), encoding="utf-8")
     present = sorted(h for h in mapping if (AUDIO / f"{h}.mp3").exists())
-    (AUDIO / "manifest.json").write_text(json.dumps(present), encoding="utf-8")
     chars = sum(len(t) for t in mapping.values())
     print(f"{len(mapping)} metin, {chars} karakter; kayıtlı ses: {len(present)}")
     return mapping
@@ -180,5 +187,72 @@ def synthesize():
         sys.exit(1)
 
 
+def _texts_of(pack: dict) -> set:
+    texts = set()
+    for o in pack["outcomes"]:
+        for l in o["lessons"]:
+            for p in l["pages"]:
+                texts.add(p.get("say") or p["text"])
+        for c in o["cards"]:
+            if c["type"] in ("mc", "act"):
+                texts.add(c.get("say") or c["prompt"])
+                for k in ("explain", "hint"):
+                    if c.get(k):
+                        texts.add(c[k])
+    return {speakable(t) for t in texts if speakable(t)}
+
+
+def pack():
+    """assets/audio_ui: uygulamayla gelen ekran cümleleri.
+    dist/ses-<sınıf>.bin: o sınıfın ders sesleri; dist/ses.json: paket listesi.
+
+    Paket biçimi (bağımlılıksız, lib/app/audio_packs.dart okur):
+      'DKSES1' + kayıt sayısı (4 bayt, büyük uçlu) +
+      her kayıt: 16 haneli kimlik (ASCII) + uzunluk (4 bayt) + MP3 baytları
+    """
+    import hashlib
+    import shutil
+    import struct
+    collect()
+    # 1) Ekran cümleleri uygulamaya gömülür
+    if UI_AUDIO.exists():
+        shutil.rmtree(UI_AUDIO)
+    UI_AUDIO.mkdir(parents=True)
+    ui = []
+    for t in UI_PHRASES:
+        h = speech_id(speakable(t))
+        src = AUDIO / f"{h}.mp3"
+        if src.exists():
+            shutil.copy(src, UI_AUDIO / f"{h}.mp3")
+            ui.append(h)
+    (UI_AUDIO / "manifest.json").write_text(json.dumps(sorted(ui)), encoding="utf-8")
+    # 2) Sınıf paketleri
+    by_grade = {}
+    for f in sorted(glob.glob(str(ROOT / "assets/content/*.json"))):
+        g = int(Path(f).stem.rsplit("_", 1)[1])
+        by_grade.setdefault(g, set()).update(
+            speech_id(t) for t in _texts_of(json.loads(Path(f).read_text(encoding="utf-8"))))
+    DIST.mkdir(exist_ok=True)
+    index = {"format": 1, "grades": {}}
+    for g, ids in sorted(by_grade.items()):
+        ids = sorted(h for h in ids if (AUDIO / f"{h}.mp3").exists())
+        out = DIST / f"ses-{g}.bin"
+        sha = hashlib.sha256()
+        with open(out, "wb") as w:
+            w.write(b"DKSES1" + struct.pack(">I", len(ids)))
+            for h in ids:
+                data = (AUDIO / f"{h}.mp3").read_bytes()
+                rec = h.encode("ascii") + struct.pack(">I", len(data)) + data
+                w.write(rec)
+                sha.update(rec)
+        index["grades"][str(g)] = {
+            "file": out.name, "count": len(ids), "bytes": out.stat().st_size,
+            "version": sha.hexdigest()[:16],
+        }
+        print(f"{out.name}: {len(ids)} ses, {out.stat().st_size / 1e6:.1f} MB")
+    (DIST / "ses.json").write_text(json.dumps(index, indent=1), encoding="utf-8")
+    print(f"ekran cümleleri: {len(ui)} (assets/audio_ui)")
+
+
 if __name__ == "__main__":
-    {"collect": collect, "synthesize": synthesize}[sys.argv[1]]()
+    {"collect": collect, "synthesize": synthesize, "pack": pack}[sys.argv[1]]()

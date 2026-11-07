@@ -26,3 +26,4 @@ ios/Flutter/flutter_export_environment.sh
 ios/Runner.xcworkspace/xcuserdata/
 ios/Runner.xcodeproj/xcuserdata/
 __pycache__/
+dist/
