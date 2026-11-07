@@ -108,11 +108,35 @@ def pick_voice(key: str) -> str:
     voices = json.loads(urllib.request.urlopen(url, timeout=30).read())["voices"]
     names = [v["name"] for v in voices]
     for pref in ("Chirp3-HD", "Neural2", "Wavenet"):
-        female = [n for n in names if pref in n]
-        if female:
-            print("ses:", female[0], f"({len(female)} seçenek: {', '.join(female[:6])})")
-            return female[0]
+        found = [n for n in names if pref in n]
+        if not found:
+            continue
+        # Chirp 3 HD'de sıcak, anlaşılır kadın sesleri önce
+        for warm in ("Kore", "Aoede", "Leda", "Zephyr"):
+            for n in found:
+                if n.endswith(warm):
+                    print("ses:", n, f"({len(found)} seçenek)")
+                    return n
+        print("ses:", found[0], f"({len(found)} seçenek: {', '.join(found[:6])})")
+        return found[0]
     return names[0]
+
+
+def _post(req):
+    """Kota (429) ya da sunucu hatasında bekleyip yeniden dener."""
+    import time
+    import urllib.error
+    for attempt in range(6):
+        try:
+            return json.loads(urllib.request.urlopen(req, timeout=60).read())
+        except urllib.error.HTTPError as e:
+            if e.code not in (429, 500, 502, 503, 504) or attempt == 5:
+                raise
+            time.sleep(2 ** attempt * 5)
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == 5:
+                raise
+            time.sleep(10)
 
 
 def synthesize():
@@ -132,7 +156,7 @@ def synthesize():
         req = urllib.request.Request(
             f"https://texttospeech.googleapis.com/v1/text:synthesize?key={key}",
             data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
-        audio = json.loads(urllib.request.urlopen(req, timeout=60).read())["audioContent"]
+        audio = _post(req)["audioContent"]
         (AUDIO / f"{h}.mp3").write_bytes(base64.b64decode(audio))
         if i % 50 == 0:
             print(f"{i}/{len(todo)}")

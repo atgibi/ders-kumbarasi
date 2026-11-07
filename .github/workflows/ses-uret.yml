@@ -5,7 +5,7 @@ name: Seslendirme (Google TTS)
 
 on:
   push:
-    branches: [main]
+    branches: [main, oyun-demirdag]
     paths: ["assets/content/**", "tools/audio/**"]
   workflow_dispatch:
 
@@ -39,7 +39,8 @@ jobs:
           GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
         run: python3 tools/audio/speech.py synthesize
       - name: Depoya ekle ve uygulamayı yeniden derle
-        if: steps.key.outputs.ok == 'true'
+        # Üretim yarıda kalsa da üretilenler eklenir; yeniden çalışınca kalanlar üretilir
+        if: always() && steps.key.outputs.ok == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -48,8 +49,8 @@ jobs:
           git add assets/audio tools/audio/texts.json
           if git commit -qm "Seslendirme: eksik sesler üretildi"; then
             git push
-            gh workflow run ci.yml --ref main
-            gh workflow run web.yml --ref main
+            gh workflow run ci.yml --ref "${GITHUB_REF_NAME}"
+            gh workflow run web.yml --ref "${GITHUB_REF_NAME}"
           else
             echo "Yeni ses yok."
           fi
