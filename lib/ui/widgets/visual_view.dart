@@ -390,8 +390,11 @@ class _NumberHighlight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    // Milyonluk sayılar telefona sığmıyordu: gerekirse küçülür
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < number.length; i++)
           Container(
@@ -409,6 +412,7 @@ class _NumberHighlight extends StatelessWidget {
                     const TextStyle(fontSize: 40, fontWeight: FontWeight.w800)),
           ),
       ],
+    ),
     );
   }
 }

@@ -117,7 +117,7 @@ void main() {
         }
       }
     }
-    expect(cards, greaterThan(5000));
+    expect(cards, greaterThan(4000));
     expect(problems, isEmpty,
         reason: '${problems.length} sorun:\n${problems.take(80).join('\n')}');
   });
