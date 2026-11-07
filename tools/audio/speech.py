@@ -147,7 +147,8 @@ def synthesize():
     voice = pick_voice(key)
     todo = [h for h in mapping if not (AUDIO / f"{h}.mp3").exists()]
     print(f"üretilecek: {len(todo)}")
-    for i, h in enumerate(todo, 1):
+
+    def one(h):
         body = {
             "input": {"text": mapping[h]},
             "voice": {"languageCode": "tr-TR", "name": voice},
@@ -158,9 +159,25 @@ def synthesize():
             data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
         audio = _post(req)["audioContent"]
         (AUDIO / f"{h}.mp3").write_bytes(base64.b64decode(audio))
-        if i % 50 == 0:
-            print(f"{i}/{len(todo)}")
+
+    # Paralel istek: 6.000+ ses tek tek saatler sürer; kota hatasında _post bekler
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    failed = 0
+    with ThreadPoolExecutor(max_workers=int(os.environ.get("TTS_WORKERS", "6"))) as ex:
+        futs = [ex.submit(one, h) for h in todo]
+        for i, f in enumerate(as_completed(futs), 1):
+            try:
+                f.result()
+            except Exception as e:  # noqa: BLE001
+                failed += 1
+                if failed <= 5:
+                    print("hata:", e)
+            if i % 200 == 0:
+                print(f"{i}/{len(todo)}", flush=True)
+    print(f"bitti: {len(todo) - failed} üretildi, {failed} hata")
     collect()
+    if failed:
+        sys.exit(1)
 
 
 if __name__ == "__main__":
