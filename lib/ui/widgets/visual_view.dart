@@ -394,25 +394,25 @@ class _NumberHighlight extends StatelessWidget {
     return FittedBox(
       fit: BoxFit.scaleDown,
       child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (var i = 0; i < number.length; i++)
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 3),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: number.length - 1 - i == pos
-                  ? K.primary.withValues(alpha: 0.35)
-                  : Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: K.ink.withValues(alpha: 0.2)),
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (var i = 0; i < number.length; i++)
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: number.length - 1 - i == pos
+                    ? K.primary.withValues(alpha: 0.35)
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: K.ink.withValues(alpha: 0.2)),
+              ),
+              child: Text(number[i],
+                  style: const TextStyle(
+                      fontSize: 40, fontWeight: FontWeight.w800)),
             ),
-            child: Text(number[i],
-                style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.w800)),
-          ),
-      ],
-    ),
+        ],
+      ),
     );
   }
 }
