@@ -7,6 +7,7 @@ import '../../app/session_controller.dart';
 import '../../app/speaker.dart';
 import '../../data/models.dart';
 import '../../data/progress_store.dart';
+import '../../game/items.dart';
 import '../../game/quests.dart';
 import '../../game/turkish.dart';
 import '../../game/world.dart';
@@ -73,6 +74,7 @@ class _SessionScreenState extends State<SessionScreen> {
   int _duelHits = 0;
   int _duelPieces = 0;
   bool _duelGift = false;
+  ItemDef? _duelItem;
   String? _notebookLine;
 
   @override
@@ -182,8 +184,9 @@ class _SessionScreenState extends State<SessionScreen> {
         await app.saveProgress();
         if (!mounted) return;
         setState(() => _phase = _Phase.duelWin);
-        _say(
-            '${widget.duel!.guardian.name} kurtuldu! ${widget.duel!.guardian.thanks}');
+        _say('${widget.duel!.guardian.name} kurtuldu! '
+            '${widget.duel!.guardian.thanks}'
+            '${_duelItem == null ? '' : ' Yeni eşya kazandın: ${_duelItem!.name}.'}');
         return;
       }
       _writeNotebook(app, c);
@@ -232,6 +235,10 @@ class _SessionScreenState extends State<SessionScreen> {
     g.banners.add(r.key);
     if (first) g.rescued.add(r.key);
     g.duelBest[r.key] = math.max(g.duelBest[r.key] ?? 0, pct);
+    // Her ilk kurtarış sıradaki eşyayı açar (bkz. items.dart)
+    _duelItem = first && g.banners.length <= items.length
+        ? items[g.banners.length - 1]
+        : null;
     if (first) {
       g.addSupply(Kingdom.of(r.subject).material, 5);
       g.addLetter(guardianLetter(
@@ -382,6 +389,7 @@ class _SessionScreenState extends State<SessionScreen> {
         body = DuelWinView(
           region: widget.duel!,
           gift: _duelGift,
+          newItem: _duelItem,
           onDone: _end,
           onSay: _say,
         );

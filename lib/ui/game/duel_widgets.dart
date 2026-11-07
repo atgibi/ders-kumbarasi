@@ -5,6 +5,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../game/items.dart';
 import '../../game/world.dart';
 import '../theme.dart';
 import '../widgets/emoji_text.dart';
@@ -15,6 +16,7 @@ import '../widgets/mascot.dart';
 import 'game_theme.dart';
 import 'guardian_svg.dart';
 import 'hero_figure.dart';
+import 'wardrobe_screen.dart';
 
 /// Bekçinin çizimi; tasarımda çizimi olmayanlar için emoji.
 class GuardianFigure extends StatelessWidget {
@@ -249,9 +251,13 @@ class DuelWinView extends StatelessWidget {
     required this.gift,
     required this.onDone,
     required this.onSay,
+    this.newItem,
   });
   final RegionDef region;
   final bool gift;
+
+  /// Bu bölgeyle açılan eşya (ilk kurtarışta).
+  final ItemDef? newItem;
   final VoidCallback onDone;
   final void Function(String, {bool slow}) onSay;
 
@@ -352,6 +358,32 @@ class DuelWinView extends StatelessWidget {
                       ),
                     ),
                   ),
+                  if (newItem != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(18, 4, 18, 8),
+                      child: DkCard(
+                        key: const Key('duel-item'),
+                        child: Row(children: [
+                          SizedBox(
+                            width: 64,
+                            height: 64,
+                            child: SvgPicture.string(itemThumbSvg(newItem!)),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Yeni eşya: ${newItem!.name}',
+                                    style: G.sub),
+                                const Text('Giysi dolabında seni bekliyor.',
+                                    style: G.soft),
+                              ],
+                            ),
+                          ),
+                        ]),
+                      ),
+                    ),
                   if (!gift)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(18, 4, 18, 4),

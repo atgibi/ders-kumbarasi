@@ -159,11 +159,7 @@ class _ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final art = itemArt[item.id] ?? '';
-    final box = itemBox[item.id] ?? '0 0 208 228';
-    final svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="$box">'
-        '<g stroke="#2B2320" stroke-width="2.4" stroke-linecap="round" '
-        'stroke-linejoin="round">$art</g></svg>';
+    final svg = itemThumbSvg(item);
     return Pressable(
       label: open
           ? '${item.name}${worn ? ', takılı' : ''}'
@@ -215,4 +211,13 @@ class _ItemTile extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Eşyanın tek başına küçük resmi (dolap ve düello ödülü).
+String itemThumbSvg(ItemDef item) {
+  final art = itemArt[item.id] ?? '';
+  final box = itemBox[item.id] ?? '0 0 208 228';
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="$box">'
+      '<g stroke="#2B2320" stroke-width="2.4" stroke-linecap="round" '
+      'stroke-linejoin="round">$art</g></svg>';
 }
