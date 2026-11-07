@@ -10,6 +10,7 @@ import '../data/content_repository.dart';
 import '../data/generators.dart';
 import '../data/models.dart';
 import '../data/progress_store.dart';
+import '../game/world.dart';
 
 enum StepKind { lesson, question }
 
@@ -38,7 +39,7 @@ class AnswerResult {
   final ReviewOutcome outcome;
 }
 
-/// Doğru cevap başına ve oturum sonunda kazanılan fındık.
+/// Doğru cevap başına ve oturum sonunda kazanılan ışık.
 const int nutsPerCorrect = 1;
 const int nutsSessionBonus = 5;
 
@@ -49,6 +50,9 @@ class SessionSummary {
   int nutsEarned = 0;
   int activities = 0;
   int minutes = 0;
+
+  /// Bu oturumda kazanılan krallık malzemesi.
+  int suppliesEarned = 0;
 
   /// Bu oturumda seri bir gün arttı mı (C12 seri kutlaması).
   bool streakGrew = false;
@@ -63,7 +67,13 @@ class SessionController {
     required this.random,
     required this.clock,
     required this.plan,
+    this.altLessons = const [],
   }) : startedAt = clock();
+
+  /// Yeni konunun "farklı yoldan" anlatımları: alıştırmada ilk yanlışta
+  /// bir kez araya girer.
+  final List<Lesson> altLessons;
+  bool _altShown = false;
 
   final Subject subject;
   final ChildProgress progress;
@@ -129,6 +139,7 @@ class SessionController {
     String? focusOutcome,
     bool reviewOnly = false,
     bool extraPractice = false,
+    Set<String> locked = const {},
   }) async {
     final now = (clock ?? DateTime.now)();
     final rnd = random ?? Random();
@@ -165,7 +176,9 @@ class SessionController {
         ..sort((a, b) {
           final sa = progress.cards[a.id], sb = progress.cards[b.id];
           final c = (sa?.box ?? -1).compareTo(sb?.box ?? -1);
-          return c != 0 ? c : a.id.compareTo(b.id);
+          if (c != 0) return c;
+          final l = a.level.compareTo(b.level);
+          return l != 0 ? l : a.id.compareTo(b.id);
         });
       final ids = cards.take(8).map((c) => c.id).toList()..shuffle(rnd);
       final plan = SessionPlan(
@@ -193,9 +206,16 @@ class SessionController {
       final oc = pack[o.code];
       if (oc == null || oc.cards.isEmpty) continue;
       if (progress.startedOutcomes.contains(o.code)) continue;
+      if (locked.contains(o.code)) continue; // abonelikle açılan bölge
       nextNew = NewOutcomeCandidate(
         outcomeId: o.code,
-        cardIds: [for (final c in oc.cards) c.id],
+        // Kolaydan zora: ilk alıştırmada önce kolay sorular gelir
+        cardIds: [
+          for (final c in ([
+            ...oc.cards
+          ]..sort((a, b) => a.level.compareTo(b.level))))
+            c.id
+        ],
       );
       break;
     }
@@ -227,7 +247,7 @@ class SessionController {
       for (final id in plan.warmup) q(id, StepPhase.warmup),
       if (plan.newOutcomeId != null)
         for (final l in pack[plan.newOutcomeId]!.lessons)
-          SessionStep.lesson(l, StepPhase.newTopic),
+          if (!l.alt) SessionStep.lesson(l, StepPhase.newTopic),
       for (final id in plan.practice) q(id, StepPhase.practice),
       for (final id in plan.review) q(id, StepPhase.review),
     ];
@@ -239,6 +259,64 @@ class SessionController {
       random: rnd,
       clock: clock ?? DateTime.now,
       plan: plan,
+      altLessons: plan.newOutcomeId == null
+          ? const []
+          : [
+              for (final l in pack[plan.newOutcomeId]!.lessons)
+                if (l.alt) l
+            ],
+    );
+  }
+
+  /// Bekçi düellosu: bölgenin çıktılarından karma [count] soru. En zayıf
+  /// kartlar önce; her çıktıdan sırayla seçilir. Cevaplar tekrar motoruna
+  /// tekrar olarak işlenir.
+  static Future<SessionController> duel({
+    required ContentRepository repo,
+    required Subject subject,
+    required int grade,
+    required ChildProgress progress,
+    required List<String> outcomeCodes,
+    int count = 8,
+    DateTime Function()? clock,
+    Random? random,
+  }) async {
+    final rnd = random ?? Random();
+    final pack = await repo.contentFor(subject, grade);
+    final pools = <List<CardDef>>[
+      for (final code in outcomeCodes)
+        ([...?pack[code]?.cards]
+          ..removeWhere((c) => c.fixed?.activity ?? false)
+          ..shuffle(rnd)
+          ..sort((a, b) => (progress.cards[a.id]?.box ?? -1)
+              .compareTo(progress.cards[b.id]?.box ?? -1)))
+    ]..removeWhere((p) => p.isEmpty);
+    final picked = <CardDef>[];
+    var round = 0;
+    while (picked.length < count && pools.any((p) => p.length > round)) {
+      for (final p in pools) {
+        if (picked.length >= count) break;
+        if (p.length > round) picked.add(p[round]);
+      }
+      round++;
+    }
+    picked.shuffle(rnd);
+    final ids = [for (final c in picked) c.id];
+    return SessionController._(
+      subject: subject,
+      progress: progress,
+      steps: [
+        for (final c in picked)
+          SessionStep.question(c, generate(c, rnd), StepPhase.review)
+      ],
+      random: rnd,
+      clock: clock ?? DateTime.now,
+      plan: SessionPlan(
+          warmup: const [],
+          newOutcomeId: null,
+          practice: const [],
+          review: ids,
+          isReviewDay: false),
     );
   }
 
@@ -301,6 +379,16 @@ class SessionController {
       summary.newOutcomes.add(plan.newOutcomeId!);
     }
 
+    // Yeni konunun alıştırmasında ilk yanlış: konu farklı yoldan bir kez daha
+    if (!correct &&
+        step.phase == StepPhase.practice &&
+        !_altShown &&
+        altLessons.isNotEmpty) {
+      _altShown = true;
+      steps.insert(
+          index + 1, SessionStep.lesson(altLessons.first, StepPhase.newTopic));
+    }
+
     // Yanlış cevaplanan kart oturum sonunda farklı bir varyantla bir kez daha
     if (!correct && !_retried.contains(card.id)) {
       _retried.add(card.id);
@@ -354,6 +442,11 @@ class SessionController {
       summary.streakGrew = before != progress.lastSessionDay;
       summary.nutsEarned += nutsSessionBonus;
       progress.nuts += nutsSessionBonus;
+      // Krallık malzemesi: her 3 doğruya 1 (en az 1), her yeni konuya 2
+      final earned =
+          max(1, summary.correct ~/ 3) + 2 * summary.newOutcomes.length;
+      summary.suppliesEarned = earned;
+      progress.game.addSupply(Kingdom.of(subject).material, earned);
     }
   }
 }

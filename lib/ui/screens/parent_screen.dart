@@ -17,6 +17,7 @@ import 'data_screen.dart';
 import 'onboarding_screen.dart';
 import 'profile_form.dart';
 import 'profile_picker_screen.dart';
+import 'subscription_screen.dart';
 
 const levelText = {
   MasteryLevel.notStarted: 'Başlanmadı',
@@ -120,7 +121,7 @@ class _ParentScreenState extends State<ParentScreen> {
       _key = key;
       _f = _loadKid(app, profile);
     }
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -195,6 +196,17 @@ class _ParentScreenState extends State<ParentScreen> {
                             builder: (_) => ReportScreen(profile: profile))),
                   ),
                   NavRow(
+                    key: const Key('nav-subscription'),
+                    icon: DkIcons.star,
+                    title: 'Abonelik',
+                    subtitle: app.settings.premium
+                        ? 'Tüm bölgeler açık'
+                        : 'Her krallığın ilk 3 bölümü ücretsiz',
+                    onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                            builder: (_) => const SubscriptionScreen())),
+                  ),
+                  NavRow(
                     key: const Key('nav-settings'),
                     icon: DkIcons.sliders,
                     title: 'Ayarlar',
@@ -244,6 +256,7 @@ class _StorageNotice extends StatelessWidget {
             : 'Bir kayıt dosyası okunamadı. Dosya silinmedi, kenara alındı; '
                 'yedeğiniz varsa Veri bölümünden geri yükleyebilirsiniz.';
     return DkCard(
+      hand: false,
       color: K.againBg,
       borderColor: K.againLine,
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -313,6 +326,7 @@ class _Overview extends StatelessWidget {
 
     if (minutes == 0 && started.isEmpty) {
       return DkCard(
+        hand: false,
         key: const Key('parent-empty'),
         padding: const EdgeInsets.fromLTRB(18, 24, 18, 24),
         child: Column(
@@ -342,7 +356,7 @@ class _Overview extends StatelessWidget {
             Text(title, style: T.pSection),
             const SizedBox(height: 8),
             if (rows.isEmpty)
-              DkCard(child: Text(empty, style: T.pBodySoft))
+              DkCard(hand: false, child: Text(empty, style: T.pBodySoft))
             else
               ListBox(children: [
                 for (var i = 0; i < rows.length && i < 3; i++)
@@ -379,6 +393,7 @@ class _Overview extends StatelessWidget {
             if (l != 'çalıştı') const SizedBox(width: 8),
             Expanded(
               child: DkCard(
+                hand: false,
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -490,7 +505,7 @@ class _ReportScreenState extends State<ReportScreen> {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     _f ??= _loadKid(app, widget.profile);
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -537,6 +552,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   padding: const EdgeInsets.all(16),
                   children: [
                     DkCard(
+                      hand: false,
                       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -706,7 +722,7 @@ class _OutcomeScreenState extends State<OutcomeScreen> {
   @override
   Widget build(BuildContext context) {
     _f ??= _load();
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -789,6 +805,7 @@ class _OutcomeScreenState extends State<OutcomeScreen> {
                     ]),
                     const SizedBox(height: 16),
                     DkCard(
+                      hand: false,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -834,7 +851,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final s = app.settings;
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -893,6 +910,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ]),
                 const SizedBox(height: 12),
                 DkCard(
+                  hand: false,
                   padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -969,7 +987,7 @@ class ProfilesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [

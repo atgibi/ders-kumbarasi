@@ -56,7 +56,7 @@ class _DataScreenState extends State<DataScreen> {
               name: name, mimeType: 'application/json')
         ],
         fileNameOverrides: [name],
-        subject: 'Ders Kumbarası yedeği',
+        subject: 'Bilgelik Diyarı yedeği',
         sharePositionOrigin: origin,
       );
       _say(
@@ -76,7 +76,7 @@ class _DataScreenState extends State<DataScreen> {
     try {
       final file = await openFile(acceptedTypeGroups: const [
         XTypeGroup(
-          label: 'Ders Kumbarası yedeği',
+          label: 'Bilgelik Diyarı yedeği',
           extensions: ['json'],
           mimeTypes: ['application/json', 'text/plain'],
           uniformTypeIdentifiers: ['public.json', 'public.text'],
@@ -129,7 +129,7 @@ class _DataScreenState extends State<DataScreen> {
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -141,7 +141,7 @@ class _DataScreenState extends State<DataScreen> {
               padding: const EdgeInsets.all(16),
               children: [
                 const Text(
-                    'Ders Kumbarası hiçbir veriyi internete göndermez. Takma ad, sınıf ve çalışma kayıtları yalnızca bu cihazda saklanır.',
+                    'Bilgelik Diyarı hiçbir veriyi internete göndermez. Takma ad, sınıf ve çalışma kayıtları yalnızca bu cihazda saklanır.',
                     style: T.pBody),
                 const SizedBox(height: 14),
                 ListBox(children: [
@@ -171,7 +171,7 @@ class _DataScreenState extends State<DataScreen> {
                       last: true,
                       onTap: () => showLicensePage(
                           context: context,
-                          applicationName: 'Ders Kumbarası',
+                          applicationName: 'Bilgelik Diyarı',
                           applicationVersion: appVersion)),
                 ]),
                 if (_note != null) ...[
@@ -224,6 +224,7 @@ class _DataScreenState extends State<DataScreen> {
                   )
                 else
                   DkCard(
+                    hand: false,
                     borderColor: K.ink,
                     borderWidth: 3,
                     child: Column(
@@ -279,7 +280,7 @@ class _DataScreenState extends State<DataScreen> {
                               fontSize: 15, height: 21 / 15, color: K.ink)),
                       SizedBox(height: 8),
                       Text(
-                          'Yazı tipi: Nunito (SIL Open Font License). Emoji görselleri: Twemoji, CC-BY 4.0. Simgeler: Lucide (ISC).',
+                          'Yazı tipleri: Fraunces, Andika, Shantell Sans (SIL Open Font License). Emoji görselleri: Twemoji, CC-BY 4.0. Simgeler: Lucide (ISC) ve Bilgelik Diyarı el çizimi simgeleri.',
                           style: T.pSmall),
                     ],
                   ),
@@ -329,7 +330,7 @@ class PrivacyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Column(children: [
@@ -363,11 +364,11 @@ class PrivacyScreen extends StatelessWidget {
 const privacySections = [
   (
     'Özet',
-    'Ders Kumbarası, 1–4. sınıf öğrencileri için hazırlanmış, çevrimdışı çalışan bir tekrar ve konu anlatımı uygulamasıdır. Uygulama hiçbir kişisel veriyi internete göndermez, reklam göstermez, uygulama içi satın alma içermez ve hesap açmayı gerektirmez.'
+    'Bilgelik Diyarı, 1–4. sınıf öğrencileri için hazırlanmış, internetsiz çalışan bir tekrar ve konu anlatımı uygulamasıdır. Uygulama hiçbir kişisel veriyi internete göndermez, reklam göstermez, uygulama içi satın alma içermez ve hesap açmayı gerektirmez.'
   ),
   (
     'Hangi bilgiler tutulur?',
-    'Veli tarafından girilen çocuğun adı ya da takma adı, sınıfı ve seçilen hayvan avatarı; çalışma kayıtları (hangi konulara başlandığı, soru tekrar takvimi, günlük çalışma süresi, son denemelerin özeti, toplanan fındık sayısı); uygulama ayarları (günlük süre, sessiz saatler, ses, hareket ve yazı boyutu tercihleri). Soyad, fotoğraf, e-posta, telefon numarası, konum, cihaz kimliği gibi bilgiler istenmez ve toplanmaz.'
+    'Veli tarafından girilen çocuğun adı ya da takma adı, sınıfı ve seçilen hayvan avatarı; çalışma kayıtları (hangi konulara başlandığı, soru tekrar takvimi, günlük çalışma süresi, son denemelerin özeti, toplanan ışık ve malzemeler, kahramanın görünümü, kurulan yapılar ve Kahraman Defteri sayfaları); uygulama ayarları (günlük süre, sessiz saatler, ses, hareket ve yazı boyutu tercihleri). Soyad, fotoğraf, e-posta, telefon numarası, konum, cihaz kimliği gibi bilgiler istenmez ve toplanmaz.'
   ),
   (
     'Bilgiler nerede saklanır?',
@@ -375,7 +376,7 @@ const privacySections = [
   ),
   (
     'Sesli okuma',
-    'Sesli okuma, uygulamayla birlikte gelen ses kayıtlarıyla ya da cihazın kendi metin okuma motoruyla yapılır. Metinler uygulama tarafından herhangi bir sunucuya gönderilmez. Cihazınızın metin okuma motorunun çalışma şekli, cihaz üreticisinin politikasına tabidir.'
+    'Sesli okuma, önceden seslendirilmiş kayıtlarla ya da cihazın kendi metin okuma motoruyla yapılır. Ders sesleri, çocuğun sınıfına göre bir ses paketi olarak GitHub (github.com) üzerinden bir kez indirilir ve cihazda saklanır; indirme sırasında yalnızca hangi sınıfın paketinin istendiği bilinir, çocuğa ya da cihaza ait hiçbir bilgi gönderilmez. Uygulamanın internete çıktığı tek durum budur; internet yoksa cihazın sesi kullanılır. Metinler uygulama tarafından herhangi bir sunucuya gönderilmez. Cihazınızın metin okuma motorunun çalışma şekli, cihaz üreticisinin politikasına tabidir.'
   ),
   (
     'Yedekleme',

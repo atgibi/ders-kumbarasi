@@ -11,16 +11,16 @@ from common import outcome, lesson, page, mc, act, gen, V
 T = lambda t: V("text", text=t)
 
 
-def listen(story, question, options, answer, explain=None):
+def listen(story, question, options, answer, explain=None, why=None):
     """Dinleme kartı: hikâye sesli okunur; ses kapalıysa ipucunda yazılıdır."""
     return mc(f"🔊 Dinle ve cevapla: {question}", options, answer,
               say=f"{story} Soru: {question}", hint=story, explain=explain,
-              visual=T("🔊 Hikâyeyi dinle"))
+              visual=T("🔊 Hikâyeyi dinle"), why=why)
 
 
-def read(text, question, options, answer, explain=None):
+def read(text, question, options, answer, explain=None, why=None):
     """Okuma kartı: kısa metin ekranda; soru altında."""
-    return mc(f"{text}\n\n{question}", options, answer, explain=explain)
+    return mc(f"{text}\n\n{question}", options, answer, explain=explain, why=why)
 
 
 def build(grade, P):
@@ -28,8 +28,13 @@ def build(grade, P):
     g = grade
     out = []
 
+    rich = P.get("lessons", {})
+
     def o(area, n, title, pages, cards):
-        out.append(outcome(f"T.{area}.{g}.{n}", lessons=[lesson(title, pages)], cards=cards))
+        # P["lessons"]["D1"] gibi bir girdi varsa ayrıntılı anlatım (ve
+        # "farklı yoldan" ikinci anlatım) varsayılan tek sayfanın yerine geçer
+        ls = rich.get(f"{area}{n}") or [lesson(title, pages)]
+        out.append(outcome(f"T.{area}.{g}.{n}", lessons=ls, cards=cards))
 
     # --- Dinleme / İzleme ---
     o("D", 1, "İyi bir dinleyici", [

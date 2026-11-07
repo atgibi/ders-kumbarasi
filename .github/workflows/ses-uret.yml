@@ -5,8 +5,8 @@ name: Seslendirme (Google TTS)
 
 on:
   push:
-    branches: [main]
-    paths: ["assets/content/**", "tools/audio/**"]
+    branches: [main, oyun-demirdag]
+    paths: ["assets/content/**", "tools/audio/**", ".github/workflows/ses-uret.yml"]
   workflow_dispatch:
 
 concurrency:
@@ -38,18 +38,34 @@ jobs:
         env:
           GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
         run: python3 tools/audio/speech.py synthesize
-      - name: Depoya ekle ve uygulamayı yeniden derle
-        if: steps.key.outputs.ok == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Depoya ekle
+        # Üretim yarıda kalsa da üretilenler eklenir; yeniden çalışınca kalanlar üretilir
+        if: always() && steps.key.outputs.ok == 'true'
         run: |
+          python3 tools/audio/speech.py pack
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/audio tools/audio/texts.json
+          git add audio assets/audio_ui tools/audio/texts.json
           if git commit -qm "Seslendirme: eksik sesler üretildi"; then
             git push
-            gh workflow run ci.yml --ref main
-            gh workflow run web.yml --ref main
+            echo "yeni=1" >> "$GITHUB_ENV"
           else
             echo "Yeni ses yok."
           fi
+      - name: Sınıf ses paketlerini yayımla (GitHub Releases, etiket "ses")
+        if: always() && steps.key.outputs.ok == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 tools/audio/speech.py pack
+          gh release view ses >/dev/null 2>&1 || gh release create ses \
+            --title "Ses paketleri" --latest=false --target "${GITHUB_REF_NAME}" \
+            --notes "Uygulama çocuğun sınıfının ses paketini buradan bir kez indirir (lib/app/audio_packs.dart). Elle değiştirmeyin; Seslendirme iş akışı günceller."
+          gh release upload ses dist/* --clobber
+      - name: Uygulamayı yeniden derle
+        if: env.yeni == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run ci.yml --ref "${GITHUB_REF_NAME}"
+          gh workflow run web.yml --ref "${GITHUB_REF_NAME}"

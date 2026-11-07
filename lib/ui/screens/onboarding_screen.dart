@@ -1,13 +1,17 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../app/app_state.dart';
 import '../../data/models.dart';
+import '../../game/game_state.dart';
+import '../game/hero_create_screen.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
+import 'first_quest.dart';
 import 'profile_form.dart';
-import 'session_screen.dart';
 
 /// İlk açılış (A1–A6). Veli doldurur; çocuk profili en sonda kaydedilir.
 class OnboardingScreen extends StatefulWidget {
@@ -18,7 +22,7 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  int _step = 0; // 0 A1, 1 A2, 2 A3, 3 A4, 4 A5, 5 A6
+  int _step = 0; // 0 A1, 1 A2, 2 A3, 3 A4, 4 A5, 5 A6, 6 kahraman
   int _how = 0;
   ProfileFormResult? _profile;
   late AppSettings _settings = AppScope.read(context).settings;
@@ -26,14 +30,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _go(int s) => setState(() => _step = s);
 
-  Future<void> _finish() async {
+  Future<void> _finish(HeroLook hero) async {
     if (_busy) return;
-    setState(() => _busy = true);
+    _busy = true;
     final app = AppScope.read(context);
     final nav = Navigator.of(context);
     final r = _profile!;
     await app.updateSettings(_settings.copyWith(onboarded: true));
-    final child = await app.addChild(r.nickname, r.grade, r.avatar);
+    final child =
+        await app.addChildWithHero(r.nickname, r.grade, r.avatar, hero);
     await app.selectChild(child);
     // İlk ders: sıradaki ilk konu (anlatım + kısa alıştırma)
     final subject = app.subject ?? Subject.forGrade(r.grade).first;
@@ -44,7 +49,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         .map((o) => o.code)
         .firstOrNull;
     nav.push(MaterialPageRoute<void>(
-        builder: (_) => SessionScreen(subject: subject, focusOutcome: first)));
+        builder: (_) =>
+            FirstQuestScreen(subject: subject, focusOutcome: first)));
   }
 
   @override
@@ -64,7 +70,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
       3 => _settingsStep(),
       4 => _privacy(),
-      _ => _ready(),
+      5 => _ready(),
+      _ => HeroCreateScreen(onSave: _finish, onDone: (_) {}),
     };
     return PopScope(
       canPop: _step == 0,
@@ -96,33 +103,57 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
       );
 
+  /// Claude Design 1 · Açılış: gece göğünde Kaf Dağı, tepesinde Bilgi
+  /// Pınarı'nın ışığı, dağın beli sisli.
   Widget _welcome() => _page(
         children: [
-          const Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Mascot(size: 190, label: 'Fındık'),
-                    SizedBox(height: 18),
-                    Text('DERS KUMBARASI', style: T.kicker),
-                    SizedBox(height: 18),
-                    Text('Her gün 10 dakika, kalıcı öğrenme', style: T.hero),
-                    SizedBox(height: 18),
-                    Text(
-                        '1–4. sınıf için kısa konu anlatımları ve akıllı tekrar.',
-                        style: T.bodySoft),
-                  ],
-                ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: SizedBox(
+                      height: 300,
+                      child: Semantics(
+                        image: true,
+                        label:
+                            "Kaf Dağı gece gökyüzünde; tepesinde Bilgi Pınarı'nın ışığı parlıyor, dağın beli sisle örtülü.",
+                        child: CustomPaint(
+                          painter: _KafPainter(),
+                          child: const Align(
+                            alignment: Alignment(.75, .55),
+                            child: Mascot(size: 96, mood: MascotMood.celebrate),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  const Text('Bilgelik Diyarı',
+                      style: TextStyle(
+                          fontFamily: K.display,
+                          fontSize: 38,
+                          height: 1.05,
+                          fontWeight: FontWeight.w800,
+                          color: K.lacivert)),
+                  const SizedBox(height: 8),
+                  const Text(
+                      'Diyarı sis kapladı. Her öğrendiğin konu sisi biraz dağıtır.',
+                      style: TextStyle(fontSize: 20, height: 1.35)),
+                  const SizedBox(height: 8),
+                  const Text(
+                      '1–4. sınıf · Maarif Modeli · kısa anlatım ve akıllı tekrar',
+                      style: T.bodySoft),
+                ],
               ),
             ),
           ),
         ],
         bottom: ChunkyButton(
             key: const Key('onboarding-start'),
-            label: 'Başla',
+            label: 'Maceraya başla',
             onPressed: () => _go(1)),
       );
 
@@ -130,7 +161,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     (
       DkIcons.book,
       'Kısa konu anlatımı',
-      'Her konu 2–4 sayfalık resimli bir anlatımla başlar. Fındık her sayfayı sesli okur.',
+      'Her konu 2–4 sayfalık resimli bir anlatımla başlar. Bilge kuş Anka her sayfayı sesli okur.',
       K.peach,
       K.label
     ),
@@ -387,7 +418,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const Mascot(
                       mood: MascotMood.celebrate,
                       size: 220,
-                      label: 'Fındık sevinçle bekliyor'),
+                      label: 'Anka sevinçle bekliyor'),
                 ],
               ),
             ),
@@ -396,8 +427,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ],
       bottom: ChunkyButton(
           key: const Key('first-lesson'),
-          label: 'İlk dersim',
-          onPressed: _busy ? null : _finish),
+          label: 'Kahramanımı seçeyim',
+          onPressed: () => _go(6)),
     );
   }
 }
@@ -449,4 +480,96 @@ class DailyLimitCard extends StatelessWidget {
           ],
         ),
       );
+}
+
+class _KafPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width, h = size.height;
+    double x(double v) => v / 390 * w;
+    double y(double v) => v / 660 * h * 1.6 - h * .25;
+    canvas.drawRect(Offset.zero & size, Paint()..color = K.lacivert);
+    final rnd = math.Random(3);
+    final star = Paint()..color = const Color(0xD9F4EAD5);
+    for (var i = 0; i < 40; i++) {
+      canvas.drawCircle(Offset(rnd.nextDouble() * w, rnd.nextDouble() * h * .5),
+          rnd.nextDouble() * 1.4 + .6, star);
+    }
+    final ink = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.4
+      ..strokeJoin = StrokeJoin.round
+      ..color = K.murekkep;
+    Path tri(double a, double b, double c, double d, double e, double f) =>
+        Path()
+          ..moveTo(x(a), y(b))
+          ..lineTo(x(c), y(d))
+          ..lineTo(x(e), y(f))
+          ..close();
+    for (final (p, col) in [
+      (tri(-30, 590, 58, 352, 150, 590), K.sis),
+      (tri(236, 590, 318, 318, 420, 590), K.sis),
+      (tri(300, 590, 362, 420, 430, 590), const Color(0xFFB7C0C9)),
+    ]) {
+      canvas.drawPath(p, Paint()..color = col);
+      canvas.drawPath(p, ink);
+    }
+    final kaf = Path()
+      ..moveTo(x(78), y(590))
+      ..lineTo(x(150), y(338))
+      ..lineTo(x(178), y(256))
+      ..lineTo(x(195), y(186))
+      ..lineTo(x(212), y(256))
+      ..lineTo(x(240), y(338))
+      ..lineTo(x(312), y(590))
+      ..close();
+    canvas.drawPath(kaf, Paint()..color = K.kagit2);
+    canvas.drawPath(kaf, ink);
+    // ışık
+    final c = Offset(x(195), y(166));
+    final ray = Paint()
+      ..color = K.safran
+      ..strokeWidth = 2.6
+      ..strokeCap = StrokeCap.round;
+    for (var i = 0; i < 12; i++) {
+      final a = i / 12 * math.pi * 2;
+      canvas.drawLine(c + Offset(math.cos(a), math.sin(a)) * 22,
+          c + Offset(math.cos(a), math.sin(a)) * (i.isEven ? 34 : 28), ray);
+    }
+    canvas.drawCircle(c, 15, Paint()..color = K.safran);
+    canvas.drawCircle(c, 15, ink..strokeWidth = 2.2);
+    // sis kuşağı
+    final sis = Path()
+      ..moveTo(-20, y(430))
+      ..cubicTo(x(40), y(404), x(90), y(446), x(150), y(420))
+      ..cubicTo(x(210), y(396), x(260), y(440), x(320), y(414))
+      ..cubicTo(x(360), y(398), x(390), y(408), w + 20, y(420))
+      ..lineTo(w + 20, y(486))
+      ..cubicTo(x(330), y(498), x(210), y(468), x(110), y(484))
+      ..cubicTo(x(60), y(472), x(20), y(494), -20, y(480))
+      ..close();
+    canvas.drawPath(sis, Paint()..color = const Color(0xD9C9D1D9));
+    // tepeler
+    final t1 = Path()
+      ..moveTo(-12, y(612))
+      ..quadraticBezierTo(x(60), y(548), x(140), y(584))
+      ..quadraticBezierTo(x(200), y(610), x(262), y(566))
+      ..quadraticBezierTo(x(330), y(528), w + 12, y(576))
+      ..lineTo(w + 12, h + 10)
+      ..lineTo(-12, h + 10)
+      ..close();
+    canvas.drawPath(t1, Paint()..color = const Color(0xFF5E7A3A));
+    canvas.drawPath(t1, ink..strokeWidth = 2.2);
+    final t2 = Path()
+      ..moveTo(-12, y(640))
+      ..quadraticBezierTo(x(98), y(596), x(200), y(626))
+      ..quadraticBezierTo(x(300), y(652), w + 12, y(612))
+      ..lineTo(w + 12, h + 10)
+      ..lineTo(-12, h + 10)
+      ..close();
+    canvas.drawPath(t2, Paint()..color = K.zumrut);
+  }
+
+  @override
+  bool shouldRepaint(_KafPainter old) => false;
 }

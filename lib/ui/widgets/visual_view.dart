@@ -129,6 +129,12 @@ class VisualView extends StatelessWidget {
             ),
           ],
         ),
+      'number_line' => _NumberLine(
+          from: _i('from'),
+          to: _i('to'),
+          mark: visual.params['mark'] as num?,
+          missing: visual.params['missing'] as num?,
+        ),
       'number_highlight' =>
         _NumberHighlight(number: '${visual.params['number']}', pos: _i('pos')),
       'row' => Wrap(
@@ -285,8 +291,52 @@ class VisualView extends StatelessWidget {
       'money' => 'Para',
       'shapes' => 'Geometrik şekiller',
       'text' => _s('text', ''),
+      'number_line' => '${_i('from')} ile ${_i('to')} arası sayı doğrusu'
+          '${visual.params['mark'] != null ? ', ${visual.params['mark']} işaretli' : ''}'
+          '${visual.params['missing'] != null ? ', bir sayı eksik' : ''}',
       _ => 'Resim',
     };
+  }
+}
+
+/// Sayı doğrusu: kutucuklar, işaretli sayı safran, eksik sayı "?".
+class _NumberLine extends StatelessWidget {
+  const _NumberLine(
+      {required this.from, required this.to, this.mark, this.missing});
+  final int from;
+  final int to;
+  final num? mark;
+  final num? missing;
+
+  @override
+  Widget build(BuildContext context) {
+    final cells = [for (var i = from; i <= to; i++) i];
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 4,
+      runSpacing: 6,
+      children: [
+        for (final v in cells)
+          Container(
+            width: 36,
+            height: 44,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: v == mark
+                  ? K.reward
+                  : v == missing
+                      ? K.againBg
+                      : K.card,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                  color: v == mark ? K.rewardShade : K.line, width: 2),
+            ),
+            child: Text(v == missing ? '?' : '$v',
+                style: const TextStyle(
+                    fontSize: 19, fontWeight: FontWeight.w900, color: K.ink)),
+          ),
+      ],
+    );
   }
 }
 
@@ -340,25 +390,29 @@ class _NumberHighlight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        for (var i = 0; i < number.length; i++)
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 3),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: number.length - 1 - i == pos
-                  ? K.primary.withValues(alpha: 0.35)
-                  : Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: K.ink.withValues(alpha: 0.2)),
+    // Milyonluk sayılar telefona sığmıyordu: gerekirse küçülür
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (var i = 0; i < number.length; i++)
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: number.length - 1 - i == pos
+                    ? K.primary.withValues(alpha: 0.35)
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: K.ink.withValues(alpha: 0.2)),
+              ),
+              child: Text(number[i],
+                  style: const TextStyle(
+                      fontSize: 40, fontWeight: FontWeight.w800)),
             ),
-            child: Text(number[i],
-                style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.w800)),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

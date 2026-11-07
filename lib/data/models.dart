@@ -102,14 +102,24 @@ class LessonPage {
 }
 
 class Lesson {
-  const Lesson({required this.id, required this.title, required this.pages});
+  const Lesson({
+    required this.id,
+    required this.title,
+    required this.pages,
+    this.alt = false,
+  });
   final String id;
   final String title;
   final List<LessonPage> pages;
 
+  /// "Farklı yoldan" ikinci anlatım: oturumda kendiliğinden gösterilmez,
+  /// çocuk zorlanınca ya da "Başka türlü anlat" denince açılır.
+  final bool alt;
+
   factory Lesson.fromJson(Map<String, Object?> j) => Lesson(
         id: j['id']! as String,
         title: j['title']! as String,
+        alt: j['alt'] as bool? ?? false,
         pages: (j['pages']! as List<Object?>)
             .map((p) => LessonPage.fromJson(p! as Map<String, Object?>))
             .toList(growable: false),
@@ -117,6 +127,30 @@ class Lesson {
 }
 
 /// Çocuğa gösterilen somut soru (sabit karttan ya da üreteçten).
+/// Soru türü (Claude Design 16a–16g). Hepsi tek bir doğru/yanlış sonucuna
+/// iner; tekrar motoru türden bağımsızdır.
+enum QKind {
+  /// Çoktan seçmeli (doğru/yanlış dahil).
+  choice,
+
+  /// Tuş takımıyla sayı yazma: options[answerIndex] cevap (seçenekler
+  /// gösterilmez).
+  keypad,
+
+  /// Sıralama: options = doğru sırayla öğeler (ekranda karışık).
+  order,
+
+  /// Eşleştirme: options = sol sütun, pairs = aynı sırada sağ sütun.
+  match,
+
+  /// Saat kurma: options[answerIndex] okunuşu, pairs = [saat, dakika, adım].
+  clock,
+
+  /// Hece kartlarından sözcük kurma: options = heceler sırayla,
+  /// pairs = çeldirici heceler.
+  syllables,
+}
+
 class Question {
   const Question({
     required this.prompt,
@@ -127,7 +161,41 @@ class Question {
     this.explanation,
     this.hint,
     this.activity = false,
+    this.optionNotes,
+    this.kind = QKind.choice,
+    this.pairs,
   }) : assert(answerIndex >= 0);
+
+  final QKind kind;
+
+  /// Eşleştirmede sağ sütun; hece kurmada çeldirici heceler.
+  final List<String>? pairs;
+
+  /// Doğru cevabın okunur hâli (geri bildirim ve seslendirme).
+  String get answerText => switch (kind) {
+        QKind.choice || QKind.keypad => options[answerIndex],
+        QKind.order => options.join(', '),
+        QKind.match => [
+            for (var i = 0; i < options.length; i++)
+              '${options[i]} – ${pairs![i]}'
+          ].join(', '),
+        QKind.clock => options[answerIndex],
+        QKind.syllables => options.join(),
+      };
+
+  /// Yanlış seçeneklere özel açıklama (seçenek sırasıyla; doğru seçenekte
+  /// ve notu olmayanlarda null). Örn. "Son dişliyi iki kez saymış olabilir
+  /// misin?"
+  final List<String?>? optionNotes;
+
+  /// Seçilen yanlış seçeneğe özel açıklama, yoksa genel açıklama.
+  String? explainFor(int chosen) {
+    final n = optionNotes;
+    if (n != null && chosen >= 0 && chosen < n.length && n[chosen] != null) {
+      return n[chosen];
+    }
+    return explanation;
+  }
 
   /// Veliyle birlikte yapılan etkinlik (puanlanmaz; "Yaptık" ile tamamlanır).
   final bool activity;
@@ -154,7 +222,11 @@ class CardDef {
     this.generator,
     this.generatorParams = const {},
     this.fastSeconds = 15,
+    this.level = 2,
   }) : assert(fixed != null || generator != null);
+
+  /// Zorluk: 1 kolay, 2 orta, 3 zor. Yeni konuda önce kolaylar gelir.
+  final int level;
 
   final String id;
   final String outcomeCode;
@@ -212,10 +284,25 @@ class CardDef {
         answerIndex: answer,
         explanation: j['explain'] as String?,
         hint: j['hint'] as String?,
+        optionNotes: _notes(j['why'], options.length),
       ),
       fastSeconds: (j['fast'] as num?)?.toInt() ?? 15,
+      level: (j['level'] as num?)?.toInt() ?? 2,
     );
   }
+}
+
+/// 'why': seçenek sırasıyla açıklama listesi ya da {"2": "..."} haritası.
+List<String?>? _notes(Object? raw, int n) {
+  if (raw is List) {
+    return [
+      for (var i = 0; i < n; i++) i < raw.length ? raw[i] as String? : null
+    ];
+  }
+  if (raw is Map) {
+    return [for (var i = 0; i < n; i++) raw['$i'] as String?];
+  }
+  return null;
 }
 
 /// Bir öğrenme çıktısına ait içerik paketi.

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// Tasarım paketindeki dk-icons.js ile aynı yollar.
 enum DkIcons {
   x,
+  flame,
   volume,
   bulb,
   left,
@@ -130,9 +131,12 @@ const Map<DkIcons, String> _paths = {
       '<path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/>',
   DkIcons.pencil:
       '<path d="M21.17 6.81a1 1 0 0 0-3.98-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"/><path d="m15 5 4 4"/>',
-  // Fındık: kendi renkleriyle (maske değil)
+  DkIcons.flame:
+      '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" fill="currentColor" fill-opacity=".25"/>',
+  // Işık (ana kaynak): kendi renkleriyle (maske değil). Kayıt adı eski
+  // sürümden kaldı.
   DkIcons.nut:
-      '<ellipse cx="12" cy="14.5" rx="8.5" ry="7.5" fill="#8A5326" stroke="none"/><path d="M3.6 11.6C6 6.8 18 6.8 20.4 11.6 16 9.6 8 9.6 3.6 11.6Z" fill="#5E3717" stroke="none"/><path d="M12 7.6V4.2" stroke="#5E3717" stroke-width="2"/><ellipse cx="8.8" cy="15.4" rx="1.6" ry="2.6" fill="#A86A36" stroke="none"/>',
+      '<path d="M12 1.8l2.3 6.2 6.6.3-5.2 4.1 1.8 6.4L12 15.1l-5.5 3.7 1.8-6.4-5.2-4.1 6.6-.3z" fill="#E3A535" stroke="#7A4F0C" stroke-width="1.6"/><circle cx="12" cy="11" r="2.6" fill="#FFF3C4" stroke="none"/>',
 };
 
 final Map<String, String> _cache = {};

@@ -2,15 +2,28 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../app/app_state.dart';
 import '../../app/session_controller.dart';
 import '../../app/speaker.dart';
 import '../../data/models.dart';
+import '../../data/progress_store.dart';
+import '../../game/items.dart';
+import '../../game/quests.dart';
+import '../../game/turkish.dart';
+import '../../game/world.dart';
+import '../game/duel_widgets.dart';
+import '../game/game_theme.dart';
+import '../game/hero_figure.dart';
+import '../game/year_end.dart';
 import '../theme.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
+import '../widgets/hand.dart';
+import '../widgets/ikon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
 import '../widgets/visual_view.dart';
+import 'question_kinds.dart';
 import 'system_screens.dart';
 
 const _okTitles = ['Harika!', 'Tam isabet!', 'Dikkatle düşündün!'];
@@ -20,7 +33,7 @@ const _okBodies = [
   'Güzel çalıştın.'
 ];
 
-enum _Phase { loading, empty, error, run, summary, streak }
+enum _Phase { loading, empty, error, run, summary, streak, duelWin, finaleWin }
 
 /// Çalışma oturumu (C1–C12): konu anlatımı, sorular, etkinlik, özet, seri.
 class SessionScreen extends StatefulWidget {
@@ -30,7 +43,15 @@ class SessionScreen extends StatefulWidget {
     this.focusOutcome,
     this.reviewOnly = false,
     this.extraPractice = false,
+    this.duel,
+    this.finale = false,
   });
+
+  /// Yıl sonu düellosu (Karabulut): bu dersin başlanmış tüm konularından.
+  final bool finale;
+
+  /// Verilirse bekçi düellosu: bu bölgenin çıktılarından karma sorular.
+  final RegionDef? duel;
 
   final Subject subject;
   final String? focusOutcome;
@@ -48,6 +69,13 @@ class _SessionScreenState extends State<SessionScreen> {
   int _praise = 0;
   final Map<String, String> _lessonTitles = {};
   Speaker? _speaker;
+
+  /// Düelloda düşen zırh parçası (her doğru cevap bir parça).
+  int _duelHits = 0;
+  int _duelPieces = 0;
+  bool _duelGift = false;
+  ItemDef? _duelItem;
+  String? _notebookLine;
 
   @override
   void initState() {
@@ -71,16 +99,31 @@ class _SessionScreenState extends State<SessionScreen> {
   Future<void> _load() async {
     final app = AppScope.read(context);
     try {
-      final c = await SessionController.build(
-        repo: app.content,
-        subject: widget.subject,
-        grade: app.active!.grade,
-        progress: app.progress!,
-        clock: app.clock,
-        focusOutcome: widget.focusOutcome,
-        reviewOnly: widget.reviewOnly,
-        extraPractice: widget.extraPractice,
-      );
+      final duel = widget.duel;
+      final c = duel != null || widget.finale
+          ? await SessionController.duel(
+              repo: app.content,
+              subject: widget.subject,
+              grade: app.active!.grade,
+              progress: app.progress!,
+              outcomeCodes: duel != null
+                  ? [for (final o in duel.outcomes) o.code]
+                  : await app.finaleOutcomes(widget.subject),
+              count: duel != null ? 8 : 12,
+              clock: app.clock,
+            )
+          : await SessionController.build(
+              repo: app.content,
+              subject: widget.subject,
+              grade: app.active!.grade,
+              progress: app.progress!,
+              clock: app.clock,
+              focusOutcome: widget.focusOutcome,
+              reviewOnly: widget.reviewOnly,
+              extraPractice: widget.extraPractice,
+              locked: await app.lockedOutcomes(widget.subject),
+            );
+      _duelPieces = c.steps.length;
       final pack =
           await app.content.contentFor(widget.subject, app.active!.grade);
       for (final e in pack.entries) {
@@ -123,6 +166,30 @@ class _SessionScreenState extends State<SessionScreen> {
     final app = AppScope.read(context);
     if (c.isDone) {
       c.finish();
+      await app.recordSession(
+          correct: c.summary.correct,
+          newTopics: c.summary.newOutcomes.length,
+          reviewed: widget.reviewOnly ? c.summary.answered : 0);
+      if (!mounted) return;
+      if (widget.finale) {
+        _winFinale(app);
+        await app.saveProgress();
+        if (!mounted) return;
+        setState(() => _phase = _Phase.finaleWin);
+        _say('Karabulut barıştı!');
+        return;
+      }
+      if (widget.duel != null) {
+        _winDuel(app, c);
+        await app.saveProgress();
+        if (!mounted) return;
+        setState(() => _phase = _Phase.duelWin);
+        _say('${widget.duel!.guardian.name} kurtuldu! '
+            '${widget.duel!.guardian.thanks}'
+            '${_duelItem == null ? '' : ' Yeni eşya kazandın: ${_duelItem!.name}.'}');
+        return;
+      }
+      _writeNotebook(app, c);
       await app.saveProgress();
       if (!mounted) return;
       setState(() => _phase = _Phase.summary);
@@ -137,6 +204,75 @@ class _SessionScreenState extends State<SessionScreen> {
       showDkToast(
           context, DkIcons.again, 'Bunu birazdan bir kez daha soracağız.');
     }
+  }
+
+  /// Karabulut düellosu bitti: bu krallıkta barışıldı. Dördü bitince Efsane.
+  void _winFinale(AppState app) {
+    final g = app.progress!.game;
+    final k = Kingdom.of(widget.subject);
+    final first = g.finale.add(widget.subject.id);
+    if (!first) return;
+    app.progress!.nuts += 20;
+    g.addPage(
+        dayKey(app.clock()),
+        '${_heroName(app)}, ${locative(k.name)} Karabulut ile yüzleşti. '
+        'Küs bulut barıştı ve filizlere yağmur yağdırdı.');
+    if (app.finaleDone) {
+      g.addPage(dayKey(app.clock()),
+          '${_heroName(app)} dört krallıkta da Karabulut ile barıştı ve Efsane oldu.');
+    }
+  }
+
+  /// Düello bitti: zafer her zaman gelir; %80 ve üstü ilk denemede doğruysa
+  /// bekçi ek bir hediye bırakır.
+  void _winDuel(AppState app, SessionController c) {
+    final r = widget.duel!;
+    final g = app.progress!.game;
+    final pct = c.summary.answered == 0
+        ? 0
+        : (100 * c.summary.correct / c.summary.answered).round();
+    final first = !g.banners.contains(r.key);
+    g.banners.add(r.key);
+    if (first) g.rescued.add(r.key);
+    g.duelBest[r.key] = math.max(g.duelBest[r.key] ?? 0, pct);
+    // Her ilk kurtarış sıradaki eşyayı açar (bkz. items.dart)
+    _duelItem = first && g.banners.length <= items.length
+        ? items[g.banners.length - 1]
+        : null;
+    if (first) {
+      g.addSupply(Kingdom.of(r.subject).material, 5);
+      g.addLetter(guardianLetter(
+          r.guardian, r.key, _heroName(app), dayKey(app.clock())));
+    }
+    _duelGift = pct >= 80;
+    if (_duelGift) app.progress!.nuts += 10;
+    final k = Kingdom.of(r.subject);
+    g.addPage(
+        dayKey(app.clock()),
+        '${_heroName(app)}, ${locative(k.name)} ${regionTitle(k, r.index)} '
+        'bölgesine sancağını dikti. ${r.guardian.name} sisten kurtuldu.');
+  }
+
+  String _heroName(AppState app) =>
+      app.progress?.game.hero?.name ?? app.active?.nickname ?? 'Kahraman';
+
+  void _writeNotebook(AppState app, SessionController c) {
+    final k = Kingdom.of(widget.subject);
+    final titles = [
+      for (final code in c.summary.newOutcomes) _lessonTitles[code] ?? code
+    ];
+    final String line;
+    if (titles.isNotEmpty) {
+      line = '${_heroName(app)} bugün ${locative(k.name)} '
+          '"${titles.join('", "')}" konusunu öğrendi.';
+    } else if (c.summary.answered > 0) {
+      line = '${_heroName(app)} bugün ${locative(k.name)} '
+          '${c.summary.correct} soruyu doğru çözdü, sisi biraz daha dağıttı.';
+    } else {
+      return;
+    }
+    _notebookLine = line;
+    app.progress!.game.addPage(dayKey(app.clock()), line);
   }
 
   void _summaryDone() {
@@ -177,7 +313,9 @@ class _SessionScreenState extends State<SessionScreen> {
       _summaryDone();
       return;
     }
-    if (_phase == _Phase.streak) {
+    if (_phase == _Phase.streak ||
+        _phase == _Phase.duelWin ||
+        _phase == _Phase.finaleWin) {
       _end();
       return;
     }
@@ -243,7 +381,23 @@ class _SessionScreenState extends State<SessionScreen> {
         body = _SummaryView(
           controller: c!,
           lessonTitles: _lessonTitles,
+          notebookLine: _notebookLine,
           onDone: _summaryDone,
+          onSay: _say,
+        );
+      case _Phase.duelWin:
+        body = DuelWinView(
+          region: widget.duel!,
+          gift: _duelGift,
+          newItem: _duelItem,
+          onDone: _end,
+          onSay: _say,
+        );
+      case _Phase.finaleWin:
+        body = FinaleWinView(
+          subject: widget.subject,
+          legend: AppScope.read(context).finaleDone,
+          onDone: _end,
           onSay: _say,
         );
       case _Phase.streak:
@@ -255,7 +409,21 @@ class _SessionScreenState extends State<SessionScreen> {
             _TopBar(
               progress: c.progressRatio,
               onClose: _confirmExit,
+              color: Kingdom.of(widget.subject).color,
             ),
+            if (widget.duel != null)
+              DuelHeader(
+                guardian: widget.duel!.guardian,
+                pieces: _duelPieces,
+                fallen: math.min(_duelHits, _duelPieces),
+                kingdom: Kingdom.of(widget.subject),
+              ),
+            if (widget.finale)
+              KarabulutHeader(
+                pieces: _duelPieces,
+                fallen: math.min(_duelHits, _duelPieces),
+                kingdom: Kingdom.of(widget.subject),
+              ),
             Expanded(
               child: step.kind == StepKind.lesson
                   ? _LessonView(
@@ -279,22 +447,29 @@ class _SessionScreenState extends State<SessionScreen> {
                       : _QuestionView(
                           key: ValueKey('Q${c.index}'),
                           step: step,
-                          phaseLabel: widget.extraPractice
-                              ? 'EKSTRA TEKRAR'
-                              : switch (step.phase) {
-                                  StepPhase.warmup => 'ISINMA',
-                                  StepPhase.practice ||
-                                  StepPhase.newTopic =>
-                                    'YENİ KONU',
-                                  StepPhase.review => 'TEKRAR',
-                                  StepPhase.retry => 'BİR KEZ DAHA',
-                                },
+                          scene: widget.duel == null && !widget.finale,
+                          phaseLabel: widget.finale
+                              ? 'YIL SONU'
+                              : widget.extraPractice
+                                  ? 'EKSTRA TEKRAR'
+                                  : switch (step.phase) {
+                                      StepPhase.warmup => 'ISINMA',
+                                      StepPhase.practice ||
+                                      StepPhase.newTopic =>
+                                        'YENİ KONU',
+                                      StepPhase.review => 'TEKRAR',
+                                      StepPhase.retry => 'BİR KEZ DAHA',
+                                    },
                           praise: _praise,
                           onSay: _say,
                           onAnswer: (i, elapsed, hint) {
                             final r =
                                 c.answer(i, elapsed: elapsed, usedHint: hint);
                             _praise = (_praise + 1) % 3;
+                            if (r.correct &&
+                                (widget.duel != null || widget.finale)) {
+                              setState(() => _duelHits++);
+                            }
                             AppScope.read(context).saveProgress();
                             return r;
                           },
@@ -313,61 +488,51 @@ class _SessionScreenState extends State<SessionScreen> {
       },
       child: Scaffold(
         backgroundColor: K.bg,
-        body: SafeArea(child: ChildTextScale(child: body)),
+        // kâğıt dokusu: çok hafif lif gürültüsü (Claude Design › doku)
+        body: Stack(children: [
+          SafeArea(child: ChildTextScale(child: body)),
+          const Positioned.fill(child: PaperGrain()),
+        ]),
       ),
     );
   }
 }
 
-/// C1 Oturum üstü: kapat, ilerleme, fındık. Başka hiçbir şey.
+/// C1 Oturum üstü (Claude Design 12): haritaya dönüş mührü ve sis çubuğu.
 class _TopBar extends StatelessWidget {
-  const _TopBar({required this.progress, required this.onClose});
+  const _TopBar(
+      {required this.progress, required this.onClose, this.color = K.ahsap});
   final double progress;
   final VoidCallback onClose;
+  final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    final nuts = AppScope.of(context).progress?.nuts ?? 0;
-    return SizedBox(
-      height: 64,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 4, right: 16),
-        child: Row(children: [
-          Pressable(
-            key: const Key('session-close'),
-            onTap: onClose,
-            label: 'Oturumdan çık',
-            excludeChildSemantics: true,
-            focusRadius: 32,
-            builder: (context, down) => const SizedBox(
-              width: 64,
-              height: 64,
-              child: Center(
-                  child:
-                      DkIcon(DkIcons.x, size: 30, color: K.inkSoft, stroke: 3)),
+  Widget build(BuildContext context) => SizedBox(
+        height: 68,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+          child: Row(children: [
+            Pressable(
+              key: const Key('session-close'),
+              onTap: onClose,
+              label: 'Ara ver, haritaya dön',
+              excludeChildSemantics: true,
+              focusRadius: 28,
+              builder: (context, down) => SizedBox(
+                width: 56,
+                height: 56,
+                child: CustomPaint(
+                  painter: HandPainter(HandStyle.muhur
+                      .copyWith(fill: down ? K.kagit2 : K.kagit3)),
+                  child: const Center(child: IkonView(Ikon.harita, size: 28)),
+                ),
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(child: DkProgressBar(value: progress)),
-          const SizedBox(width: 6),
-          Semantics(
-            label: '$nuts fındık',
-            child: ExcludeSemantics(
-              child: Row(children: [
-                const DkIcon(DkIcons.nut, size: 28),
-                const SizedBox(width: 4),
-                Text('$nuts',
-                    style: const TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.w900,
-                        color: K.nutInk)),
-              ]),
-            ),
-          ),
-        ]),
-      ),
-    );
-  }
+            const SizedBox(width: 10),
+            Expanded(child: DkProgressBar(value: progress, color: color)),
+          ]),
+        ),
+      );
 }
 
 /// Üst satır: kısa etiket + (ipucu) + dinle.
@@ -392,10 +557,8 @@ class _Footer extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-        decoration: const BoxDecoration(
-            border: Border(top: BorderSide(color: K.line, width: 2))),
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 14),
         child: child,
       );
 }
@@ -436,70 +599,118 @@ class _LessonViewState extends State<_LessonView> {
     final pages = widget.lesson.pages;
     final page = pages[_page];
     final last = _page == pages.length - 1;
+    // Claude Design 17: konu kitapçığı. Sayfa noktaları, cetvel çerçeveli
+    // kâğıt, altta geri/ileri.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-            children: [
-              _StepHeader(
-                label: Text('YENİ KONU · ${_page + 1}/${pages.length}',
-                    style: T.kicker),
-                trailing: [
-                  ListenSplit(
-                      onListen: (slow) =>
-                          widget.onSay(page.spoken, slow: slow)),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 2, 20, 6),
+          child: Row(children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('KONU ANLATIMI',
+                      style: TextStyle(
+                          fontFamily: K.display,
+                          fontSize: 13,
+                          letterSpacing: .8,
+                          fontWeight: FontWeight.w700,
+                          color: K.kokKoyu)),
+                  EmojiText(widget.lesson.title,
+                      style: const TextStyle(
+                          fontFamily: K.display,
+                          fontSize: 20,
+                          height: 1.15,
+                          fontWeight: FontWeight.w700,
+                          color: K.murekkep)),
                 ],
               ),
-              const SizedBox(height: 14),
-              EmojiText(widget.lesson.title, style: T.title),
-              const SizedBox(height: 14),
-              DkCard(
-                radius: K.rLg,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (page.visual != null) ...[
-                      Container(
-                        constraints: const BoxConstraints(minHeight: 150),
-                        padding: const EdgeInsets.all(16),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: K.tint,
-                            borderRadius: BorderRadius.circular(K.rMd)),
-                        child: VisualView(page.visual!),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-                    EmojiText(page.text,
-                        style: const TextStyle(
-                            fontSize: 21,
-                            height: 28 / 21,
-                            fontWeight: FontWeight.w700,
-                            color: K.ink)),
-                  ],
-                ),
-              ),
-            ],
+            ),
+            ListenSplit(
+                onListen: (slow) => widget.onSay(page.spoken, slow: slow)),
+          ]),
+        ),
+        Semantics(
+          label: 'Sayfa ${_page + 1} / ${pages.length}',
+          child: ExcludeSemantics(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var i = 0; i < pages.length; i++)
+                  Container(
+                    width: i == _page ? 30 : 12,
+                    height: 12,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: i <= _page ? K.safran : K.kagit3,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: K.murekkep, width: 2),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 6, bottom: 10),
-          child: Center(child: Dots(count: pages.length, index: _page)),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: HandBox(
+              style: HandStyle.kart,
+              child: CustomPaint(
+                foregroundPainter: _RulerFrame(),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(22, 22, 22, 18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (page.visual != null) ...[
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(minHeight: 150),
+                          child: Center(child: VisualView(page.visual!)),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                      EmojiText(page.text,
+                          style: const TextStyle(
+                              fontSize: 21, height: 1.4, color: K.murekkep)),
+                      if (last) ...[
+                        const SizedBox(height: 14),
+                        Row(children: [
+                          const Mascot(mood: MascotMood.teach, size: 64),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text('Şimdi sen dene!',
+                                style: G.hand
+                                    .copyWith(fontSize: 19, color: K.lacivert)),
+                          ),
+                        ]),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
         _Footer(
           child: Row(children: [
             if (_page > 0) ...[
-              SizedBox(
-                width: 72,
-                child: ChunkyButton(
-                  key: const Key('lesson-back'),
-                  label: '',
-                  semanticsLabel: 'Geri',
-                  icon: DkIcons.left,
-                  kind: BtnKind.secondary,
-                  onPressed: () => _go(_page - 1),
+              Pressable(
+                key: const Key('lesson-back'),
+                label: 'Geri',
+                excludeChildSemantics: true,
+                onTap: () => _go(_page - 1),
+                builder: (context, down) => SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CustomPaint(
+                    painter: HandPainter(HandStyle.muhur
+                        .copyWith(fill: down ? K.kagit2 : K.kagit3)),
+                    child: const Center(child: IkonView(Ikon.geri, size: 28)),
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -508,6 +719,7 @@ class _LessonViewState extends State<_LessonView> {
               child: ChunkyButton(
                 key: const Key('lesson-next'),
                 label: last ? 'Hadi deneyelim!' : 'İleri',
+                kind: last ? BtnKind.good : BtnKind.primary,
                 onPressed: last ? widget.onDone : () => _go(_page + 1),
               ),
             ),
@@ -516,6 +728,27 @@ class _LessonViewState extends State<_LessonView> {
       ],
     );
   }
+}
+
+/// Kitapçık sayfasının cetvel çerçevesi: mürekkep, safran, mürekkep ve
+/// lacivert iç çizgiler.
+class _RulerFrame extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    void line(double inset, double w, Color c) => canvas.drawRect(
+        (Offset.zero & size).deflate(inset),
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = w
+          ..color = c);
+    line(7, 2, K.murekkep);
+    line(9.5, 3, K.safran);
+    line(11.8, 1.5, K.murekkep);
+    line(16, 1.5, K.lacivert);
+  }
+
+  @override
+  bool shouldRepaint(_RulerFrame old) => false;
 }
 
 // ----------------------------------------------------------- C3–C7 Soru
@@ -531,10 +764,14 @@ class _QuestionView extends StatefulWidget {
     required this.onSay,
     required this.onAnswer,
     required this.onNext,
+    this.scene = true,
   });
 
   final SessionStep step;
   final String phaseLabel;
+
+  /// Kahraman ve Anka sahnesi (düelloda sahne üstte, burada gösterilmez).
+  final bool scene;
   final int praise;
   final void Function(String, {bool slow}) onSay;
   final AnswerResult Function(int index, Duration elapsed, bool usedHint)
@@ -552,7 +789,11 @@ class _QuestionViewState extends State<_QuestionView> {
   bool _hint = false;
   bool _busy = false;
 
+  /// Çoktan seçmeli dışı türlerde: cevap hazırsa doğru mu (hazır değilse null).
+  bool? _ready;
+
   Question get q => widget.step.question!;
+  bool get _choice => q.kind == QKind.choice;
 
   @override
   void initState() {
@@ -561,15 +802,23 @@ class _QuestionViewState extends State<_QuestionView> {
   }
 
   void _check() {
-    final i = _selected;
+    final i = _choice
+        ? _selected
+        : _ready == null
+            ? null
+            : (_ready! ? q.answerIndex : -1);
     if (i == null || _result != null || _busy) return;
     _busy = true; // çift dokunma koruması
     _watch.stop();
     final r = widget.onAnswer(i, _watch.elapsed, _hint);
     setState(() => _result = r);
-    widget.onSay(r.correct
-        ? _okTitles[widget.praise]
-        : 'Doğrusu: ${q.answer}. ${q.explanation ?? ''}');
+    if (r.correct) {
+      widget.onSay(_okTitles[widget.praise]);
+    } else {
+      // Parça parça: her parçanın kayıtlı sesi varsa doğal sesle okunur
+      AppScope.read(context)
+          .sayAll(['Doğrusu:', q.answerText, q.explainFor(i) ?? '']);
+    }
   }
 
   @override
@@ -585,66 +834,106 @@ class _QuestionViewState extends State<_QuestionView> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          child: ListView(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
-            children: [
-              _StepHeader(
-                label: Text(widget.phaseLabel, style: T.kicker),
-                trailing: [
-                  if (q.hint != null && r == null && !_hint)
-                    _HintButton(onTap: () {
-                      setState(() => _hint = true);
-                      widget.onSay(q.hint!);
-                    }),
-                  ListenSplit(
-                      onListen: (slow) => widget.onSay(q.spoken, slow: slow)),
-                ],
-              ),
-              const SizedBox(height: 16),
-              if (passage != null) ...[
-                _Passage(text: passage),
-                const SizedBox(height: 16),
-              ],
-              EmojiText(prompt,
-                  style: T.question.copyWith(fontSize: hasPassage ? 21 : 24)),
-              if (_hint && r == null) ...[
-                const SizedBox(height: 16),
-                _HintBox(text: q.hint!),
-              ],
-              if (q.visual != null) ...[
-                const SizedBox(height: 16),
-                VisualView(q.visual!),
-              ],
-              const SizedBox(height: 16),
-              Semantics(
-                container: true,
-                label: 'Seçenekler',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    for (var i = 0; i < q.options.length; i++) ...[
-                      if (i > 0) const SizedBox(height: 12),
-                      _OptionCard(
-                        key: Key('option-$i'),
-                        label: q.options[i],
-                        state: r == null
-                            ? (i == _selected ? _Opt.selected : _Opt.idle)
-                            : i == q.answerIndex
-                                ? _Opt.right
-                                : i == _selected
-                                    ? _Opt.chosenWrong
-                                    : _Opt.dim,
-                        onTap: r == null
-                            ? () {
-                                setState(() => _selected = i);
-                              }
-                            : null,
-                      ),
-                    ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _StepHeader(
+                  label: Text(widget.phaseLabel, style: T.kicker),
+                  trailing: [
+                    if (q.hint != null && r == null && !_hint)
+                      _HintButton(onTap: () {
+                        setState(() => _hint = true);
+                        widget.onSay(q.hint!);
+                      }),
+                    ListenSplit(
+                        onListen: (slow) => widget.onSay(q.spoken, slow: slow)),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                if (passage != null) ...[
+                  _Passage(text: passage),
+                  const SizedBox(height: 16),
+                ],
+                EmojiText(prompt,
+                    style: T.question.copyWith(
+                        fontFamily: K.font,
+                        fontWeight: FontWeight.w700,
+                        height: 1.28,
+                        fontSize: hasPassage ? 22 : 27)),
+                if (_hint && r == null) ...[
+                  const SizedBox(height: 16),
+                  _HintBox(text: q.hint!),
+                ],
+                if (q.visual != null) ...[
+                  const SizedBox(height: 16),
+                  VisualView(q.visual!),
+                ],
+                const SizedBox(height: 16),
+                if (widget.scene && (q.visual != null || passage == null)) ...[
+                  const SizedBox(height: 4),
+                  _Scene(result: r),
+                ],
+                const SizedBox(height: 14),
+                if (!_choice)
+                  KindView(
+                    key: ValueKey('kind-${q.prompt}'),
+                    question: q,
+                    locked: r != null,
+                    onChanged: (v) => setState(() => _ready = v),
+                  )
+                else
+                  Semantics(
+                    container: true,
+                    label: 'Seçenekler',
+                    child: LayoutBuilder(builder: (context, box) {
+                      _Opt stateOf(int i) => r == null
+                          ? (i == _selected ? _Opt.selected : _Opt.idle)
+                          : i == q.answerIndex
+                              ? _Opt.right
+                              : i == _selected
+                                  ? _Opt.chosenWrong
+                                  : _Opt.dim;
+                      Widget opt(int i) => _OptionCard(
+                            key: Key('option-$i'),
+                            label: q.options[i],
+                            state: stateOf(i),
+                            onTap: r == null
+                                ? () {
+                                    setState(() => _selected = i);
+                                    // Okumayı yeni öğrenenler için şık okunur
+                                    widget.onSay(q.options[i]);
+                                  }
+                                : null,
+                          );
+                      // Kısa seçenekler (sayı, hece) iki sütunda taş levha
+                      final grid = q.options.length >= 2 &&
+                          q.options.every((o) => o.characters.length <= 4);
+                      if (grid) {
+                        final w = (box.maxWidth - 14) / 2;
+                        return Wrap(
+                          spacing: 14,
+                          runSpacing: 18,
+                          children: [
+                            for (var i = 0; i < q.options.length; i++)
+                              SizedBox(width: w, child: opt(i)),
+                          ],
+                        );
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (var i = 0; i < q.options.length; i++) ...[
+                            if (i > 0) const SizedBox(height: 16),
+                            opt(i),
+                          ],
+                        ],
+                      );
+                    }),
+                  ),
+              ],
+            ),
           ),
         ),
         if (r == null)
@@ -653,18 +942,58 @@ class _QuestionViewState extends State<_QuestionView> {
               key: const Key('check'),
               label: 'Kontrol et',
               kind: BtnKind.good,
-              onPressed: _selected != null ? _check : null,
+              onPressed: (_choice ? _selected != null : _ready != null)
+                  ? _check
+                  : null,
             ),
           )
         else
           FeedbackBand(
             correct: r.correct,
-            title:
-                r.correct ? _okTitles[widget.praise] : 'Doğrusu: ${q.answer}',
-            body: r.correct ? _okBodies[widget.praise] : q.explanation,
+            title: r.correct
+                ? _okTitles[widget.praise]
+                : 'Doğrusu: ${q.answerText}',
+            body: r.correct
+                ? _okBodies[widget.praise]
+                : q.explainFor(_selected ?? -1),
             onNext: () => widget.onNext(!r.correct),
           ),
       ],
+    );
+  }
+}
+
+/// Sorunun sahnesi: solda kahraman, sağda Anka (Claude Design 12).
+class _Scene extends StatelessWidget {
+  const _Scene({required this.result});
+  final AnswerResult? result;
+
+  @override
+  Widget build(BuildContext context) {
+    final hero = AppScope.of(context).progress?.game.hero;
+    final r = result;
+    return SizedBox(
+      height: 96,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (hero != null)
+            HeroFigure(
+                look: hero,
+                size: 80,
+                showCompanion: false,
+                cheer: r?.correct == true),
+          const Spacer(),
+          Mascot(
+            size: 92,
+            mood: r == null
+                ? MascotMood.normal
+                : r.correct
+                    ? MascotMood.celebrate
+                    : MascotMood.teach,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -783,86 +1112,76 @@ class _OptionCard extends StatelessWidget {
   final _Opt state;
   final VoidCallback? onTap;
 
+  /// Taş levha (Claude Design › Cevap levhası): doğruda zümrüt kenar ve
+  /// mühür, yanlışta sis grisi ve çizgili doku, kırmızı yok.
+  static HandStyle styleFor(_Opt s) => switch (s) {
+        _Opt.idle || _Opt.dim => HandStyle.levha,
+        _Opt.selected =>
+          HandStyle.levha.copyWith(border: K.lacivert, borderWidth: 4.5),
+        _Opt.right => HandStyle.levha.copyWith(
+            fill: K.goodBg,
+            texture: HandFill.duz,
+            border: K.zumrutKoyu,
+            borderWidth: 5,
+            shadows: const [(4, Color(0xFF9FBFA8)), (7, K.zumrutKoyu)]),
+        _Opt.chosenWrong => HandStyle.levha.copyWith(
+            fill: K.sis2,
+            texture: HandFill.sisli,
+            border: K.murekkep2,
+            shadows: const [(4, K.sis), (7, K.murekkep2)]),
+      };
+
   @override
   Widget build(BuildContext context) {
-    final (Color bg, Color border) = switch (state) {
-      _Opt.idle || _Opt.dim => (K.card, K.line),
-      _Opt.selected => (K.againBg, K.again),
-      _Opt.right => (K.goodBg, K.good),
-      _Opt.chosenWrong => (K.againBg, K.again),
-    };
     final short = label.characters.length <= 3;
-    Widget card = AnimatedContainer(
-      duration: const Duration(milliseconds: 120),
-      curve: Curves.easeOut,
-      constraints: const BoxConstraints(minHeight: 72),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(K.rMd),
-        border: Border(
-          top: BorderSide(color: border, width: 2),
-          left: BorderSide(color: border, width: 2),
-          right: BorderSide(color: border, width: 2),
-          bottom: BorderSide(color: border, width: 5),
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(K.rMd - 2),
-        child: CustomPaint(
-          painter: state == _Opt.chosenWrong ? _StripePainter() : null,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 44, vertical: 12),
-                child: Center(
-                  widthFactor: 1,
-                  child: EmojiText(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: short ? 30 : 21,
-                      height: 1.2,
-                      fontWeight: FontWeight.w800,
-                      color: K.ink,
+    final wrong = state == _Opt.chosenWrong;
+    Widget face(bool down) => HandBox(
+          style: styleFor(state),
+          pressed: down || state == _Opt.selected,
+          constraints: const BoxConstraints(minHeight: 84),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+          child: Center(
+            heightFactor: 1,
+            child: EmojiText(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: K.display,
+                fontSize: short ? 40 : 22,
+                height: 1.15,
+                fontWeight: FontWeight.w700,
+                color: wrong ? K.murekkep2 : K.ink,
+              ),
+            ),
+          ),
+        );
+    Widget card(bool down) => Stack(
+          fit: StackFit.passthrough,
+          clipBehavior: Clip.none,
+          children: [
+            face(down),
+            if (state == _Opt.right || wrong)
+              Positioned(
+                right: -6,
+                top: -10,
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: CustomPaint(
+                    painter: HandPainter(HandStyle.muhur.copyWith(
+                        fill: state == _Opt.right ? K.zumrutKoyu : K.sis)),
+                    child: Center(
+                      child: state == _Opt.right
+                          ? const IkonView(Ikon.tik, size: 22, light: true)
+                          : const DkIcon(DkIcons.again,
+                              size: 18, color: K.murekkep, stroke: 3),
                     ),
                   ),
                 ),
               ),
-              if (state == _Opt.right || state == _Opt.chosenWrong)
-                Positioned(
-                  right: 10,
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: state == _Opt.right ? K.goodShadow : K.againStrong,
-                      shape: BoxShape.circle,
-                    ),
-                    child: DkIcon(
-                        state == _Opt.right ? DkIcons.check : DkIcons.again,
-                        size: state == _Opt.right ? 17 : 16,
-                        color: Colors.white,
-                        stroke: state == _Opt.right ? 3.5 : 3),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-    if (state == _Opt.dim) card = Opacity(opacity: .5, child: card);
-    if (state == _Opt.right && !reduceMotion(context)) {
-      card = TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0, end: 1),
-        duration: const Duration(milliseconds: 600),
-        builder: (context, v, child) => Transform.scale(
-            scale: 1 + .06 * math.sin(v * math.pi), child: child),
-        child: card,
-      );
-    }
+          ],
+        );
+    final motion = !reduceMotion(context);
     return Pressable(
       onTap: onTap,
       selected: state == _Opt.selected,
@@ -873,34 +1192,37 @@ class _OptionCard extends StatelessWidget {
       },
       excludeChildSemantics: true,
       focusRadius: K.rMd,
-      builder: (context, down) => card,
+      builder: (context, down) {
+        var c = card(down);
+        if (state == _Opt.dim) c = Opacity(opacity: .5, child: c);
+        if (state == _Opt.right && motion) {
+          c = TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 600),
+            builder: (context, v, child) => Transform.scale(
+                scale: 1 + .06 * math.sin(v * math.pi), child: child),
+            child: c,
+          );
+        }
+        if (wrong && motion) {
+          // salla: .45 sn, sönerek
+          c = TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 450),
+            builder: (context, v, child) => Transform.translate(
+                offset: Offset(7 * (1 - v) * math.sin(v * math.pi * 4), 0),
+                child: child),
+            child: c,
+          );
+        }
+        return c;
+      },
     );
   }
 }
 
-/// Yanlış seçilen seçeneğin 135° çizgili zemini (renk tek başına bilgi taşımaz).
-class _StripePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final p = Paint()..color = K.againStripe;
-    final d = size.width + size.height;
-    for (var x = -size.height; x < d; x += 20) {
-      final path = Path()
-        ..moveTo(x, 0)
-        ..lineTo(x + 10, 0)
-        ..lineTo(x + 10 - size.height, size.height)
-        ..lineTo(x - size.height, size.height)
-        ..close();
-      canvas.drawPath(path, p);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_StripePainter old) => false;
-}
-
-/// C7 Geri bildirim bandı: alttan kayar. Doğru: yeşil, kutlayan Fındık.
-/// Tekrar: mavi, düşünen Fındık, "Doğrusu: …" ve ANLADIM.
+/// C7 Geri bildirim bandı: alttan kayar. Doğru: yeşil, kutlayan Anka.
+/// Tekrar: mavi, düşünen Anka, "Doğrusu: …" ve ANLADIM.
 class FeedbackBand extends StatelessWidget {
   const FeedbackBand({
     super.key,
@@ -917,67 +1239,72 @@ class FeedbackBand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = correct ? K.goodInk : K.againInk;
-    final band = Container(
+    final fg = correct ? K.zumrutKoyu : K.lacivert;
+    // Claude Design 13/14: yırtık kenarlı kâğıt; doğruda kutlayan, yanlışta
+    // anlatan Anka. Kırmızı yok.
+    final band = Stack(
       key: Key(correct ? 'band-ok' : 'band-again'),
-      color: correct ? K.goodBg : K.againBg,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Semantics(
-            liveRegion: true,
-            child: Row(children: [
-              Mascot(
-                  mood: correct ? MascotMood.celebrate : MascotMood.think,
-                  size: 64),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: correct ? K.goodShadow : K.againStrong,
-                            shape: BoxShape.circle),
-                        child: DkIcon(correct ? DkIcons.check : DkIcons.again,
-                            size: 16, color: Colors.white, stroke: 3.5),
-                      ),
-                      const SizedBox(width: 8),
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          left: 0,
+          right: 0,
+          top: -12,
+          height: 24,
+          child: CustomPaint(painter: _TornEdgePainter()),
+        ),
+        Container(
+          color: K.kagit3,
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Semantics(
+                liveRegion: true,
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Mascot(
+                          mood:
+                              correct ? MascotMood.celebrate : MascotMood.teach,
+                          size: 68),
+                      const SizedBox(width: 10),
                       Expanded(
-                        child: EmojiText(title,
-                            style: TextStyle(
-                                fontSize: 24,
-                                height: 30 / 24,
-                                fontWeight: FontWeight.w900,
-                                color: fg)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            EmojiText(title,
+                                style: TextStyle(
+                                    fontFamily: K.display,
+                                    fontSize: 25,
+                                    height: 30 / 25,
+                                    fontWeight: FontWeight.w800,
+                                    color: fg)),
+                            if (body != null && body!.isNotEmpty) ...[
+                              const SizedBox(height: 4),
+                              EmojiText(body!,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      height: 1.38,
+                                      color: K.murekkep)),
+                            ],
+                          ],
+                        ),
                       ),
                     ]),
-                    if (body != null && body!.isNotEmpty) ...[
-                      const SizedBox(height: 2),
-                      EmojiText(body!,
-                          style: TextStyle(
-                              fontSize: 17, height: 24 / 17, color: fg)),
-                    ],
-                  ],
-                ),
               ),
-            ]),
+              const SizedBox(height: 14),
+              ChunkyButton(
+                key: const Key('next'),
+                label: correct ? 'Devam' : 'Anladım',
+                kind: correct ? BtnKind.good : BtnKind.primary,
+                onPressed: onNext,
+              ),
+            ],
           ),
-          const SizedBox(height: 14),
-          ChunkyButton(
-            key: const Key('next'),
-            label: correct ? 'Devam' : 'Anladım',
-            kind: correct ? BtnKind.good : BtnKind.again,
-            onPressed: onNext,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
     if (reduceMotion(context)) return band;
     return TweenAnimationBuilder<double>(
@@ -989,6 +1316,73 @@ class FeedbackBand extends StatelessWidget {
       child: band,
     );
   }
+}
+
+/// Kâğıdın yırtık üst kenarı.
+class _TornEdgePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    const pts = [
+      12,
+      8,
+      14,
+      7,
+      12,
+      6,
+      11,
+      7,
+      12,
+      6,
+      12,
+      6,
+      11,
+      7,
+      13,
+      8,
+      12,
+      6,
+      11,
+      7,
+      13,
+      8,
+      12,
+      6,
+      11,
+      7,
+      13,
+      8,
+      12,
+      6,
+      11,
+      7,
+      13,
+      9
+    ];
+    final w = size.width;
+    final step = w / (pts.length - 1);
+    final p = Path()..moveTo(0, size.height);
+    for (var i = 0; i < pts.length; i++) {
+      p.lineTo(i * step, pts[i].toDouble());
+    }
+    p
+      ..lineTo(w, size.height)
+      ..close();
+    canvas.drawPath(p, Paint()..color = K.kagit3);
+    final edge = Path()..moveTo(0, pts.first.toDouble());
+    for (var i = 1; i < pts.length; i++) {
+      edge.lineTo(i * step, pts[i].toDouble());
+    }
+    canvas.drawPath(
+        edge,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.4
+          ..strokeJoin = StrokeJoin.round
+          ..color = K.murekkep);
+  }
+
+  @override
+  bool shouldRepaint(_TornEdgePainter old) => false;
 }
 
 // --------------------------------------------------------- C8 Etkinlik
@@ -1161,140 +1555,179 @@ class _SummaryView extends StatelessWidget {
     required this.lessonTitles,
     required this.onDone,
     required this.onSay,
+    this.notebookLine,
   });
   final SessionController controller;
   final Map<String, String> lessonTitles;
+  final String? notebookLine;
   final VoidCallback onDone;
   final void Function(String, {bool slow}) onSay;
 
   @override
   Widget build(BuildContext context) {
     final s = controller.summary;
-    final streak = AppScope.of(context).progress?.streakDays ?? 0;
+    final app = AppScope.of(context);
+    final streak = app.progress?.streakDays ?? 0;
+    final hero = app.progress?.game.hero;
+    final supply = Kingdom.of(controller.subject).material;
     final tiles = [
-      (DkIcons.check, '${s.correct}', 'doğru cevap', K.goodBg, K.goodInk),
-      (DkIcons.clock, '${s.minutes} dk', 'çalıştın', K.againBg, K.againInk),
-      (DkIcons.nut, '+${s.nutsEarned}', 'fındık', K.peach, K.peachInk),
-      (DkIcons.leaf, '$streak gün', 'birlikteyiz', K.goodBg, K.goodInk),
+      (Ikon.tik, '${s.correct}', 'doğru cevap'),
+      (Ikon.isik, '+${s.nutsEarned}', 'ışık'),
+      (ikonOf(supply), '+${s.suppliesEarned}', supply.label.toLowerCase()),
+      (Ikon.mesale, '$streak gün', 'meşalen yanıyor'),
     ];
     final newTitles = [
       for (final code in s.newOutcomes) lessonTitles[code] ?? code,
     ];
+    // Claude Design 22: kemerli zafer sahnesi, el çizimi ödüller, defter notu
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: 72,
+            height: 64,
             child: Align(
               alignment: Alignment.centerRight,
               child: ListenButton(onListen: () => onSay('Bugün çok çalıştın!')),
             ),
           ),
           Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const _Pop(
-                        child: Mascot(
-                            mood: MascotMood.celebrate,
-                            size: 150,
-                            label: 'Fındık kutluyor')),
-                    const SizedBox(height: 16),
-                    const Text('Bugün çok çalıştın!', style: T.big),
-                    const SizedBox(height: 16),
-                    LayoutBuilder(builder: (context, box) {
-                      final w = (box.maxWidth - 10) / 2;
-                      return Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: [
-                          for (final t in tiles)
-                            SizedBox(
-                              width: w,
-                              child: DkCard(
-                                padding: const EdgeInsets.all(14),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 36,
-                                      height: 36,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: t.$4,
-                                          borderRadius:
-                                              BorderRadius.circular(K.rSm)),
-                                      child:
-                                          DkIcon(t.$1, size: 22, color: t.$5),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(t.$2,
-                                        style: const TextStyle(
-                                            fontSize: 26,
-                                            height: 32 / 26,
-                                            fontWeight: FontWeight.w900,
-                                            color: K.ink)),
-                                    Text(t.$3,
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                            color: K.inkSoft)),
-                                  ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _Pop(
+                    child: SizedBox(
+                      height: 220,
+                      child: HandBox(
+                        style: const HandStyle(
+                            radii:
+                                HandRadii([120, 120, 14, 14], [96, 96, 14, 14]),
+                            fill: K.kagit3),
+                        padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.elliptical(108, 86)),
+                          child: ColoredBox(
+                            color: const Color(0xFFE3E6D3),
+                            child: Stack(children: [
+                              const Positioned(
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Kilim.zumrut()),
+                              if (hero != null)
+                                Positioned(
+                                  left: 24,
+                                  bottom: 10,
+                                  child: HeroFigure(
+                                      look: hero, size: 150, cheer: true),
                                 ),
+                              const Positioned(
+                                right: 12,
+                                bottom: 14,
+                                child: Mascot(
+                                    mood: MascotMood.celebrate,
+                                    size: 110,
+                                    label: 'Anka kutluyor'),
                               ),
-                            ),
-                        ],
-                      );
-                    }),
-                    if (newTitles.isNotEmpty) ...[
-                      const SizedBox(height: 16),
-                      DkCard(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 12),
-                        color: K.rewardBg,
-                        borderColor: K.rewardLine,
-                        child: Row(children: [
-                          Container(
-                            width: 40,
-                            height: 40,
-                            alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                                color: K.reward, shape: BoxShape.circle),
-                            child: const DkIcon(DkIcons.star,
-                                size: 22, color: K.ink),
+                            ]),
                           ),
-                          const SizedBox(width: 12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  const Text('Bugün çok çalıştın!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: K.display,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          color: K.lacivert)),
+                  const SizedBox(height: 14),
+                  LayoutBuilder(builder: (context, box) {
+                    final w = (box.maxWidth - 10) / 2;
+                    return Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        for (final t in tiles)
+                          SizedBox(
+                            width: w,
+                            child: DkCard(
+                              padding: const EdgeInsets.all(12),
+                              child: Row(children: [
+                                IkonView(t.$1, size: 34),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(t.$2,
+                                          style: const TextStyle(
+                                              fontFamily: K.display,
+                                              fontSize: 24,
+                                              height: 1.1,
+                                              fontWeight: FontWeight.w800,
+                                              color: K.murekkep)),
+                                      Text(t.$3,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: K.murekkep2)),
+                                    ],
+                                  ),
+                                ),
+                              ]),
+                            ),
+                          ),
+                      ],
+                    );
+                  }),
+                  if (newTitles.isNotEmpty || notebookLine != null) ...[
+                    const SizedBox(height: 14),
+                    Transform.rotate(
+                      angle: -.015,
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                        decoration: BoxDecoration(
+                          color: K.kagit3,
+                          border: Border.all(color: K.murekkep, width: 2),
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color(0x592B2320), offset: Offset(3, 4))
+                          ],
+                        ),
+                        child: Row(children: [
+                          const IkonView(Ikon.defter, size: 34),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: EmojiText(
-                                'Yeni konu kumbarada: ${newTitles.join(', ')}',
-                                style: const TextStyle(
-                                    fontSize: 17,
-                                    height: 23 / 17,
-                                    fontWeight: FontWeight.w800,
-                                    color: K.rewardInk)),
+                                notebookLine ??
+                                    'Yeni konu: ${newTitles.join(', ')}',
+                                style: G.hand
+                                    .copyWith(fontSize: 17, color: K.murekkep)),
                           ),
                         ]),
                       ),
-                    ],
-                    if (s.retried > 0) ...[
-                      const SizedBox(height: 12),
-                      const Text('Zorlandığın soruları yakında yine soracağım.',
-                          style: T.help),
-                    ],
+                    ),
                   ],
-                ),
+                  if (s.retried > 0) ...[
+                    const SizedBox(height: 12),
+                    const Text('Zorlandığın soruları yakında yine soracağım.',
+                        style: T.help),
+                  ],
+                ],
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           ChunkyButton(
               key: const Key('summary-done'),
               label: 'Tamam',
+              kind: BtnKind.kok,
               onPressed: onDone),
         ],
       ),

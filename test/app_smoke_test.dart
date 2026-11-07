@@ -8,7 +8,12 @@ import 'package:ders_kumbarasi/app/speaker.dart';
 import 'package:ders_kumbarasi/data/content_repository.dart';
 import 'package:ders_kumbarasi/data/models.dart';
 import 'package:ders_kumbarasi/data/progress_store.dart';
+import 'package:ders_kumbarasi/game/game_state.dart';
+import 'package:ders_kumbarasi/game/world.dart';
 import 'package:ders_kumbarasi/main.dart';
+import 'package:ders_kumbarasi/ui/screens/session_screen.dart';
+import 'package:ders_kumbarasi/ui/theme.dart';
+import 'package:ders_kumbarasi/ui/widgets/kit.dart';
 
 /// Widget testlerinde gerçek dosya G/Ç'si sahte zamanlayıcıyla çakışır;
 /// içerik dosyaları önceden belleğe okunur.
@@ -58,7 +63,101 @@ Future<void> tapKey(WidgetTester t, String key) async {
   await t.pumpAndSettle();
 }
 
+/// Kasaba listesinde aşağı kaydırıp dokunur (liste tembel kurulur).
+Future<void> tapTown(WidgetTester t, String key) async {
+  final f = find.byKey(Key(key));
+  await t.scrollUntilVisible(f, 150,
+      scrollable: find
+          .descendant(
+              of: find.byKey(const Key('town-list')),
+              matching: find.byType(Scrollable))
+          .first);
+  await t.pumpAndSettle();
+  await t.tap(f);
+  await t.pumpAndSettle();
+}
+
+/// Kahramanı hazır bir çocuk (kahraman oluşturma ekranı atlanır).
+Future<void> seedHero(ProgressStore store, String id) => store.saveProgress(id,
+    ChildProgress(game: GameState(hero: const HeroLook(girl: false, path: 1))));
+
+/// Haritadaki bölgeye kaydırıp dokunur (liste tembel kurulur).
+Future<void> tapRegion(WidgetTester t, int i) async {
+  final f = find.byKey(Key('region-$i'));
+  await t.drag(find.byKey(const Key('map-list')), const Offset(0, 4000));
+  await t.pumpAndSettle();
+  await t.scrollUntilVisible(f, 200,
+      scrollable: find
+          .descendant(
+              of: find.byKey(const Key('map-list')),
+              matching: find.byType(Scrollable))
+          .first);
+  await t.pumpAndSettle();
+  await t.tap(f);
+  await t.pumpAndSettle();
+}
+
 bool has(String key) => find.byKey(Key(key)).evaluate().isNotEmpty;
+
+/// Oturumu sonuna kadar oynar. Bitiş ekranına varırsa null, ilerletecek
+/// düğme bulamazsa ekranda ne olduğunu döner.
+Future<String?> walkToEnd(WidgetTester t) async {
+  for (var guard = 0; guard < 160; guard++) {
+    for (final end in [
+      'summary-done',
+      'streak-done',
+      'duel-done',
+      'finale-done'
+    ]) {
+      if (has(end)) return null;
+    }
+    bool enabled(String key) {
+      final f = find.byKey(Key(key));
+      if (f.evaluate().isEmpty) return false;
+      final w = t.widget(f);
+      return w is! ChunkyButton || w.onPressed != null;
+    }
+
+    if (has('next')) {
+      await tapKey(t, 'next');
+    } else if (has('lesson-next')) {
+      await tapKey(t, 'lesson-next');
+    } else if (has('activity-done')) {
+      await tapKey(t, 'activity-done');
+    } else if (has('keypad')) {
+      await tapKey(t, 'key-1');
+    } else if (has('clock-face') && !enabled('check')) {
+      await tapKey(t, 'clock-h-plus');
+    } else if (has('match-area') && !enabled('check')) {
+      for (var i = 0; has('left-$i'); i++) {
+        await tapKey(t, 'left-$i');
+        await tapKey(t, 'right-$i');
+      }
+    } else if (has('build-area') && !enabled('check')) {
+      if (!has('option-0')) {
+        return 'hece/sıralama alanı doldu ama Kontrol et açılmadı';
+      }
+      await tapKey(t, 'option-0');
+    } else if (has('option-0') && !enabled('check')) {
+      await tapKey(t, 'option-0');
+    } else if (enabled('check')) {
+      await tapKey(t, 'check');
+      if (!has('next')) {
+        return 'Kontrol et sonrası Devam/Anladım çıkmadı';
+      }
+    } else {
+      final texts = find
+          .byType(Text)
+          .evaluate()
+          .map((e) => (e.widget as Text).data)
+          .whereType<String>()
+          .take(12)
+          .join(' | ');
+      return 'ilerletecek düğme yok. Ekran: $texts';
+    }
+  }
+  return '160 adımda bitmedi';
+}
 
 /// Oturumu sonuna kadar götürür (anlatım, soru, etkinlik).
 Future<void> playSession(WidgetTester t) async {
@@ -66,6 +165,31 @@ Future<void> playSession(WidgetTester t) async {
   while (guard++ < 80) {
     if (has('lesson-next')) {
       await tapKey(t, 'lesson-next');
+    } else if (has('keypad')) {
+      // Tuş takımı: bir rakam yaz, kontrol et
+      await tapKey(t, 'key-1');
+      await tapKey(t, 'check');
+      await tapKey(t, 'next');
+    } else if (has('clock-face')) {
+      await tapKey(t, 'clock-h-plus');
+      await tapKey(t, 'check');
+      await tapKey(t, 'next');
+    } else if (has('match-area')) {
+      // Eşleştirme: her sol öğeyi kendi eşine bağla
+      for (var i = 0; has('left-$i'); i++) {
+        await tapKey(t, 'left-$i');
+        await tapKey(t, 'right-$i');
+      }
+      await tapKey(t, 'check');
+      await tapKey(t, 'next');
+    } else if (has('build-area')) {
+      // Sıralama / hece: yuvalar dolana kadar ilk öğeyi seç
+      var g = 0;
+      while (has('option-0') && g++ < 10) {
+        await tapKey(t, 'option-0');
+      }
+      await tapKey(t, 'check');
+      await tapKey(t, 'next');
     } else if (has('option-0')) {
       // Seçmeden KONTROL ET pasif
       expect(find.byKey(const Key('band-ok')), findsNothing);
@@ -93,7 +217,7 @@ void main() {
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
 
-    expect(find.text('Her gün 10 dakika, kalıcı öğrenme'), findsOneWidget);
+    expect(find.text('Bilgelik Diyarı'), findsOneWidget);
     await tapKey(t, 'onboarding-start');
     for (var i = 0; i < 3; i++) {
       await tapKey(t, 'onboarding-next');
@@ -112,6 +236,16 @@ void main() {
     expect(find.text('Hazır mısın, Elif?'), findsOneWidget);
     await tapKey(t, 'first-lesson');
 
+    // Kahraman: kız → yol → görünüm
+    await tapKey(t, 'hero-girl');
+    await tapKey(t, 'hero-path-2');
+    await tapKey(t, 'hero-next');
+    await tapKey(t, 'look-tab-ten');
+    await tapKey(t, 'skin-3');
+    await tapKey(t, 'hero-done');
+    expect(find.text('Köyün ateşini yak'), findsOneWidget);
+    await tapKey(t, 'first-quest-go');
+
     await playSession(t);
     expect(find.text('Bugün çok çalıştın!'), findsOneWidget);
     await tapKey(t, 'summary-done');
@@ -119,18 +253,68 @@ void main() {
     expect(find.text('1 gündür birlikteyiz!'), findsOneWidget);
     await tapKey(t, 'streak-done');
 
-    // Yol: bugün kartı, sekmeler
-    expect(has('today-card'), isTrue);
+    // Harita, kahraman, kazanılanlar, defter
+    expect(has('map-list'), isTrue);
+    expect(has('anka-line'), isTrue);
     expect(state.progress!.startedOutcomes, isNotEmpty);
     expect(state.progress!.nuts, greaterThan(0));
     expect(state.profiles.single.avatar, '3');
+    final hero = state.progress!.game.hero!;
+    expect(hero.girl, isTrue);
+    expect(hero.path, 2);
+    expect(hero.skin, 3);
+    expect(state.progress!.game.notebook, isNotEmpty);
+    expect(state.progress!.game.supplies.values.fold<int>(0, (a, b) => a + b),
+        greaterThan(0));
 
-    await tapKey(t, 'tab-review');
+    await tapKey(t, 'tab-town');
+    expect(has('town-list'), isTrue);
+    // İstek panosu ve sefer: biten oturum sayıldı, ödül elle alınır
+    expect(has('quest-board'), isTrue);
+    // Giysi dolabı açılır, geri dönülür
+    await tapTown(t, 'wardrobe-open');
+    expect(has('wardrobe-list'), isTrue);
+    expect(has('item-cicek_taci'), isTrue);
+    await tapKey(t, 'wardrobe-back');
+    final g = state.progress!.game;
+    expect(g.board!.counts['s'], 1);
+    expect(g.trip!.days, hasLength(1));
+    final light0 = state.progress!.nuts;
+    await tapTown(t, 'quest-claim-0');
+    expect(state.progress!.nuts, light0 + g.board!.quests[0].light);
+    expect(g.board!.claimed, {0});
+    // Anka'nın hoş geldin mektubu
+    expect(g.unreadLetters, 1);
+    await tapTown(t, 'mail-open');
+    expect(find.text('Anka'), findsWidgets);
+    await tapKey(t, 'letter-0');
+    expect(g.unreadLetters, 0);
+    expect(
+        find.textContaining("Bilgelik Diyarı'na hoş geldin"), findsOneWidget);
+    await tapKey(t, 'letter-back');
+    await tapKey(t, 'mail-back');
+    await tapKey(t, 'tab-notebook');
+    expect(find.text('Kahraman Defteri'), findsOneWidget);
+    expect(find.textContaining('Elif bugün'), findsWidgets);
+    await tapKey(t, 'tab-town');
+    // İlk yapı: ışık ve demirle hemen kurulur
+    final before = state.progress!.nuts;
+    if (state.canBuild(buildings.first)) {
+      await tapTown(t, 'build-ev');
+      expect(state.progress!.game.built['ev'], 1);
+      // İzometrik kasabada varsayılan yerine konur ve kayda yazılır
+      expect(state.progress!.game.spots['ev'], '1,1');
+      expect(state.progress!.nuts, lessThan(before));
+    }
+
+    await tapKey(t, 'tab-map');
+    await tapKey(t, 'sky-open');
     expect(has('review-card'), isTrue);
-    await tapKey(t, 'tab-profile');
+    await tapKey(t, 'sky-back');
+    await tapKey(t, 'tab-hero');
     expect(find.text('Elif'), findsWidgets);
     expect(find.text('1. sınıf'), findsOneWidget);
-    await tapKey(t, 'tab-path');
+    await tapKey(t, 'tab-map');
 
     // İlerleme cihaza kaydedildi (yedek dosyasıyla)
     final saved = storage.files.keys
@@ -138,6 +322,7 @@ void main() {
         .toList();
     expect(saved, hasLength(1));
     expect(storage.files[saved.single], contains('#'));
+    expect(storage.files[saved.single], contains('"hero"'));
   });
 
   testWidgets('kilitli düğüm not gösterir; oturumdan çıkış onay ister',
@@ -147,13 +332,19 @@ void main() {
     final storage = MemoryStorage();
     await ProgressStore(storage).saveProfiles(
         const [ChildProfile(id: 'a', nickname: 'Can', grade: 1, avatar: '2')]);
+    await seedHero(ProgressStore(storage), 'a');
     final state = makeState(storage);
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
     expect(find.text('Kim çalışacak?'), findsOneWidget);
     await tapKey(t, 'kid-a');
-    state.selectSubject(Subject.matematik);
-    await settle(t);
+    await tapKey(t, 'kingdom-matematik');
+
+    // Sisli bölge açılmaz; ilk bölge açılır
+    await tapRegion(t, 1);
+    expect(find.textContaining('Sis burada çok yoğun'), findsOneWidget);
+    await t.pumpAndSettle(const Duration(seconds: 3));
+    await tapRegion(t, 0);
 
     await tapKey(t, 'node-MAT.1.1.2');
     expect(
@@ -176,6 +367,57 @@ void main() {
     await tapKey(t, 'session-close');
     await tapKey(t, 'leave');
     expect(has('path-list'), isTrue);
+    await tapKey(t, 'region-back');
+    expect(has('map-list'), isTrue);
+  });
+
+  testWidgets('ücretsiz sürümde 4. bölge kilitli; düello sancak diker',
+      (t) async {
+    reduceMotion(t);
+    phone(t);
+    final storage = MemoryStorage();
+    final store = ProgressStore(storage);
+    await store.saveProfiles(
+        const [ChildProfile(id: 'a', nickname: 'Can', grade: 1, avatar: '2')]);
+    // İlk bölgenin bütün konularına başlanmış bir çocuk
+    final probe = makeState(storage);
+    await probe.load();
+    final regions = await probe.content.outcomesFor(Subject.matematik, 1);
+    final firstUnit = regions.first.unit;
+    await store.saveProgress(
+        'a',
+        ChildProgress(
+          startedOutcomes: {
+            for (final o in regions)
+              if (o.unit == firstUnit) o.code
+          },
+          game: GameState(hero: const HeroLook(girl: true, path: 0)),
+        ));
+    final state = makeState(storage);
+    await t.pumpWidget(DersKumbarasiApp(state: state));
+    await settle(t);
+    await tapKey(t, 'kid-a');
+    await tapKey(t, 'kingdom-matematik');
+
+    final locked = await state.lockedOutcomes(Subject.matematik);
+    expect(locked, isNotEmpty);
+    final rs = await state.regions(Subject.matematik);
+    expect(locked, containsAll(rs[3].outcomes.map((o) => o.code)));
+    expect(locked.intersection(rs[2].outcomes.map((o) => o.code).toSet()),
+        isEmpty);
+    await tapRegion(t, 3);
+    expect(find.textContaining('Bir büyüğüne sorabilirsin'), findsOneWidget);
+    await t.pumpAndSettle(const Duration(seconds: 3));
+
+    await tapRegion(t, 0);
+    await tapKey(t, 'duel-start');
+    expect(has('duel-header'), isTrue);
+    await playSession(t);
+    expect(has('duel-done'), isTrue);
+    expect(state.progress!.game.banners, contains('matematik-1-0'));
+    expect(state.progress!.game.rescued, hasLength(1));
+    await tapKey(t, 'duel-done');
+    expect(has('path-list'), isTrue);
   });
 
   testWidgets('veli kapısı: yanlış cevapta açılmaz, doğruda açılır', (t) async {
@@ -185,12 +427,13 @@ void main() {
     final store = ProgressStore(storage);
     await store.saveProfiles(
         const [ChildProfile(id: 'a', nickname: 'Can', grade: 3, avatar: '🐶')]);
+    await seedHero(store, 'a');
     await store.saveSettings(const AppSettings(onboarded: true).toJson());
     final state = makeState(storage);
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
     await tapKey(t, 'kid-a');
-    await tapKey(t, 'tab-profile');
+    await tapKey(t, 'tab-hero');
     await tapKey(t, 'parent-entry');
 
     await tapKey(t, 'gate-key-1');
@@ -215,7 +458,7 @@ void main() {
     expect(state.settings.textSize, 1);
     await tapKey(t, 'back');
     await tapKey(t, 'to-child');
-    expect(has('tab-profile'), isTrue);
+    expect(has('tab-hero'), isTrue);
   });
 
   testWidgets('sessiz saatlerde oturum açılmaz', (t) async {
@@ -225,15 +468,16 @@ void main() {
     final store = ProgressStore(storage);
     await store.saveProfiles(
         const [ChildProfile(id: 'a', nickname: 'Can', grade: 1, avatar: '0')]);
+    await seedHero(store, 'a');
     final state = makeState(storage, at: DateTime(2026, 11, 2, 22, 30));
     await t.pumpWidget(DersKumbarasiApp(state: state));
     await settle(t);
     await tapKey(t, 'kid-a');
-    state.selectSubject(Subject.matematik);
-    await settle(t);
+    await tapKey(t, 'kingdom-matematik');
+    await tapRegion(t, 0);
     await tapKey(t, 'node-MAT.1.1.1');
     await tapKey(t, 'node-start');
-    expect(find.text('Fındık uyuyor. Sabah görüşürüz!'), findsOneWidget);
+    expect(find.text('Anka uyuyor. Sabah görüşürüz!'), findsOneWidget);
     expect(has('lesson-next'), isFalse);
     await tapKey(t, 'system-ok');
     expect(has('path-list'), isTrue);
@@ -248,4 +492,54 @@ void main() {
     const off = AppSettings(quietStartHour: 0, quietEndHour: 0);
     expect(off.isQuietTime(DateTime(2026, 1, 1, 23)), isFalse);
   });
+
+  // Her sınıfın her dersinde ilk iki konu ve bir düello, gerçek ekranda
+  // baştan sona oynanır. Bir adımda ilerletecek düğme yoksa test düşer.
+  for (final g in [1, 2, 3, 4]) {
+    for (final s in Subject.forGrade(g)) {
+      testWidgets('ekran taraması: $g. sınıf ${s.label}', (t) async {
+        reduceMotion(t);
+        phone(t);
+        final storage = MemoryStorage();
+        final store = ProgressStore(storage);
+        await store.saveProfiles(
+            [ChildProfile(id: 'a', nickname: 'Can', grade: g, avatar: '0')]);
+        await seedHero(store, 'a');
+        final state = makeState(storage);
+        await state.load();
+        await state.updateSettings(state.settings.copyWith(premium: true));
+        await state.selectChild(state.profiles.single);
+        final outcomes = await state.content.outcomesFor(s, g);
+        final pack = await state.content.contentFor(s, g);
+        final codes = [
+          for (final o in outcomes)
+            if (pack[o.code]?.cards.isNotEmpty ?? false) o.code
+        ];
+        if (codes.isEmpty) return;
+        final regions = await state.regions(s, g);
+        final screens = <(String, Widget)>[
+          for (final code in codes.take(2))
+            (code, SessionScreen(subject: s, focusOutcome: code)),
+          (
+            'düello',
+            SessionScreen(subject: s, duel: regions.first),
+          ),
+        ];
+        for (final (name, screen) in screens) {
+          await t.pumpWidget(AppScope(
+              state: state,
+              child: MaterialApp(theme: K.theme(), home: screen)));
+          await t.pumpAndSettle();
+          final stuck = await walkToEnd(t);
+          expect(stuck, isNull, reason: '$g. sınıf ${s.label} $name: $stuck');
+          if (name != 'düello') {
+            expect(state.progress!.startedOutcomes, contains(name),
+                reason: '$name oturumdan sonra başlamış olmalı');
+          }
+          await t.pumpWidget(const SizedBox());
+          await t.pumpAndSettle(const Duration(seconds: 3));
+        }
+      });
+    }
+  }
 }
