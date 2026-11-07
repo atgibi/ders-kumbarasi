@@ -120,6 +120,10 @@ class TtsSpeaker implements Speaker {
   @override
   Future<void> prepare(int grade) async {}
 
+  @override
+  Future<void> speakAll(List<String> parts, {bool slow = false}) =>
+      speak(parts.where((p) => p.trim().isNotEmpty).join('. '), slow: slow);
+
   Future<void> _init() async {
     if (_ready) return;
     _ready = true;
@@ -201,8 +205,9 @@ class HybridSpeaker implements Speaker {
 
   Future<Source?> _source(String t) async {
     final id = speechId(t);
-    if ((await _manifest()).contains(id))
+    if ((await _manifest()).contains(id)) {
       return AssetSource('audio_ui/$id.mp3');
+    }
     final path = await _packs.pathFor(id);
     return path == null ? null : DeviceFileSource(path);
   }
