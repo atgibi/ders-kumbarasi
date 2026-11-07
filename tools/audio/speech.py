@@ -36,6 +36,7 @@ UI_PHRASES = [
     "Dikkatle düşündün!",
     "Harika! Birlikte yaptınız.",
     "Bugün çok çalıştın!",
+    "Doğrusu:",
     # Sabit ekran metinleri
     "Kim çalışacak?",
     "Fındık uyuyor. Sabah görüşürüz!",
@@ -85,17 +86,7 @@ def speech_id(text: str) -> str:
 def collect() -> dict:
     texts = set(UI_PHRASES)
     for f in sorted(glob.glob(str(ROOT / "assets/content/*.json"))):
-        pk = json.loads(Path(f).read_text(encoding="utf-8"))
-        for o in pk["outcomes"]:
-            for l in o["lessons"]:
-                for p in l["pages"]:
-                    texts.add(p.get("say") or p["text"])
-            for c in o["cards"]:
-                if c["type"] in ("mc", "act"):
-                    texts.add(c.get("say") or c["prompt"])
-                    for k in ("explain", "hint"):
-                        if c.get(k):
-                            texts.add(c[k])
+        texts |= _texts_of(json.loads(Path(f).read_text(encoding="utf-8")))
     spoken = {speakable(t) for t in texts}
     mapping = {speech_id(t): t for t in spoken if t}
     AUDIO.mkdir(parents=True, exist_ok=True)
@@ -199,6 +190,11 @@ def _texts_of(pack: dict) -> set:
                 for k in ("explain", "hint"):
                     if c.get(k):
                         texts.add(c[k])
+            if c["type"] == "mc":
+                # Şıklar dokununca, "neden yanlış" notları geri bildirimde okunur
+                texts.update(c["options"])
+                w = c.get("why")
+                texts.update(v for v in (w.values() if isinstance(w, dict) else (w or [])) if v)
     return {speakable(t) for t in texts if speakable(t)}
 
 

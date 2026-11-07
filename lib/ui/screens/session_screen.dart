@@ -804,9 +804,13 @@ class _QuestionViewState extends State<_QuestionView> {
     _watch.stop();
     final r = widget.onAnswer(i, _watch.elapsed, _hint);
     setState(() => _result = r);
-    widget.onSay(r.correct
-        ? _okTitles[widget.praise]
-        : 'Doğrusu: ${q.answerText}. ${q.explainFor(i) ?? ''}');
+    if (r.correct) {
+      widget.onSay(_okTitles[widget.praise]);
+    } else {
+      // Parça parça: her parçanın kayıtlı sesi varsa doğal sesle okunur
+      AppScope.read(context)
+          .sayAll(['Doğrusu:', q.answerText, q.explainFor(i) ?? '']);
+    }
   }
 
   @override
@@ -888,7 +892,11 @@ class _QuestionViewState extends State<_QuestionView> {
                             label: q.options[i],
                             state: stateOf(i),
                             onTap: r == null
-                                ? () => setState(() => _selected = i)
+                                ? () {
+                                    setState(() => _selected = i);
+                                    // Okumayı yeni öğrenenler için şık okunur
+                                    widget.onSay(q.options[i]);
+                                  }
                                 : null,
                           );
                       // Kısa seçenekler (sayı, hece) iki sütunda taş levha

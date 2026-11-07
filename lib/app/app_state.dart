@@ -193,6 +193,13 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  /// Parçaları art arda okur (kayıtlı seslerle; yoksa cihaz sesiyle).
+  void sayAll(List<String> parts, {bool slow = false}) {
+    if (settings.soundOn && parts.any((p) => p.trim().isNotEmpty)) {
+      speaker.speakAll(parts, slow: slow);
+    }
+  }
+
   Future<ChildProfile> addChild(
       String nickname, int grade, String avatar) async {
     final id = '${clock().microsecondsSinceEpoch}${Random().nextInt(1 << 16)}';

@@ -24,6 +24,10 @@ abstract class Speaker {
 
   /// Çocuğun sınıfının kayıtlı seslerini hazırlar (gerekirse indirir).
   Future<void> prepare(int grade);
+
+  /// Parçaları art arda okur (ör. "Doğrusu:" + cevap + açıklama): her
+  /// parçanın kaydı varsa kayıtlar, yoksa hepsi cihaz sesiyle.
+  Future<void> speakAll(List<String> parts, {bool slow = false});
 }
 
 class NoopSpeaker implements Speaker {
@@ -39,6 +43,9 @@ class NoopSpeaker implements Speaker {
   Future<bool> checkAvailable() async => false;
   @override
   Future<void> prepare(int grade) async {}
+  @override
+  Future<void> speakAll(List<String> parts, {bool slow = false}) async =>
+      spoken.add(speakable(parts.join(' ')));
 }
 
 const _symbolRanges = [
@@ -189,24 +196,42 @@ class HybridSpeaker implements Speaker {
   @override
   Future<void> prepare(int grade) => _packs.ensure(grade);
 
-  @override
-  Future<void> speak(String text, {bool slow = false}) async {
-    final t = speakable(text);
-    if (t.isEmpty) return;
+  /// Her yeni okuma bir öncekini keser.
+  int _turn = 0;
+
+  Future<Source?> _source(String t) async {
     final id = speechId(t);
-    Source? src;
-    if ((await _manifest()).contains(id)) {
-      src = AssetSource('audio_ui/$id.mp3');
-    } else {
-      final path = await _packs.pathFor(id);
-      if (path != null) src = DeviceFileSource(path);
-    }
-    if (src != null) {
+    if ((await _manifest()).contains(id)) return AssetSource('audio_ui/$id.mp3');
+    final path = await _packs.pathFor(id);
+    return path == null ? null : DeviceFileSource(path);
+  }
+
+  @override
+  Future<void> speak(String text, {bool slow = false}) =>
+      speakAll([text], slow: slow);
+
+  @override
+  Future<void> speakAll(List<String> parts, {bool slow = false}) async {
+    final ps = [
+      for (final p in parts)
+        if (speakable(p).isNotEmpty) speakable(p)
+    ];
+    if (ps.isEmpty) return;
+    final turn = ++_turn;
+    final srcs = [for (final p in ps) await _source(p)];
+    if (turn != _turn) return;
+    if (srcs.every((s) => s != null)) {
       try {
         await _tts.stop();
         await _player.stop();
         await _player.setPlaybackRate(slow ? 0.75 : 1.0);
-        await _player.play(src);
+        for (final src in srcs) {
+          if (turn != _turn) return;
+          final done =
+              srcs.length > 1 ? _player.onPlayerComplete.first : null;
+          await _player.play(src!);
+          await done?.timeout(const Duration(seconds: 40), onTimeout: () {});
+        }
         return;
       } on Object {
         // kayıt çalınamazsa cihaz sesine düş
@@ -217,11 +242,12 @@ class HybridSpeaker implements Speaker {
     } on Object {
       // yok say
     }
-    await _tts.speak(t, slow: slow);
+    await _tts.speak(ps.join('. '), slow: slow);
   }
 
   @override
   Future<void> stop() async {
+    _turn++;
     try {
       await _player.stop();
     } on Object {
