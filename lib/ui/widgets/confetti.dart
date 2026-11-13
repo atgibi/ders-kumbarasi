@@ -96,8 +96,7 @@ class _ConfettiPainter extends CustomPainter {
       if (u <= 0) continue;
       final y = -20 + (size.height + 60) * u * p.speed;
       if (y > size.height + 20) continue;
-      final x =
-          (p.x + p.sway * math.sin(p.phase + u * 6)) * size.width;
+      final x = (p.x + p.sway * math.sin(p.phase + u * 6)) * size.width;
       // sona doğru solar
       paint.color = p.color.withValues(alpha: u > .75 ? (1 - u) * 4 : 1);
       canvas
