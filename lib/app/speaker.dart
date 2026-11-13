@@ -28,6 +28,9 @@ abstract class Speaker {
   /// Parçaları art arda okur (ör. "Doğrusu:" + cevap + açıklama): her
   /// parçanın kaydı varsa kayıtlar, yoksa hepsi cihaz sesiyle.
   Future<void> speakAll(List<String> parts, {bool slow = false});
+
+  /// Kısa efekt sesi (assets/sfx/<ad>.mp3): dogru, yanlis, dokun, kutlama.
+  Future<void> effect(String name);
 }
 
 class NoopSpeaker implements Speaker {
@@ -46,6 +49,9 @@ class NoopSpeaker implements Speaker {
   @override
   Future<void> speakAll(List<String> parts, {bool slow = false}) async =>
       spoken.add(speakable(parts.join(' ')));
+  final List<String> effects = [];
+  @override
+  Future<void> effect(String name) async => effects.add(name);
 }
 
 const _symbolRanges = [
@@ -124,6 +130,9 @@ class TtsSpeaker implements Speaker {
   Future<void> speakAll(List<String> parts, {bool slow = false}) =>
       speak(parts.where((p) => p.trim().isNotEmpty).join('. '), slow: slow);
 
+  @override
+  Future<void> effect(String name) async {}
+
   Future<void> _init() async {
     if (_ready) return;
     _ready = true;
@@ -199,6 +208,20 @@ class HybridSpeaker implements Speaker {
 
   @override
   Future<void> prepare(int grade) => _packs.ensure(grade);
+
+  /// Efektler ayrı çalar: okumayı kesmez, kısık ve yumuşaktır.
+  final AudioPlayer _sfx = AudioPlayer();
+
+  @override
+  Future<void> effect(String name) async {
+    try {
+      await _sfx.stop();
+      await _sfx.setVolume(name == 'dokun' ? .35 : .55);
+      await _sfx.play(AssetSource('sfx/$name.mp3'));
+    } on Object {
+      // efekt çalınamazsa sessiz geç
+    }
+  }
 
   /// Her yeni okuma bir öncekini keser.
   int _turn = 0;

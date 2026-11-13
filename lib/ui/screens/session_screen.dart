@@ -16,6 +16,7 @@ import '../game/game_theme.dart';
 import '../game/hero_figure.dart';
 import '../game/year_end.dart';
 import '../theme.dart';
+import '../widgets/confetti.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
 import '../widgets/hand.dart';
@@ -176,6 +177,7 @@ class _SessionScreenState extends State<SessionScreen> {
         await app.saveProgress();
         if (!mounted) return;
         setState(() => _phase = _Phase.finaleWin);
+        app.sfx('kutlama');
         _say('Karabulut barıştı!');
         return;
       }
@@ -184,6 +186,7 @@ class _SessionScreenState extends State<SessionScreen> {
         await app.saveProgress();
         if (!mounted) return;
         setState(() => _phase = _Phase.duelWin);
+        app.sfx('kutlama');
         _say('${widget.duel!.guardian.name} kurtuldu! '
             '${widget.duel!.guardian.thanks}'
             '${_duelItem == null ? '' : ' Yeni eşya kazandın: ${_duelItem!.name}.'}');
@@ -193,6 +196,7 @@ class _SessionScreenState extends State<SessionScreen> {
       await app.saveProgress();
       if (!mounted) return;
       setState(() => _phase = _Phase.summary);
+      app.sfx('kutlama');
       _say('Bugün çok çalıştın!');
       return;
     }
@@ -492,6 +496,11 @@ class _SessionScreenState extends State<SessionScreen> {
         body: Stack(children: [
           SafeArea(child: ChildTextScale(child: body)),
           const Positioned.fill(child: PaperGrain()),
+          // Oturum, düello ya da yıl sonu bitince konfeti
+          if (_phase == _Phase.summary ||
+              _phase == _Phase.duelWin ||
+              _phase == _Phase.finaleWin)
+            Positioned.fill(child: Confetti(key: ValueKey(_phase))),
         ]),
       ),
     );
@@ -812,6 +821,7 @@ class _QuestionViewState extends State<_QuestionView> {
     _watch.stop();
     final r = widget.onAnswer(i, _watch.elapsed, _hint);
     setState(() => _result = r);
+    AppScope.read(context).sfx(r.correct ? 'dogru' : 'yanlis');
     if (r.correct) {
       widget.onSay(_okTitles[widget.praise]);
     } else {
@@ -902,8 +912,13 @@ class _QuestionViewState extends State<_QuestionView> {
                             onTap: r == null
                                 ? () {
                                     setState(() => _selected = i);
+                                    final app = AppScope.read(context);
                                     // Okumayı yeni öğrenenler için şık okunur
-                                    widget.onSay(q.options[i]);
+                                    if (app.settings.readOptions) {
+                                      widget.onSay(q.options[i]);
+                                    } else {
+                                      app.sfx('dokun');
+                                    }
                                   }
                                 : null,
                           );

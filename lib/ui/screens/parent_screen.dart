@@ -898,6 +898,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   const Divider(height: 2, thickness: 2, color: K.lineSoft),
                   ToggleRow(
+                    key: const Key('set-read-options'),
+                    boxed: false,
+                    parent: true,
+                    title: 'Şıkları sesli oku',
+                    subtitle: 'Çocuk bir şıkka dokununca şık okunur',
+                    value: s.readOptions,
+                    onChanged: (v) =>
+                        app.updateSettings(s.copyWith(readOptions: v)),
+                  ),
+                  const Divider(height: 2, thickness: 2, color: K.lineSoft),
+                  ToggleRow(
+                    key: const Key('set-effects'),
+                    boxed: false,
+                    parent: true,
+                    title: 'Efekt sesleri',
+                    subtitle: 'Doğru, yanlış ve kutlama sesleri',
+                    value: s.effectsOn,
+                    onChanged: (v) =>
+                        app.updateSettings(s.copyWith(effectsOn: v)),
+                  ),
+                  const Divider(height: 2, thickness: 2, color: K.lineSoft),
+                  ToggleRow(
                     key: const Key('set-reduce'),
                     boxed: false,
                     parent: true,

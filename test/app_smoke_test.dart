@@ -483,6 +483,16 @@ void main() {
     expect(has('path-list'), isTrue);
   });
 
+  test('ses ayarları kayda yazılır', () {
+    const s = AppSettings();
+    expect(s.effectsOn, isTrue);
+    expect(s.readOptions, isTrue);
+    final back = AppSettings.fromJson(
+        s.copyWith(effectsOn: false, readOptions: false).toJson());
+    expect(back.effectsOn, isFalse);
+    expect(back.readOptions, isFalse);
+  });
+
   test('sessiz saat hesabı', () {
     const s = AppSettings();
     expect(s.isQuietTime(DateTime(2026, 1, 1, 21)), isTrue);

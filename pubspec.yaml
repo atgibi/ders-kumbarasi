@@ -31,6 +31,7 @@ flutter:
     - assets/content/
     - assets/mascot/
     - assets/audio_ui/
+    - assets/sfx/
     - assets/emoji/
     - assets/fonts/licenses/
     - assets/ikon/

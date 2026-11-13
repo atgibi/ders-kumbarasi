@@ -27,6 +27,8 @@ class AppSettings {
     this.reduceMotion = false,
     this.textSize = 0,
     this.premium = false,
+    this.effectsOn = true,
+    this.readOptions = true,
   });
 
   final int dailyLimitMinutes;
@@ -45,6 +47,12 @@ class AppSettings {
   /// kurulana kadar yalnızca geliştirme sürümünde açılabilir.
   final bool premium;
 
+  /// Doğru/yanlış ve kutlama efekt sesleri.
+  final bool effectsOn;
+
+  /// Şıkka dokununca şık sesli okunur.
+  final bool readOptions;
+
   bool get quietEnabled => quietStartHour != quietEndHour;
 
   /// Çocuk alanında yazı büyütme katsayısı.
@@ -59,6 +67,8 @@ class AppSettings {
     bool? reduceMotion,
     int? textSize,
     bool? premium,
+    bool? effectsOn,
+    bool? readOptions,
   }) =>
       AppSettings(
         dailyLimitMinutes: dailyLimitMinutes ?? this.dailyLimitMinutes,
@@ -69,6 +79,8 @@ class AppSettings {
         reduceMotion: reduceMotion ?? this.reduceMotion,
         textSize: textSize ?? this.textSize,
         premium: premium ?? this.premium,
+        effectsOn: effectsOn ?? this.effectsOn,
+        readOptions: readOptions ?? this.readOptions,
       );
 
   AppSettings withQuiet(bool on) => on
@@ -84,6 +96,8 @@ class AppSettings {
         'reduce': reduceMotion,
         'text': textSize,
         'premium': premium,
+        'sfx': effectsOn,
+        'ropt': readOptions,
       };
 
   factory AppSettings.fromJson(Map<String, Object?> j) => AppSettings(
@@ -95,6 +109,8 @@ class AppSettings {
         reduceMotion: j['reduce'] as bool? ?? false,
         textSize: (j['text'] as num?)?.toInt() ?? 0,
         premium: j['premium'] as bool? ?? false,
+        effectsOn: j['sfx'] as bool? ?? true,
+        readOptions: j['ropt'] as bool? ?? true,
       );
 
   /// Sessiz saatlerde mi? (ör. 21:00–07:00)
@@ -191,6 +207,11 @@ class AppState extends ChangeNotifier {
     if (settings.soundOn && text.trim().isNotEmpty) {
       speaker.speak(text, slow: slow);
     }
+  }
+
+  /// Kısa efekt sesi (ayar kapalıysa sessiz).
+  void sfx(String name) {
+    if (settings.soundOn && settings.effectsOn) speaker.effect(name);
   }
 
   /// Parçaları art arda okur (kayıtlı seslerle; yoksa cihaz sesiyle).
