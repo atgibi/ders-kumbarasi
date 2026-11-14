@@ -1187,60 +1187,60 @@ class _ProfileRowState extends State<_ProfileRow> {
   @override
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
-    final key = '${profile.id}|${profile.grade}|${app.progress?.lastSessionDay}';
+    final key =
+        '${profile.id}|${profile.grade}|${app.progress?.lastSessionDay}';
     if (_summary == null || key != _for) {
       _for = key;
       _summary = _load(app);
     }
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          border: last
-              ? null
-              : const Border(bottom: BorderSide(color: K.lineSoft, width: 2)),
-        ),
-        child: Row(children: [
-          Avatar(index: profile.avatarIndex, size: 44),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(profile.nickname, style: T.pStrong),
-                Text('${profile.grade}. sınıf', style: T.pSmall),
-                FutureBuilder<String>(
-                  future: _summary,
-                  builder: (context, snap) => Text(snap.data ?? ' ',
-                      key: Key('summary-${profile.id}'), style: T.code),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        border: last
+            ? null
+            : const Border(bottom: BorderSide(color: K.lineSoft, width: 2)),
+      ),
+      child: Row(children: [
+        Avatar(index: profile.avatarIndex, size: 44),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(profile.nickname, style: T.pStrong),
+              Text('${profile.grade}. sınıf', style: T.pSmall),
+              FutureBuilder<String>(
+                future: _summary,
+                builder: (context, snap) => Text(snap.data ?? ' ',
+                    key: Key('summary-${profile.id}'), style: T.code),
+              ),
+              if (profile.grade < 4)
+                TextBtn(
+                  key: Key('promote-${profile.id}'),
+                  label: '${profile.grade + 1}. sınıfa geçir',
+                  fontSize: 14,
+                  onPressed: () => _promote(context),
                 ),
-                if (profile.grade < 4)
-                  TextBtn(
-                    key: Key('promote-${profile.id}'),
-                    label: '${profile.grade + 1}. sınıfa geçir',
-                    fontSize: 14,
-                    onPressed: () => _promote(context),
-                  ),
-              ],
-            ),
+            ],
           ),
-          CircleBtn(
-              key: Key('edit-${profile.id}'),
-              icon: DkIcons.pencil,
-              label: '${profile.nickname} profilini düzenle',
-              iconSize: 20,
-              onPressed: () => _edit(context)),
-          const SizedBox(width: 8),
-          CircleBtn(
-              key: Key('delete-${profile.id}'),
-              icon: DkIcons.trash,
-              label: '${profile.nickname} profilini sil',
-              iconSize: 20,
-              onPressed: () => _delete(context)),
-        ]),
-      );
+        ),
+        CircleBtn(
+            key: Key('edit-${profile.id}'),
+            icon: DkIcons.pencil,
+            label: '${profile.nickname} profilini düzenle',
+            iconSize: 20,
+            onPressed: () => _edit(context)),
+        const SizedBox(width: 8),
+        CircleBtn(
+            key: Key('delete-${profile.id}'),
+            icon: DkIcons.trash,
+            label: '${profile.nickname} profilini sil',
+            iconSize: 20,
+            onPressed: () => _delete(context)),
+      ]),
+    );
   }
 }
-
 
 /// Ayarlar › Ses paketleri: her çocuğun sınıfının paketi cihazda mı,
 /// ne kadar yer tutuyor; elle indirme ve yalnızca Wi-Fi ayarı.
@@ -1255,7 +1255,8 @@ class _AudioPackCardState extends State<AudioPackCard> {
   Future<Map<int, AudioPackStatus>>? _status;
   String _key = '';
 
-  Future<Map<int, AudioPackStatus>> _load(AppState app, List<int> grades) async =>
+  Future<Map<int, AudioPackStatus>> _load(
+          AppState app, List<int> grades) async =>
       {for (final g in grades) g: await app.speaker.packs.status(g)};
 
   static String _mb(int bytes) => '${(bytes / 1e6).round()} MB';

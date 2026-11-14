@@ -15,7 +15,8 @@ const audioPackBase =
 
 /// Bir sınıf paketinin cihazdaki durumu.
 class AudioPackStatus {
-  const AudioPackStatus({required this.installed, this.count = 0, this.bytes = 0});
+  const AudioPackStatus(
+      {required this.installed, this.count = 0, this.bytes = 0});
   final bool installed;
   final int count;
   final int bytes;
