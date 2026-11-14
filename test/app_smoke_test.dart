@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:ders_kumbarasi/app/app_state.dart';
+import 'package:ders_kumbarasi/app/reminder.dart';
 import 'package:ders_kumbarasi/app/speaker.dart';
 import 'package:ders_kumbarasi/data/content_repository.dart';
 import 'package:ders_kumbarasi/data/models.dart';
@@ -520,6 +521,40 @@ void main() {
     expect(state.settings.wifiOnlyAudio, isTrue);
     await tapKey(t, 'set-wifi');
     expect(state.settings.wifiOnlyAudio, isFalse);
+  });
+
+  testWidgets('günlük hatırlatma: aç, saat seç, kapat', (t) async {
+    final rem = NoopReminder();
+    final state = AppState(
+      store: ProgressStore(MemoryStorage()),
+      content: ContentRepository(_load),
+      speaker: NoopSpeaker(),
+      reminder: rem,
+      clock: () => DateTime(2026, 11, 2, 17),
+    );
+    await state.load();
+    await t.pumpWidget(AppScope(
+        state: state,
+        child: MaterialApp(theme: K.theme(), home: const SettingsScreen())));
+    await t.pumpAndSettle();
+    await t.scrollUntilVisible(find.byKey(const Key('reminder')), 200,
+        scrollable: find.byType(Scrollable).first);
+    await t.pumpAndSettle();
+    await tapKey(t, 'set-remind');
+    expect(state.settings.reminderHour, 18);
+    await state.rescheduleReminder();
+    // saat 17: bugün 18:00
+    expect(rem.scheduled, DateTime(2026, 11, 2, 18));
+    await tapKey(t, 'remind-16');
+    expect(state.settings.reminderHour, 16);
+    await state.rescheduleReminder();
+    // 16:00 geçti: yarın
+    expect(rem.scheduled, DateTime(2026, 11, 3, 16));
+    expect(AppSettings.fromJson(state.settings.toJson()).reminderHour, 16);
+    await tapKey(t, 'set-remind');
+    expect(state.settings.reminderHour, -1);
+    await state.rescheduleReminder();
+    expect(rem.scheduled, isNull);
   });
 
   test('ses ayarları kayda yazılır', () {

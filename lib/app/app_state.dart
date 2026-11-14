@@ -15,6 +15,7 @@ import '../game/items.dart';
 import '../game/quests.dart';
 import '../game/town_layout.dart';
 import '../game/world.dart';
+import 'reminder.dart';
 import 'speaker.dart';
 
 class AppSettings {
@@ -31,6 +32,7 @@ class AppSettings {
     this.readOptions = true,
     this.slowReading = false,
     this.wifiOnlyAudio = true,
+    this.reminderHour = -1,
   });
 
   final int dailyLimitMinutes;
@@ -61,6 +63,9 @@ class AppSettings {
   /// Ses paketi yalnızca Wi-Fi'de kendiliğinden iner.
   final bool wifiOnlyAudio;
 
+  /// Günlük hatırlatma saati (-1 kapalı).
+  final int reminderHour;
+
   /// Okuma hızı çarpanı.
   double get speechFactor => slowReading ? 0.85 : 1.0;
 
@@ -82,6 +87,7 @@ class AppSettings {
     bool? readOptions,
     bool? slowReading,
     bool? wifiOnlyAudio,
+    int? reminderHour,
   }) =>
       AppSettings(
         dailyLimitMinutes: dailyLimitMinutes ?? this.dailyLimitMinutes,
@@ -96,6 +102,7 @@ class AppSettings {
         readOptions: readOptions ?? this.readOptions,
         slowReading: slowReading ?? this.slowReading,
         wifiOnlyAudio: wifiOnlyAudio ?? this.wifiOnlyAudio,
+        reminderHour: reminderHour ?? this.reminderHour,
       );
 
   AppSettings withQuiet(bool on) => on
@@ -115,6 +122,7 @@ class AppSettings {
         'ropt': readOptions,
         'slow': slowReading,
         'wifi': wifiOnlyAudio,
+        'remind': reminderHour,
       };
 
   factory AppSettings.fromJson(Map<String, Object?> j) => AppSettings(
@@ -130,6 +138,7 @@ class AppSettings {
         readOptions: j['ropt'] as bool? ?? true,
         slowReading: j['slow'] as bool? ?? false,
         wifiOnlyAudio: j['wifi'] as bool? ?? true,
+        reminderHour: (j['remind'] as num?)?.toInt() ?? -1,
       );
 
   /// Sessiz saatlerde mi? (ör. 21:00–07:00)
@@ -162,11 +171,14 @@ class AppState extends ChangeNotifier {
     required this.content,
     required this.speaker,
     DateTime Function()? clock,
-  }) : clock = clock ?? DateTime.now;
+    Reminder? reminder,
+  })  : clock = clock ?? DateTime.now,
+        reminder = reminder ?? NoopReminder();
 
   final ProgressStore store;
   final ContentRepository content;
   final Speaker speaker;
+  final Reminder reminder;
   final DateTime Function() clock;
 
   bool loaded = false;
@@ -201,11 +213,14 @@ class AppState extends ChangeNotifier {
     speaker.speed = settings.speechFactor;
     loaded = true;
     notifyListeners();
+    unawaited(rescheduleReminder());
   }
 
   Future<void> updateSettings(AppSettings s) async {
+    final remindChanged = s.reminderHour != settings.reminderHour;
     settings = s;
     speaker.speed = s.speechFactor;
+    if (remindChanged) unawaited(rescheduleReminder());
     notifyListeners();
     await _guard(() => store.saveSettings(s.toJson()));
   }
@@ -559,6 +574,30 @@ class AppState extends ChangeNotifier {
     b.add(QuestKind.newTopic, newTopics);
     b.add(QuestKind.review, reviewed);
     thisTrip().days.add(dayKey(clock()));
+    unawaited(rescheduleReminder());
+  }
+
+  /// Hatırlatmayı yeniden kurar: bugün çalışıldıysa yarına, değilse bugünün
+  /// saatine (geçtiyse yarına).
+  Future<void> rescheduleReminder() async {
+    final h = settings.reminderHour;
+    if (h < 0) {
+      await reminder.cancel();
+      return;
+    }
+    final now = clock();
+    final today = dayKey(now);
+    var studied = false;
+    for (final p in profiles) {
+      final pr = active?.id == p.id && progress != null
+          ? progress!
+          : await store.loadProgress(p.id);
+      if (pr.lastSessionDay == today) studied = true;
+    }
+    var at = DateTime(now.year, now.month, now.day, h);
+    if (studied || !at.isAfter(now)) at = at.add(const Duration(days: 1));
+    await reminder.schedule(at, 'Anka seni bekliyor!',
+        'Bugünkü kısa macera hazır. Birlikte biraz çalışalım mı?');
   }
 
   /// Tamamlanan isteğin ödülünü alır.

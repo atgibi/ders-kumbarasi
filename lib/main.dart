@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'app/app_state.dart';
+import 'app/reminder.dart';
 import 'app/speaker.dart';
 import 'data/content_repository.dart';
 import 'data/progress_store.dart';
@@ -29,6 +30,7 @@ Future<void> main() async {
     store: ProgressStore(await createPlatformStorage()),
     content: ContentRepository(rootBundle.loadString),
     speaker: HybridSpeaker(),
+    reminder: createReminder(),
   );
   await applyDemo(state);
   runApp(DersKumbarasiApp(state: state));

@@ -376,7 +376,7 @@ const privacySections = [
   ),
   (
     'Sesli okuma',
-    'Sesli okuma, önceden seslendirilmiş kayıtlarla ya da cihazın kendi metin okuma motoruyla yapılır. Ders sesleri, çocuğun sınıfına göre bir ses paketi olarak GitHub (github.com) üzerinden bir kez indirilir ve cihazda saklanır; indirme sırasında yalnızca hangi sınıfın paketinin istendiği bilinir, çocuğa ya da cihaza ait hiçbir bilgi gönderilmez. Uygulamanın internete çıktığı tek durum budur; internet yoksa cihazın sesi kullanılır. Metinler uygulama tarafından herhangi bir sunucuya gönderilmez. Cihazınızın metin okuma motorunun çalışma şekli, cihaz üreticisinin politikasına tabidir.'
+    'Sesli okuma, önceden seslendirilmiş kayıtlarla ya da cihazın kendi metin okuma motoruyla yapılır. Ders sesleri, çocuğun sınıfına göre bir ses paketi olarak GitHub (github.com) üzerinden bir kez indirilir ve cihazda saklanır; indirme sırasında yalnızca hangi sınıfın paketinin istendiği bilinir, çocuğa ya da cihaza ait hiçbir bilgi gönderilmez. Uygulamanın internete çıktığı tek durum budur; internet yoksa cihazın sesi kullanılır. Metinler uygulama tarafından herhangi bir sunucuya gönderilmez. Cihazınızın metin okuma motorunun çalışma şekli, cihaz üreticisinin politikasına tabidir. Veli isterse Ayarlar'dan günlük hatırlatma bildirimi açabilir; bu bildirim cihazın kendisinde kurulur, hiçbir sunucuya gitmez.'
   ),
   (
     'Yedekleme',

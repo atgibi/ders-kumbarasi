@@ -945,6 +945,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 12),
                 const AudioPackCard(),
                 const SizedBox(height: 12),
+                const ReminderCard(),
+                const SizedBox(height: 12),
                 DkCard(
                   hand: false,
                   padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
@@ -1244,6 +1246,72 @@ class _ProfileRowState extends State<_ProfileRow> {
 
 /// Ayarlar › Ses paketleri: her çocuğun sınıfının paketi cihazda mı,
 /// ne kadar yer tutuyor; elle indirme ve yalnızca Wi-Fi ayarı.
+/// Ayarlar › Günlük hatırlatma: açılınca bildirim izni istenir; saat seçilir.
+/// O gün çalışıldıysa bildirim ertesi güne kayar.
+class ReminderCard extends StatelessWidget {
+  const ReminderCard({super.key});
+
+  static const hours = [16, 17, 18, 19, 20];
+
+  @override
+  Widget build(BuildContext context) {
+    final app = AppScope.of(context);
+    final s = app.settings;
+    final on = s.reminderHour >= 0;
+    return DkCard(
+      key: const Key('reminder'),
+      hand: false,
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ToggleRow(
+            key: const Key('set-remind'),
+            boxed: false,
+            parent: true,
+            title: 'Günlük hatırlatma',
+            subtitle: 'O gün çalışılmadıysa seçtiğiniz saatte tek bildirim',
+            value: on,
+            onChanged: (v) async {
+              if (!v) {
+                await app.updateSettings(s.copyWith(reminderHour: -1));
+                return;
+              }
+              final ok = await app.reminder.requestPermission();
+              if (!ok) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                          'Bildirim izni verilmedi. Telefon ayarlarından açabilirsiniz.')));
+                }
+                return;
+              }
+              await app.updateSettings(s.copyWith(reminderHour: 18));
+            },
+          ),
+          if (on) ...[
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final h in hours)
+                  ChoiceChip(
+                    key: Key('remind-$h'),
+                    label: Text('$h:00'),
+                    selected: s.reminderHour == h,
+                    onSelected: (_) =>
+                        app.updateSettings(s.copyWith(reminderHour: h)),
+                  ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class AudioPackCard extends StatefulWidget {
   const AudioPackCard({super.key});
 
