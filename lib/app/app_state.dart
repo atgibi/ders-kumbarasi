@@ -29,6 +29,8 @@ class AppSettings {
     this.premium = false,
     this.effectsOn = true,
     this.readOptions = true,
+    this.slowReading = false,
+    this.wifiOnlyAudio = true,
   });
 
   final int dailyLimitMinutes;
@@ -53,6 +55,15 @@ class AppSettings {
   /// Şıkka dokununca şık sesli okunur.
   final bool readOptions;
 
+  /// Bütün okumalar biraz daha yavaş.
+  final bool slowReading;
+
+  /// Ses paketi yalnızca Wi-Fi'de kendiliğinden iner.
+  final bool wifiOnlyAudio;
+
+  /// Okuma hızı çarpanı.
+  double get speechFactor => slowReading ? 0.85 : 1.0;
+
   bool get quietEnabled => quietStartHour != quietEndHour;
 
   /// Çocuk alanında yazı büyütme katsayısı.
@@ -69,6 +80,8 @@ class AppSettings {
     bool? premium,
     bool? effectsOn,
     bool? readOptions,
+    bool? slowReading,
+    bool? wifiOnlyAudio,
   }) =>
       AppSettings(
         dailyLimitMinutes: dailyLimitMinutes ?? this.dailyLimitMinutes,
@@ -81,6 +94,8 @@ class AppSettings {
         premium: premium ?? this.premium,
         effectsOn: effectsOn ?? this.effectsOn,
         readOptions: readOptions ?? this.readOptions,
+        slowReading: slowReading ?? this.slowReading,
+        wifiOnlyAudio: wifiOnlyAudio ?? this.wifiOnlyAudio,
       );
 
   AppSettings withQuiet(bool on) => on
@@ -98,6 +113,8 @@ class AppSettings {
         'premium': premium,
         'sfx': effectsOn,
         'ropt': readOptions,
+        'slow': slowReading,
+        'wifi': wifiOnlyAudio,
       };
 
   factory AppSettings.fromJson(Map<String, Object?> j) => AppSettings(
@@ -111,6 +128,8 @@ class AppSettings {
         premium: j['premium'] as bool? ?? false,
         effectsOn: j['sfx'] as bool? ?? true,
         readOptions: j['ropt'] as bool? ?? true,
+        slowReading: j['slow'] as bool? ?? false,
+        wifiOnlyAudio: j['wifi'] as bool? ?? true,
       );
 
   /// Sessiz saatlerde mi? (ör. 21:00–07:00)
@@ -179,12 +198,14 @@ class AppState extends ChangeNotifier {
     _noteIssue();
     settings = AppSettings.fromJson(await store.loadSettings());
     _noteIssue();
+    speaker.speed = settings.speechFactor;
     loaded = true;
     notifyListeners();
   }
 
   Future<void> updateSettings(AppSettings s) async {
     settings = s;
+    speaker.speed = s.speechFactor;
     notifyListeners();
     await _guard(() => store.saveSettings(s.toJson()));
   }
@@ -207,6 +228,20 @@ class AppState extends ChangeNotifier {
     if (settings.soundOn && text.trim().isNotEmpty) {
       speaker.speak(text, slow: slow);
     }
+  }
+
+  /// Kimsenin kullanmadığı sınıfların ses paketleri silinir (yer açılır).
+  void _audioGradesChanged() =>
+      unawaited(speaker.packs.keepOnly({for (final p in profiles) p.grade}));
+
+  /// Velinin "Şimdi indir" düğmesi: mobil veride de indirir.
+  Future<void> downloadAudio(int grade, {bool force = false}) =>
+      speaker.prepare(grade, force: force);
+
+  /// Sınıf atlatma: ilerleme silinmez, yeni sınıfın dersleri açılır.
+  Future<void> promoteChild(ChildProfile p) async {
+    if (p.grade >= 4) return;
+    await updateChild(p.copyWith(grade: p.grade + 1));
   }
 
   /// Kısa efekt sesi (ayar kapalıysa sessiz).
@@ -255,9 +290,14 @@ class AppState extends ChangeNotifier {
       updateSettings(settings.copyWith(onboarded: true));
 
   Future<void> updateChild(ChildProfile p) async {
+    final before = profiles.where((x) => x.id == p.id).firstOrNull;
     profiles = [for (final x in profiles) x.id == p.id ? p : x];
     await _guard(() => store.saveProfiles(profiles));
+    if (before != null && before.grade != p.grade) _audioGradesChanged();
     if (active?.id == p.id) {
+      if (before?.grade != p.grade) {
+        unawaited(speaker.prepare(p.grade, wifiOnly: settings.wifiOnlyAudio));
+      }
       active = p;
       if (!Subject.forGrade(p.grade).contains(subject)) {
         subject = await _defaultSubject(p.grade);
@@ -269,6 +309,7 @@ class AppState extends ChangeNotifier {
   Future<void> deleteChild(String id) async {
     await _guard(() => store.deleteChild(id));
     profiles = profiles.where((p) => p.id != id).toList();
+    _audioGradesChanged();
     if (active?.id == id) {
       active = null;
       progress = null;
@@ -300,7 +341,7 @@ class AppState extends ChangeNotifier {
   Future<void> selectChild(ChildProfile p) async {
     active = p;
     // Sınıfın ders sesleri arka planda hazırlanır (gerekirse bir kez iner)
-    unawaited(speaker.prepare(p.grade));
+    unawaited(speaker.prepare(p.grade, wifiOnly: settings.wifiOnlyAudio));
     subject = await _defaultSubject(p.grade);
     progress = await store.loadProgress(p.id);
     _noteIssue();

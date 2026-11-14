@@ -3,4 +3,4 @@ library;
 
 import 'audio_packs.dart';
 
-AudioPacks createAudioPacks() => const NoAudioPacks();
+AudioPacks createAudioPacks() => NoAudioPacks();

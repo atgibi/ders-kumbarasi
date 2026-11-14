@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'audio_packs.dart';
@@ -13,18 +15,34 @@ AudioPacks createAudioPacks() => FileAudioPacks();
 
 class FileAudioPacks implements AudioPacks {
   FileAudioPacks(
-      {Future<Directory> Function()? root, this.base = audioPackBase})
-      : _rootOf = root ?? getApplicationSupportDirectory;
+      {Future<Directory> Function()? root,
+      this.base = audioPackBase,
+      Future<bool> Function()? unmetered})
+      : _rootOf = root ?? getApplicationSupportDirectory,
+        _unmetered = unmetered ?? _onWifi;
 
   final Future<Directory> Function() _rootOf;
   final String base;
+  final Future<bool> Function() _unmetered;
   final Set<int> _busy = {};
   Map<String, String>? _index;
+  final ValueNotifier<AudioDownload?> _downloading = ValueNotifier(null);
+
+  @override
+  ValueListenable<AudioDownload?> get downloading => _downloading;
+
+  /// Wi-Fi ya da kablolu bağlantı var mı (mobil veri değil)?
+  static Future<bool> _onWifi() async {
+    final r = await Connectivity().checkConnectivity();
+    return r.contains(ConnectivityResult.wifi) ||
+        r.contains(ConnectivityResult.ethernet);
+  }
 
   Future<Directory> _root() async => Directory('${(await _rootOf()).path}/ses');
 
   @override
-  Future<void> ensure(int grade) async {
+  Future<void> ensure(int grade,
+      {bool wifiOnly = false, bool force = false}) async {
     if (!_busy.add(grade)) return;
     try {
       final root = await _root();
@@ -36,11 +54,14 @@ class FileAudioPacks implements AudioPacks {
       final g = info['$grade'];
       if (g is! Map) return;
       final version = '${g['version']}';
-      if (await mark.exists() &&
+      if (!force &&
+          await mark.exists() &&
           (await mark.readAsString()).trim() == version) {
         return;
       }
-      final bytes = await _get('$base/${g['file']}');
+      if (wifiOnly && !await _unmetered()) return; // mobil veride bekle
+      _downloading.value = AudioDownload(grade, 0);
+      final bytes = await _get('$base/${g['file']}', grade: grade);
       if (bytes.length != (g['bytes'] as num?)?.toInt()) return; // yarım indi
       final fresh = Directory('${root.path}/$grade.yeni');
       if (await fresh.exists()) await fresh.delete(recursive: true);
@@ -55,6 +76,45 @@ class FileAudioPacks implements AudioPacks {
       // internet yok ya da sunucu cevap vermedi: cihaz sesi yeterli
     } finally {
       _busy.remove(grade);
+      if (_downloading.value?.grade == grade) _downloading.value = null;
+    }
+  }
+
+  @override
+  Future<AudioPackStatus> status(int grade) async {
+    try {
+      final dir = Directory('${(await _root()).path}/$grade');
+      if (!await File('${dir.path}/surum.txt').exists()) {
+        return AudioPackStatus.none;
+      }
+      var n = 0, size = 0;
+      await for (final e in dir.list()) {
+        if (e is File && e.path.endsWith('.mp3')) {
+          n++;
+          size += await e.length();
+        }
+      }
+      return AudioPackStatus(installed: true, count: n, bytes: size);
+    } on Object {
+      return AudioPackStatus.none;
+    }
+  }
+
+  @override
+  Future<void> keepOnly(Set<int> grades) async {
+    try {
+      final root = await _root();
+      if (!await root.exists()) return;
+      await for (final e in root.list()) {
+        final name = e.uri.pathSegments.where((x) => x.isNotEmpty).last;
+        final g = int.tryParse(name);
+        if (e is Directory && g != null && !grades.contains(g)) {
+          await e.delete(recursive: true);
+          _index = null;
+        }
+      }
+    } on Object {
+      // silinemezse yer kaplamaya devam eder, zararı yok
     }
   }
 
@@ -81,7 +141,7 @@ class FileAudioPacks implements AudioPacks {
     return idx[id];
   }
 
-  Future<Uint8List> _get(String url) async {
+  Future<Uint8List> _get(String url, {int? grade}) async {
     final client = HttpClient()
       ..connectionTimeout = const Duration(seconds: 15);
     try {
@@ -91,8 +151,13 @@ class FileAudioPacks implements AudioPacks {
         throw HttpException('HTTP ${res.statusCode}', uri: Uri.parse(url));
       }
       final b = BytesBuilder(copy: false);
+      final total = res.contentLength;
       await for (final chunk in res.timeout(const Duration(seconds: 60))) {
         b.add(chunk);
+        if (grade != null) {
+          _downloading.value =
+              AudioDownload(grade, total > 0 ? b.length / total : null);
+        }
       }
       return b.takeBytes();
     } finally {

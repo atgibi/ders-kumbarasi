@@ -11,6 +11,7 @@ import 'package:ders_kumbarasi/data/progress_store.dart';
 import 'package:ders_kumbarasi/game/game_state.dart';
 import 'package:ders_kumbarasi/game/world.dart';
 import 'package:ders_kumbarasi/main.dart';
+import 'package:ders_kumbarasi/ui/screens/parent_screen.dart';
 import 'package:ders_kumbarasi/ui/screens/session_screen.dart';
 import 'package:ders_kumbarasi/ui/theme.dart';
 import 'package:ders_kumbarasi/ui/widgets/kit.dart';
@@ -483,6 +484,40 @@ void main() {
     expect(has('path-list'), isTrue);
   });
 
+  testWidgets('profiller: haftalık özet, sınıf atlatma; ses paketi kartı',
+      (t) async {
+    reduceMotion(t);
+    phone(t);
+    final storage = MemoryStorage();
+    final store = ProgressStore(storage);
+    await store.saveProfiles(
+        const [ChildProfile(id: 'a', nickname: 'Can', grade: 2, avatar: '0')]);
+    await seedHero(store, 'a');
+    final state = makeState(storage);
+    await state.load();
+    await t.pumpWidget(AppScope(
+        state: state,
+        child: MaterialApp(theme: K.theme(), home: const ProfilesScreen())));
+    await t.pumpAndSettle();
+    expect(find.textContaining('Bu hafta 0 dk'), findsOneWidget);
+    await tapKey(t, 'promote-a');
+    await tapKey(t, 'confirm-promote');
+    expect(state.profiles.single.grade, 3);
+    expect(find.text('3. sınıf'), findsOneWidget);
+
+    await t.pumpWidget(AppScope(
+        state: state,
+        child: MaterialApp(theme: K.theme(), home: const SettingsScreen())));
+    await t.pumpAndSettle();
+    await t.scrollUntilVisible(find.byKey(const Key('audio-packs')), 200,
+        scrollable: find.byType(Scrollable).first);
+    await t.pumpAndSettle();
+    expect(find.text('İndirilmedi'), findsOneWidget);
+    expect(state.settings.wifiOnlyAudio, isTrue);
+    await tapKey(t, 'set-wifi');
+    expect(state.settings.wifiOnlyAudio, isFalse);
+  });
+
   test('ses ayarları kayda yazılır', () {
     const s = AppSettings();
     expect(s.effectsOn, isTrue);
@@ -491,6 +526,13 @@ void main() {
         s.copyWith(effectsOn: false, readOptions: false).toJson());
     expect(back.effectsOn, isFalse);
     expect(back.readOptions, isFalse);
+    expect(s.slowReading, isFalse);
+    expect(s.wifiOnlyAudio, isTrue);
+    final b2 = AppSettings.fromJson(
+        s.copyWith(slowReading: true, wifiOnlyAudio: false).toJson());
+    expect(b2.slowReading, isTrue);
+    expect(b2.speechFactor, lessThan(1));
+    expect(b2.wifiOnlyAudio, isFalse);
   });
 
   test('sessiz saat hesabı', () {

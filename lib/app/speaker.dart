@@ -23,7 +23,13 @@ abstract class Speaker {
   Future<bool> checkAvailable();
 
   /// Çocuğun sınıfının kayıtlı seslerini hazırlar (gerekirse indirir).
-  Future<void> prepare(int grade);
+  Future<void> prepare(int grade, {bool wifiOnly = false, bool force = false});
+
+  /// Sınıf ses paketleri (ayarlar ekranında durum ve indirme için).
+  AudioPacks get packs;
+
+  /// Okuma hızı çarpanı (1 normal, < 1 daha yavaş).
+  set speed(double v);
 
   /// Parçaları art arda okur (ör. "Doğrusu:" + cevap + açıklama): her
   /// parçanın kaydı varsa kayıtlar, yoksa hepsi cihaz sesiyle.
@@ -45,7 +51,14 @@ class NoopSpeaker implements Speaker {
   @override
   Future<bool> checkAvailable() async => false;
   @override
-  Future<void> prepare(int grade) async {}
+  Future<void> prepare(int grade,
+      {bool wifiOnly = false, bool force = false}) async {}
+  final AudioPacks _packs = NoAudioPacks();
+  @override
+  AudioPacks get packs => _packs;
+  double currentSpeed = 1;
+  @override
+  set speed(double v) => currentSpeed = v;
   @override
   Future<void> speakAll(List<String> parts, {bool slow = false}) async =>
       spoken.add(speakable(parts.join(' ')));
@@ -124,7 +137,16 @@ class TtsSpeaker implements Speaker {
   }
 
   @override
-  Future<void> prepare(int grade) async {}
+  Future<void> prepare(int grade,
+      {bool wifiOnly = false, bool force = false}) async {}
+
+  final AudioPacks _none = NoAudioPacks();
+  @override
+  AudioPacks get packs => _none;
+
+  double _speed = 1;
+  @override
+  set speed(double v) => _speed = v;
 
   @override
   Future<void> speakAll(List<String> parts, {bool slow = false}) =>
@@ -158,7 +180,7 @@ class TtsSpeaker implements Speaker {
     if (t.isEmpty) return;
     try {
       await _tts.stop();
-      await _tts.setSpeechRate(slow ? 0.3 : 0.45);
+      await _tts.setSpeechRate((slow ? 0.3 : 0.45) * _speed);
       await _tts.speak(t);
     } on Object {
       // sesli okuma hatası uygulamayı durdurmamalı
@@ -207,7 +229,19 @@ class HybridSpeaker implements Speaker {
       (await _manifest()).isNotEmpty || await _tts.checkAvailable();
 
   @override
-  Future<void> prepare(int grade) => _packs.ensure(grade);
+  Future<void> prepare(int grade,
+          {bool wifiOnly = false, bool force = false}) =>
+      _packs.ensure(grade, wifiOnly: wifiOnly, force: force);
+
+  @override
+  AudioPacks get packs => _packs;
+
+  double _speed = 1;
+  @override
+  set speed(double v) {
+    _speed = v;
+    _tts.speed = v;
+  }
 
   /// Efektler ayrı çalar: okumayı kesmez, kısık ve yumuşaktır.
   final AudioPlayer _sfx = AudioPlayer();
@@ -253,7 +287,7 @@ class HybridSpeaker implements Speaker {
       try {
         await _tts.stop();
         await _player.stop();
-        await _player.setPlaybackRate(slow ? 0.75 : 1.0);
+        await _player.setPlaybackRate((slow ? 0.75 : 1.0) * _speed);
         for (final src in srcs) {
           if (turn != _turn) return;
           final done = srcs.length > 1 ? _player.onPlayerComplete.first : null;

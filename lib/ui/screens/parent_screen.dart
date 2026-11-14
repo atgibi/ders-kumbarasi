@@ -5,6 +5,7 @@ library;
 import 'package:flutter/material.dart';
 
 import '../../app/app_state.dart';
+import '../../app/audio_packs.dart';
 import '../../core/srs/leitner.dart';
 import '../../data/models.dart';
 import '../../data/progress_store.dart';
@@ -920,6 +921,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   const Divider(height: 2, thickness: 2, color: K.lineSoft),
                   ToggleRow(
+                    key: const Key('set-slow'),
+                    boxed: false,
+                    parent: true,
+                    title: 'Yavaş okuma',
+                    subtitle: 'Bütün sesler biraz daha yavaş okunur',
+                    value: s.slowReading,
+                    onChanged: (v) =>
+                        app.updateSettings(s.copyWith(slowReading: v)),
+                  ),
+                  const Divider(height: 2, thickness: 2, color: K.lineSoft),
+                  ToggleRow(
                     key: const Key('set-reduce'),
                     boxed: false,
                     parent: true,
@@ -930,6 +942,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         app.updateSettings(s.copyWith(reduceMotion: v)),
                   ),
                 ]),
+                const SizedBox(height: 12),
+                const AudioPackCard(),
                 const SizedBox(height: 12),
                 DkCard(
                   hand: false,
@@ -1048,10 +1062,66 @@ class ProfilesScreen extends StatelessWidget {
   }
 }
 
-class _ProfileRow extends StatelessWidget {
+class _ProfileRow extends StatefulWidget {
   const _ProfileRow({required this.profile, required this.last});
   final ChildProfile profile;
   final bool last;
+
+  @override
+  State<_ProfileRow> createState() => _ProfileRowState();
+}
+
+class _ProfileRowState extends State<_ProfileRow> {
+  ChildProfile get profile => widget.profile;
+  bool get last => widget.last;
+  Future<String>? _summary;
+  String _for = '';
+
+  /// "Bu hafta 34 dk · 12 konu"
+  Future<String> _load(AppState app) async {
+    final p = app.active?.id == profile.id && app.progress != null
+        ? app.progress!
+        : await app.store.loadProgress(profile.id);
+    final mins = app.week(p).fold<int>(0, (a, d) => a + d.minutes);
+    return 'Bu hafta $mins dk · ${p.startedOutcomes.length} konu';
+  }
+
+  Future<void> _promote(BuildContext context) async {
+    final app = AppScope.read(context);
+    final next = profile.grade + 1;
+    final ok = await showDkSheet<bool>(
+      context,
+      builder: (ctx) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text('${profile.nickname} $next. sınıfa geçsin mi?',
+              style: const TextStyle(
+                  fontSize: 21, fontWeight: FontWeight.w900, color: K.ink)),
+          const SizedBox(height: 8),
+          Text(
+              'Kahraman, kasaba, eşyalar ve önceki sınıfın tekrarları kalır. $next. sınıfın dersleri ve ses paketi açılır.',
+              style: T.pBody),
+          const SizedBox(height: 16),
+          Row(children: [
+            Expanded(
+                child: ChunkyButton(
+                    label: 'Vazgeç',
+                    kind: BtnKind.secondary,
+                    onPressed: () => Navigator.pop(ctx, false))),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ChunkyButton(
+                  key: const Key('confirm-promote'),
+                  label: 'Geçir',
+                  kind: BtnKind.good,
+                  onPressed: () => Navigator.pop(ctx, true)),
+            ),
+          ]),
+        ],
+      ),
+    );
+    if (ok == true) await app.promoteChild(profile);
+  }
 
   Future<void> _edit(BuildContext context) async {
     final app = AppScope.read(context);
@@ -1115,7 +1185,14 @@ class _ProfileRow extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) {
+    final app = AppScope.of(context);
+    final key = '${profile.id}|${profile.grade}|${app.progress?.lastSessionDay}';
+    if (_summary == null || key != _for) {
+      _for = key;
+      _summary = _load(app);
+    }
+    return Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
           border: last
@@ -1131,6 +1208,18 @@ class _ProfileRow extends StatelessWidget {
               children: [
                 Text(profile.nickname, style: T.pStrong),
                 Text('${profile.grade}. sınıf', style: T.pSmall),
+                FutureBuilder<String>(
+                  future: _summary,
+                  builder: (context, snap) => Text(snap.data ?? ' ',
+                      key: Key('summary-${profile.id}'), style: T.code),
+                ),
+                if (profile.grade < 4)
+                  TextBtn(
+                    key: Key('promote-${profile.id}'),
+                    label: '${profile.grade + 1}. sınıfa geçir',
+                    fontSize: 14,
+                    onPressed: () => _promote(context),
+                  ),
               ],
             ),
           ),
@@ -1149,4 +1238,158 @@ class _ProfileRow extends StatelessWidget {
               onPressed: () => _delete(context)),
         ]),
       );
+  }
+}
+
+
+/// Ayarlar › Ses paketleri: her çocuğun sınıfının paketi cihazda mı,
+/// ne kadar yer tutuyor; elle indirme ve yalnızca Wi-Fi ayarı.
+class AudioPackCard extends StatefulWidget {
+  const AudioPackCard({super.key});
+
+  @override
+  State<AudioPackCard> createState() => _AudioPackCardState();
+}
+
+class _AudioPackCardState extends State<AudioPackCard> {
+  Future<Map<int, AudioPackStatus>>? _status;
+  String _key = '';
+
+  Future<Map<int, AudioPackStatus>> _load(AppState app, List<int> grades) async =>
+      {for (final g in grades) g: await app.speaker.packs.status(g)};
+
+  static String _mb(int bytes) => '${(bytes / 1e6).round()} MB';
+
+  @override
+  Widget build(BuildContext context) {
+    final app = AppScope.of(context);
+    final s = app.settings;
+    final grades = {for (final p in app.profiles) p.grade}.toList()..sort();
+    return ValueListenableBuilder<AudioDownload?>(
+      valueListenable: app.speaker.packs.downloading,
+      builder: (context, dl, _) {
+        final key = '${grades.join(',')}|${dl?.grade}';
+        if (_status == null || key != _key) {
+          _key = key;
+          _status = _load(app, grades);
+        }
+        return DkCard(
+          key: const Key('audio-packs'),
+          hand: false,
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text('Ses paketleri', style: T.pStrong),
+              const SizedBox(height: 4),
+              const Text(
+                  'Ders sesleri her sınıf için bir kez indirilir, sonra internetsiz çalışır. İnene kadar cihazın kendi sesi okur.',
+                  style: T.pSmall),
+              const SizedBox(height: 8),
+              if (grades.isEmpty)
+                const Text('Henüz çocuk profili yok.', style: T.pSmall),
+              FutureBuilder<Map<int, AudioPackStatus>>(
+                future: _status,
+                builder: (context, snap) {
+                  final st = snap.data ?? const {};
+                  return Column(children: [
+                    for (final g in grades)
+                      _PackRow(
+                        grade: g,
+                        status: st[g],
+                        download: dl?.grade == g ? dl : null,
+                        sizeText: _mb,
+                        onDownload: () => app.downloadAudio(g,
+                            force: st[g]?.installed ?? false),
+                      ),
+                  ]);
+                },
+              ),
+              const Divider(height: 18, thickness: 2, color: K.lineSoft),
+              ToggleRow(
+                key: const Key('set-wifi'),
+                boxed: false,
+                parent: true,
+                title: 'Yalnızca Wi-Fi\'de kendiliğinden indir',
+                subtitle: 'Mobil veride yalnızca "İndir" düğmesiyle iner',
+                value: s.wifiOnlyAudio,
+                onChanged: (v) =>
+                    app.updateSettings(s.copyWith(wifiOnlyAudio: v)),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _PackRow extends StatelessWidget {
+  const _PackRow({
+    required this.grade,
+    required this.status,
+    required this.download,
+    required this.sizeText,
+    required this.onDownload,
+  });
+  final int grade;
+  final AudioPackStatus? status;
+  final AudioDownload? download;
+  final String Function(int) sizeText;
+  final VoidCallback onDownload;
+
+  @override
+  Widget build(BuildContext context) {
+    final st = status;
+    final dl = download;
+    final String line;
+    if (dl != null) {
+      line = dl.fraction == null
+          ? 'İniyor…'
+          : 'İniyor… %${(dl.fraction! * 100).round()}';
+    } else if (st == null) {
+      line = '…';
+    } else if (st.installed) {
+      line = 'Cihazda · ${st.count} ses · ${sizeText(st.bytes)}';
+    } else {
+      line = 'İndirilmedi';
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('$grade. sınıf', style: T.pBody),
+                  Text(line, key: Key('pack-status-$grade'), style: T.code),
+                ],
+              ),
+            ),
+            if (dl == null && st != null)
+              TextBtn(
+                key: Key('pack-download-$grade'),
+                label: st.installed ? 'Yeniden indir' : 'İndir',
+                onPressed: onDownload,
+              ),
+          ]),
+          if (dl != null) ...[
+            const SizedBox(height: 6),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: dl.fraction,
+                minHeight: 6,
+                color: K.primary,
+                backgroundColor: K.lineSoft,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }

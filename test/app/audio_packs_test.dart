@@ -83,6 +83,27 @@ void main() {
     expect(await packs.pathFor('0123456789abcdef'), isNull,
         reason: 'eski paket silinir');
 
+    // Durum: cihazda, kayıt sayısı ve boyutu
+    final st = await packs.status(2);
+    expect(st.installed, isTrue);
+    expect(st.count, 1);
+    expect((await packs.status(3)).installed, isFalse);
+
+    // Mobil veride (Wi-Fi yok) kendiliğinden inmez
+    final metered = FileAudioPacks(
+        root: () async => Directory('${tmp.path}/m')..createSync(),
+        base: 'http://127.0.0.1:${server.port}',
+        unmetered: () async => false);
+    await metered.ensure(2, wifiOnly: true);
+    expect((await metered.status(2)).installed, isFalse);
+    await metered.ensure(2); // "İndir" düğmesi
+    expect((await metered.status(2)).installed, isTrue);
+
+    // Kullanılmayan sınıf silinir
+    await packs.keepOnly({4});
+    expect((await packs.status(2)).installed, isFalse);
+    await packs.ensure(2);
+
     // Sunucu yoksa sessizce vazgeçer, eldeki kayıtlar kalır
     await server.close(force: true);
     await packs.ensure(2);
