@@ -4,6 +4,7 @@ library;
 import 'dart:convert';
 
 import '../core/srs/leitner.dart';
+import '../game/game_state.dart';
 
 class ChildProfile {
   const ChildProfile({
@@ -83,11 +84,16 @@ class ChildProgress {
     this.restWeek,
     Map<String, List<int>>? dailyAnswers,
     Map<String, List<Attempt>>? attempts,
+    GameState? game,
   })  : cards = cards ?? {},
+        game = game ?? GameState(),
         startedOutcomes = startedOutcomes ?? {},
         dailyMinutes = dailyMinutes ?? {},
         dailyAnswers = dailyAnswers ?? {},
         attempts = attempts ?? {};
+
+  /// Oyun durumu (kahraman, malzemeler, yapılar, sancaklar, defter).
+  final GameState game;
 
   /// 'YYYY-MM-DD' -> [cevaplanan, ilk denemede doğru].
   final Map<String, List<int>> dailyAnswers;
@@ -117,7 +123,8 @@ class ChildProgress {
 
   int streakDays;
 
-  /// Toplanan fındık (doğru cevap ve tamamlanan oturum ödülü).
+  /// Toplanan ışık (doğru cevap ve tamamlanan oturum ödülü). Eski sürümlerde
+  /// "fındık" adıyla tutuluyordu; kayıt anahtarı aynı kaldı.
   int nuts;
   String? lastSessionDay;
   int restDaysUsedThisWeek;
@@ -138,6 +145,7 @@ class ChildProgress {
           for (final e in attempts.entries)
             e.key: [for (final a in e.value) a.toJson()],
         },
+        'game': game.toJson(),
       };
 
   factory ChildProgress.fromJson(Map<String, Object?> j) {
@@ -165,6 +173,7 @@ class ChildProgress {
                 for (final x in (v! as List<Object?>))
                   if (Attempt.fromJson(x) case final a?) a
               ])),
+      game: GameState.fromJson(j['game']),
     );
   }
 }
@@ -357,10 +366,10 @@ class ProgressStore {
     try {
       j = jsonDecode(content) as Map<String, Object?>;
     } on Object {
-      throw const FormatException('Bu dosya bir Ders Kumbarası yedeği değil.');
+      throw const FormatException('Bu dosya bir Bilgelik Diyarı yedeği değil.');
     }
     if (j['uygulama'] != backupAppId) {
-      throw const FormatException('Bu dosya bir Ders Kumbarası yedeği değil.');
+      throw const FormatException('Bu dosya bir Bilgelik Diyarı yedeği değil.');
     }
     final List<ChildProfile> profiles;
     final Map<String, ChildProgress> progress;

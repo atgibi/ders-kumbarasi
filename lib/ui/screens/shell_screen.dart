@@ -3,18 +3,27 @@ import 'package:flutter/material.dart';
 import '../../app/app_state.dart';
 import '../../core/srs/leitner.dart';
 import '../../data/models.dart';
+import '../../game/world.dart';
 import '../theme.dart';
 import '../widgets/avatar.dart';
 import '../widgets/dk_icon.dart';
 import '../widgets/emoji_text.dart';
+import '../widgets/ikon.dart';
 import '../widgets/kit.dart';
 import '../widgets/mascot.dart';
+import '../game/hero_create_screen.dart';
+import '../game/kingdom_map.dart';
+import '../game/hero_figure.dart';
+import '../game/year_end.dart';
+import '../game/town_tab.dart';
+import '../widgets/hand.dart';
 import 'parent_gate.dart';
 import 'parent_screen.dart';
-import 'path_screen.dart';
 import 'system_screens.dart';
 
-/// Çocuğun ana kabuğu: Yol, Tekrar, Profil sekmeleri.
+/// Çocuğun ana kabuğu: Harita, Kasaba, Kahraman, Defter sekmeleri
+/// (Claude Design › Sekme çubuğu). Gök Adaları haritadan açılır.
+/// Kahramanı olmayan çocuk önce kahramanını oluşturur.
 class ShellScreen extends StatefulWidget {
   const ShellScreen({super.key});
 
@@ -36,6 +45,9 @@ class _ShellScreenState extends State<ShellScreen> {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final p = app.progress!;
+    if (p.game.hero == null) {
+      return HeroCreateScreen(onDone: (_) => setState(() => _tab = 0));
+    }
     final key = '${app.active?.id}|${p.cards.length}|${p.lastSessionDay}|'
         '${p.nuts}|${app.clock().hour}';
     if (_dueFuture == null || key != _dueKey) {
@@ -43,32 +55,36 @@ class _ShellScreenState extends State<ShellScreen> {
       _dueFuture = _totalDue();
     }
     return PopScope(
-      // Android geri tuşu: önce Yol sekmesine döner
+      // Android geri tuşu: önce Harita sekmesine döner
       canPop: _tab == 0,
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop && _tab != 0) setState(() => _tab = 0);
       },
       child: Scaffold(
         backgroundColor: K.bg,
-        body: SafeArea(
-          bottom: false,
-          child: ChildTextScale(
-            child: Column(children: [
-              _TopBar(tab: _tab),
-              if (app.saveFailed) const _SaveWarning(),
-              Expanded(
-                child: IndexedStack(
-                  index: _tab,
-                  children: [
-                    const PathScreen(),
-                    _ReviewTab(active: _tab == 1),
-                    const _ProfileTab(),
-                  ],
+        body: Stack(children: [
+          SafeArea(
+            bottom: false,
+            child: ChildTextScale(
+              child: Column(children: [
+                _TopBar(tab: _tab),
+                if (app.saveFailed) const _SaveWarning(),
+                Expanded(
+                  child: IndexedStack(
+                    index: _tab,
+                    children: const [
+                      KingdomMapTab(header: _SkyEntry()),
+                      TownTab(),
+                      _ProfileTab(),
+                      NotebookScreen(asTab: true),
+                    ],
+                  ),
                 ),
-              ),
-            ]),
+              ]),
+            ),
           ),
-        ),
+          const Positioned.fill(child: PaperGrain()),
+        ]),
         bottomNavigationBar: FutureBuilder<int>(
           future: _dueFuture,
           builder: (context, snap) => _TabBar(
@@ -116,82 +132,39 @@ class _TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = AppScope.of(context);
     final p = app.progress!;
-    final subject = app.subject!;
-    final (icon, tint, ink) = subjectStyle(subject);
     return Container(
       height: 68,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: K.line, width: 2))),
       child: Row(children: [
-        if (tab == 0)
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Pressable(
-                key: const Key('subject-picker'),
-                onTap: () => showSubjectSheet(context),
-                label: 'Ders seç: ${subject.label}',
-                excludeChildSemantics: true,
-                focusRadius: K.rMd,
-                builder: (context, down) => Container(
-                  constraints: const BoxConstraints(minHeight: 52),
-                  padding: const EdgeInsets.only(left: 6, right: 10),
-                  decoration: BoxDecoration(
-                    color: K.card,
-                    borderRadius: BorderRadius.circular(K.rMd),
-                    border: Border.all(color: K.line, width: 2),
-                    boxShadow: down
-                        ? null
-                        : const [
-                            BoxShadow(color: K.line, offset: Offset(0, 3))
-                          ],
-                  ),
-                  child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Container(
-                      width: 38,
-                      height: 38,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: tint, borderRadius: BorderRadius.circular(12)),
-                      child: DkIcon(icon, size: 22, color: ink),
-                    ),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(subject.label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w900,
-                              color: K.ink)),
-                    ),
-                    const SizedBox(width: 4),
-                    const DkIcon(DkIcons.down, size: 20, color: K.inkSoft),
-                  ]),
-                ),
-              ),
-            ),
-          )
-        else ...[
-          Text(tab == 1 ? 'Tekrar' : 'Profil',
+        Expanded(
+          child: Text(
+              const [
+                'Bilgelik Diyarı',
+                'Kasaba',
+                'Kahraman',
+                'Kahraman Defteri'
+              ][tab],
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.w900, color: K.ink)),
-          const Spacer(),
-        ],
+                  fontFamily: K.display,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: K.lacivert)),
+        ),
         _Counter(
           key: const Key('streak'),
-          icon: DkIcons.leaf,
+          icon: Ikon.mesale,
           color: K.leafInk,
           value: p.streakDays,
           spoken: '${p.streakDays} gündür birlikteyiz',
         ),
         _Counter(
           key: const Key('nuts'),
-          icon: DkIcons.nut,
+          icon: Ikon.isik,
           color: K.nutInk,
           value: p.nuts,
-          spoken: '${p.nuts} fındık',
+          spoken: '${p.nuts} ışık',
         ),
       ]),
     );
@@ -206,7 +179,7 @@ class _Counter extends StatelessWidget {
     required this.value,
     required this.spoken,
   });
-  final DkIcons icon;
+  final Ikon icon;
   final Color color;
   final int value;
   final String spoken;
@@ -221,11 +194,14 @@ class _Counter extends StatelessWidget {
           constraints: const BoxConstraints(minHeight: 52),
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
-            DkIcon(icon, size: icon == DkIcons.nut ? 28 : 26, color: color),
-            const SizedBox(width: 4),
+            IkonView(icon, size: 26),
+            const SizedBox(width: 3),
             Text('$value',
-                style: TextStyle(
-                    fontSize: 19, fontWeight: FontWeight.w900, color: color)),
+                style: const TextStyle(
+                    fontFamily: K.display,
+                    fontSize: 19,
+                    fontWeight: FontWeight.w800,
+                    color: K.murekkep)),
           ]),
         ),
       );
@@ -241,104 +217,284 @@ class _TabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const tabs = [
-      ('tab-path', 'Yol', DkIcons.map),
-      ('tab-review', 'Tekrar', DkIcons.again),
-      ('tab-profile', 'Profil', DkIcons.user),
+      ('tab-map', 'Harita', Ikon.harita),
+      ('tab-town', 'Kasaba', Ikon.kasaba),
+      ('tab-hero', 'Kahraman', Ikon.kalkan),
+      ('tab-notebook', 'Defter', Ikon.defter),
     ];
-    return Container(
-      decoration: const BoxDecoration(
-        color: K.card,
-        border: Border(top: BorderSide(color: K.line, width: 2)),
-      ),
-      padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
-      child: SafeArea(
-        top: false,
-        child: Row(children: [
-          for (var i = 0; i < tabs.length; i++)
-            Expanded(
-              child: Pressable(
-                key: Key(tabs[i].$1),
-                onTap: () => onTap(i),
-                selected: index == i,
-                label: i == 1 && badge > 0
-                    ? '${tabs[i].$2}, $badge tekrar bekliyor'
-                    : tabs[i].$2,
-                excludeChildSemantics: true,
-                focusRadius: 17,
-                builder: (context, down) {
-                  final sel = index == i;
-                  final fg = sel ? K.peachInk : K.inkSoft;
-                  return SizedBox(
-                    height: 64,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.center,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 34,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: sel ? K.peach : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(17)),
-                              child: DkIcon(tabs[i].$3, size: 26, color: fg),
-                            ),
-                            const SizedBox(height: 3),
-                            Text(tabs[i].$2,
-                                textScaler: TextScaler.noScaling,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight:
-                                        sel ? FontWeight.w900 : FontWeight.w700,
-                                    color: fg)),
-                          ],
-                        ),
-                        if (i == 1 && badge > 0)
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            child: Center(
-                              child: Transform.translate(
-                                offset: const Offset(26, 0),
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                      minWidth: 24, minHeight: 24),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: K.primary,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                        color: Colors.white, width: 2),
+    // Claude Design › Sekme çubuğu: kâğıt şerit, üstte el çizimi çizgi ve
+    // bayrak dizisi, seçili sekmede safran daire ve kök boya alt çizgi.
+    return CustomPaint(
+      foregroundPainter: const _BuntingPainter(),
+      child: Container(
+        color: K.kagit2,
+        padding: const EdgeInsets.fromLTRB(8, 10, 8, 4),
+        child: SafeArea(
+          top: false,
+          child: Row(children: [
+            for (var i = 0; i < tabs.length; i++)
+              Expanded(
+                child: Pressable(
+                  key: Key(tabs[i].$1),
+                  onTap: () => onTap(i),
+                  selected: index == i,
+                  label: i == 0 && badge > 0
+                      ? '${tabs[i].$2}, $badge tekrar bekliyor'
+                      : tabs[i].$2,
+                  excludeChildSemantics: true,
+                  focusRadius: 17,
+                  builder: (context, down) {
+                    final sel = index == i;
+                    return SizedBox(
+                      height: 66,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 44,
+                                height: 40,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: sel
+                                      ? K.safran
+                                      : down
+                                          ? K.kagit
+                                          : Colors.transparent,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: IkonView(tabs[i].$3, size: 30),
+                              ),
+                              const SizedBox(height: 1),
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(tabs[i].$2,
+                                    maxLines: 1,
+                                    textScaler: TextScaler.noScaling,
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: sel
+                                            ? FontWeight.w700
+                                            : FontWeight.w400,
+                                        color: K.murekkep)),
+                              ),
+                              SizedBox(
+                                width: 54,
+                                height: 6,
+                                child: sel
+                                    ? const CustomPaint(
+                                        painter: _UnderlinePainter())
+                                    : null,
+                              ),
+                            ],
+                          ),
+                          if (i == 0 && badge > 0)
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              child: Center(
+                                child: Transform.translate(
+                                  offset: const Offset(24, -2),
+                                  child: Container(
+                                    constraints: const BoxConstraints(
+                                        minWidth: 24, minHeight: 24),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: K.kok,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                          color: K.murekkep, width: 2),
+                                    ),
+                                    child: Text(badge > 99 ? '99+' : '$badge',
+                                        textAlign: TextAlign.center,
+                                        textScaler: TextScaler.noScaling,
+                                        style: const TextStyle(
+                                            fontFamily: K.display,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w800,
+                                            color: K.kagit3)),
                                   ),
-                                  child: Text(badge > 99 ? '99+' : '$badge',
-                                      textAlign: TextAlign.center,
-                                      textScaler: TextScaler.noScaling,
-                                      style: const TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w900,
-                                          color: K.ink)),
                                 ),
                               ),
                             ),
-                          ),
-                      ],
-                    ),
-                  );
-                },
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-        ]),
+          ]),
+        ),
       ),
     );
   }
 }
 
-/// B5 Tekrar sekmesi.
+/// Sekme çubuğunun üstündeki el çizimi çizgi ve kök boya bayrakçıklar.
+class _BuntingPainter extends CustomPainter {
+  const _BuntingPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width;
+    final line = Path()
+      ..moveTo(0, 0)
+      ..cubicTo(w * .2, -3, w * .41, 2, w * .62, -1)
+      ..cubicTo(w * .8, -3, w * .9, 1, w, -1);
+    final ink = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.6
+      ..color = K.murekkep;
+    final red = Paint()..color = K.kok;
+    final thin = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2
+      ..color = K.murekkep;
+    for (var x = 10.0; x < w; x += 26) {
+      final t = Path()
+        ..moveTo(x, 1)
+        ..lineTo(x + 5, 6)
+        ..lineTo(x + 10, 1)
+        ..close();
+      canvas.drawPath(t, red);
+      canvas.drawPath(t, thin);
+    }
+    canvas.drawPath(line, ink);
+  }
+
+  @override
+  bool shouldRepaint(_BuntingPainter old) => false;
+}
+
+/// Seçili sekmenin altındaki fırça çizgisi.
+class _UnderlinePainter extends CustomPainter {
+  const _UnderlinePainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Path()
+      ..moveTo(3, size.height * .6)
+      ..cubicTo(size.width * .3, 0, size.width * .6, size.height,
+          size.width - 3, size.height * .3);
+    canvas.drawPath(
+        p,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3
+          ..strokeCap = StrokeCap.round
+          ..color = K.kok);
+  }
+
+  @override
+  bool shouldRepaint(_UnderlinePainter old) => false;
+}
+
+/// Haritanın üstündeki Gök Adaları girişi: bekleyen tekrar sayısıyla.
+class _SkyEntry extends StatefulWidget {
+  const _SkyEntry();
+
+  @override
+  State<_SkyEntry> createState() => _SkyEntryState();
+}
+
+class _SkyEntryState extends State<_SkyEntry> {
+  Future<int>? _f;
+  String _key = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final app = AppScope.of(context);
+    final p = app.progress!;
+    final key =
+        '${app.active?.id}|${p.cards.length}|${p.lastSessionDay}|${p.nuts}';
+    if (_f == null || key != _key) {
+      _key = key;
+      _f = app.dueBySubject().then((l) => l.fold<int>(0, (s, e) => s + e.$2));
+    }
+    return FutureBuilder<int>(
+      future: _f,
+      builder: (context, snap) {
+        final due = snap.data ?? 0;
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(12, 4, 12, 2),
+          child: Pressable(
+            key: const Key('sky-open'),
+            label:
+                due > 0 ? 'Gök Adaları: $due tekrar bekliyor' : 'Gök Adaları',
+            onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
+                builder: (_) => const SkyIslandsScreen())),
+            builder: (context, down) => HandBox(
+              style: HandStyle.kart.copyWith(
+                  fill:
+                      down ? const Color(0xFFD5DEE6) : const Color(0xFFE3EAF0)),
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+              child: Row(children: [
+                const IkonView(Ikon.mesale, size: 30),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                      due > 0
+                          ? 'Gök Adaları · $due kart seni bekliyor'
+                          : 'Gök Adaları · bugün tekrar yok',
+                      style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: K.murekkep)),
+                ),
+                const IkonView(Ikon.ileri, size: 22),
+              ]),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Gök Adaları (Claude Design B16): karışık tekrar. Her zaman ücretsiz.
+class SkyIslandsScreen extends StatelessWidget {
+  const SkyIslandsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFDCE6EC),
+        body: SafeArea(
+          child: ChildTextScale(
+            child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: Row(children: [
+                  CircleBtn(
+                    key: const Key('sky-back'),
+                    icon: DkIcons.left,
+                    label: 'Haritaya dön',
+                    size: 56,
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text('Gök Adaları',
+                        style: TextStyle(
+                            fontFamily: K.display,
+                            fontSize: 27,
+                            fontWeight: FontWeight.w800,
+                            color: K.lacivert)),
+                  ),
+                ]),
+              ),
+              const Expanded(child: _ReviewTab(active: true)),
+            ]),
+          ),
+        ),
+      );
+}
+
+/// Gök Adaları içeriği (eski Tekrar sekmesi).
 class _ReviewTab extends StatefulWidget {
   const _ReviewTab({required this.active});
   final bool active;
@@ -348,7 +504,9 @@ class _ReviewTab extends StatefulWidget {
 }
 
 class _ReviewData {
-  const _ReviewData(this.due, this.subject, this.tomorrow, this.strengths);
+  const _ReviewData(
+      this.due, this.subject, this.tomorrow, this.strengths, this.islands);
+  final List<(Subject, int)> islands;
   final int due;
   final Subject? subject;
   final int tomorrow;
@@ -382,7 +540,7 @@ class _ReviewTabState extends State<_ReviewTab> {
       strengths.add((await app.outcomeLabel(e.key), lv));
     }
     return _ReviewData(due, due > 0 ? bySubject.first.$1 : null, tomorrow,
-        strengths.reversed.toList());
+        strengths.reversed.toList(), bySubject);
   }
 
   @override
@@ -404,6 +562,13 @@ class _ReviewTabState extends State<_ReviewTab> {
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            const Text('GÖK ADALARI', style: T.kickerSm),
+            const SizedBox(height: 2),
+            const Text(
+                'Öğrendiklerin bulutların üstündeki adalarda saklanır. '
+                'Tekrar etmezsen adalar sise gömülür; tekrar ettikçe yükselir.',
+                style: T.help),
+            const SizedBox(height: 12),
             DkCard(
               key: const Key('review-card'),
               radius: K.rLg,
@@ -456,6 +621,28 @@ class _ReviewTabState extends State<_ReviewTab> {
                 ],
               ),
             ),
+            if (d.islands.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  for (final isl in d.islands)
+                    _Island(
+                      key: Key('island-${isl.$1.id}'),
+                      kingdom: Kingdom.of(isl.$1),
+                      due: isl.$2,
+                      onTap: isl.$2 == 0
+                          ? null
+                          : () {
+                              app.selectSubject(isl.$1);
+                              openSession(context,
+                                  subject: isl.$1, reviewOnly: true);
+                            },
+                    ),
+                ],
+              ),
+            ],
             const SizedBox(height: 20),
             const Text('Güçlenen konular', style: T.sub),
             const SizedBox(height: 12),
@@ -470,6 +657,52 @@ class _ReviewTabState extends State<_ReviewTab> {
           ],
         );
       },
+    );
+  }
+}
+
+/// Bir krallığın gök adası: bekleyen tekrar sayısıyla. Bekleyen varsa ada
+/// sisli görünür; dokununca o dersin tekrarı başlar.
+class _Island extends StatelessWidget {
+  const _Island(
+      {super.key, required this.kingdom, required this.due, this.onTap});
+  final Kingdom kingdom;
+  final int due;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final foggy = due > 0;
+    return Pressable(
+      label: foggy
+          ? '${kingdom.name} adası: $due kart bekliyor'
+          : '${kingdom.name} adası: tekrar yok',
+      onTap: onTap,
+      builder: (context, down) => Container(
+        width: 100,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+        decoration: BoxDecoration(
+          color: down
+              ? K.closeBg
+              : foggy
+                  ? const Color(0xFFDDE3EA)
+                  : Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border:
+              Border.all(color: foggy ? kingdom.color : K.closeBg, width: 2),
+        ),
+        child: Column(children: [
+          Opacity(
+              opacity: foggy ? 0.6 : 1,
+              child: EmojiImage(kingdom.emoji, size: 34)),
+          const SizedBox(height: 4),
+          Text(foggy ? '$due' : '✓',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: foggy ? kingdom.ink : K.ink2)),
+        ]),
+      ),
     );
   }
 }
@@ -589,81 +822,110 @@ class _ProfileTabState extends State<_ProfileTab> {
           ),
         );
     final week = app.week();
-    return ListView(
+    return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-      children: [
-        Row(children: [
-          Avatar(index: c.avatarIndex, size: 88),
-          const SizedBox(width: 16),
-          Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(children: [
+            if (p.game.hero != null)
+              FutureBuilder<HeroStage>(
+                future: app.heroStage(),
+                builder: (context, snap) => HeroFigure(
+                    look: p.game.hero!,
+                    stage: snap.data ?? HeroStage.cirak,
+                    size: 130),
+              )
+            else
+              Avatar(index: c.avatarIndex, size: 88),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(p.game.hero?.name ?? c.nickname, style: T.title),
+                  if (p.game.hero != null)
+                    Text(p.game.hero!.heroPath.name,
+                        style: TextStyle(
+                            fontFamily: K.display,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: p.game.hero!.heroPath.color)),
+                  Text('${c.grade}. sınıf',
+                      style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: K.inkSoft)),
+                ],
+              ),
+            ),
+          ]),
+          if (p.game.hero != null) ...[
+            const SizedBox(height: 18),
+            FutureBuilder<HeroStage>(
+              future: app.heroStage(),
+              builder: (context, snap) =>
+                  YearEndCard(stage: snap.data ?? HeroStage.cirak),
+            ),
+          ],
+          const SizedBox(height: 18),
+          FutureBuilder<int>(
+            future: _stars,
+            builder: (context, snap) => IntrinsicHeight(
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                  stat(DkIcons.leaf, K.leafInk, '${p.streakDays}',
+                      'gündür birlikte'),
+                  const SizedBox(width: 10),
+                  stat(DkIcons.nut, K.nut, '${p.nuts}', 'ışık'),
+                  const SizedBox(width: 10),
+                  stat(DkIcons.star, K.rewardShade, '${snap.data ?? 0}',
+                      'yıldızlı konu'),
+                ])),
+          ),
+          const SizedBox(height: 18),
+          DkCard(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(c.nickname, style: T.title),
-                Text('${c.grade}. sınıf',
-                    style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: K.inkSoft)),
+                const Text('Bu hafta',
+                    style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.w800,
+                        color: K.ink)),
+                const SizedBox(height: 12),
+                Row(children: [
+                  for (final d in week) Expanded(child: _DayDot(day: d)),
+                ]),
+                const SizedBox(height: 12),
+                const Text(
+                    'Ay simgeli günler dinlenme günü. Haftada 2 gün dinlenmek de öğrenmenin parçası.',
+                    style: T.help),
               ],
             ),
           ),
-        ]),
-        const SizedBox(height: 18),
-        FutureBuilder<int>(
-          future: _stars,
-          builder: (context, snap) => IntrinsicHeight(
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                stat(DkIcons.leaf, K.leafInk, '${p.streakDays}',
-                    'gündür birlikte'),
-                const SizedBox(width: 10),
-                stat(DkIcons.nut, K.nut, '${p.nuts}', 'fındık'),
-                const SizedBox(width: 10),
-                stat(DkIcons.star, K.rewardShade, '${snap.data ?? 0}',
-                    'yıldızlı konu'),
-              ])),
-        ),
-        const SizedBox(height: 18),
-        DkCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text('Bu hafta',
-                  style: TextStyle(
-                      fontSize: 19, fontWeight: FontWeight.w800, color: K.ink)),
-              const SizedBox(height: 12),
-              Row(children: [
-                for (final d in week) Expanded(child: _DayDot(day: d)),
-              ]),
-              const SizedBox(height: 12),
-              const Text(
-                  'Ay simgeli günler dinlenme günü. Haftada 2 gün dinlenmek de öğrenmenin parçası.',
-                  style: T.help),
-            ],
+          const SizedBox(height: 18),
+          ChunkyButton(
+            key: const Key('switch-profile'),
+            label: 'Profil değiştir',
+            kind: BtnKind.secondary,
+            onPressed: app.signOutChild,
           ),
-        ),
-        const SizedBox(height: 18),
-        ChunkyButton(
-          key: const Key('switch-profile'),
-          label: 'Profil değiştir',
-          kind: BtnKind.secondary,
-          onPressed: app.signOutChild,
-        ),
-        const SizedBox(height: 8),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextBtn(
-            key: const Key('parent-entry'),
-            label: 'Veli alanı',
-            icon: DkIcons.lock,
-            color: K.inkSoft,
-            fontSize: 15,
-            onPressed: () => openParentArea(context),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextBtn(
+              key: const Key('parent-entry'),
+              label: 'Veli alanı',
+              icon: DkIcons.lock,
+              color: K.inkSoft,
+              fontSize: 15,
+              onPressed: () => openParentArea(context),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

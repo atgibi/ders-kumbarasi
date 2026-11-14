@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 168 208">
+<ellipse cx="80" cy="195" rx="54" ry="5" fill="#2B2320" opacity="0.12"/>
+<g stroke="#2B2320" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M50 176C48 188 50 194 56 194H77V176ZM110 176C112 188 110 194 104 194H83V176Z" fill="#5E3A1B"/>
+  <path d="M42 110C40 150 44 170 52 180H108C116 170 120 150 118 110C110 96 50 96 42 110Z" fill="{{govde}}"/>
+  <path d="M58 118H102V172C90 178 70 178 58 172Z" fill="{{onluk}}"/>
+  <g display="{{d.cark}}"><path d="M66 130v14M71 129l4 15M86 130h10v8h-10z" fill="#E3A535" stroke-width="1.8"/></g>
+  <g display="{{d.hasan}}" fill="#FBF5E8" stroke="none"><circle cx="70" cy="150" r="2.2"/><circle cx="88" cy="140" r="1.8"/><circle cx="80" cy="160" r="2.6"/></g>
+  <path d="M44 116C32 128 30 146 36 160L46 158C44 146 46 134 54 124Z" fill="{{govde}}"/>
+  <circle cx="40" cy="162" r="8" fill="{{ten}}"/>
+  <g display="{{d.dur}}"><path d="M116 116C128 128 130 146 124 160L114 158C116 146 114 134 106 124Z" fill="{{govde}}"/><circle cx="120" cy="162" r="8" fill="{{ten}}"/></g>
+  <g display="{{d.selam}}"><path d="M114 114C128 104 134 88 134 70L124 70C122 86 116 98 106 106Z" fill="{{govde}}"/><circle cx="129" cy="64" r="8" fill="{{ten}}"/><path d="M141 56q6 7 0 15M148 50q9 11 0 26" fill="none" stroke-width="2"/></g>
+  <circle cx="80" cy="70" r="30" fill="{{ten}}"/>
+  <path d="M50 76C48 110 62 136 80 142C98 136 112 110 110 76C104 90 96 94 80 94C64 94 56 90 50 76Z" fill="{{sakal}}"/>
+  <path d="M66 104q2 14 8 24M80 108v24M94 104q-2 14 -8 24" fill="none" stroke-width="1.3"/>
+  <path d="M63 88C69 81 76 83 80 88C84 83 91 81 97 88C91 93 84 93 80 90C76 93 69 93 63 88Z" fill="{{sakal}}"/>
+  <ellipse cx="80" cy="78" rx="9" ry="8" fill="#D58D6A"/>
+  <path d="M61 61C65 54 74 54 77 61ZM83 61C86 54 95 54 99 61Z" fill="{{sakal}}" stroke-width="1.8"/>
+  <g display="{{d.gozAcik}}" fill="#2B2320" stroke="none"><circle cx="70" cy="68" r="2.6"/><circle cx="90" cy="68" r="2.6"/></g>
+  <path display="{{d.gozMutlu}}" d="M65 69q5 -5 10 0M85 69q5 -5 10 0" fill="none" stroke-width="2.4"/>
+  <g display="{{d.cark}}">
+    <path d="M51 58C51 33 109 33 109 58C96 51 64 51 51 58Z" fill="#5E3A1B"/>
+    <circle cx="80" cy="42" r="7" fill="#E3A535"/>
+    <path d="M80 32v3M80 49v3M70 42h3M87 42h3M73 35l2 2M85 47l2 2M87 35l-2 2M73 49l2 -2" fill="none" stroke-width="1.6"/>
+    <circle cx="90" cy="68" r="7.5" fill="#FBF5E8" fill-opacity="0.3" stroke="#C98B2A" stroke-width="3"/>
+    <path d="M97 63L107 52" fill="none" stroke-width="1.6"/>
+  </g>
+  <g display="{{d.hasan}}">
+    <path d="M54 54C46 32 58 16 70 24C74 9 92 9 94 24C106 16 116 32 106 54Z" fill="#FBF5E8"/>
+    <path d="M53 50H107V59H53Z" fill="#FBF5E8"/>
+    <path d="M66 30q4 8 2 18M92 30q-4 8 -2 18" fill="none" stroke-width="1.4"/>
+    <circle cx="62" cy="80" r="2" fill="#FBF5E8" stroke="none"/>
+  </g>
+</g>
+</svg>

@@ -192,6 +192,29 @@ void main() {
     }
   }
 
+  test('kazanım kodundan sınıf', () {
+    expect(gradeOfCode('MAT.4.1.2'), 4);
+    expect(gradeOfCode('T.O.2.3'), 2);
+    expect(gradeOfCode('HB.1.2.1'), 1);
+    expect(gradeOfCode('X'), 1);
+  });
+
+  test('sayısal üreteçler: 1. sınıfta 3, 4. sınıfta 4 seçenek', () {
+    for (final (code, n) in [('MAT.1.2.1', 3), ('MAT.4.2.1', 4)]) {
+      final card = CardDef(
+        id: 't',
+        outcomeCode: code,
+        generator: 'multiply',
+        generatorParams: const {'max': 9},
+      );
+      for (var seed = 0; seed < 50; seed++) {
+        final q = generate(card, Random(seed));
+        expect(q.options.length, n, reason: '$code ${q.prompt}');
+        expect(q.options.toSet().length, n);
+      }
+    }
+  });
+
   test('toplama: elde yok parametresi eldeli soru üretmez', () {
     const card = CardDef(
       id: 't',

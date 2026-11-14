@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'app/app_state.dart';
+import 'app/reminder.dart';
 import 'app/speaker.dart';
 import 'data/content_repository.dart';
 import 'data/progress_store.dart';
@@ -29,6 +30,7 @@ Future<void> main() async {
     store: ProgressStore(await createPlatformStorage()),
     content: ContentRepository(rootBundle.loadString),
     speaker: HybridSpeaker(),
+    reminder: createReminder(),
   );
   await applyDemo(state);
   runApp(DersKumbarasiApp(state: state));
@@ -62,7 +64,7 @@ class _DersKumbarasiAppState extends State<DersKumbarasiApp> {
       state: widget.state,
       child: MaterialApp(
         navigatorKey: _nav,
-        title: 'Ders Kumbarası',
+        title: 'Bilgelik Diyarı',
         debugShowCheckedModeBanner: false,
         theme: K.theme(),
         locale: const Locale('tr', 'TR'),
@@ -99,8 +101,14 @@ class _Root extends StatelessWidget {
 
 void _registerLicenses() {
   LicenseRegistry.addLicense(() async* {
-    yield LicenseEntryWithLineBreaks(
-        const ['Nunito'], await rootBundle.loadString('assets/fonts/OFL.txt'));
+    for (final (name, file) in const [
+      ('Fraunces', 'fraunces'),
+      ('Andika', 'andika'),
+      ('Shantell Sans', 'shantellsans'),
+    ]) {
+      yield LicenseEntryWithLineBreaks([name],
+          await rootBundle.loadString('assets/fonts/licenses/$file-OFL.txt'));
+    }
     yield LicenseEntryWithLineBreaks(const ['Twemoji'],
         await rootBundle.loadString('assets/emoji/LICENSE.txt'));
     yield const LicenseEntryWithLineBreaks([

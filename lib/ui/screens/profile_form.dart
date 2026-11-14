@@ -138,6 +138,9 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                       style: T.help),
                   const SizedBox(height: 22),
                   const Text('Sınıf', style: T.strong),
+                  const Text('Bunu bir büyüğünle birlikte seç.',
+                      style: TextStyle(
+                          fontFamily: K.hand, fontSize: 16, color: K.inkSoft)),
                   const SizedBox(height: 8),
                   Row(children: [
                     for (var g = 1; g <= 4; g++) ...[
@@ -150,33 +153,8 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                           label: '$g. sınıf',
                           excludeChildSemantics: true,
                           focusRadius: K.rMd,
-                          builder: (context, down) => Container(
-                            height: 72,
-                            decoration: BoxDecoration(
-                              color: _grade == g ? K.tint : K.card,
-                              borderRadius: BorderRadius.circular(K.rMd),
-                              border: Border.all(
-                                  color: _grade == g ? K.primary : K.line,
-                                  width: 3),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('$g',
-                                    style: const TextStyle(
-                                        fontSize: 26,
-                                        height: 1,
-                                        fontWeight: FontWeight.w900,
-                                        color: K.ink)),
-                                const SizedBox(height: 4),
-                                const Text('sınıf',
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w800,
-                                        color: K.inkSoft)),
-                              ],
-                            ),
-                          ),
+                          builder: (context, down) =>
+                              _GradeSeal(grade: g, selected: _grade == g),
                         ),
                       ),
                     ],
@@ -233,6 +211,88 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Claude Design A07: sınıf düğmeleri renkli mühürler; seçilende zümrüt
+/// halka ve tik.
+class _GradeSeal extends StatelessWidget {
+  const _GradeSeal({required this.grade, required this.selected});
+  final int grade;
+  final bool selected;
+
+  static const _colors = [
+    Color(0xFF9E3624),
+    Color(0xFF1F4E79),
+    Color(0xFF26664B),
+    Color(0xFF7A5418),
+  ];
+  static const _tilt = [-0.07, 0.05, 0.035, -0.05];
+
+  @override
+  Widget build(BuildContext context) {
+    const paper = Color(0xFFFBF5E8);
+    return SizedBox(
+      height: 84,
+      child: Center(
+        child: Transform.rotate(
+          angle: _tilt[grade - 1],
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Stack(clipBehavior: Clip.none, children: [
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: _colors[grade - 1],
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                        color: selected
+                            ? const Color(0xFF26664B)
+                            : const Color(0xFF2B2320),
+                        width: selected ? 5 : 2.5),
+                    boxShadow: const [
+                      BoxShadow(color: Color(0xFF2B2320), offset: Offset(2, 3))
+                    ],
+                  ),
+                  child: FittedBox(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        Text('$grade',
+                            style: const TextStyle(
+                                fontFamily: K.display,
+                                fontSize: 34,
+                                height: 1,
+                                fontWeight: FontWeight.w900,
+                                color: paper)),
+                        const Text('sınıf',
+                            style: TextStyle(
+                                fontFamily: K.display,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: paper)),
+                      ]),
+                    ),
+                  ),
+                ),
+              ),
+              if (selected)
+                Positioned(
+                  right: -6,
+                  top: -4,
+                  child: Container(
+                    width: 26,
+                    height: 26,
+                    decoration: const BoxDecoration(
+                        color: Color(0xFF26664B), shape: BoxShape.circle),
+                    child: const Icon(Icons.check, size: 18, color: paper),
+                  ),
+                ),
+            ]),
+          ),
         ),
       ),
     );

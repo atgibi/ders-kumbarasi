@@ -58,7 +58,7 @@ async function step(name, fn) {
 await step('A', async () => {
   const p = await open('onboarding');
   await shot(p, 'A1-karsilama');
-  await tap(p, 'Başla');
+  await tap(p, 'Maceraya başla');
   await shot(p, 'A2-nasil-calisir');
   for (let i = 0; i < 3; i++) await tap(p, 'İleri');
   await shot(p, 'A3-profil');
@@ -87,22 +87,58 @@ await step('B1', async () => {
 
 await step('B', async () => {
   const p = await open('path');
-  await shot(p, 'B2-yol');
-  await tap(p, 'Ders seç');
-  await shot(p, 'B4-ders-secici');
-  await tap(p, 'Kapat');
-  await tap(p, 'Çok mu az mı?');
-  await shot(p, 'B3-dugum-detayi');
-  await tap(p, 'Kapat');
-  await tap(p, 'Tekrar');
+  await shot(p, 'G1-harita');
+  await p.mouse.wheel(0, 700);
+  await shot(p, 'G1-harita-asagi');
+  await tap(p, 'Kasaba');
+  await shot(p, 'G3-kasaba');
+  await tap(p, 'Defter');
+  await shot(p, 'G4-defter');
+  await tap(p, 'Harita');
+  await tap(p, 'Gök Adaları');
   await shot(p, 'B5-tekrar');
-  await tap(p, 'Profil');
+  await tap(p, 'Haritaya dön');
+  await tap(p, 'Kahraman');
   await shot(p, 'B6-profil');
   await tap(p, 'Veli alanı');
   await shot(p, 'D1-veli-kapisi');
   await tap(p, '1');
   await tap(p, 'Onayla');
   await shot(p, 'D1-yanlis');
+  await p.close();
+});
+
+await step('G', async () => {
+  let p = await open('hero');
+  await shot(p, 'G0-kahraman-cinsiyet');
+  await tap(p, 'Kız kahraman');
+  await shot(p, 'G0-kahraman-yol');
+  await tap(p, 'Okçu olacağım');
+  await shot(p, 'G0-kahraman-gorunum');
+  await p.close();
+  p = await open('region');
+  await shot(p, 'G2-bolge');
+  await p.mouse.wheel(0, 1500);
+  await shot(p, 'G2-bolge-bekci');
+  await p.close();
+  p = await open('duel');
+  await shot(p, 'G5-duello');
+  await p.close();
+  p = await open('finale');
+  await shot(p, 'G7-karabulut');
+  await p.close();
+  p = await open('legend');
+  await tap(p, 'Kahraman');
+  await shot(p, 'G8-efsane');
+  await p.close();
+  p = await open('town');
+  await tap(p, 'Kasaba');
+  await shot(p, 'G9-kasaba');
+  await p.close();
+  p = await open('wardrobe');
+  await shot(p, 'G10-giysi-dolabi');
+  await p.mouse.wheel(0, 600);
+  await shot(p, 'G10-giysi-dolabi-asagi');
   await p.close();
 });
 

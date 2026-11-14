@@ -1,6 +1,7 @@
 /// Uygulama durumu: profiller, seçili çocuk, ayarlar. Sunucu yok.
 library;
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -9,6 +10,12 @@ import '../core/srs/leitner.dart';
 import '../data/content_repository.dart';
 import '../data/models.dart';
 import '../data/progress_store.dart';
+import '../game/game_state.dart';
+import '../game/items.dart';
+import '../game/quests.dart';
+import '../game/town_layout.dart';
+import '../game/world.dart';
+import 'reminder.dart';
 import 'speaker.dart';
 
 class AppSettings {
@@ -20,6 +27,12 @@ class AppSettings {
     this.onboarded = false,
     this.reduceMotion = false,
     this.textSize = 0,
+    this.premium = false,
+    this.effectsOn = true,
+    this.readOptions = true,
+    this.slowReading = false,
+    this.wifiOnlyAudio = true,
+    this.reminderHour = -1,
   });
 
   final int dailyLimitMinutes;
@@ -34,6 +47,28 @@ class AppSettings {
   /// 0 normal, 1 büyük, 2 en büyük (çocuk alanındaki yazılar).
   final int textSize;
 
+  /// Abonelik etkin mi (tüm krallık bölgeleri açık). Mağaza bağlantısı
+  /// kurulana kadar yalnızca geliştirme sürümünde açılabilir.
+  final bool premium;
+
+  /// Doğru/yanlış ve kutlama efekt sesleri.
+  final bool effectsOn;
+
+  /// Şıkka dokununca şık sesli okunur.
+  final bool readOptions;
+
+  /// Bütün okumalar biraz daha yavaş.
+  final bool slowReading;
+
+  /// Ses paketi yalnızca Wi-Fi'de kendiliğinden iner.
+  final bool wifiOnlyAudio;
+
+  /// Günlük hatırlatma saati (-1 kapalı).
+  final int reminderHour;
+
+  /// Okuma hızı çarpanı.
+  double get speechFactor => slowReading ? 0.85 : 1.0;
+
   bool get quietEnabled => quietStartHour != quietEndHour;
 
   /// Çocuk alanında yazı büyütme katsayısı.
@@ -47,6 +82,12 @@ class AppSettings {
     bool? onboarded,
     bool? reduceMotion,
     int? textSize,
+    bool? premium,
+    bool? effectsOn,
+    bool? readOptions,
+    bool? slowReading,
+    bool? wifiOnlyAudio,
+    int? reminderHour,
   }) =>
       AppSettings(
         dailyLimitMinutes: dailyLimitMinutes ?? this.dailyLimitMinutes,
@@ -56,6 +97,12 @@ class AppSettings {
         onboarded: onboarded ?? this.onboarded,
         reduceMotion: reduceMotion ?? this.reduceMotion,
         textSize: textSize ?? this.textSize,
+        premium: premium ?? this.premium,
+        effectsOn: effectsOn ?? this.effectsOn,
+        readOptions: readOptions ?? this.readOptions,
+        slowReading: slowReading ?? this.slowReading,
+        wifiOnlyAudio: wifiOnlyAudio ?? this.wifiOnlyAudio,
+        reminderHour: reminderHour ?? this.reminderHour,
       );
 
   AppSettings withQuiet(bool on) => on
@@ -70,6 +117,12 @@ class AppSettings {
         'onboarded': onboarded,
         'reduce': reduceMotion,
         'text': textSize,
+        'premium': premium,
+        'sfx': effectsOn,
+        'ropt': readOptions,
+        'slow': slowReading,
+        'wifi': wifiOnlyAudio,
+        'remind': reminderHour,
       };
 
   factory AppSettings.fromJson(Map<String, Object?> j) => AppSettings(
@@ -80,6 +133,12 @@ class AppSettings {
         onboarded: j['onboarded'] as bool? ?? false,
         reduceMotion: j['reduce'] as bool? ?? false,
         textSize: (j['text'] as num?)?.toInt() ?? 0,
+        premium: j['premium'] as bool? ?? false,
+        effectsOn: j['sfx'] as bool? ?? true,
+        readOptions: j['ropt'] as bool? ?? true,
+        slowReading: j['slow'] as bool? ?? false,
+        wifiOnlyAudio: j['wifi'] as bool? ?? true,
+        reminderHour: (j['remind'] as num?)?.toInt() ?? -1,
       );
 
   /// Sessiz saatlerde mi? (ör. 21:00–07:00)
@@ -112,11 +171,14 @@ class AppState extends ChangeNotifier {
     required this.content,
     required this.speaker,
     DateTime Function()? clock,
-  }) : clock = clock ?? DateTime.now;
+    Reminder? reminder,
+  })  : clock = clock ?? DateTime.now,
+        reminder = reminder ?? NoopReminder();
 
   final ProgressStore store;
   final ContentRepository content;
   final Speaker speaker;
+  final Reminder reminder;
   final DateTime Function() clock;
 
   bool loaded = false;
@@ -148,12 +210,17 @@ class AppState extends ChangeNotifier {
     _noteIssue();
     settings = AppSettings.fromJson(await store.loadSettings());
     _noteIssue();
+    speaker.speed = settings.speechFactor;
     loaded = true;
     notifyListeners();
+    unawaited(rescheduleReminder());
   }
 
   Future<void> updateSettings(AppSettings s) async {
+    final remindChanged = s.reminderHour != settings.reminderHour;
     settings = s;
+    speaker.speed = s.speechFactor;
+    if (remindChanged) unawaited(rescheduleReminder());
     notifyListeners();
     await _guard(() => store.saveSettings(s.toJson()));
   }
@@ -178,9 +245,54 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  /// Kimsenin kullanmadığı sınıfların ses paketleri silinir (yer açılır).
+  void _audioGradesChanged() =>
+      unawaited(speaker.packs.keepOnly({for (final p in profiles) p.grade}));
+
+  /// Velinin "Şimdi indir" düğmesi: mobil veride de indirir.
+  Future<void> downloadAudio(int grade, {bool force = false}) =>
+      speaker.prepare(grade, force: force);
+
+  /// Sınıf atlatma: ilerleme silinmez, yeni sınıfın dersleri açılır.
+  Future<void> promoteChild(ChildProfile p) async {
+    if (p.grade >= 4) return;
+    await updateChild(p.copyWith(grade: p.grade + 1));
+  }
+
+  /// Kısa efekt sesi (ayar kapalıysa sessiz).
+  void sfx(String name) {
+    if (settings.soundOn && settings.effectsOn) speaker.effect(name);
+  }
+
+  /// Parçaları art arda okur (kayıtlı seslerle; yoksa cihaz sesiyle).
+  void sayAll(List<String> parts, {bool slow = false}) {
+    if (settings.soundOn && parts.any((p) => p.trim().isNotEmpty)) {
+      speaker.speakAll(parts, slow: slow);
+    }
+  }
+
   Future<ChildProfile> addChild(
       String nickname, int grade, String avatar) async {
     final id = '${clock().microsecondsSinceEpoch}${Random().nextInt(1 << 16)}';
+    final p = ChildProfile(
+        id: id, nickname: nickname.trim(), grade: grade, avatar: avatar);
+    profiles = [...profiles, p];
+    await _guard(() => store.saveProfiles(profiles));
+    notifyListeners();
+    return p;
+  }
+
+  /// İlk açılış: profil ve kahraman birlikte kaydedilir (kahramansız bir
+  /// an olmasın diye ilerleme dosyası profil listesinden önce yazılır).
+  Future<ChildProfile> addChildWithHero(
+      String nickname, int grade, String avatar, HeroLook hero) async {
+    final id = '${clock().microsecondsSinceEpoch}${Random().nextInt(1 << 16)}';
+    await _guard(() => store.saveProgress(
+        id,
+        ChildProgress(
+            game: GameState(hero: hero)
+              ..addLetter(welcomeLetter(
+                  hero.name ?? nickname.trim(), dayKey(clock()))))));
     final p = ChildProfile(
         id: id, nickname: nickname.trim(), grade: grade, avatar: avatar);
     profiles = [...profiles, p];
@@ -193,9 +305,14 @@ class AppState extends ChangeNotifier {
       updateSettings(settings.copyWith(onboarded: true));
 
   Future<void> updateChild(ChildProfile p) async {
+    final before = profiles.where((x) => x.id == p.id).firstOrNull;
     profiles = [for (final x in profiles) x.id == p.id ? p : x];
     await _guard(() => store.saveProfiles(profiles));
+    if (before != null && before.grade != p.grade) _audioGradesChanged();
     if (active?.id == p.id) {
+      if (before?.grade != p.grade) {
+        unawaited(speaker.prepare(p.grade, wifiOnly: settings.wifiOnlyAudio));
+      }
       active = p;
       if (!Subject.forGrade(p.grade).contains(subject)) {
         subject = await _defaultSubject(p.grade);
@@ -207,6 +324,7 @@ class AppState extends ChangeNotifier {
   Future<void> deleteChild(String id) async {
     await _guard(() => store.deleteChild(id));
     profiles = profiles.where((p) => p.id != id).toList();
+    _audioGradesChanged();
     if (active?.id == id) {
       active = null;
       progress = null;
@@ -237,6 +355,8 @@ class AppState extends ChangeNotifier {
 
   Future<void> selectChild(ChildProfile p) async {
     active = p;
+    // Sınıfın ders sesleri arka planda hazırlanır (gerekirse bir kez iner)
+    unawaited(speaker.prepare(p.grade, wifiOnly: settings.wifiOnlyAudio));
     subject = await _defaultSubject(p.grade);
     progress = await store.loadProgress(p.id);
     _noteIssue();
@@ -368,5 +488,276 @@ class AppState extends ChangeNotifier {
     final pack = await content.contentFor(o.subject, o.grade);
     final lessons = pack[o.code]?.lessons ?? const <Lesson>[];
     return lessons.isNotEmpty ? lessons.first.title : o.title;
+  }
+
+  // ---------------------------------------------------------------- Oyun
+
+  GameState get game => progress!.game;
+
+  /// Işık: ana kaynak.
+  int get light => progress?.nuts ?? 0;
+
+  Future<void> saveHero(HeroLook hero) async {
+    progress!.game.hero = hero;
+    progress!.game.addLetter(welcomeLetter(
+        hero.name ?? active?.nickname ?? 'Kahraman', dayKey(clock())));
+    await saveProgress();
+  }
+
+  // ------------------------------------------------- Süreklilik (pano, sefer)
+
+  String get heroName =>
+      progress?.game.hero?.name ?? active?.nickname ?? 'Kahraman';
+
+  /// Haftanın pazartesisinin gün anahtarı.
+  String weekKey(DateTime t) {
+    final d = dayStart(t);
+    return dayKey(DateTime(d.year, d.month, d.day - (d.weekday - 1), 12));
+  }
+
+  /// Şu an bekleyen (daha önce görülmüş) tekrar kartı sayısı.
+  int get dueNowRough {
+    final now = clock();
+    return progress?.cards.values
+            .where((c) => !c.isNew && !c.due.isAfter(now))
+            .length ??
+        0;
+  }
+
+  /// Açılabilecek yeni konu var mı (abonelik kilidi dahil)?
+  Future<bool> _hasNewTopic() async {
+    final a = active, p = progress;
+    if (a == null || p == null) return false;
+    for (final s in Subject.forGrade(a.grade)) {
+      final locked = await lockedOutcomes(s);
+      final all = await content.outcomesFor(s, a.grade);
+      if (all.any((o) =>
+          !p.startedOutcomes.contains(o.code) && !locked.contains(o.code))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// Bugünün istek panosu; gün değiştiyse yenisini kurar.
+  Future<DailyBoard> todayBoard({bool save = true}) async {
+    final g = game;
+    final today = dayKey(clock());
+    final b = g.board;
+    if (b != null && b.day == today) return b;
+    g.board = DailyBoard(
+        today,
+        makeDailyQuests(today, active!.id,
+            reviewReady: dueNowRough >= 5,
+            newTopicReady: await _hasNewTopic()));
+    if (save) await saveProgress();
+    return g.board!;
+  }
+
+  /// Bu haftanın seferi; hafta değiştiyse yenisini başlatır.
+  WeeklyTrip thisTrip() {
+    final g = game;
+    final wk = weekKey(clock());
+    if (g.trip?.week != wk) g.trip = WeeklyTrip(wk);
+    return g.trip!;
+  }
+
+  /// Oturum bitince pano ve sefer ilerler. Kaydetmez; çağıran kaydeder.
+  Future<void> recordSession(
+      {required int correct,
+      required int newTopics,
+      required int reviewed}) async {
+    if (progress == null || active == null) return;
+    final b = await todayBoard(save: false);
+    b.add(QuestKind.session, 1);
+    b.add(QuestKind.correct, correct);
+    b.add(QuestKind.newTopic, newTopics);
+    b.add(QuestKind.review, reviewed);
+    thisTrip().days.add(dayKey(clock()));
+    unawaited(rescheduleReminder());
+  }
+
+  /// Hatırlatmayı yeniden kurar: bugün çalışıldıysa yarına, değilse bugünün
+  /// saatine (geçtiyse yarına).
+  Future<void> rescheduleReminder() async {
+    final h = settings.reminderHour;
+    if (h < 0) {
+      await reminder.cancel();
+      return;
+    }
+    final now = clock();
+    final today = dayKey(now);
+    var studied = false;
+    for (final p in profiles) {
+      final pr = active?.id == p.id && progress != null
+          ? progress!
+          : await store.loadProgress(p.id);
+      if (pr.lastSessionDay == today) studied = true;
+    }
+    var at = DateTime(now.year, now.month, now.day, h);
+    if (studied || !at.isAfter(now)) at = at.add(const Duration(days: 1));
+    await reminder.schedule(at, 'Anka seni bekliyor!',
+        'Bugünkü kısa macera hazır. Birlikte biraz çalışalım mı?');
+  }
+
+  /// Tamamlanan isteğin ödülünü alır.
+  Future<bool> claimQuest(int i) async {
+    final b = await todayBoard();
+    if (i < 0 || i >= b.quests.length || !b.canClaim(i)) return false;
+    final q = b.quests[i];
+    b.claimed.add(i);
+    progress!.nuts += q.light;
+    game.addSupply(q.supply, q.qty);
+    game.addPage(dayKey(clock()),
+        '$heroName, ${q.who.name} için bir iş gördü: ${q.task}');
+    await saveProgress();
+    return true;
+  }
+
+  /// Haftalık seferin ödülü: ışık, her krallıktan malzeme ve önderin mektubu.
+  Future<bool> claimTrip() async {
+    final t = thisTrip();
+    if (!t.canClaim) return false;
+    t.claimed = true;
+    progress!.nuts += 15;
+    for (final s in Supply.values) {
+      game.addSupply(s, 2);
+    }
+    final today = dayKey(clock());
+    game.addLetter(
+        leaderLetter(t.leaderKingdom, t.week, heroName, t.days.length, today));
+    game.addPage(today, '$heroName haftalık seferini tamamladı.');
+    await saveProgress();
+    return true;
+  }
+
+  Future<void> readLetter(Letter l) async {
+    if (l.read) return;
+    l.read = true;
+    await saveProgress();
+  }
+
+  /// Ders/sınıf için krallık bölgeleri.
+  Future<List<RegionDef>> regions(Subject s, [int? grade]) async {
+    final g = grade ?? active!.grade;
+    return regionsOf(s, g, await content.outcomesFor(s, g));
+  }
+
+  /// Bölge abonelik kilidinde mi?
+  bool regionLocked(RegionDef r) => r.premium && !settings.premium;
+
+  /// Abonelik olmadan yeni konusu açılmayan çıktılar.
+  Future<Set<String>> lockedOutcomes(Subject s) async {
+    if (settings.premium) return const {};
+    return {
+      for (final r in await regions(s))
+        if (regionLocked(r)) ...r.outcomes.map((o) => o.code),
+    };
+  }
+
+  /// "Yeterli" düzeydeki çıktı sayısı (tüm dersler).
+  Future<int> masteredCount() async {
+    final a = active, p = progress;
+    if (a == null || p == null) return 0;
+    var n = 0;
+    for (final s in Subject.forGrade(a.grade)) {
+      final m = await masteryMap(a, p, s);
+      n += m.entries
+          .where((e) =>
+              p.startedOutcomes.contains(e.key.code) &&
+              e.value == MasteryLevel.sufficient)
+          .length;
+    }
+    return n;
+  }
+
+  Future<HeroStage> heroStage() async => stageFor(
+        started: progress?.startedOutcomes.length ?? 0,
+        banners: progress?.game.banners.length ?? 0,
+        mastered: await masteredCount(),
+        legend: finaleDone,
+      );
+
+  /// Yıl sonu düellosu: her krallıkta Karabulut'la bir kez barışılır.
+  /// Hepsi bitince kahraman Efsane olur.
+  bool get finaleDone {
+    final a = active, p = progress;
+    if (a == null || p == null) return false;
+    return Subject.forGrade(a.grade).every((s) => p.game.finale.contains(s.id));
+  }
+
+  /// Bir dersin yıl sonu düellosuna girecek çıktılar: başlanmış olanlar.
+  Future<List<String>> finaleOutcomes(Subject s) async {
+    final a = active, p = progress;
+    if (a == null || p == null) return const [];
+    final pack = await content.contentFor(s, a.grade);
+    return [
+      for (final k in pack.keys)
+        if (p.startedOutcomes.contains(k)) k
+    ];
+  }
+
+  /// Yapı kurulabilir/yükseltilebilir mi?
+  bool canBuild(BuildingDef b) {
+    final p = progress;
+    if (p == null) return false;
+    final next = p.game.levelOf(b) + 1;
+    if (next > BuildingDef.maxLevel) return false;
+    if (p.nuts < b.lightCost(next)) return false;
+    return b
+        .materialCost(next)
+        .entries
+        .every((e) => p.game.supply(e.key) >= e.value);
+  }
+
+  /// Yapıyı kurar ya da bir seviye yükseltir. Bekleme süresi yok.
+  Future<bool> build(BuildingDef b) async {
+    if (!canBuild(b)) return false;
+    final p = progress!;
+    final next = p.game.levelOf(b) + 1;
+    p.nuts -= b.lightCost(next);
+    for (final e in b.materialCost(next).entries) {
+      p.game.addSupply(e.key, -e.value);
+    }
+    p.game.built[b.id] = next;
+    p.game.layout.ensure(p.game.built.keys);
+    await saveProgress();
+    return true;
+  }
+
+  /// Kasaba ızgarası. Eski kayıtlarda kurulmuş yapılara yer verir (kaydetmez;
+  /// yerler bir sonraki kayıtta yazılır).
+  TownLayout townLayout() {
+    final g = progress!.game;
+    final l = g.layout;
+    l.ensure(g.built.keys);
+    return l;
+  }
+
+  /// Eşyayı takar ya da çıkarır.
+  Future<bool> wearItem(ItemDef item) async {
+    final p = progress;
+    if (p == null || !toggleItem(p.game, item)) return false;
+    await saveProgress();
+    return true;
+  }
+
+  /// Giysi dolabı açıldı: yeni eşya rozeti söner.
+  Future<void> markItemsSeen() async {
+    final p = progress;
+    if (p == null) return;
+    final n = unlockedItems(p.game).length;
+    if (p.game.itemsSeen == n) return;
+    p.game.itemsSeen = n;
+    await saveProgress();
+  }
+
+  /// Yapıyı ızgarada boş bir kareye taşır.
+  Future<bool> moveBuilding(String id, Spot to) async {
+    final p = progress;
+    if (p == null || (p.game.built[id] ?? 0) == 0) return false;
+    if (!townLayout().move(id, to)) return false;
+    await saveProgress();
+    return true;
   }
 }

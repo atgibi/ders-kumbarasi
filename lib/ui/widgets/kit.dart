@@ -2,12 +2,14 @@
 library;
 
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../theme.dart';
 import 'dk_icon.dart';
+import 'hand.dart';
 
 /// Basılınca çöken, klavyeyle de çalışan dokunma yüzeyi.
 class Pressable extends StatefulWidget {
@@ -95,7 +97,32 @@ class _PressableState extends State<Pressable> {
   }
 }
 
-enum BtnKind { primary, good, again, secondary }
+enum BtnKind { primary, good, again, secondary, kok }
+
+/// Veli alanı: tasarımdaki sakin ürün dili (düz lacivert düğmeler, ince
+/// çizgiler). Bu alanın altındaki düğmeler çocuk ekranlarındaki ahşap tabela
+/// yerine sade çizilir.
+class Calm extends InheritedWidget {
+  const Calm({super.key, required super.child});
+
+  static bool of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<Calm>() != null;
+
+  @override
+  bool updateShouldNotify(Calm oldWidget) => false;
+}
+
+/// Veli alanı iskelesi.
+class CalmScaffold extends StatelessWidget {
+  const CalmScaffold({super.key, this.backgroundColor, required this.body});
+  final Color? backgroundColor;
+  final Widget body;
+
+  @override
+  Widget build(BuildContext context) => Calm(
+        child: Scaffold(backgroundColor: K.bgParent, body: body),
+      );
+}
 
 /// Tıknaz düğme: 56 yükseklik, 22 yuvarlama, 5 px blok gölge.
 class ChunkyButton extends StatelessWidget {
@@ -121,60 +148,164 @@ class ChunkyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onPressed != null;
-    final (Color bg, Color sh, Color fg) = switch (kind) {
-      BtnKind.primary => (K.primary, K.primaryShadow, K.ink),
-      BtnKind.good => (K.good, K.goodShadow, K.ink),
-      BtnKind.again => (K.againStrong, K.againShadow, Colors.white),
-      BtnKind.secondary => (K.card, K.line, K.ink),
-    };
-    const depth = 5.0;
+    if (Calm.of(context)) return _calm(context, enabled);
+    // Tasarım: birincil ahşap tabela, ikincil parşömen; zafer zümrüt,
+    // tekrar lacivert. Devre dışı: soluk taş.
+    final HandStyle style;
+    final Color fg;
+    if (!enabled) {
+      style = HandStyle.tabela.copyWith(
+          fill: K.locked,
+          texture: HandFill.duz,
+          border: K.lockedShade,
+          shadows: const [(4, Color(0xFFCFC7B8))]);
+      fg = K.inkMuted;
+    } else {
+      final (HandStyle, Color) r = switch (kind) {
+        BtnKind.primary => (HandStyle.tabela, K.kagit3),
+        BtnKind.good => (
+            HandStyle.tabela.copyWith(
+                fill: K.zumrutKoyu,
+                texture: HandFill.duz,
+                shadows: const [(5, K.goodShadow)]),
+            K.kagit3
+          ),
+        BtnKind.again => (
+            HandStyle.tabela.copyWith(
+                fill: K.lacivert,
+                texture: HandFill.duz,
+                shadows: const [(5, K.againShadow)]),
+            K.kagit3
+          ),
+        BtnKind.secondary => (HandStyle.parsomen, K.ink),
+        BtnKind.kok => (
+            HandStyle.tabela.copyWith(
+                fill: K.kokKoyu,
+                texture: HandFill.duz,
+                shadows: const [(5, Color(0xFF6E2417))]),
+            K.kagit3
+          ),
+      };
+      style = r.$1;
+      fg = r.$2;
+    }
+    final sign = kind != BtnKind.secondary;
+    final text = sign
+        ? T.button.copyWith(color: fg)
+        : const TextStyle(
+            fontFamily: K.font,
+            fontSize: 20,
+            height: 1.15,
+            fontWeight: FontWeight.w700,
+            color: K.ink);
     return Pressable(
       onTap: onPressed,
       label: semanticsLabel ?? label,
       excludeChildSemantics: true,
-      builder: (context, down) {
-        final face = Container(
-          constraints: BoxConstraints(minHeight: height),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      builder: (context, down) => HandBox(
+        style: style,
+        pressed: down && enabled,
+        constraints: BoxConstraints(minHeight: height),
+        padding: EdgeInsets.symmetric(horizontal: sign ? 26 : 18, vertical: 8),
+        child: Stack(
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: enabled ? bg : K.locked,
-            borderRadius: BorderRadius.circular(K.rLg),
-            border: kind == BtnKind.secondary && enabled
-                ? Border.all(color: K.line, width: 2)
-                : null,
-            boxShadow: enabled && !down
-                ? [BoxShadow(color: sh, offset: const Offset(0, depth))]
-                : null,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (icon != null)
-                DkIcon(icon!,
-                    size: label.isEmpty ? 26 : 24,
-                    color: iconColor ?? (enabled ? fg : K.inkSoft),
-                    stroke: label.isEmpty ? 3 : 2.5),
-              if (icon != null && label.isNotEmpty) const SizedBox(width: 10),
-              if (label.isNotEmpty)
-                Flexible(
-                  child: Text(
-                    trUpper(label),
-                    textAlign: TextAlign.center,
-                    style: T.button.copyWith(color: enabled ? fg : K.inkSoft),
-                  ),
-                ),
+          clipBehavior: Clip.none,
+          children: [
+            Align(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (icon != null)
+                    DkIcon(icon!,
+                        size: label.isEmpty ? 26 : 24,
+                        color: iconColor ?? fg,
+                        stroke: label.isEmpty ? 3 : 2.5),
+                  if (icon != null && label.isNotEmpty)
+                    const SizedBox(width: 10),
+                  if (label.isNotEmpty)
+                    Flexible(
+                      child:
+                          Text(label, textAlign: TextAlign.center, style: text),
+                    ),
+                ],
+              ),
+            ),
+            if (sign && enabled) ...const [
+              Positioned(
+                  left: -17, top: 0, bottom: 0, child: Center(child: _Nail())),
+              Positioned(
+                  right: -17, top: 0, bottom: 0, child: Center(child: _Nail())),
             ],
-          ),
-        );
-        return Padding(
-          padding:
-              EdgeInsets.only(top: down ? depth : 0, bottom: down ? 0 : depth),
-          child: face,
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
+
+  Widget _calm(BuildContext context, bool enabled) {
+    final secondary = kind == BtnKind.secondary;
+    final bg = !enabled
+        ? K.locked
+        : secondary
+            ? Colors.transparent
+            : kind == BtnKind.good
+                ? K.zumrutKoyu
+                : K.lacivert;
+    final fg = !enabled
+        ? K.inkMuted
+        : secondary
+            ? K.lacivert
+            : K.kagit3;
+    return Pressable(
+      onTap: onPressed,
+      label: semanticsLabel ?? label,
+      excludeChildSemantics: true,
+      builder: (context, down) => Opacity(
+        opacity: down ? .85 : 1,
+        child: Container(
+          constraints: BoxConstraints(minHeight: math.max(52, height - 4)),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: bg,
+            borderRadius: BorderRadius.circular(6),
+            border: secondary && enabled
+                ? Border.all(color: K.lacivert, width: 1.5)
+                : null,
+          ),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            if (icon != null)
+              DkIcon(icon!, size: 22, color: iconColor ?? fg, stroke: 2.4),
+            if (icon != null && label.isNotEmpty) const SizedBox(width: 8),
+            if (label.isNotEmpty)
+              Flexible(
+                child: Text(label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: K.font,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: fg)),
+              ),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+/// Tabelanın çivisi.
+class _Nail extends StatelessWidget {
+  const _Nail();
+
+  @override
+  Widget build(BuildContext context) => Container(
+        width: 6,
+        height: 6,
+        decoration: const BoxDecoration(
+            color: Color(0xB32B2320), shape: BoxShape.circle),
+      );
 }
 
 /// Düz metin düğmesi (ŞİMDİ DEĞİL, ÇIK, ATLA).
@@ -272,16 +403,17 @@ class CircleBtn extends StatelessWidget {
         label: label,
         excludeChildSemantics: true,
         focusRadius: size / 2,
-        builder: (context, down) => Container(
+        builder: (context, down) => SizedBox(
           width: size,
           height: size,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: down ? K.closeBg : bg,
-            shape: BoxShape.circle,
-            border: border ? Border.all(color: K.line, width: 2) : null,
+          child: CustomPaint(
+            painter: HandPainter(HandStyle.muhur.copyWith(
+                fill: down ? K.kagit2 : bg,
+                borderWidth: border ? 2.5 : 2,
+                border: border ? K.murekkep : K.murekkep2)),
+            child: Center(
+                child: DkIcon(icon, size: iconSize, color: fg, stroke: stroke)),
           ),
-          child: DkIcon(icon, size: iconSize, color: fg, stroke: stroke),
         ),
       );
 }
@@ -415,45 +547,130 @@ class _ListenSplitState extends State<ListenSplit> {
 
 /// Oturum ilerleme çubuğu (16 yükseklik, yeşil, üstte parlaklık şeridi).
 class DkProgressBar extends StatelessWidget {
-  const DkProgressBar({super.key, required this.value});
+  const DkProgressBar({super.key, required this.value, this.color = K.ahsap});
   final double value;
 
+  /// Dağların rengi (krallık rengi).
+  final Color color;
+
+  /// Claude Design › Sis çubuğu: dağların üstündeki sis, ilerledikçe güneş
+  /// sağa yürür ve sis çekilir.
   @override
   Widget build(BuildContext context) {
     final pct = (value.clamp(0, 1) * 100).round();
     return Semantics(
-      label: 'İlerleme',
+      label: 'Sis çubuğu: dağılan sis',
       value: '%$pct',
       child: TweenAnimationBuilder<double>(
         tween: Tween(end: value.clamp(0.0, 1.0)),
         duration: Duration(milliseconds: reduceMotion(context) ? 0 : 350),
         curve: Curves.easeOut,
-        builder: (context, v, _) => Container(
-          height: 16,
-          decoration: BoxDecoration(
-              color: K.line, borderRadius: BorderRadius.circular(999)),
-          alignment: Alignment.centerLeft,
-          child: FractionallySizedBox(
-            widthFactor: v,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: K.good, borderRadius: BorderRadius.circular(999)),
-              padding: const EdgeInsets.fromLTRB(8, 3, 8, 0),
-              alignment: Alignment.topCenter,
-              child: v > .06
-                  ? Container(
-                      height: 4,
-                      decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: .5),
-                          borderRadius: BorderRadius.circular(2)),
-                    )
-                  : null,
-            ),
-          ),
+        builder: (context, v, _) => SizedBox(
+          height: 48,
+          child: CustomPaint(painter: _FogBarPainter(v, color)),
         ),
       ),
     );
   }
+}
+
+class _FogBarPainter extends CustomPainter {
+  _FogBarPainter(this.v, this.color);
+  final double v;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width, h = size.height;
+    final frame = Path()
+      ..moveTo(10, 3)
+      ..cubicTo(w * .4, 1, w * .7, 4, w - 10, 2)
+      ..cubicTo(w - 1, 3, w - 1, h - 4, w - 10, h - 2)
+      ..cubicTo(w * .6, h - 1, w * .3, h - 4, 10, h - 2)
+      ..cubicTo(1, h - 3, 1, 4, 10, 3)
+      ..close();
+    final ink = Paint()
+      ..style = PaintingStyle.stroke
+      ..color = K.murekkep
+      ..strokeJoin = StrokeJoin.round;
+    canvas.save();
+    canvas.clipPath(frame);
+    canvas.drawRect(Offset.zero & size, Paint()..color = K.kagit3);
+    // dağlar
+    final dag = Path()..moveTo(0, h - 8);
+    var x = 0.0;
+    var i = 0;
+    while (x < w) {
+      final mh = const [30.0, 20.0, 25.0][i % 3];
+      dag
+        ..lineTo(x + 17, h - 8 - mh)
+        ..lineTo(x + 34, h - 8);
+      x += 34;
+      i++;
+    }
+    dag
+      ..lineTo(w, h)
+      ..lineTo(0, h)
+      ..close();
+    canvas.drawPath(dag, Paint()..color = color);
+    canvas.drawPath(dag, ink..strokeWidth = 1.6);
+    canvas.drawRect(Rect.fromLTWH(0, h - 12, w, 12),
+        Paint()..color = const Color(0xFF5E7A3A));
+    // evler
+    for (var k = 22.0; k < w - 10; k += 58) {
+      final ev = Path()
+        ..moveTo(k, h - 8)
+        ..lineTo(k, h - 14)
+        ..lineTo(k + 4, h - 18)
+        ..lineTo(k + 8, h - 14)
+        ..lineTo(k + 8, h - 8)
+        ..close();
+      canvas.drawPath(ev, Paint()..color = K.safran);
+      canvas.drawPath(ev, ink..strokeWidth = 1.3);
+    }
+    // sis: güneşin sağı
+    final fx = 10 + (w - 20) * v;
+    final sis = Path()
+      ..moveTo(fx, 0)
+      ..cubicTo(fx - 9, 8, fx + 7, 16, fx - 4, 24)
+      ..cubicTo(fx - 12, 32, fx + 5, 40, fx, h)
+      ..lineTo(w + 20, h)
+      ..lineTo(w + 20, 0)
+      ..close();
+    canvas.drawPath(sis, Paint()..color = const Color(0xF2C9D1D9));
+    canvas.save();
+    canvas.clipPath(sis);
+    final tul = Paint()
+      ..color = const Color(0x999AA6B2)
+      ..strokeWidth = .8;
+    for (var t = -h; t < w + h; t += 9) {
+      canvas.drawLine(Offset(t, h), Offset(t + h * .53, 0), tul);
+    }
+    canvas.restore();
+    canvas.restore();
+    canvas.drawPath(frame, ink..strokeWidth = 2.6);
+    // güneş
+    final c = Offset(fx, h / 2);
+    final ray = Paint()
+      ..color = K.safran
+      ..strokeWidth = 2.4
+      ..strokeCap = StrokeCap.round;
+    for (final (a, b) in const [
+      (Offset(0, -17), Offset(0, -22)),
+      (Offset(0, 17), Offset(0, 22)),
+      (Offset(-13, -10), Offset(-16, -13)),
+      (Offset(13, -10), Offset(16, -13)),
+      (Offset(-13, 10), Offset(-16, 13)),
+      (Offset(13, 10), Offset(16, 13)),
+    ]) {
+      canvas.drawLine(c + a, c + b, ray);
+    }
+    canvas.drawCircle(c, 9, Paint()..color = K.safran);
+    canvas.drawCircle(c, 9, ink..strokeWidth = 2.2);
+  }
+
+  @override
+  bool shouldRepaint(_FogBarPainter old) => old.v != v || old.color != color;
 }
 
 /// Beyaz kart, 2 px çizgi.
@@ -464,9 +681,10 @@ class DkCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(16),
     this.radius = K.rMd,
     this.color = K.card,
-    this.borderColor = K.line,
-    this.borderWidth = 2,
+    this.borderColor = K.murekkep,
+    this.borderWidth = 2.5,
     this.margin,
+    this.hand = true,
   });
 
   final Widget child;
@@ -477,17 +695,29 @@ class DkCard extends StatelessWidget {
   final double borderWidth;
   final EdgeInsetsGeometry? margin;
 
+  /// El çizimi kart (çocuk ekranları). Veli alanında sade çerçeve.
+  final bool hand;
+
   @override
-  Widget build(BuildContext context) => Container(
-        margin: margin,
-        padding: padding,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(radius),
-          border: Border.all(color: borderColor, width: borderWidth),
-        ),
-        child: child,
-      );
+  Widget build(BuildContext context) {
+    final Widget box = hand
+        ? HandBox(
+            style: HandStyle.kart.copyWith(
+                fill: color, border: borderColor, borderWidth: borderWidth),
+            padding: padding,
+            child: child,
+          )
+        : Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: K.line, width: 1.5),
+            ),
+            child: child,
+          );
+    return margin == null ? box : Padding(padding: margin!, child: box);
+  }
 }
 
 /// Hap biçimli etiket.
@@ -568,7 +798,7 @@ class DkSwitch extends StatelessWidget {
         width: 52,
         height: 32,
         decoration: BoxDecoration(
-            color: on ? K.good : K.toggleOff,
+            color: on ? K.zumrutKoyu : K.toggleOff,
             borderRadius: BorderRadius.circular(16)),
         child: AnimatedAlign(
           duration: const Duration(milliseconds: 120),
@@ -646,43 +876,61 @@ class ToggleRow extends StatelessWidget {
 
 /// Konuşma balonu (sol altta kuyruk).
 class SpeechBubble extends StatelessWidget {
-  const SpeechBubble({super.key, required this.child, this.tailLeft = 40});
+  const SpeechBubble(
+      {super.key,
+      required this.child,
+      this.tailLeft = 40,
+      this.fill = K.kagit3});
   final Widget child;
   final double tailLeft;
+
+  /// Anka kâğıt, önder parşömen (K.kagit2), bekçi sis tonu (0xFFE3EAF0).
+  final Color fill;
 
   @override
   Widget build(BuildContext context) => Stack(
         clipBehavior: Clip.none,
         children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-            decoration: BoxDecoration(
-              color: K.card,
-              borderRadius: BorderRadius.circular(K.rLg),
-              border: Border.all(color: K.line, width: 2),
-            ),
+          HandBox(
+            style: HandStyle.balon.copyWith(fill: fill),
+            padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
             child: child,
           ),
           Positioned(
             left: tailLeft,
-            bottom: -10,
-            child: Transform.rotate(
-              angle: 0.785398,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: const BoxDecoration(
-                  color: K.card,
-                  border: Border(
-                    right: BorderSide(color: K.line, width: 2),
-                    bottom: BorderSide(color: K.line, width: 2),
-                  ),
-                ),
-              ),
-            ),
+            bottom: -16,
+            child: CustomPaint(
+                size: const Size(26, 20), painter: _TailPainter(fill)),
           ),
         ],
       );
+}
+
+class _TailPainter extends CustomPainter {
+  _TailPainter(this.fill);
+  final Color fill;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Path()
+      ..moveTo(2, 0)
+      ..quadraticBezierTo(8, 12, 4, size.height)
+      ..quadraticBezierTo(16, 12, size.width, 0);
+    canvas.drawPath(p, Paint()..color = fill);
+    canvas.drawPath(
+        p,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.5
+          ..strokeJoin = StrokeJoin.round
+          ..color = K.murekkep);
+    // balonun kenarıyla birleştiği yeri ört
+    canvas.drawRect(
+        Rect.fromLTWH(4, -3, size.width - 6, 3.6), Paint()..color = fill);
+  }
+
+  @override
+  bool shouldRepaint(_TailPainter old) => old.fill != fill;
 }
 
 /// Kesikli çerçeve (soru görsellerindeki gruplar).
@@ -858,7 +1106,7 @@ class ParentHeader extends StatelessWidget {
         height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: K.line, width: 2))),
+            border: Border(bottom: BorderSide(color: K.line, width: 1))),
         child: Row(children: [
           if (onBack != null) ...[
             CircleBtn(

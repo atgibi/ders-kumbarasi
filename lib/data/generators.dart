@@ -14,16 +14,21 @@ int _p(Map<String, Object?> p, String k, int def) =>
 
 int _between(Random r, int min, int max) => min + r.nextInt(max - min + 1);
 
+/// Sayısal sorularda varsayılan seçenek sayısı: 1. sınıfta 3, 2–4. sınıfta
+/// 4 (tahminle bilme şansı %25). [generate] kartın sınıfına göre ayarlar.
+int _optionCount = 3;
+
 /// Doğru cevabın etrafında, tekrarsız ve negatif olmayan çeldiricilerle
 /// karışık seçenek listesi üretir.
 ({List<String> options, int answerIndex}) numericOptions(
   int answer,
   Random rnd, {
-  int count = 3,
+  int? count,
   int spread = 3,
   int min = 0,
   List<int> preferred = const [],
 }) {
+  count ??= _optionCount;
   final set = <int>{answer};
   for (final p in preferred) {
     if (set.length >= count) break;
@@ -47,6 +52,10 @@ int _between(Random r, int min, int max) => min + r.nextInt(max - min + 1);
   );
 }
 
+/// Seçeneklerden her biri için, cevaba göre kavram yanılgısı açıklaması.
+List<String?> _notesFor(List<String> options, String? Function(int v) note) =>
+    [for (final o in options) note(int.parse(o))];
+
 const _objects = ['🍎', '⭐', '🎈', '🐟', '🌼', '🚗', '🐞', '⚽', '🍐', '🐥'];
 
 Question _countObjects(Map<String, Object?> p, Random r) {
@@ -61,6 +70,13 @@ Question _countObjects(Map<String, Object?> p, Random r) {
     options: o.options,
     answerIndex: o.answerIndex,
     explanation: 'Tek tek saydığımızda $n tane buluruz.',
+    optionNotes: _notesFor(
+        o.options,
+        (v) => v == n
+            ? null
+            : v > n
+                ? '$v dedin. Bir tanesini iki kez saymış olabilir misin? Saydığına parmağınla dokun, sonra yanındakine geç. Doğrusu $n.'
+                : '$v dedin. Birini atlamış olabilir misin? Hepsine sırayla dokunarak say. Doğrusu $n.'),
   );
 }
 
@@ -101,6 +117,17 @@ Question _add(Map<String, Object?> p, Random r) {
       spread: 2,
       // Sık hata: basamak birleştirme ("38 + 5 = 313") yerine yakın komşular
       preferred: [s + 1, s - 1, if (s >= 10) s + 10, if (s >= 10) s - 10]);
+  if (maxSum > 10 && r.nextInt(3) == 0) {
+    // Tuş takımıyla yazma (Claude Design 16a): seçenekler gösterilmez
+    return Question(
+      kind: QKind.keypad,
+      prompt: '$a + $b = ?',
+      say: '$a artı $b kaç eder? Cevabı tuşlarla yaz.',
+      options: o.options,
+      answerIndex: o.answerIndex,
+      explanation: '$a ile $b toplanınca $s olur.',
+    );
+  }
   return Question(
     prompt: '$a + $b = ?',
     say: '$a artı $b kaç eder?',
@@ -111,6 +138,17 @@ Question _add(Map<String, Object?> p, Random r) {
     answerIndex: o.answerIndex,
     explanation: '$a ile $b toplanınca $s olur.',
     hint: maxSum <= 20 ? 'Büyük sayıdan başla, $b tane ileri say.' : null,
+    optionNotes: _notesFor(
+        o.options,
+        (v) => v == s
+            ? null
+            : v == s - 1
+                ? 'İleri sayarken ilk sayıyı da saymış olabilir misin? $a + $b için saymaya ${a + 1} sayısından başla ve $b adım ileri git.'
+                : v == s + 1
+                    ? 'Bir adım fazla saymış olabilirsin. $b parmak aç, her parmakta bir sayı ileri git.'
+                    : (v - s).abs() == 10
+                        ? 'Onlukları karıştırmış olabilir misin? Önce birlikleri, sonra onlukları topla.'
+                        : null),
   );
 }
 
@@ -135,6 +173,15 @@ Question _sub(Map<String, Object?> p, Random r) {
     answerIndex: o.answerIndex,
     explanation: '$a içinden $b çıkarılınca $d kalır.',
     hint: max <= 20 ? '$a sayısından $b tane geri say.' : null,
+    optionNotes: _notesFor(
+        o.options,
+        (v) => v == d
+            ? null
+            : v == a + b
+                ? 'Burada toplama değil çıkarma var: “−” işareti “eksilt” demek. $a sayısından $b tane geri say.'
+                : v == d + 1
+                    ? 'Geri sayarken $a sayısını da saymış olabilir misin? İlk adımda ${a - 1} dersin.'
+                    : null),
   );
 }
 
@@ -267,6 +314,15 @@ Question _skipCount(Map<String, Object?> p, Random r) {
     options: o.options,
     answerIndex: o.answerIndex,
     explanation: 'Her seferinde $st ekliyoruz: ${seq.last} + $st = $ans.',
+    optionNotes: _notesFor(
+        o.options,
+        (v) => v == ans
+            ? null
+            : v == seq.last + 1 && st != 1
+                ? 'Burada sayılar birer birer değil, ${_dagitma(st)} ${_dagitma(st)} artıyor. ${seq.last} sayısına $st ekle.'
+                : v < seq.last
+                    ? 'Sayılar artıyor, yani sıradaki sayı ${seq.last} sayısından büyük olmalı.'
+                    : 'İki sayı arasındaki farka bak: hep $st. ${seq.last} + $st = $ans.'),
   );
 }
 
@@ -458,7 +514,14 @@ Question _countBack(Map<String, Object?> p, Random r) {
     options: o.options,
     answerIndex: o.answerIndex,
     explanation:
-        'Geriye sayarken her seferinde 1 azalır: ${seq.last}den sonra $ans gelir.',
+        'Geriye sayarken her seferinde 1 azalır: ${seq.last} sayısından sonra $ans gelir.',
+    optionNotes: _notesFor(
+        o.options,
+        (v) => v == ans
+            ? null
+            : v > seq.last
+                ? 'Geriye sayıyoruz, sayılar küçülüyor. Sıradaki sayı ${seq.last} sayısından küçük olmalı.'
+                : 'Bir sayıyı atlamış olabilir misin? ${seq.last} sayısından bir eksik: $ans.'),
   );
 }
 
@@ -558,6 +621,27 @@ Question _order3(Map<String, Object?> p, Random r) {
     set.add(_between(r, 0, max));
   }
   final nums = set.toList()..sort();
+  if (r.nextInt(5) < 2) {
+    // Sıralama (Claude Design 16c)
+    while (set.length < 4) {
+      set.add(_between(r, 0, max));
+    }
+    final four = set.toList()..sort();
+    final up = r.nextBool();
+    final seq = up ? four : four.reversed.toList();
+    return Question(
+      kind: QKind.order,
+      prompt: up ? 'Küçükten büyüğe sırala.' : 'Büyükten küçüğe sırala.',
+      say: up
+          ? 'Sayıları küçükten büyüğe sırala.'
+          : 'Sayıları büyükten küçüğe sırala.',
+      options: [for (final n in seq) '$n'],
+      answerIndex: 0,
+      explanation: up
+          ? 'Küçükten büyüğe: ${seq.join(' < ')}.'
+          : 'Büyükten küçüğe: ${seq.join(' > ')}.',
+    );
+  }
   final kind = r.nextInt(3);
   final ans = switch (kind) { 0 => nums.first, 1 => nums.last, _ => nums[1] };
   final shown = List.of(nums)..shuffle(r);
@@ -636,6 +720,24 @@ Question _clockRead(Map<String, Object?> p, Random r) {
   final opts = set.take(3).toList();
   if (!opts.contains(right)) opts[0] = right;
   opts.shuffle(r);
+  if (r.nextInt(5) < 2) {
+    // Saat kurma (Claude Design 16g): seçenekler gösterilmez
+    return Question(
+      kind: QKind.clock,
+      prompt: 'Saati $right olarak kur.',
+      say:
+          'Saati $right olarak kur. Kısa kol saati, uzun kol dakikayı gösterir.',
+      options: opts,
+      answerIndex: opts.indexOf(right),
+      pairs: [
+        '$h',
+        '$m',
+        '${mins.every((x) => x % 30 == 0) ? 30 : mins.every((x) => x % 15 == 0) ? 15 : 5}'
+      ],
+      explanation:
+          'Kısa kol (akrep) saati, uzun kol (yelkovan) dakikayı gösterir: $right.',
+    );
+  }
   return Question(
     prompt: 'Saat kaç?',
     visual: Visual('clock', {'h': h, 'm': m}),
@@ -1064,6 +1166,20 @@ Question _syllables(Map<String, Object?> p, Random r) {
   const valid = _heceler;
   final w = valid[r.nextInt(valid.length)];
   final word = w.join();
+  if (w.length >= 2 && w.toSet().length == w.length && r.nextInt(3) == 0) {
+    // Hece kartlarından sözcük kur (Claude Design 16f)
+    final other = (List.of(valid)..remove(w))[r.nextInt(valid.length - 1)];
+    final extra = other.firstWhere((h) => !w.contains(h), orElse: () => 'ta');
+    return Question(
+      kind: QKind.syllables,
+      prompt: 'Heceleri sırayla seçip “$word” sözcüğünü kur.',
+      say: '$word. Heceleri sırayla seç.',
+      options: List.of(w),
+      answerIndex: 0,
+      pairs: [extra],
+      explanation: '${w.join(' - ')}: “$word”.',
+    );
+  }
   if (r.nextBool()) {
     final o = numericOptions(w.length, r, spread: 1, min: 1, count: 3);
     return Question(
@@ -1130,6 +1246,19 @@ const _zitAnlam = [
 Question _wordPair(Map<String, Object?> p, Random r) {
   final kind = p['kind'] as String? ?? (r.nextBool() ? 'es' : 'zit');
   final bank = kind == 'es' ? _esAnlam : _zitAnlam;
+  if (bank.length >= 3 && r.nextInt(3) == 0) {
+    // Eşleştirme (Claude Design 16b)
+    final picks = (List.of(bank)..shuffle(r)).take(3).toList();
+    final adj = kind == 'es' ? 'eş anlamlılarını' : 'zıt anlamlılarını';
+    return Question(
+      kind: QKind.match,
+      prompt: 'Sözcükleri $adj ile eşleştir.',
+      options: [for (final x in picks) x.$1],
+      pairs: [for (final x in picks) x.$2],
+      answerIndex: 0,
+      explanation: [for (final x in picks) '${x.$1} – ${x.$2}'].join(', '),
+    );
+  }
   final pair = bank[r.nextInt(bank.length)];
   final flip = r.nextBool();
   final ask = flip ? pair.$2 : pair.$1, ans = flip ? pair.$1 : pair.$2;
@@ -1202,11 +1331,29 @@ Question generate(CardDef card, Random rnd) {
       answerIndex: order.indexOf(f.answerIndex),
       explanation: f.explanation,
       hint: f.hint,
+      // "Neden yanlış" notları seçeneklerle birlikte karışır
+      optionNotes: f.optionNotes == null
+          ? null
+          : [for (final i in order) f.optionNotes![i]],
     );
   }
   final g = generators[card.generator];
   if (g == null) {
     throw StateError('Bilinmeyen üreteç: ${card.generator} (${card.id})');
   }
-  return g(card.generatorParams, rnd);
+  _optionCount = gradeOfCode(card.outcomeCode) <= 1 ? 3 : 4;
+  try {
+    return g(card.generatorParams, rnd);
+  } finally {
+    _optionCount = 3;
+  }
+}
+
+/// Kazanım kodundan sınıf: MAT.4.1.2 → 4, T.O.2.3 → 2. Bulunamazsa 1.
+int gradeOfCode(String code) {
+  final parts = code.split('.');
+  if (parts.length < 2) return 1;
+  // Türkçe kodlarında sınıf üçüncü parçadır (T.O.2.3)
+  final i = parts[0] == 'T' ? 2 : 1;
+  return i < parts.length ? int.tryParse(parts[i]) ?? 1 : 1;
 }

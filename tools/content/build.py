@@ -22,8 +22,74 @@ PACK_MODULES = sorted(p.stem for p in Path(__file__).parent.glob("*_[1-4].py"))
 VISUAL_KINDS = {
     "objects", "objects2", "objects_crossed", "groups", "blocks", "number_highlight",
     "row", "emoji", "text", "compare_groups", "shapes", "money", "pictograph", "tally", "grid",
-    "clock", "fraction", "angle", "area",
+    "clock", "fraction", "angle", "area", "number_line",
 }
+
+
+# Soru bankası kurallarına geçmiş paketler (sınıf sınıf genişler).
+STRICT = {"fen_bilimleri_4", "sosyal_bilgiler_4", "turkce_4", "matematik_4", "fen_bilimleri_3", "hayat_bilgisi_3", "turkce_3", "matematik_3", "hayat_bilgisi_2", "turkce_2", "matematik_2", "hayat_bilgisi_1", "turkce_1", "matematik_1"}
+MIN_PER_OUTCOME = 15
+
+
+def merge_bank(mod, pk):
+    """bank/<paket>.py varsa: o kazanımların çoktan seçmeli kartları bankadaki
+    sorularla değiştirilir (etkinlik ve üreteç kartları kalır)."""
+    path = Path(__file__).parent / "bank" / f"{mod}.py"
+    if not path.exists():
+        return
+    from common import card_id
+    bank = importlib.import_module(f"bank.{mod}").BANK
+    codes = {o["kod"] for o in pk["outcomes"]}
+    for code in bank:
+        if code not in codes:
+            raise SystemExit(f"bank/{mod}.py: {code} pakette yok")
+    for oc in pk["outcomes"]:
+        new = bank.get(oc["kod"])
+        if new is None:
+            continue
+        kept = [c for c in oc["cards"] if c["type"] != "mc"]
+        taken = {c["id"] for c in kept}
+        for c in new:
+            c.pop("id", None)
+            c["id"] = card_id(oc["kod"], c, taken)
+        oc["cards"] = kept + new
+
+
+def strict_check(mod, pk, errors):
+    """Soru kalitesi kuralları (planın 1e maddesi)."""
+    grade = pk["sinif"]
+    n_opts = 3 if grade == 1 else 4
+    prompts = {}
+    for oc in pk["outcomes"]:
+        code = oc["kod"]
+        mcs = [c for c in oc["cards"] if c["type"] == "mc"]
+        gens = [c for c in oc["cards"] if c["type"] == "gen"]
+        if not gens and len(mcs) < MIN_PER_OUTCOME:
+            errors.append(f"{code}: {len(mcs)} soru var, en az {MIN_PER_OUTCOME} gerekir")
+        levels = {c.get("level") for c in mcs}
+        if mcs and not {1, 2, 3} <= levels:
+            errors.append(f"{code}: üç zorluk düzeyi de olmalı (var: {sorted(l for l in levels if l)})")
+        longest = 0
+        for c in mcs:
+            cid = c["id"]
+            if c.get("level") not in (1, 2, 3):
+                errors.append(f"{cid}: zorluk düzeyi yok")
+            if len(c["options"]) != n_opts:
+                errors.append(f"{cid}: {grade}. sınıfta {n_opts} seçenek olmalı ({len(c['options'])} var)")
+            why = c.get("why", {})
+            for i in range(len(c["options"])):
+                if i != c["answer"] and not why.get(str(i), "").strip():
+                    errors.append(f"{cid}: '{c['options'][i]}' seçeneğinin neden yanlış notu yok")
+            key = c["prompt"].strip().lower()
+            if key in prompts:
+                errors.append(f"{cid}: aynı soru metni {prompts[key]} kartında da var")
+            prompts[key] = cid
+            lens = [len(o) for o in c["options"]]
+            right = lens[c["answer"]]
+            if right > max(l for i, l in enumerate(lens) if i != c["answer"]):
+                longest += 1
+        if mcs and longest > len(mcs) * 0.5:
+            errors.append(f"{code}: doğru cevap {longest}/{len(mcs)} soruda en uzun seçenek (ipucu veriyor)")
 
 
 def dart_generators():
@@ -83,6 +149,9 @@ def validate(pk, curriculum, gens, errors, warnings):
                     errors.append(f"{cid}: tekrarlı seçenek {opts}")
                 if not (0 <= c["answer"] < len(opts)):
                     errors.append(f"{cid}: cevap indeksi geçersiz")
+                for k in c.get("why", {}):
+                    if not (0 <= int(k) < len(opts)) or int(k) == c["answer"]:
+                        errors.append(f"{cid}: geçersiz yanılgı notu sırası {k}")
                 check_visual(c.get("visual"), cid, errors)
         if len(oc["cards"]) < 3:
             warnings.append(f"{code}: yalnızca {len(oc['cards'])} kart")
@@ -112,6 +181,9 @@ def main():
     report = []
     for mod in PACK_MODULES:
         pk = importlib.import_module(mod).PACK
+        merge_bank(mod, pk)
+        if mod in STRICT:
+            strict_check(mod, pk, errors)
         missing = validate(pk, curriculum, gens, errors, warnings)
         n_cards = sum(len(o["cards"]) for o in pk["outcomes"])
         n_lessons = sum(len(o["lessons"]) for o in pk["outcomes"])

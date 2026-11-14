@@ -92,7 +92,7 @@ class _ParentGateScreenState extends State<ParentGateScreen> {
         : _tries > 0
             ? 'Bu cevap değil. ${3 - _tries} deneme hakkınız kaldı.'
             : '';
-    return Scaffold(
+    return CalmScaffold(
       backgroundColor: K.bgParent,
       body: SafeArea(
         child: Padding(

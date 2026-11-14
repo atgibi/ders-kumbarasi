@@ -10,6 +10,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import 'audio_packs.dart';
+
 abstract class Speaker {
   /// [slow]: kaplumbağa düğmesi, daha yavaş okuma.
   Future<void> speak(String text, {bool slow = false});
@@ -19,6 +21,22 @@ abstract class Speaker {
   /// Cihazda kullanılabilir bir Türkçe ses (ya da kayıt) var mı? Gerekirse
   /// metin okuma motorunu yoklar.
   Future<bool> checkAvailable();
+
+  /// Çocuğun sınıfının kayıtlı seslerini hazırlar (gerekirse indirir).
+  Future<void> prepare(int grade, {bool wifiOnly = false, bool force = false});
+
+  /// Sınıf ses paketleri (ayarlar ekranında durum ve indirme için).
+  AudioPacks get packs;
+
+  /// Okuma hızı çarpanı (1 normal, < 1 daha yavaş).
+  set speed(double v);
+
+  /// Parçaları art arda okur (ör. "Doğrusu:" + cevap + açıklama): her
+  /// parçanın kaydı varsa kayıtlar, yoksa hepsi cihaz sesiyle.
+  Future<void> speakAll(List<String> parts, {bool slow = false});
+
+  /// Kısa efekt sesi (assets/sfx/<ad>.mp3): dogru, yanlis, dokun, kutlama.
+  Future<void> effect(String name);
 }
 
 class NoopSpeaker implements Speaker {
@@ -32,6 +50,21 @@ class NoopSpeaker implements Speaker {
   bool get available => false;
   @override
   Future<bool> checkAvailable() async => false;
+  @override
+  Future<void> prepare(int grade,
+      {bool wifiOnly = false, bool force = false}) async {}
+  final AudioPacks _packs = NoAudioPacks();
+  @override
+  AudioPacks get packs => _packs;
+  double currentSpeed = 1;
+  @override
+  set speed(double v) => currentSpeed = v;
+  @override
+  Future<void> speakAll(List<String> parts, {bool slow = false}) async =>
+      spoken.add(speakable(parts.join(' ')));
+  final List<String> effects = [];
+  @override
+  Future<void> effect(String name) async => effects.add(name);
 }
 
 const _symbolRanges = [
@@ -103,6 +136,25 @@ class TtsSpeaker implements Speaker {
     return _available;
   }
 
+  @override
+  Future<void> prepare(int grade,
+      {bool wifiOnly = false, bool force = false}) async {}
+
+  final AudioPacks _none = NoAudioPacks();
+  @override
+  AudioPacks get packs => _none;
+
+  double _speed = 1;
+  @override
+  set speed(double v) => _speed = v;
+
+  @override
+  Future<void> speakAll(List<String> parts, {bool slow = false}) =>
+      speak(parts.where((p) => p.trim().isNotEmpty).join('. '), slow: slow);
+
+  @override
+  Future<void> effect(String name) async {}
+
   Future<void> _init() async {
     if (_ready) return;
     _ready = true;
@@ -128,7 +180,7 @@ class TtsSpeaker implements Speaker {
     if (t.isEmpty) return;
     try {
       await _tts.stop();
-      await _tts.setSpeechRate(slow ? 0.3 : 0.45);
+      await _tts.setSpeechRate((slow ? 0.3 : 0.45) * _speed);
       await _tts.speak(t);
     } on Object {
       // sesli okuma hatası uygulamayı durdurmamalı
@@ -146,43 +198,102 @@ class TtsSpeaker implements Speaker {
   }
 }
 
-/// Kayıtlı ses + cihaz sesi yedeği.
+/// Kayıtlı ses + cihaz sesi yedeği. Ekran cümleleri uygulamayla gelir
+/// (assets/audio_ui); ders sesleri sınıf paketinden okunur (audio_packs).
 class HybridSpeaker implements Speaker {
-  HybridSpeaker({TtsSpeaker? fallback}) : _tts = fallback ?? TtsSpeaker();
+  HybridSpeaker({TtsSpeaker? fallback, AudioPacks? packs})
+      : _tts = fallback ?? TtsSpeaker(),
+        _packs = packs ?? createAudioPacks();
 
   final TtsSpeaker _tts;
+  final AudioPacks _packs;
   final AudioPlayer _player = AudioPlayer();
-  Set<String>? _recorded;
+  Set<String>? _bundled;
 
   Future<Set<String>> _manifest() async {
-    if (_recorded != null) return _recorded!;
+    if (_bundled != null) return _bundled!;
     try {
-      final raw = await rootBundle.loadString('assets/audio/manifest.json');
-      _recorded = (jsonDecode(raw) as List<Object?>).cast<String>().toSet();
+      final raw = await rootBundle.loadString('assets/audio_ui/manifest.json');
+      _bundled = (jsonDecode(raw) as List<Object?>).cast<String>().toSet();
     } on Object {
-      _recorded = {};
+      _bundled = {};
     }
-    return _recorded!;
+    return _bundled!;
   }
 
   @override
-  bool get available => (_recorded?.isNotEmpty ?? false) || _tts.available;
+  bool get available => (_bundled?.isNotEmpty ?? false) || _tts.available;
 
   @override
   Future<bool> checkAvailable() async =>
       (await _manifest()).isNotEmpty || await _tts.checkAvailable();
 
   @override
-  Future<void> speak(String text, {bool slow = false}) async {
-    final t = speakable(text);
-    if (t.isEmpty) return;
+  Future<void> prepare(int grade,
+          {bool wifiOnly = false, bool force = false}) =>
+      _packs.ensure(grade, wifiOnly: wifiOnly, force: force);
+
+  @override
+  AudioPacks get packs => _packs;
+
+  double _speed = 1;
+  @override
+  set speed(double v) {
+    _speed = v;
+    _tts.speed = v;
+  }
+
+  /// Efektler ayrı çalar: okumayı kesmez, kısık ve yumuşaktır.
+  final AudioPlayer _sfx = AudioPlayer();
+
+  @override
+  Future<void> effect(String name) async {
+    try {
+      await _sfx.stop();
+      await _sfx.setVolume(name == 'dokun' ? .35 : .55);
+      await _sfx.play(AssetSource('sfx/$name.mp3'));
+    } on Object {
+      // efekt çalınamazsa sessiz geç
+    }
+  }
+
+  /// Her yeni okuma bir öncekini keser.
+  int _turn = 0;
+
+  Future<Source?> _source(String t) async {
     final id = speechId(t);
     if ((await _manifest()).contains(id)) {
+      return AssetSource('audio_ui/$id.mp3');
+    }
+    final path = await _packs.pathFor(id);
+    return path == null ? null : DeviceFileSource(path);
+  }
+
+  @override
+  Future<void> speak(String text, {bool slow = false}) =>
+      speakAll([text], slow: slow);
+
+  @override
+  Future<void> speakAll(List<String> parts, {bool slow = false}) async {
+    final ps = [
+      for (final p in parts)
+        if (speakable(p).isNotEmpty) speakable(p)
+    ];
+    if (ps.isEmpty) return;
+    final turn = ++_turn;
+    final srcs = [for (final p in ps) await _source(p)];
+    if (turn != _turn) return;
+    if (srcs.every((s) => s != null)) {
       try {
         await _tts.stop();
         await _player.stop();
-        await _player.setPlaybackRate(slow ? 0.75 : 1.0);
-        await _player.play(AssetSource('audio/$id.mp3'));
+        await _player.setPlaybackRate((slow ? 0.75 : 1.0) * _speed);
+        for (final src in srcs) {
+          if (turn != _turn) return;
+          final done = srcs.length > 1 ? _player.onPlayerComplete.first : null;
+          await _player.play(src!);
+          await done?.timeout(const Duration(seconds: 40), onTimeout: () {});
+        }
         return;
       } on Object {
         // kayıt çalınamazsa cihaz sesine düş
@@ -193,11 +304,12 @@ class HybridSpeaker implements Speaker {
     } on Object {
       // yok say
     }
-    await _tts.speak(t, slow: slow);
+    await _tts.speak(ps.join('. '), slow: slow);
   }
 
   @override
   Future<void> stop() async {
+    _turn++;
     try {
       await _player.stop();
     } on Object {
