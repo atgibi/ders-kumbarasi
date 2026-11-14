@@ -454,6 +454,10 @@ void main() {
     expect(has('parent-empty'), isTrue);
 
     await tapKey(t, 'nav-settings');
+    // Ayarlar uzun: yazı boyutu en altta
+    await t.scrollUntilVisible(find.text('Yazı boyutu'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await t.pumpAndSettle();
     expect(find.text('Yazı boyutu'), findsOneWidget);
     await tapKey(t, 'text-size-1');
     expect(state.settings.textSize, 1);
